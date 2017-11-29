@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+@import "bootstrap/bootstrap";
+@import "spinner";
+@import "utils";
+@import "rtl";
+@import "responsive";
+
+// Se ajusta para que abarque toda la pantalla
+.main-container-full-width {
+  margin-left: 0px !important;
+}
+
+.hidden-nav {
+  left: 0 !important;
+}
+
+@media screen and (max-width: 992px) {
+  .navbar-toggler-custom {
+      visibility: hidden;
+  }
+}

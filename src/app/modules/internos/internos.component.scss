@@ -1,0 +1,38 @@
+.table {
+  font-size: 0.75rem !important;
+}
+.form-control-sm {
+  line-height: 1.4;
+}
+
+.card-body {
+  padding: 0.55rem 1.15rem;
+}
+
+.card-header {
+  padding: 0.15rem 1.15rem;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.col-width-concepto {
+  width: 20%;
+}
+
+.col-width-cantidad {
+  width: 10%;
+}
+
+.col-width-perc {
+  width: 5%;
+}
+
+.btn-vm, {
+  line-height: 1;
+}
+
+.btn-primary:focus, .btn-primary.focus {
+  box-shadow: none;
+}
