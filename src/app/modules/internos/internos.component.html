@@ -71,7 +71,7 @@
                                   [(ngModel)]='selectedDepartamento'
                                   (ngModelChange)='onChangeDepartamento($event)'>
                                   <option value="Todos">Todos</option>
-                                  <option *ngFor='let depto of departamentos' [value]='depto.Departamento'>
+                                  <option *ngFor='let depto of departamentos' [value]='depto.Depto'>
                                     {{ depto.Departamento }}
                                   </option>
                                 </select>
