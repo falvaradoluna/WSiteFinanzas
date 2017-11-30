@@ -17,6 +17,7 @@ export class InternosService {
   private _urlCompanias = 'api/internos/companias';
   private _urlSucursales = 'api/internos/sucursales';
   private _urlDepartamentos = 'api/internos/departamentos';
+  private _urlUnidadesDepartamento = 'api/internos/unidadesdepto';
 
   constructor(private _http: HttpClient) { }
 
@@ -47,6 +48,22 @@ export class InternosService {
     Params = Params.append('mes', parameters.mes);
 
     return this._http.get<IResultadoInternos[]>(this._urlEstadoResultados, { params: Params })
+      // .do(data => console.log('All:' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  getUnidadesDepartamento(parameters): Observable<IResultadoInternos[]> { //Se reutiliza la interfaz de unidades
+    // Initialize Params Object
+    let Params = new HttpParams();
+
+    // Begin assigning parameters
+    Params = Params.append('idcia', parameters.idCia);
+    Params = Params.append('idsucursal', parameters.idSucursal)
+    Params = Params.append('departamento', parameters.departamento)
+    Params = Params.append('anio', parameters.anio);
+    Params = Params.append('mes', parameters.mes);
+
+    return this._http.get<IResultadoInternos[]>(this._urlUnidadesDepartamento, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }

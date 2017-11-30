@@ -72,7 +72,36 @@ internos.prototype.get_estadoresultados = function(req, res, next) {
       result: result,
     });
   });
-  };
+};
+
+// /api/internos/unidadesdepto
+// Funcionalidad de la tabla UNIDADES por departamento
+internos.prototype.get_unidadesdepto = function (req, res, next) {
+  var self = this;
+  var idCia = req.query.idcia;
+  var idSucursal = req.query.idsucursal;
+  var departamento = req.query.departamento
+  var mes = req.query.mes;
+  var anio = req.query.anio;
+
+  var params = [
+    { name: 'IdCia', value: idCia, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.STRING },
+    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
+    { name: 'Mes', value: mes, type: self.model.types.STRING },
+    { name: 'Anio', value: anio, type: self.model.types.STRING }
+  ];
+
+  this.model.query('SP_CONSULTA_UNIDADES_DEPTO', params, function (error, result) {
+    if (result.length > 0) {
+      console.log("Unidades Depto " + result[0]);
+    }
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
 
 // /api/internos/companias
 // Funcionalidad del dropdown de compañias

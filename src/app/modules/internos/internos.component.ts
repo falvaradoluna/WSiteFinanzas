@@ -12,7 +12,6 @@ import { ICompania } from './compania';
 import { IDepartamento } from './departamento';
 import { ITipoReporte } from './tipo-reporte';
 
-
 @Component({
   selector: 'app-internos',
   templateUrl: './internos.component.html',
@@ -47,9 +46,11 @@ export class InternosComponent implements OnInit {
   showFilters = true;
   showUnidades = true;
   showResultados = true;
+  showUnidadesDepartamento = true;
 
   resultadoUnidadesService: IResultadoInternos[] = [];
   estadoResultados: IResultadoInternos[] = [];
+  unidadesDepartamento: IResultadoInternos[] = [];
   companias: ICompania[];
   sucursales: ISucursal[];
   departamentos: IDepartamento[];
@@ -82,9 +83,14 @@ export class InternosComponent implements OnInit {
     this.showResultados = !this.showResultados;
   }
 
+  toggleUnidadesDepartamento(): void {
+    this.showUnidadesDepartamento = !this.showUnidadesDepartamento;
+  }
+
   procesar(): void {
     this.getResultadoUnidades();
     this.getEstadoResultados();
+    this.getUnidadesDepartamento();
   }
 
   getResultadoUnidades(): void {
@@ -112,6 +118,24 @@ export class InternosComponent implements OnInit {
         this.estadoResultados = estadoResultados;
       },
       error => this.errorMessage = <any>error);
+  }
+
+  getUnidadesDepartamento(): void {
+    if (this.selectedDepartamento !== 'Todos') {
+      this._service.getUnidadesDepartamento({
+        idCia: this.selectedCompania,
+        idSucursal: this.selectedSucursal,
+        departamento: this.selectedDepartamento,
+        mes: this.mes,
+        anio: this.anio
+      })
+        .subscribe(unidadesDepartamento => {
+          this.unidadesDepartamento = unidadesDepartamento;
+        },
+        error => this.errorMessage = <any>error);
+    } else {
+      this.unidadesDepartamento = [];
+    }
   }
 
   getCompanias(): void {
