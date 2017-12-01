@@ -173,6 +173,28 @@ internos.prototype.get_departamentos = function (req, res, next) {
   });
 };
 
+// /api/internos/efectivoysituacion
+// Funcionalidad para las opciones de efectivo real y situacion financiera
+internos.prototype.get_efectivoysituacion = function (req, res, next) {
+  var self = this;
+  var idReporte = req.query.idreporte;
+  var idAgencia = req.query.idcia;
+  var anio = req.query.anio;
+
+  var params = [
+    { name: 'IdAgencia', value: idAgencia, type: self.model.types.INT },
+    { name: 'IdReporte', value: idReporte, type: self.model.types.INT },
+    { name: 'Anio', value: anio, type: self.model.types.STRING }
+  ];
+
+  this.model.query('SP_EFECTIVO_REAL_Y_SITUACION_FINANCIERA', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
 
 // internos.prototype.post_internos = function(req, res, next) {
 // var self = this;

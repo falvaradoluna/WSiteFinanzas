@@ -8,6 +8,7 @@ import 'rxjs/add/operator/do';
 import { ICompania } from './compania';
 import { ISucursal } from './sucursal';
 import { IDepartamento } from './departamento';
+import { IEfectivoSituacion } from './efectivo-y-situacion-financiera';
 
 @Injectable()
 export class InternosService {
@@ -18,6 +19,7 @@ export class InternosService {
   private _urlSucursales = 'api/internos/sucursales';
   private _urlDepartamentos = 'api/internos/departamentos';
   private _urlUnidadesDepartamento = 'api/internos/unidadesdepto';
+  private _urlEfectivoSituacion = 'api/internos/efectivoysituacion';
 
   constructor(private _http: HttpClient) { }
 
@@ -106,6 +108,20 @@ export class InternosService {
     Params = Params.append('mes', parameters.mes);
 
     return this._http.get<IDepartamento[]>(this._urlDepartamentos, { params: Params })
+      // .do(data => console.log('All:' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  get_EfectivoSituacion(parameters): Observable<IEfectivoSituacion[]> {
+    // Initialize Params Object
+    let Params = new HttpParams();
+
+    // Begin assigning parameters
+    Params = Params.append('idreporte', parameters.idTipoReporte);
+    Params = Params.append('idcia', parameters.idAgencia);
+    Params = Params.append('anio', parameters.anio);
+
+    return this._http.get<IEfectivoSituacion[]>(this._urlEfectivoSituacion, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
