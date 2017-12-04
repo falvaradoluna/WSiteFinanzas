@@ -95,13 +95,10 @@ export class InternosComponent implements OnInit {
     let sTipoReporte = this.selectedTipoReporte.toString(); //Aunque se definio como number, la comparacion siempre lo toma como string
     let sCompania = this.selectedCompania.toString();
 
-    if (sTipoReporte === '4' && sCompania !== '0') {
+    if ((sTipoReporte === '4' || sTipoReporte === '5') && sCompania !== '0') {
       this.showReporteUnidades = false;
       this.showEfectivoSituacion = true;
       this.getEfectivoSituacion();
-    }
-    else if (sTipoReporte === '5' && sCompania !== '0') {
-      console.log('tipo reporte 5');
     }
     else if (sCompania !== '0') {
       this.showReporteUnidades = true;
@@ -213,7 +210,6 @@ export class InternosComponent implements OnInit {
     this.mes = mesStr;
     this.anio = anio;
     this.periodo = anio + '-' + mesStr;
-    console.log(this.periodo);
   }
 
   getEfectivoSituacion(): void {
@@ -229,17 +225,12 @@ export class InternosComponent implements OnInit {
   }
 
   onChangePeriodo(selectedDate): void {
-    console.log(selectedDate);
-
     if (selectedDate) {
       const mesStr = selectedDate.substring(5,7);
       const fullYearStr = selectedDate.substring(0,4);
 
       this.mes = mesStr;
       this.anio = fullYearStr;
-
-      console.log(this.mes);
-      console.log(this.anio);
 
       if(this.mes && this.anio && this.selectedCompania !== 0 && this.selectedSucursal) {
         this.getDepartamentos();
@@ -275,14 +266,16 @@ export class InternosComponent implements OnInit {
 
   onChangeTipoReporte(newValue: number): void {
     this.selectedTipoReporte = newValue;
+    const nv = newValue.toString();
 
-    if (newValue.toString() === '4') {
+    if (nv === '4' || nv === '5') {
       this.showReporteUnidades = false;
       this.sucursales = [];
       this.departamentos = [];
     }
     else {
       this.showReporteUnidades = true;
+      this.setDefaultDate();
       this.getSucursales();
     }
   }

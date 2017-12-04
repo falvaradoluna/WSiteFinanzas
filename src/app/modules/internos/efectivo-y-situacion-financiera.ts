@@ -1,5 +1,7 @@
 export interface IEfectivoSituacion {
   Concepto: string,
+  SaldoINI: string,
+  Orden: string,
   Ene: number,
   Feb: number,
   Mar: number,

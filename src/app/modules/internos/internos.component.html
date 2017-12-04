@@ -22,11 +22,16 @@
               </div>
               <div class="form-group col-md-4">
                 <label for="inputPeriodo">Periodo</label>
-                <input type="month" name="inputPeriodo" class="form-control form-control-sm" min="1960-01" [value]='periodo' (input)='onChangePeriodo($event.target.value)'>
+                <input type="month" name="inputPeriodo" class="form-control form-control-sm"
+                  min="1960-01"
+                  [value]='periodo'
+                  (input)='onChangePeriodo($event.target.value)'>
               </div>
               <div class="form-group col-md-3">
                 <label for="inputTipoReporte">Estado de Resultados</label>
-                <select name="inputTipoReporte" class="form-control form-control-sm" ([ngModel])='selectedTipoReporte' (change)='onChangeTipoReporte($event.target.value)'>
+                <select name="inputTipoReporte" class="form-control form-control-sm"
+                  ([ngModel])='selectedTipoReporte'
+                  (change)='onChangeTipoReporte($event.target.value)'>
                   <option *ngFor='let tipo of tipoReporte' [value]='tipo.Id'>
                     {{ tipo.Descripcion }}
                   </option>
@@ -235,6 +240,7 @@
               <th class="bg-success text-white">Oct</th>
               <th class="bg-success text-white">Nov</th>
               <th class="bg-success text-white">Dic</th>
+              <th *ngIf="selectedTipoReporte === '5'" class="bg-success text-white">DicAñoAnt</th>
             </tr>
           </thead>
           <tbody>
@@ -253,6 +259,7 @@
                 <td class="text-right">{{ es.Oct | number:'1.2-2' }}</td>
                 <td class="text-right">{{ es.Nov | number:'1.2-2' }}</td>
                 <td class="text-right">{{ es.Dic | number:'1.2-2' }}</td>
+                <td *ngIf="selectedTipoReporte === '5'" class="text-right">{{ es.SaldoINI | number:'1.2-2' }}</td>
               </tr>
             </ng-container>
           </tbody>
