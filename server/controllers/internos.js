@@ -72,7 +72,36 @@ internos.prototype.get_estadoresultados = function(req, res, next) {
       result: result,
     });
   });
-  };
+};
+
+// /api/internos/unidadesdepto
+// Funcionalidad de la tabla UNIDADES por departamento
+internos.prototype.get_unidadesdepto = function (req, res, next) {
+  var self = this;
+  var idCia = req.query.idcia;
+  var idSucursal = req.query.idsucursal;
+  var departamento = req.query.departamento
+  var mes = req.query.mes;
+  var anio = req.query.anio;
+
+  var params = [
+    { name: 'IdCia', value: idCia, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.STRING },
+    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
+    { name: 'Mes', value: mes, type: self.model.types.STRING },
+    { name: 'Anio', value: anio, type: self.model.types.STRING }
+  ];
+
+  this.model.query('SP_CONSULTA_UNIDADES_DEPTO', params, function (error, result) {
+    if (result.length > 0) {
+      console.log("Unidades Depto " + result[0]);
+    }
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
 
 // /api/internos/companias
 // Funcionalidad del dropdown de compañias
@@ -144,6 +173,28 @@ internos.prototype.get_departamentos = function (req, res, next) {
   });
 };
 
+// /api/internos/efectivoysituacion
+// Funcionalidad para las opciones de efectivo real y situacion financiera
+internos.prototype.get_efectivoysituacion = function (req, res, next) {
+  var self = this;
+  var idReporte = req.query.idreporte;
+  var idAgencia = req.query.idcia;
+  var anio = req.query.anio;
+
+  var params = [
+    { name: 'IdAgencia', value: idAgencia, type: self.model.types.INT },
+    { name: 'IdReporte', value: idReporte, type: self.model.types.INT },
+    { name: 'Anio', value: anio, type: self.model.types.STRING }
+  ];
+
+  this.model.query('SP_EFECTIVO_REAL_Y_SITUACION_FINANCIERA', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
 
 // internos.prototype.post_internos = function(req, res, next) {
 // var self = this;

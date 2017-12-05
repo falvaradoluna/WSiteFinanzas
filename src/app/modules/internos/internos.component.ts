@@ -11,7 +11,7 @@ import { ISucursal } from './sucursal';
 import { ICompania } from './compania';
 import { IDepartamento } from './departamento';
 import { ITipoReporte } from './tipo-reporte';
-
+import { IEfectivoSituacion } from './efectivo-y-situacion-financiera';
 
 @Component({
   selector: 'app-internos',
@@ -47,12 +47,18 @@ export class InternosComponent implements OnInit {
   showFilters = true;
   showUnidades = true;
   showResultados = true;
+  showUnidadesDepartamento = true;
+  showEfectivoSituacion = false;
+  showReporteUnidades = true;
+  isCollapsed = true;
 
   resultadoUnidadesService: IResultadoInternos[] = [];
   estadoResultados: IResultadoInternos[] = [];
+  unidadesDepartamento: IResultadoInternos[] = [];
+  efectivoSituacion: IEfectivoSituacion[];
   companias: ICompania[];
   sucursales: ISucursal[];
-  departamentos: IDepartamento[];
+  departamentos: IDepartamento[] = [];
   tipoReporte: ITipoReporte[];
   selectedCompania = 0;
   selectedTipoReporte = 1;
@@ -82,9 +88,26 @@ export class InternosComponent implements OnInit {
     this.showResultados = !this.showResultados;
   }
 
+  toggleUnidadesDepartamento(): void {
+    this.showUnidadesDepartamento = !this.showUnidadesDepartamento;
+  }
+
   procesar(): void {
-    this.getResultadoUnidades();
-    this.getEstadoResultados();
+    let sTipoReporte = this.selectedTipoReporte.toString(); //Aunque se definio como number, la comparacion siempre lo toma como string
+    let sCompania = this.selectedCompania.toString();
+
+    if ((sTipoReporte === '4' || sTipoReporte === '5') && sCompania !== '0') {
+      this.showReporteUnidades = false;
+      this.showEfectivoSituacion = true;
+      this.getEfectivoSituacion();
+    }
+    else if (sCompania !== '0') {
+      this.showReporteUnidades = true;
+      this.showEfectivoSituacion = false;
+      this.getResultadoUnidades();
+      this.getEstadoResultados();
+      this.getUnidadesDepartamento();
+    }
   }
 
   getResultadoUnidades(): void {
@@ -112,6 +135,24 @@ export class InternosComponent implements OnInit {
         this.estadoResultados = estadoResultados;
       },
       error => this.errorMessage = <any>error);
+  }
+
+  getUnidadesDepartamento(): void {
+    if (this.selectedDepartamento !== 'Todos') {
+      this._service.getUnidadesDepartamento({
+        idCia: this.selectedCompania,
+        idSucursal: this.selectedSucursal,
+        departamento: this.selectedDepartamento,
+        mes: this.mes,
+        anio: this.anio
+      })
+        .subscribe(unidadesDepartamento => {
+          this.unidadesDepartamento = unidadesDepartamento;
+        },
+        error => this.errorMessage = <any>error);
+    } else {
+      this.unidadesDepartamento = [];
+    }
   }
 
   getCompanias(): void {
@@ -151,7 +192,9 @@ export class InternosComponent implements OnInit {
     this.tipoReporte = [
       { Id: 1, Descripcion: 'Mensual' },
       { Id: 2, Descripcion: 'Acumulado Real' },
-      { Id: 3, Descripcion: 'Acumulado Presupuestos' }
+      { Id: 3, Descripcion: 'Acumulado Presupuestos' },
+      { Id: 4, Descripcion: 'Flujo de Efectivo Real' },
+      { Id: 5, Descripcion: 'Estado de Situación Financiera' }
     ];
   }
 
@@ -168,21 +211,27 @@ export class InternosComponent implements OnInit {
     this.mes = mesStr;
     this.anio = anio;
     this.periodo = anio + '-' + mesStr;
-    console.log(this.periodo);
+  }
+
+  getEfectivoSituacion(): void {
+    this._service.get_EfectivoSituacion({
+      idTipoReporte: this.selectedTipoReporte,
+      idAgencia: this.selectedCompania,
+      anio: this.anio
+    })
+      .subscribe(efectivoSituacion => {
+        this.efectivoSituacion = efectivoSituacion;
+      },
+      error => this.errorMessage = <any>error);
   }
 
   onChangePeriodo(selectedDate): void {
-    console.log(selectedDate);
-
     if (selectedDate) {
       const mesStr = selectedDate.substring(5,7);
       const fullYearStr = selectedDate.substring(0,4);
 
       this.mes = mesStr;
       this.anio = fullYearStr;
-
-      console.log(this.mes);
-      console.log(this.anio);
 
       if(this.mes && this.anio && this.selectedCompania !== 0 && this.selectedSucursal) {
         this.getDepartamentos();
@@ -216,54 +265,24 @@ export class InternosComponent implements OnInit {
     console.log(newValue);
   }
 
-  onChangeTipoReporte(newValue): void {
+  onChangeTipoReporte(newValue: number): void {
     this.selectedTipoReporte = newValue;
-    this.getSucursales();
+    const nv = newValue.toString();
+
+    if (nv === '4' || nv === '5') {
+      this.showReporteUnidades = false;
+      this.sucursales = [];
+      this.departamentos = [];
+    }
+    else {
+      this.showReporteUnidades = true;
+      this.setDefaultDate();
+      this.getSucursales();
+    }
   }
 
-  //Multi Select
-//   dropdownEnabled = true;
-//   // values: number[];
-//   config = TreeviewConfig.create({
-//       hasAllCheckBox: false,
-//       hasFilter: true,
-//       hasCollapseExpand: false,
-//       decoupleChildFromParent: false,
-//       maxHeight: 400
-//   });
-
-//   buttonClass = 'btn-outline-secondary btn-sm';
-
-//   itCategory = new TreeviewItem({
-//             text: 'Programming', value: 91, children: [{
-//                 text: 'Frontend', value: 911, children: [
-//                     { text: 'Angular 1', value: 9111 },
-//                     { text: 'Angular 2', value: 9112 },
-//                     { text: 'ReactJS', value: 9113 }
-//                 ]
-//             }, {
-//                 text: 'Backend', value: 912, children: [
-//                     { text: 'C#', value: 9121 },
-//                     { text: 'Java', value: 9122 },
-//                     { text: 'Python', value: 9123, checked: false }
-//                 ]
-//             }]
-//   });
-
-//   // items = [this.itCategory];
-
-//   items: TreeviewItem[];
-
-//   onSelectedChange(event): void{
-
-//  }
-//   //
-
-//   ngOnInit() {
-//     this.items = [
-//       new TreeviewItem({ text: 'ANDRADE UNIVERSIDAD SA DE CV', value: 91, children: [] }),
-//       new TreeviewItem({ text: 'AUTOS JAPONESES SA DE CV', value: 92, children: [] }),
-//       new TreeviewItem({ text: 'ANDRADE ZARAGOZA SA DE CV', value: 93, children: [] })
-//     ]
-//   }
+  onClickCell(i: number, value: number, name: string) {
+    this.estadoResultados[i].isCollapsed = true;
+    console.log(name + ' ' + value);
+  }
 }

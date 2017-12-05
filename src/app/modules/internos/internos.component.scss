@@ -18,11 +18,11 @@
 }
 
 .col-width-concepto {
-  width: 20%;
+  width: 15%;
 }
 
 .col-width-cantidad {
-  width: 10%;
+  width: 9.16%;
 }
 
 .col-width-perc {
@@ -35,4 +35,45 @@
 
 .btn-primary:focus, .btn-primary.focus {
   box-shadow: none;
+}
+
+//Boton cerrar
+.close {
+  position:absolute;
+  top:30px;
+  right:0;
+}
+
+//Tabla con celdas hover
+.table-hover-td tbody td:hover {
+  background-color: rgba(0,0,0,.075);
+  cursor: pointer;
+}
+
+//Tabla con encabezados fixed
+.table-fixed{
+  width: 98.4%;
+  table-layout:fixed;
+  tbody{
+    height:300px;
+    overflow-y:auto;
+    width: 101.6%;
+    }
+  thead,tbody,tr,td,th{
+    display:block;
+  }
+  tbody{
+    td{
+      float:left;
+      overflow:hidden;
+      white-space:nowrap;
+    }
+  }
+  thead {
+    tr{
+      th{
+        float:left;
+      }
+    }
+  }
 }
