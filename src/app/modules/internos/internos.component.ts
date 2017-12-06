@@ -50,6 +50,7 @@ export class InternosComponent implements OnInit {
   showUnidadesDepartamento = true;
   showEfectivoSituacion = false;
   showReporteUnidades = true;
+  showDetalleResultados = false;
   isCollapsed = true;
 
   resultadoUnidadesService: IResultadoInternos[] = [];
@@ -67,6 +68,9 @@ export class InternosComponent implements OnInit {
   mes: string;
   anio: string;
   periodo: string;
+  detalleName: string;
+  detalleValue: number;
+  detalleConcepto: string;
 
   resultadoUnidades: IResultadoInternos[] = [];
 
@@ -282,7 +286,9 @@ export class InternosComponent implements OnInit {
   }
 
   onClickCell(i: number, value: number, name: string) {
-    this.estadoResultados[i].isCollapsed = true;
-    console.log(name + ' ' + value);
+    this.showDetalleResultados = true;
+    this.detalleName = name;
+    this.detalleValue = value;
+    this.detalleConcepto = this.estadoResultados[i].Concepto;
   }
 }

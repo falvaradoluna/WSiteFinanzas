@@ -11,6 +11,5 @@ export interface IResultadoInternos {
   AcPPto: number,
   AcPerc2: number,
   AcVariacion: number,
-  AcPerc3: number,
-  isCollapsed: boolean
+  AcPerc3: number
 }
