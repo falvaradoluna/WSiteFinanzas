@@ -235,7 +235,7 @@
           </thead>
           <tbody>
             <ng-container *ngFor='let r of estadoResultados; let i = index;'>
-              <tr [ngClass]="{'font-weight-bold': i === 2 || i === 4 || i === 8 || i === 10 || i === 15 || i === 19 || i === 21 || i === 22 || i === 23 || i === 24 || i === 25 || i === 26}">
+              <tr [ngClass]="{'font-weight-bold': shouldBeBold(r.Concepto)}">
                 <td class="col-width-concepto">{{ r.Concepto }}</td>
                 <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.Real, 'Real', 1)">
                   {{ r.Concepto === 'ROS' ? (r.Real | percent:'1.2-2') : (r.Real | number:'1.2-2') }}
@@ -297,7 +297,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor='let drm of detalleResultadosMensual; let i = index;'>
+              <tr *ngFor='let drm of detalleResultadosMensual; let i = index;'
+                  [ngClass]="{'font-weight-bold': shouldBeBold(drm.Concepto)}">
                 <td class="col-md-3">{{ drm.Concepto }}</td>
                 <td class="col-md-3">{{ drm.Numcta }}</td>
                 <td class="col-md-3">{{ drm.Descr }}</td>
