@@ -325,10 +325,17 @@
           <button type="button" class="close" (click)='hideDetallePrimerNivel()'>
             <span>&times;</span>
           </button>
-          <p>
-            <b>Concepto:</b> <span class="badge badge-pill badge-success">{{ detalleConcepto }}</span>
-            <b>{{ detalleName }}:</b> <span class="badge badge-pill badge-success">{{ detalleValue | number:'1.2-2' }}</span>
-          </p>
+
+          <nav role="navigation">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="javascript:void(0)" (click)='hideDetallePrimerNivel()'>{{ selectedNombreCompania }}</a></li>
+              <li class="breadcrumb-item active">
+                {{ detalleConcepto}} ({{ detalleName }})
+                <span class="badge badge-dark">{{ detalleValue | number:'1.2-2' }}</span>
+              </li>
+            </ol>
+          </nav>
+
           <table *ngIf='idDetalle === 1' class="table table-sm table-bordered table-fixed table-hover-td">
             <thead>
               <tr>
@@ -419,12 +426,17 @@
           <button type="button" class="close" (click)='hideDetalleSegundoNivel()'>
             <span>&times;</span>
           </button>
-          <p>
-            <b>Concepto:</b>
-            <span class="badge badge-pill badge-success">{{ detalleConceptoSegundoNivel }}</span>
-            <b>{{ detalleNameSegundoNivel }}:</b>
-            <span class="badge badge-pill badge-success">{{ detalleValueSegundoNivel | number:'1.2-2' }}</span>
-          </p>
+
+          <nav role="navigation">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="javascript:void(0)" (click)='hideDetallePrimerNivel()'>{{ selectedNombreCompania }}</a></li>
+              <li class="breadcrumb-item"><a href="javascript:void(0)" (click)='hideDetalleSegundoNivel()'>{{ detalleConcepto}} ({{ detalleName }})</a></li>
+              <li class="breadcrumb-item active">
+                {{ detalleConceptoSegundoNivel }}
+                <span class="badge badge-dark">{{ detalleValueSegundoNivel | number:'1.2-2' }}</span>
+              </li>
+            </ol>
+          </nav>
 
           <table class="table table-sm table-bordered table-fixed">
               <thead>

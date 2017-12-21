@@ -69,6 +69,11 @@
   background-color: #ff6600 !important;
 }
 
+.breadcrumb-item.active {
+  color: #343a40;
+  font-weight: bold;
+}
+
 //Tabla con encabezados fixed
 .table-fixed{
   width: 98.4%;

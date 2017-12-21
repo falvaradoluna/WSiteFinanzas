@@ -208,10 +208,9 @@ export class InternosComponent implements OnInit {
 
   getCompanias(): void {
     this._service.getCompanias({ idUsuario: 3 })
-      .subscribe(companias => {
-        this.companias = companias;
-      },
-      error => this.errorMessage = <any>error);
+      .subscribe(
+        companias => { this.companias = companias; },
+        error => this.errorMessage = <any>error);
   }
 
   getSucursales(): void {
@@ -234,10 +233,11 @@ export class InternosComponent implements OnInit {
       anio: this.anio,
       mes: this.mes
     })
-      .subscribe(departamentos => {
-        this.departamentos = departamentos;
-      },
-      error => this.errorMessage = <any>error);
+      .subscribe(
+        departamentos => { this.departamentos = departamentos; },
+        error => this.errorMessage = <any>error,
+        () => this.procesar()
+      );
   }
 
   setTipoReporte(): void {
@@ -399,7 +399,6 @@ export class InternosComponent implements OnInit {
 
   onChangeDepartamento(newValue): void {
     this.selectedDepartamento = newValue;
-    console.log(newValue);
   }
 
   onChangeTipoReporte(newValue: number): void {
@@ -458,7 +457,7 @@ export class InternosComponent implements OnInit {
     this.showDetalleSegundoNivel = true;
     this.detalleNameSegundoNivel = name;
     this.detalleValueSegundoNivel = value;
-    this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].Concepto;
+    this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].Descr;
     this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].Numcta, mes);
   }
 
