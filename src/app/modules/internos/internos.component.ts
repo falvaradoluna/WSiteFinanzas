@@ -291,6 +291,9 @@ export class InternosComponent implements OnInit {
     if (concepto.startsWith('N ')) concepto = concepto.substr(2);
     else if (concepto.startsWith('S ')) concepto = concepto.substr(2);
 
+    //Limpiar tabla antes de consultar
+    this.detalleUnidadesAcumulado = [];
+
     this._service.getDetalleUnidadesAcumulado({
       idAgencia: this.selectedCompania,
       mSucursal: this.selectedSucursal,
@@ -356,6 +359,9 @@ export class InternosComponent implements OnInit {
   }
 
   getDetalleResultadosCuentas(numCta: string, mes: string = ''): void {
+    //Limpiar tabla antes de consultar
+    this.detalleResultadosCuentas = [];
+
     this._service.getDetalleResultadosCuentas({
       servidorAgencia: this.selectedIpSucursal,
       concentradora: this.selectedConcentradora,
@@ -501,10 +507,17 @@ export class InternosComponent implements OnInit {
   onClickDetalleSegundoNivel(i: number, value: number, name: string, mes: string = '') {
     //validar que solo entre cuando viene de real (excluir Ppto y Variacion)
     if (this.detalleName === 'Real' || this.detalleName === 'AcReal') {
+      //Etiqueta de mes usada en breadcrumb
+      if (mes !== '') {
+        this.detalleNameSegundoNivel = `(${name})`;
+      }
+      else {
+        this.detalleNameSegundoNivel = '';
+      }
+
       this.showResultados = false;
       this.showDetallePrimerNivel = false;
       this.showDetalleSegundoNivel = true;
-      this.detalleNameSegundoNivel = name;
       this.detalleValueSegundoNivel = value;
       this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].Descr;
       this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].Numcta, mes);

@@ -505,6 +505,7 @@
               <li class="breadcrumb-item"><a href="javascript:void(0)" (click)='hideDetalleSegundoNivel()'>{{ detalleConcepto}} ({{ detalleName }})</a></li>
               <li class="breadcrumb-item active">
                 {{ detalleConceptoSegundoNivel }}
+                {{ detalleNameSegundoNivel }}
                 <span class="badge badge-dark">{{ detalleValueSegundoNivel | number:'1.2-2' }}</span>
               </li>
             </ol>
@@ -516,22 +517,18 @@
                 <tr>
                   <th class="bg-orange text-white col-md-1">TIPOPOL</th>
                   <th class="bg-orange text-white col-md-1">CONSPOL</th>
-                  <th class="bg-orange text-white col-md-1">CONSMOV</th>
-                  <th class="bg-orange text-white col-md-1">MES</th>
                   <th class="bg-orange text-white col-md-2">NUMCTA</th>
-                  <th class="bg-orange text-white col-md-4">CONCEPTO</th>
-                  <th class="bg-orange text-white col-md-1">DEBE</th>
-                  <th class="bg-orange text-white col-md-1">HABER</th>
+                  <th class="bg-orange text-white col-md-6">CONCEPTO</th>
+                  <th class="bg-orange text-white col-md-1">CARGO</th>
+                  <th class="bg-orange text-white col-md-1">ABONO</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor='let drc of detalleResultadosCuentas'>
                   <td class="col-md-1">{{ drc.MOV_TIPOPOL }}</td>
                   <td class="col-md-1 text-center">{{ drc.MOV_CONSPOL }}</td>
-                  <td class="col-md-1 text-center">{{ drc.MOV_CONSMOV }}</td>
-                  <td class="col-md-1 text-center">{{ drc.MOV_MES }}</td>
                   <td class="col-md-2">{{ drc.MOV_NUMCTA }}</td>
-                  <td class="col-md-4">{{ drc.MOV_CONCEPTO }}</td>
+                  <td class="col-md-6">{{ drc.MOV_CONCEPTO }}</td>
                   <td class="col-md-1 text-right">{{ drc.MOV_DEBE | number:'1.2-2' }}</td>
                   <td class="col-md-1 text-right">{{ drc.MOV_HABER | number:'1.2-2' }}</td>
                 </tr>
