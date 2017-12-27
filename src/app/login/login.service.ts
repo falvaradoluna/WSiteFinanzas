@@ -11,7 +11,6 @@ export class LoginService {
   private _urlLogin = 'api/login/auth';
   constructor(private _http: HttpClient) { }
 
-
   private handleError(err: HttpErrorResponse) {
     console.error(err.message);
     return Observable.throw(err.message);
