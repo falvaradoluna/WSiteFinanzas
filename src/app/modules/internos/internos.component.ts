@@ -351,9 +351,10 @@ export class InternosComponent implements OnInit {
         this.detalleResultadosMensual = [];
       },
       //Si la lista tiene más de 10 resultados se necesita ajustar
-      //el ancho de tabla para que quepa el scroll
+      //el ancho de tabla para que quepa el scroll (solo mensual)
       () => {
         this.detalleResultadosMensualScroll = this.detalleResultadosMensual.length <= 10 ? true : false;
+        this.fixedHeader();
       }
     );
   }
@@ -504,6 +505,17 @@ export class InternosComponent implements OnInit {
     this.getDetalleResultadosMensual(this.detalleConcepto);
   }
 
+  //Usa CSS transforms para dejar los titulos fijos en la tabla
+  fixedHeader(): void {
+    //Esperar a que se construya la tabla, delay de 1.5 segundos
+    setTimeout(function () {
+      document.getElementById("detalleResultadosAcumulado").addEventListener("scroll", function(){
+        var translate = "translate(0,"+this.scrollTop+"px)";
+        this.querySelector("thead").style.transform = translate;
+    })
+   }, 1000);
+  }
+
   onClickDetalleSegundoNivel(i: number, value: number, name: string, mes: string = '') {
     //validar que solo entre cuando viene de real (excluir Ppto y Variacion)
     if (this.detalleName === 'Real' || this.detalleName === 'AcReal') {
@@ -555,5 +567,6 @@ export class InternosComponent implements OnInit {
     this.showResultados = false;
     this.showDetalleSegundoNivel = false;
     this.showDetallePrimerNivel = true;
+    this.fixedHeader();
   }
 }
