@@ -320,8 +320,8 @@ export class InternosComponent implements OnInit {
       anio: this.anio,
       mes:  mes === '' ? this.mes : mes, //Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
       departamento: concepto,
-      carLine: carLine,
-      tipoAuto: tipoAuto
+      carLine: concepto === 'FLOTILLAS' ? tipoAuto : carLine, //Para el caso de flotillas el sp cambia carLine por tipoAuto
+      tipoAuto: concepto === 'FLOTILLAS' ? carLine : tipoAuto
     })
       .subscribe(detalleUnidadesTipo => {
         this.detalleUnidadesTipo = detalleUnidadesTipo;
@@ -475,21 +475,21 @@ export class InternosComponent implements OnInit {
     }
   }
 
-  onClickDetalleUnidadesMensual(i: number, value: string, name: string, mes: string = '') {
+  onClickDetalleUnidadesMensual(i: number, value: string, strMes: string, mes: string = '', depto: string = '') {
     if (value.trim() !== 'Total') {
       this.showUnidades = false;
       this.showDetalleUnidadesPrimerNivel = false;
       this.showDetalleUnidadesSegundoNivel = true;
-      this.detalleUnidadesNameSegundoNivel = name;
+      this.detalleUnidadesNameSegundoNivel = strMes;
       this.detalleUnidadesValueSegundoNivel = value;
 
       if (mes === '') { //mensual
         this.detalleUnidadesConceptoSegundoNivel = this.detalleUnidadesMensual[i].CarLine;
-        this.getDetalleUnidadesTipo(this.detalleUnidadesMensual[i].CarLine, '', mes);
+        this.getDetalleUnidadesTipo(this.detalleUnidadesMensual[i].CarLine, depto, mes);
       }
       else { //acumulado
-        this.detalleUnidadesConceptoSegundoNivel = this.detalleUnidadesAcumulado[i].Carline + ' ' + name;
-        this.getDetalleUnidadesTipo(this.detalleUnidadesAcumulado[i].Carline, '', mes);
+        this.detalleUnidadesConceptoSegundoNivel = this.detalleUnidadesAcumulado[i].Carline + ' ' + strMes;
+        this.getDetalleUnidadesTipo(this.detalleUnidadesAcumulado[i].Carline, depto, mes);
       }
     }
   }
