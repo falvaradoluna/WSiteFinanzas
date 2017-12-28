@@ -457,7 +457,7 @@
                 <th *ngIf='mes >= "10"' class="bg-secondary text-white">OCT</th>
                 <th *ngIf='mes >= "11"' class="bg-secondary text-white">NOV</th>
                 <th *ngIf='mes >= "12"' class="bg-secondary text-white">DIC</th>
-                <th class="bg-secondary text-white">SUMA</th>
+                <th *ngIf='mes >= "02"' class="bg-secondary text-white">SUMA</th>
                 <th *ngIf='idEstadoResultado === 3' class="bg-secondary text-white">Real</th>
                 <th *ngIf='idEstadoResultado === 3' class="bg-secondary text-white">Presupuesto</th>
                 <th *ngIf='idEstadoResultado === 3' class="bg-secondary text-white">Variacion</th>
@@ -482,7 +482,7 @@
                 <td *ngIf='mes >= "10"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.Oct, 'Octubre', '10')">{{ drm.Oct | number:'1.2-2' }}</td>
                 <td *ngIf='mes >= "11"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.Nov, 'Noviembre', '11')">{{ drm.Nov | number:'1.2-2' }}</td>
                 <td *ngIf='mes >= "12"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.Dic, 'Diciembre', '12')">{{ drm.Dic | number:'1.2-2' }}</td>
-                <td class="text-right">{{ drm.Suma | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "02"' class="text-right">{{ drm.Suma | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Real | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Pspsto | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Variacion | number:'1.2-2' }}</td>
