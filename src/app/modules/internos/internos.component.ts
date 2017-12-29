@@ -17,6 +17,7 @@ import { IDetalleResultadosMensual } from './detalle-resultados-mensual';
 import { IDetalleResultadosCuentas } from './detalle-resultados-cuentas';
 import { ITipoUnidad } from './tipo-unidad';
 import { IDetalleUnidadesAcumulado } from './detalle-unidades-acumulado';
+import { ISeries } from './series';
 
 @Component({
   selector: 'app-internos',
@@ -56,9 +57,11 @@ export class InternosComponent implements OnInit {
   showEfectivoSituacion = false;
   showReporteUnidades = true;
   showDetalleUnidadesPrimerNivel = false;
+  showDetalleUnidadesSegundoNivel = false;
+  showDetalleUnidadesTercerNivel = false;
   showDetallePrimerNivel = false;
   showDetalleSegundoNivel = false;
-  showDetalleUnidadesSegundoNivel = false;
+
   isCollapsed = true;
 
   resultadoUnidadesService: IResultadoInternos[] = [];
@@ -72,6 +75,7 @@ export class InternosComponent implements OnInit {
   detalleUnidadesMensual: IDetalleUnidadesMensual[];
   detalleUnidadesAcumulado: IDetalleUnidadesAcumulado[];
   detalleUnidadesTipo: ITipoUnidad[];
+  detalleUnidadesSeries: ISeries[];
   detalleResultadosMensual: IDetalleResultadosMensual[];
   detalleResultadosCuentas: IDetalleResultadosCuentas[];
   resultadoUnidades: IResultadoInternos[] = [];
@@ -100,6 +104,9 @@ export class InternosComponent implements OnInit {
   detalleUnidadesConceptoSegundoNivel: string;
   detalleUnidadesNameSegundoNivel: string;
   detalleUnidadesValueSegundoNivel: string;
+  detalleUnidadesConceptoTercerNivel: string;
+  detalleUnidadesNameTercerNivel: string;
+  detalleUnidadesValueTercerNivel: string;
   detalleName: string;
   detalleValue: number;
   detalleConcepto: string;
@@ -329,6 +336,30 @@ export class InternosComponent implements OnInit {
       error => this.errorMessage = <any>error);
   }
 
+  getDetalleUnidadesSeries(tipoAuto: string = '', idReporte: string, mes: string): void {
+    // Se usa como parametro de departamento el texto de Concepto del primer nivel,
+    // sin las letras N o S que se le agregan al inicio
+    let concepto = this.detalleUnidadesConcepto;
+    if (concepto.startsWith('N ')) concepto = concepto.substr(2);
+    else if (concepto.startsWith('S ')) concepto = concepto.substr(2);
+
+    this._service.getDetalleUnidadesSeries({
+      idAgencia: this.selectedCompania,
+      mSucursal: this.selectedSucursal,
+      anio: this.anio,
+      mes:  mes === '' ? this.mes : mes, //Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
+      departamento: concepto,
+      idEstadoDeResultado: 1, //QUITAR HARD CODE CUANDO TIBERIO COMPLETE EL SP
+      idReporte: idReporte,
+      carLine: this.detalleUnidadesConceptoSegundoNivel,
+      tipoAuto: tipoAuto
+    })
+      .subscribe(detalleUnidadesSeries => {
+        this.detalleUnidadesSeries = detalleUnidadesSeries;
+      },
+      error => this.errorMessage = <any>error);
+  }
+
   getDetalleResultadosMensual(concepto: string): void {
     //Este servicio requiere el Id de la sucursal con un cero a la izquierda
     this._service.getDetalleResultadosMensual({
@@ -495,6 +526,27 @@ export class InternosComponent implements OnInit {
     }
   }
 
+  onClickDetalleUnidadesTipo(i: number, value: string, strMes: string = '', mes: string = '', depto: string = '') {
+    if (value.trim() !== 'Total') {
+      this.showUnidades = false;
+      this.showDetalleUnidadesPrimerNivel = false;
+      this.showDetalleUnidadesSegundoNivel = false;
+      this.showDetalleUnidadesTercerNivel = true;
+      this.detalleUnidadesNameTercerNivel = strMes;
+      this.detalleUnidadesValueTercerNivel = value;
+      const idReporte = this.detalleName === 'Real' ? 'MRQ' : 'ARQ';
+
+      if (mes === '') { //mensual
+        this.detalleUnidadesConceptoTercerNivel = value;
+        this.getDetalleUnidadesSeries(value, idReporte, mes);
+      }
+      // else { //acumulado
+      //   this.detalleUnidadesConceptoTercerNivel = this.detalleUnidadesAcumulado[i].Carline + ' ' + strMes;
+      //   this.getDetalleUnidadesTipo(this.detalleUnidadesAcumulado[i].Carline, depto, mes);
+      // }
+    }
+  }
+
   onClickResultado(i: number, value: number, name: string, idEstadoResultado: number, idDetalleResultados: number) {
     this.showDetallePrimerNivel = true;
     this.detalleName = name;
@@ -548,13 +600,22 @@ export class InternosComponent implements OnInit {
   hideDetalleUnidadesPrimerNivel(): void {
     this.showUnidades = true;
     this.showDetalleUnidadesSegundoNivel = false;
+    this.showDetalleUnidadesTercerNivel = false;
     this.showDetalleUnidadesPrimerNivel = false;
   }
 
   hideDetalleUnidadesSegundoNivel(): void {
     this.showUnidades = false;
     this.showDetalleUnidadesSegundoNivel = false;
+    this.showDetalleUnidadesTercerNivel = false;
     this.showDetalleUnidadesPrimerNivel = true;
+  }
+
+  hideDetalleUnidadesTercerNivel(): void {
+    this.showUnidades = false;
+    this.showDetalleUnidadesSegundoNivel = true;
+    this.showDetalleUnidadesTercerNivel = false;
+    this.showDetalleUnidadesPrimerNivel = false;
   }
 
   hideDetallePrimerNivel(): void {
