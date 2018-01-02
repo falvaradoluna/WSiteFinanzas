@@ -324,15 +324,15 @@
                 <td>{{ dus.Factura }}</td>
                 <td>{{ dus.NumInventario }}</td>
                 <td>{{ dus.Serie }}</td>
-                <td>{{ dus.PrecioBase | number:'1.2-2' }}</td>
-                <td>{{ dus.Isan | number:'1.2-2' }}</td>
-                <td>{{ dus.PercIVA | number:'1.2-2' }}</td>
-                <td>{{ dus.IVA | iva: dus.Isan }}</td>
-                <td>{{ dus.ImporteTotal | number:'1.2-2' }}</td>
-                <td>{{ dus.CostoCompra | number:'1.2-2' }}</td>
-                <td>{{ dus.Incentivo | number:'1.2-2' }}</td>
-                <td>{{ dus.TotalCompra | number:'1.2-2' }}</td>
-                <td>{{ dus.Utilidad | number:'1.2-2' }}</td>
+                <td class="text-right">{{ dus.PrecioBase | number:'1.2-2' }}</td>
+                <td class="text-right">{{ dus.Isan | number:'1.2-2' }}</td>
+                <td class="text-right">{{ dus.PercIVA | number:'1.0-2' }}</td>
+                <td class="text-right">{{ dus.PrecioBase | iva: dus.Isan | number:'1.2-2' }}</td>
+                <td class="text-right">{{ dus.ImporteTotal | number:'1.2-2' }}</td>
+                <td class="text-right">{{ dus.CostoCompra | number:'1.2-2' }}</td>
+                <td class="text-right">{{ dus.Incentivo | number:'1.2-2' }}</td>
+                <td class="text-right">{{ dus.TotalCompra | number:'1.2-2' }}</td>
+                <td class="text-right">{{ dus.Utilidad | number:'1.2-2' }}</td>
               </tr>
             </tbody>
           </table>

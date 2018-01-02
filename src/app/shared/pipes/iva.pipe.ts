@@ -5,12 +5,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class IvaPipe implements PipeTransform {
 
-  transform(value: string, isan: string): string {
-    console.log(value);
-    const pb = Number(value) || 0;
-    const isn = Number(isan) || 0;
+  transform(value: number, isan: number): string {
+    const iva = ((value + isan) * 0.16).toString();
 
-    return ((pb + isn) * 0.16).toString();
+    //Para el caso de IVA, la versión pasada no redondea los decimales
+    //El pipe de number redondea por default y causa inconsitencia
+    return iva.slice(0, (iva.indexOf(".")) + 3);
   }
 
 }
