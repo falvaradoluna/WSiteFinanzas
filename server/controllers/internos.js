@@ -231,6 +231,35 @@ internos.prototype.get_detalleunidadestipo = function (req, res, next) {
   });
 };
 
+// /api/internos/detalleunidadestipoacumulado
+// Funcionalidad para tipo de Unidades acumulado(tercer nivel de unidades)
+internos.prototype.get_detalleunidadestipoacumulado = function (req, res, next) {
+  var self = this;
+  var idAgencia = req.query.idcia;
+  var anio = req.query.anio;
+  var mes = req.query.mes;
+  var departamento = req.query.departamento;
+  var xCarLine = req.query.carline;
+  var xTipoAuto = req.query.tipoauto;
+
+  var params = [
+    { name: 'IdAgencia', value: idAgencia, type: self.model.types.STRING },
+    { name: 'Anio', value: anio, type: self.model.types.STRING },
+    { name: 'Mes', value: mes, type: self.model.types.STRING },
+    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
+    { name: 'xCarLine', value: xCarLine, type: self.model.types.STRING },
+    { name: 'xTipoAuto', value: xTipoAuto, type: self.model.types.STRING }
+  ];
+
+  this.model.query('SP_TIPO_DE_UNIDADES_ACUMULADO', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
 // /api/internos/detalleunidadesseries
 // Funcionalidad para series de Unidades (cuarto nivel de unidades)
 internos.prototype.get_detalleunidadesseries = function (req, res, next) {

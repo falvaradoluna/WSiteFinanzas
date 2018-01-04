@@ -28,6 +28,7 @@ export class InternosService {
   private _urlEfectivoSituacion = 'api/internos/efectivoysituacion';
   private _urlDetalleUnidadesMensual = 'api/internos/detalleunidadesmensual';
   private _urlDetalleUnidadesTipo = 'api/internos/detalleunidadestipo';
+  private _urlDetalleUnidadesTipoAcumulado = 'api/internos/detalleunidadestipoacumulado';
   private _urlDetalleUnidadesSeries = 'api/internos/detalleunidadesseries';
   private _urlDetalleUnidadesAcumulado = 'api/internos/detalleunidadesacumulado';
   private _urlDetalleResultadosMensual = 'api/internos/detalleresultadosmensual';
@@ -153,6 +154,22 @@ export class InternosService {
     Params = Params.append('tipoauto', parameters.tipoAuto);
 
     return this._http.get<ITipoUnidad[]>(this._urlDetalleUnidadesTipo, { params: Params })
+      .catch(this.handleError);
+  }
+
+  getDetalleUnidadesTipoAcumulado(parameters): Observable<ITipoUnidad[]> {
+    // Initialize Params Object
+    let Params = new HttpParams();
+
+    // Begin assigning parameters
+    Params = Params.append('idcia', parameters.idAgencia);
+    Params = Params.append('anio', parameters.anio);
+    Params = Params.append('mes', parameters.mes);
+    Params = Params.append('departamento', parameters.departamento);
+    Params = Params.append('carline', parameters.carLine);
+    Params = Params.append('tipoauto', parameters.tipoAuto);
+
+    return this._http.get<ITipoUnidad[]>(this._urlDetalleUnidadesTipoAcumulado, { params: Params })
       .catch(this.handleError);
   }
 

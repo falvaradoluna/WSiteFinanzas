@@ -103,7 +103,7 @@
               <td>
                 {{ r.Concepto }}
               </td>
-              <td class="text-center" (click)="onClickUnidades(i, r.Real, 'Real', 1)">
+              <td class="text-center" (click)="onClickUnidades(i, r.Real, 'Real', 1)"> <!-- 1 = Mensual -->
                 {{ r.Real }}
               </td>
               <td class="text-right">{{ r.Perc1 | number:'1.2-2' }}</td>
@@ -111,7 +111,7 @@
               <td class="text-right">{{ r.Perc2 | number:'1.2-2' }}</td>
               <td class="text-center">{{ r.Variacion }}</td>
               <td class="text-right">{{ r.Perc3 | number:'1.2-2' }}</td>
-              <td class="text-center" (click)="onClickUnidades(i, r.AcReal, 'AcReal', 2)">
+              <td class="text-center" (click)="onClickUnidades(i, r.AcReal, 'AcReal', 2)"> <!-- 2 = Acumulado -->
                 {{ r.AcReal }}
               </td>
               <td class="text-right">{{ r.AcPerc1 | number:'1.2-2' }}</td>
@@ -242,11 +242,11 @@
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="javascript:void(0)" (click)='hideDetalleUnidadesPrimerNivel()'>{{ selectedNombreCompania }}</a></li>
               <li class="breadcrumb-item"><a href="javascript:void(0)" (click)='hideDetalleUnidadesSegundoNivel()'>{{ detalleUnidadesConcepto }}</a></li>
-              <li class="breadcrumb-item active">{{ detalleUnidadesConceptoSegundoNivel }}</li>
+              <li class="breadcrumb-item active">{{ detalleUnidadesConceptoSegundoNivel }} {{ toLongMonth(mesAcumulado) }}</li>
             </ol>
           </nav>
 
-          <div class="row justify-content-center">
+          <div *ngIf='idDetalleUnidades === 1' class="row justify-content-center">
             <div class="col-md-6">
               <table class="table table-sm table-bordered table-hover-td">
                 <thead>
@@ -267,6 +267,73 @@
               </table>
             </div>
           </div>
+
+          <!--BEGIN Unidades Segundo Nivel Acumulado -->
+          <table id="idDetalleUnidadesTipo" *ngIf='idDetalleUnidades === 2' class="table table-sm table-bordered table-responsive table-hover-td table-double-scroll">
+            <thead>
+              <tr>
+                <th class="bg-secondary text-white min-width-135">TipoUnidad</th>
+                <th class="bg-secondary text-white">ENE</th>
+                <th class="bg-secondary text-white text-center"> % </th>
+                <th class="bg-secondary text-white">FEB</th>
+                <th class="bg-secondary text-white text-center"> % </th>
+                <th class="bg-secondary text-white">MAR</th>
+                <th class="bg-secondary text-white text-center"> % </th>
+                <th class="bg-secondary text-white">ABR</th>
+                <th class="bg-secondary text-white text-center"> % </th>
+                <th class="bg-secondary text-white">MAY</th>
+                <th class="bg-secondary text-white text-center"> % </th>
+                <th class="bg-secondary text-white">JUN</th>
+                <th class="bg-secondary text-white text-center"> % </th>
+                <th class="bg-secondary text-white">JUL</th>
+                <th class="bg-secondary text-white text-center"> % </th>
+                <th class="bg-secondary text-white">AGO</th>
+                <th class="bg-secondary text-white text-center"> % </th>
+                <th class="bg-secondary text-white">SEP</th>
+                <th class="bg-secondary text-white text-center"> % </th>
+                <th class="bg-secondary text-white">OCT</th>
+                <th class="bg-secondary text-white text-center"> % </th>
+                <th class="bg-secondary text-white">NOV</th>
+                <th class="bg-secondary text-white text-center"> % </th>
+                <th class="bg-secondary text-white">DIC</th>
+                <th class="bg-secondary text-white text-center"> % </th>
+                <th class="bg-secondary text-white">TOTAL</th>
+                <th class="bg-secondary text-white text-center"> % </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor='let dut of detalleUnidadesTipo; let i = index;'>
+                <td>{{ dut.TipoUnidad }}</td>
+                <td class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.TipoUnidad, "Enero", "01")'>{{ dut.Ene }}</td>
+                <td class="text-right">{{ dut.PercEne | number:'1.2-2' }}</td>
+                <td class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.TipoUnidad, "Febrero", "02")'>{{ dut.Feb }}</td>
+                <td class="text-right">{{ dut.PercFeb | number:'1.2-2' }}</td>
+                <td class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.TipoUnidad, "Marzo", "03")'>{{ dut.Mar }}</td>
+                <td class="text-right">{{ dut.PercMar | number:'1.2-2' }}</td>
+                <td class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.TipoUnidad, "Abril", "04")'>{{ dut.Abr }}</td>
+                <td class="text-right">{{ dut.PercAbr | number:'1.2-2' }}</td>
+                <td class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.TipoUnidad, "Mayo", "05")'>{{ dut.May }}</td>
+                <td class="text-right">{{ dut.PercMay | number:'1.2-2' }}</td>
+                <td class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.TipoUnidad, "Junio", "06")'>{{ dut.Jun }}</td>
+                <td class="text-right">{{ dut.PercJun | number:'1.2-2' }}</td>
+                <td class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.TipoUnidad, "Julio", "07")'>{{ dut.Jul }}</td>
+                <td class="text-right">{{ dut.PercJul | number:'1.2-2' }}</td>
+                <td class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.TipoUnidad, "Agosto", "08")'>{{ dut.Ago }}</td>
+                <td class="text-right">{{ dut.PercAgo | number:'1.2-2' }}</td>
+                <td class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.TipoUnidad, "Septiembre", "09")'>{{ dut.Sep }}</td>
+                <td class="text-right">{{ dut.PercSep | number:'1.2-2' }}</td>
+                <td class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.TipoUnidad, "Octubre", "10")'>{{ dut.Oct }}</td>
+                <td class="text-right">{{ dut.PercOct | number:'1.2-2' }}</td>
+                <td class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.TipoUnidad, "Noviembre", "11")'>{{ dut.Nov }}</td>
+                <td class="text-right">{{ dut.PercNov | number:'1.2-2' }}</td>
+                <td class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.TipoUnidad, "Diciembre", "12")'>{{ dut.Dic }}</td>
+                <td class="text-right">{{ dut.PercDic | number:'1.2-2' }}</td>
+                <td class="text-center">{{ dut.TOTAL }}</td>
+                <td class="text-right">{{ dut.PercTotal | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <!--END Unidades Segundo Nivel Acumulado -->
         </div>
         <!-- END Unidades Segundo Nivel -->
 
@@ -280,12 +347,12 @@
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="javascript:void(0)" (click)='hideDetalleUnidadesPrimerNivel()'>{{ selectedNombreCompania }}</a></li>
               <li class="breadcrumb-item"><a href="javascript:void(0)" (click)='hideDetalleUnidadesSegundoNivel()'>{{ detalleUnidadesConcepto }}</a></li>
-              <li class="breadcrumb-item"><a href="javascript:void(0)" (click)='hideDetalleUnidadesTercerNivel()'>{{ detalleUnidadesConceptoSegundoNivel }}</a></li>
+              <li class="breadcrumb-item"><a href="javascript:void(0)" (click)='hideDetalleUnidadesTercerNivel()'>{{ detalleUnidadesConceptoSegundoNivel }} {{ toLongMonth(mesAcumulado) }}</a></li>
               <li class="breadcrumb-item active">{{ detalleUnidadesConceptoTercerNivel }}</li>
             </ol>
           </nav>
 
-          <table class="table table-sm table-bordered table-responsive table-double-scroll">
+          <table id="detalleUnidadesSeries" class="table table-sm table-bordered table-responsive table-double-scroll">
             <thead>
               <tr>
                 <th class="bg-secondary text-white">Modelo</th>
