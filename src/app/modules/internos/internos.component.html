@@ -62,8 +62,16 @@
                   </option>
                 </select>
               </div>
-              <div class="form-group col-md-2 d-flex align-items-end">
-                <button type="button" class="btn btn-primary btn-sm" id="submit" (click)='procesar()'>Procesar</button>
+              <div class="form-group col-md-3">
+                <label class="invisible">invisible</label> <!-- Para bajar los botones -->
+                <div class="row">
+                  <div class="col-sm-6">
+                    <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='procesar()'>Procesar</button>
+                  </div>
+                  <div class="col-sm-6">
+                    <button type="button" class="btn btn-secondary btn-sm btn-block" (click)='showSuma()'>Suma</button>
+                  </div>
+                </div>
               </div>
             </div>
           </form>
@@ -465,6 +473,7 @@
             <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
           </button>
         </div>
+
         <table *ngIf='showResultados && !showDetallePrimerNivel' class="table table-sm table-bordered table-fixed table-hover-td">
           <thead>
             <tr>
@@ -485,17 +494,65 @@
           </thead>
           <tbody>
             <ng-container *ngFor='let r of estadoResultados; let i = index;'>
-              <tr [ngClass]="{'font-weight-bold': shouldBeBold(r.Concepto)}">
-                <td class="col-width-concepto">{{ r.Concepto }}</td>
+              <!-- BEGIN Templates para la tabla -->
+              <ng-template #tipErReal>Por Unidad: {{ calculaTooltip(r.Real, 1) | number:'1.2-2' }}</ng-template>
+              <ng-template #tipErPpto>Por Unidad: {{ calculaTooltip(r.PPto, 3) | number:'1.2-2' }}</ng-template>
+              <ng-template #tipErAcReal>Por Unidad: {{ calculaTooltip(r.AcReal, 7) | number:'1.2-2' }}</ng-template>
+              <ng-template #tipErAcPpto>Por Unidad: {{ calculaTooltip(r.AcPPto, 9) | number:'1.2-2' }}</ng-template>
+
+              <ng-template #conTooltipReal>
+                  <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.Real, 'Real', 1, 1)" [ngbTooltip]="tipErReal">
+                    {{ r.Concepto === 'ROS' ? (r.Real | percent:'1.2-2') : (r.Real | number:'1.2-2') }}
+                  </td>
+                </ng-template>
+              <ng-template #sinTooltipReal>
                 <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.Real, 'Real', 1, 1)">
                   {{ r.Concepto === 'ROS' ? (r.Real | percent:'1.2-2') : (r.Real | number:'1.2-2') }}
                 </td>
-                <td class="text-right col-width-perc">
-                  {{ r.Concepto === 'ROS' ? (r.Perc1 | percent:'1.2-2') : (r.Perc1 | number:'1.2-2') }}
+              </ng-template>
+
+              <ng-template #conTooltipPpto>
+                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.PPto, 'PPto', 2, 1)" [ngbTooltip]="tipErPpto">
+                  {{ r.Concepto === 'ROS' ? (r.PPto | percent:'1.2-2') : (r.PPto | number:'1.2-2') }}
                 </td>
+              </ng-template>
+              <ng-template #sinTooltipPpto>
                 <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.PPto, 'PPto', 2, 1)">
                   {{ r.Concepto === 'ROS' ? (r.PPto | percent:'1.2-2') : (r.PPto | number:'1.2-2') }}
                 </td>
+              </ng-template>
+              <ng-template #conTooltipAcReal>
+                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.AcReal, 'AcReal', 1, 2)" [ngbTooltip]="tipErAcReal">
+                  {{ r.Concepto === 'ROS' ? (r.AcReal | percent:'1.2-2') : (r.AcReal | number:'1.2-2') }}
+                </td>
+              </ng-template>
+              <ng-template #sinTooltipAcReal>
+                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.AcReal, 'AcReal', 1, 2)">
+                  {{ r.Concepto === 'ROS' ? (r.AcReal | percent:'1.2-2') : (r.AcReal | number:'1.2-2') }}
+                </td>
+              </ng-template>
+              <ng-template #conTooltipAcPpto>
+                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.AcPPto, 'AcPPto', 2, 2)" [ngbTooltip]="tipErAcPpto">
+                  {{ r.Concepto === 'ROS' ? (r.AcPPto | percent:'1.2-2') : (r.AcPPto | number:'1.2-2') }}
+                </td>
+              </ng-template>
+              <ng-template #sinTooltipAcPpto>
+                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.AcPPto, 'AcPPto', 2, 2)">
+                  {{ r.Concepto === 'ROS' ? (r.AcPPto | percent:'1.2-2') : (r.AcPPto | number:'1.2-2') }}
+                </td>
+              </ng-template>
+              <!-- END Templates -->
+              <tr [ngClass]="{'font-weight-bold': shouldBeBold(r.Concepto)}">
+                <td class="col-width-concepto">{{ r.Concepto }}</td>
+                <ng-container *ngIf='r.Concepto === "Utilidad Bruta"; then conTooltipReal; else sinTooltipReal'> <!-- Se usan templates para ver si lleva o no tooltip-->
+                  Esto no se muestra !!!!!!!
+                </ng-container>
+                <td class="text-right col-width-perc">
+                  {{ r.Concepto === 'ROS' ? (r.Perc1 | percent:'1.2-2') : (r.Perc1 | number:'1.2-2') }}
+                </td>
+                <ng-container *ngIf='r.Concepto === "Utilidad Bruta"; then conTooltipPpto; else sinTooltipPpto'> <!-- Se usan templates para ver si lleva o no tooltip-->
+                  Esto no se muestra !!!!!!!
+                </ng-container>
                 <td class="text-right col-width-perc">
                   {{ r.Concepto === 'ROS' ? (r.Perc2 | percent:'1.2-2') : (r.Perc2 | number:'1.2-2') }}
                 </td>
@@ -505,15 +562,15 @@
                 <td class="text-right col-width-perc">
                   {{ r.Concepto === 'ROS' ? (r.Perc3 | percent:'1.2-2') : (r.Perc3 | number:'1.2-2') }}
                 </td>
-                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.AcReal, 'AcReal', 1, 2)">
-                  {{ r.Concepto === 'ROS' ? (r.AcReal | percent:'1.2-2') : (r.AcReal | number:'1.2-2') }}
-                </td>
+                <ng-container *ngIf='r.Concepto === "Utilidad Bruta"; then conTooltipAcReal; else sinTooltipAcReal'> <!-- Se usan templates para ver si lleva o no tooltip-->
+                  Esto no se muestra !!!!!!!
+                </ng-container>
                 <td class="text-right col-width-perc">
                   {{ r.Concepto === 'ROS' ? (r.AcPerc1 | percent:'1.2-2') : (r.AcPerc1 | number:'1.2-2') }}
                 </td>
-                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.AcPPto, 'AcPPto', 2, 2)">
-                  {{ r.Concepto === 'ROS' ? (r.AcPPto | percent:'1.2-2') : (r.AcPPto | number:'1.2-2') }}
-                </td>
+                <ng-container *ngIf='r.Concepto === "Utilidad Bruta"; then conTooltipAcPpto; else sinTooltipAcPpto'> <!-- Se usan templates para ver si lleva o no tooltip-->
+                  Esto no se muestra !!!!!!!
+                </ng-container>
                 <td class="text-right col-width-perc">
                   {{ r.Concepto === 'ROS' ? (r.AcPerc2 | percent:'1.2-2') : (r.AcPerc2 | number:'1.2-2') }}
                 </td>
@@ -544,7 +601,7 @@
             </ol>
           </nav>
 
-          <table *ngIf='idDetalleResultados === 1' class="table table-sm table-bordered table-fixed table-hover-td"
+          <table id="detalleResultadosAcumulado" *ngIf='idDetalleResultados === 1' class="table table-sm table-bordered table-fixed table-hover-td"
                   [ngClass]="{'table-without-scroll': detalleResultadosMensualScroll}">
             <thead>
               <tr>
@@ -676,6 +733,112 @@
       </div>
     </div>
   </div>
+
+  <!-- BEGIN Suma de departamentos -->
+  <div *ngIf='showSumaDepartamentos' class="row">
+    <div class="col-sm-12 mt-2">
+      <div class="card">
+        <div class="card-header bg-primary text-white text-center">SUMA DEPARTAMENTOS</div>
+        <div class="card-body">
+            <button type="button" class="close" (click)='hideSumaDepartamentos()'>
+                <span>&times;</span>
+              </button>
+          <div class="row">
+            <div class="col-sm-2">
+              <form>
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <button type="button" class="btn btn-secondary btn-sm btn-block">Ninguno</button>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <button type="button" class="btn btn-secondary btn-sm btn-block">Todos</button>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-sm-12">
+                    <button type="button" class="btn btn-secondary btn-sm btn-block" (click)='sumaDepartamentos()'>Procesar</button>
+                  </div>
+                </div>
+                <select name="inputDepartamentoMulti" class="custom-select custom-select-sm" multiple size="13" [(ngModel)]='selectedDepartamentos'
+                        (change)='onChangeSumaDepartamentos()'>
+                  <option *ngFor='let depto of departamentos' [value]='depto.Depto'>
+                    {{ depto.Departamento }}
+                  </option>
+                </select>
+              </form>
+            </div>
+            <div class="col-sm-10">
+              <table class="table table-sm table-bordered table-fixed">
+                <thead>
+                  <tr>
+                    <th class="bg-secondary text-white col-width-concepto">Concepto</th>
+                    <th class="bg-primary text-white col-width-cantidad">Real</th>
+                    <th class="bg-primary text-white col-width-perc">%</th>
+                    <th class="bg-primary text-white col-width-cantidad">PPto</th>
+                    <th class="bg-primary text-white col-width-perc">%</th>
+                    <th class="bg-primary text-white col-width-cantidad">Variación</th>
+                    <th class="bg-primary text-white col-width-perc">%</th>
+                    <th class="bg-success text-white col-width-cantidad">Real</th>
+                    <th class="bg-success text-white col-width-perc">%</th>
+                    <th class="bg-success text-white col-width-cantidad">PPto</th>
+                    <th class="bg-success text-white col-width-perc">%</th>
+                    <th class="bg-success text-white col-width-cantidad">Variación</th>
+                    <th class="bg-success text-white col-width-perc">%</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor='let r of resultadoSumaDepartamentos; let i = index;'>
+                    <tr [ngClass]="{'font-weight-bold': shouldBeBold(r.Concepto)}">
+                      <td class="col-width-concepto">{{ r.Concepto }}</td>
+                      <td class="text-right col-width-cantidad">
+                        {{ r.Concepto === 'ROS' ? (r.Real | percent:'1.2-2') : (r.Real | number:'1.2-2') }}
+                      </td>
+                      <td class="text-right col-width-perc">
+                        {{ r.Concepto === 'ROS' ? (r.Perc1 | percent:'1.2-2') : (r.Perc1 | number:'1.2-2') }}
+                      </td>
+                      <td class="text-right col-width-cantidad">
+                        {{ r.Concepto === 'ROS' ? (r.PPto | percent:'1.2-2') : (r.PPto | number:'1.2-2') }}
+                      </td>
+                      <td class="text-right col-width-perc">
+                        {{ r.Concepto === 'ROS' ? (r.Perc2 | percent:'1.2-2') : (r.Perc2 | number:'1.2-2') }}
+                      </td>
+                      <td class="text-right col-width-cantidad">
+                        {{ r.Concepto === 'ROS' ? (r.Variacion | percent:'1.2-2') : (r.Variacion | number:'1.2-2') }}
+                      </td>
+                      <td class="text-right col-width-perc">
+                        {{ r.Concepto === 'ROS' ? (r.Perc3 | percent:'1.2-2') : (r.Perc3 | number:'1.2-2') }}
+                      </td>
+                      <td class="text-right col-width-cantidad">
+                        {{ r.Concepto === 'ROS' ? (r.AcReal | percent:'1.2-2') : (r.AcReal | number:'1.2-2') }}
+                      </td>
+                      <td class="text-right col-width-perc">
+                        {{ r.Concepto === 'ROS' ? (r.AcPerc1 | percent:'1.2-2') : (r.AcPerc1 | number:'1.2-2') }}
+                      </td>
+                      <td class="text-right col-width-cantidad">
+                        {{ r.Concepto === 'ROS' ? (r.AcPPto | percent:'1.2-2') : (r.AcPPto | number:'1.2-2') }}
+                      </td>
+                      <td class="text-right col-width-perc">
+                        {{ r.Concepto === 'ROS' ? (r.AcPerc2 | percent:'1.2-2') : (r.AcPerc2 | number:'1.2-2') }}
+                      </td>
+                      <td class="text-right col-width-cantidad">
+                        {{ r.Concepto === 'ROS' ? (r.AcVariacion | percent:'1.2-2') : (r.AcVariacion | number:'1.2-2') }}
+                      </td>
+                      <td class="text-right col-width-perc">
+                        {{ r.Concepto === 'ROS' ? (r.AcPerc3 | percent:'1.2-2') : (r.AcPerc3 | number:'1.2-2') }}
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END Suma de departamentos -->
+
+  <!-- BEGIN Estado de situacion financiera -->
   <div *ngIf='showEfectivoSituacion' class="row">
     <div class="col-md-12 mt-2">
       <div class="card">
@@ -725,4 +888,5 @@
       </div>
     </div>
   </div>
+  <!-- END Estado de situacion financiera -->
 </div>
