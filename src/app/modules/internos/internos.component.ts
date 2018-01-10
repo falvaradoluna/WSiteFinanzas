@@ -18,6 +18,8 @@ import { IDetalleResultadosCuentas } from './detalle-resultados-cuentas';
 import { ITipoUnidad } from './tipo-unidad';
 import { IDetalleUnidadesAcumulado } from './detalle-unidades-acumulado';
 import { ISeries } from './series';
+import { ColumnSortedEvent } from '../../shared/services/sort.service';
+
 
 @Component({
   selector: 'app-internos',
@@ -753,5 +755,18 @@ export class InternosComponent implements OnInit {
     this.showDetalleSegundoNivel = false;
     this.showDetallePrimerNivel = true;
     this.fixedHeader("detalleResultadosAcumulado");
+  }
+
+  //Ordenamiento de tabla
+  onSorted(event: ColumnSortedEvent, obj: Object[]) {
+    //Se pasa como referencia el objeto que se quiere ordenar
+    obj.sort(function (a, b) {
+      if (event.sortDirection === 'asc') {
+        return a[event.sortColumn] - b[event.sortColumn];
+      }
+      else {
+        return b[event.sortColumn] - a[event.sortColumn];
+      }
+    });
   }
 }
