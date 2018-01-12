@@ -744,18 +744,18 @@
       <div class="card">
         <div class="card-header bg-primary text-white text-center">SUMA DEPARTAMENTOS</div>
         <div class="card-body">
-            <button type="button" class="close" (click)='hideSumaDepartamentos()'>
-                <span>&times;</span>
-              </button>
+          <button type="button" class="close" (click)='hideSumaDepartamentos()'>
+            <span>&times;</span>
+          </button>
           <div class="row">
             <div class="col-sm-2">
               <form>
                 <div class="form-row">
                   <div class="form-group col-md-6">
-                    <button type="button" class="btn btn-secondary btn-sm btn-block">Ninguno</button>
+                    <button type="button" class="btn btn-secondary btn-sm btn-block" (click)='selectTodosDeptos(false)'>Ninguno</button>
                   </div>
                   <div class="form-group col-md-6">
-                    <button type="button" class="btn btn-secondary btn-sm btn-block">Todos</button>
+                    <button type="button" class="btn btn-secondary btn-sm btn-block" (click)='selectTodosDeptos(true)'>Todos</button>
                   </div>
                 </div>
                 <div class="form-row">
@@ -765,7 +765,7 @@
                 </div>
                 <select name="inputDepartamentoMulti" class="custom-select custom-select-sm" multiple size="13" [(ngModel)]='selectedDepartamentos'
                         (change)='onChangeSumaDepartamentos()'>
-                  <option *ngFor='let depto of departamentos' [value]='depto.Depto'>
+                  <option *ngFor='let depto of departamentos' [value]='depto.Depto' [selected]='depto.Selected'>
                     {{ depto.Departamento }}
                   </option>
                 </select>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -92,7 +92,7 @@ export class InternosComponent implements OnInit {
   selectedIpSucursal = '';
   selectedConcentradora = '';
   selectedDepartamento = 'Todos';
-  selectedDepartamentos: string[];
+  selectedDepartamentos: string[] = [''];
   selectedDepartamentosStr: string; // Se formatean los departamentos como los necesita el sp
   deptoFlotillas: string; //Se guarda el departamento que aparece solo para flotillas segundo nivel
   detalleResultadosMensualScroll = false;
@@ -768,5 +768,21 @@ export class InternosComponent implements OnInit {
         return b[event.sortColumn] - a[event.sortColumn];
       }
     });
+  }
+
+  //Selecciona o deselecciona todas las opciones del select suma de departamentos
+  //True = Todos, False = ninguno
+  selectTodosDeptos(selected: boolean) {
+    this.selectedDepartamentos = [''];
+
+    //Se actualizan los departamentos seleccionados a TODOS
+    this.departamentos.forEach(d => {
+      d.Selected = selected;
+      if(selected === true)
+        this.selectedDepartamentos.push(d.Depto);
+    })
+
+    //Se dispara el evento de cambio en los departamentos seleccionados
+    this.onChangeSumaDepartamentos();
   }
 }
