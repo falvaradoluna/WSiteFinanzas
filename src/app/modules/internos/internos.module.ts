@@ -5,7 +5,7 @@ import { InternosComponent } from './internos.component';
 import { InternosService } from './internos.service';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { SharedPipesModule, SortableTableModule } from '../../shared';
+import { SharedPipesModule, SortableTableModule, SumaColumnasModule } from '../../shared';
 
 @NgModule({
   imports: [
@@ -14,6 +14,7 @@ import { SharedPipesModule, SortableTableModule } from '../../shared';
     FormsModule,
     SharedPipesModule,
     SortableTableModule,
+    SumaColumnasModule,
     NgbModule.forRoot()
   ],
   declarations: [InternosComponent],

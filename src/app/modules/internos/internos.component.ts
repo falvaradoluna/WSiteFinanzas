@@ -332,7 +332,14 @@ export class InternosComponent implements OnInit {
       .subscribe(detalleUnidadesMensual => {
         this.detalleUnidadesMensual = detalleUnidadesMensual;
       },
-      error => this.errorMessage = <any>error);
+      error => this.errorMessage = <any>error,
+      () => {
+        this.detalleUnidadesMensual.forEach(dum => {
+          dum.CantidadSelected = false,
+          dum.PercSelected = false
+        });
+      }
+    );
   }
 
   getDetalleUnidadesAcumulado(): void {
@@ -549,6 +556,7 @@ export class InternosComponent implements OnInit {
     this.selectedDepartamentos.forEach(d => {
       this.selectedDepartamentosStr += `''${d}'',`;
     });
+    //Se elimina la última coma
     this.selectedDepartamentosStr = this.selectedDepartamentosStr.substring(0, this.selectedDepartamentosStr.length - 1);
     this.selectedDepartamentosStr += "'";
   }
@@ -785,4 +793,27 @@ export class InternosComponent implements OnInit {
     //Se dispara el evento de cambio en los departamentos seleccionados
     this.onChangeSumaDepartamentos();
   }
+
+  sumaDetalleUnidades = 0;
+  //Sirve para todas las tablas
+  onSelectedCell(index: number, obj: any, prop: string, selected: boolean, objSuma: string): boolean {
+    obj[index][prop + 'Selected'] = !selected;
+    let valorSeleccionado: number = obj[index][prop];
+
+    if (!selected === true) {
+      this[objSuma] = this[objSuma] + valorSeleccionado;
+    }
+    else {
+      const suma = this[objSuma] - valorSeleccionado;
+      this[objSuma] = suma >= 0.01 ? suma : 0; //Fix para decimales 0.0000000001
+    }
+    return !selected;
+  }
+
+  // sumDetalleUnidades() {
+  //   const suma = this.detalleUnidadesMensual.forEach( dum => suma +)
+  // }
+
+
 }
+
