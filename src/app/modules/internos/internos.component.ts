@@ -98,7 +98,10 @@ export class InternosComponent implements OnInit {
   detalleResultadosMensualScroll = false;
   detalleResultadosCuentasScroll = false;
   mes: string;
+  departamentoAcumulado: string; //se usa en int-unidades-nv2 para guardar el mes selecccionado de la tabla acumulado
   mesAcumulado: string; //Se usa para ocultar los meses que no traen informacion en Unidades Segundo Nivel Acumulado
+  carLine: string;
+  idReporte: string; //Se usa en unidades nv 4 para diferenciar real de acumulado
   anio: string;
   periodo: string;
   //Control de sp SP_ESTADO_DE_RESULTADOS_DETALLE
@@ -106,6 +109,7 @@ export class InternosComponent implements OnInit {
   idEstadoResultado: number;
   idDetalleUnidades: number;
 
+  unidadesConcepto: string;
   detalleUnidadesConcepto: string;
   detalleUnidadesName: string;
   detalleUnidadesValue: number;
@@ -321,124 +325,6 @@ export class InternosComponent implements OnInit {
     this.periodo = anio + '-' + mesStr;
   }
 
-  getDetalleUnidadesMensual(concepto: string): void {
-    this._service.getDetalleUnidadesMensual({
-      idAgencia: this.selectedCompania,
-      mSucursal: this.selectedSucursal,
-      anio: this.anio,
-      mes: this.mes,
-      concepto: concepto
-    })
-      .subscribe(detalleUnidadesMensual => {
-        this.detalleUnidadesMensual = detalleUnidadesMensual;
-      },
-      error => this.errorMessage = <any>error,
-      () => {
-        this.detalleUnidadesMensual.forEach(dum => {
-          dum.CantidadSelected = false,
-          dum.PercSelected = false
-        });
-      }
-    );
-  }
-
-  getDetalleUnidadesAcumulado(): void {
-    // Se usa como parametro de departamento el texto de Concepto del primer nivel,
-    // sin las letras N o S que se le agregan al inicio
-    let concepto = this.detalleUnidadesConcepto;
-    if (concepto.startsWith('N ')) concepto = concepto.substr(2);
-    else if (concepto.startsWith('S ')) concepto = concepto.substr(2);
-
-    //Limpiar tabla antes de consultar
-    this.detalleUnidadesAcumulado = [];
-
-    this._service.getDetalleUnidadesAcumulado({
-      idAgencia: this.selectedCompania,
-      mSucursal: this.selectedSucursal,
-      anio: this.anio,
-      mes: this.mes,
-      departamento: concepto
-    })
-      .subscribe(detalleUnidadesAcumulado => {
-        this.detalleUnidadesAcumulado = detalleUnidadesAcumulado;
-      },
-      error => this.errorMessage = <any>error);
-  }
-
-  getDetalleUnidadesTipo(carLine: string, tipoAuto: string = '', mes: string): void {
-    // Se usa como parametro de departamento el texto de Concepto del primer nivel,
-    // sin las letras N o S que se le agregan al inicio
-    let concepto = this.detalleUnidadesConcepto;
-    if (concepto.startsWith('N ')) concepto = concepto.substr(2);
-    else if (concepto.startsWith('S ')) concepto = concepto.substr(2);
-
-    this.deptoFlotillas = tipoAuto; // Se usa el departamento que aparece solo para flotillas en el segundo nivel
-
-    this._service.getDetalleUnidadesTipo({
-      idAgencia: this.selectedCompania,
-      mSucursal: this.selectedSucursal,
-      anio: this.anio,
-      mes:  mes === '' ? this.mes : mes, //Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
-      departamento: concepto,
-      carLine: concepto === 'FLOTILLAS' ? tipoAuto : carLine, //Para el caso de flotillas el sp cambia carLine por tipoAuto (columna depto aparece solo para flotillas)
-      tipoAuto: concepto === 'FLOTILLAS' ? carLine : tipoAuto
-    })
-      .subscribe(detalleUnidadesTipo => {
-        this.detalleUnidadesTipo = detalleUnidadesTipo;
-      },
-      error => this.errorMessage = <any>error);
-  }
-
-  getDetalleUnidadesTipoAcumulado(carLine: string, tipoAuto: string = '', mes: string): void {
-    // Se usa como parametro de departamento el texto de Concepto del primer nivel,
-    // sin las letras N o S que se le agregan al inicio
-    let concepto = this.detalleUnidadesConcepto;
-
-    if (concepto.startsWith('N ')) concepto = concepto.substr(2);
-    else if (concepto.startsWith('S ')) concepto = concepto.substr(2);
-
-    this.deptoFlotillas = tipoAuto; // Se usa el departamento que aparece solo para flotillas en el segundo nivel
-
-    this._service.getDetalleUnidadesTipoAcumulado({
-      idAgencia: this.selectedCompania,
-      mSucursal: this.selectedSucursal,
-      anio: this.anio,
-      mes:  mes === '' ? this.mes : mes, //Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
-      departamento: concepto,
-      carLine: concepto === 'FLOTILLAS' ? tipoAuto : carLine, //Para el caso de flotillas el sp cambia carLine por tipoAuto (columna depto aparece solo para flotillas)
-      tipoAuto: concepto === 'FLOTILLAS' ? carLine : tipoAuto
-    })
-      .subscribe(detalleUnidadesTipo => {
-        this.detalleUnidadesTipo = detalleUnidadesTipo;
-      },
-      error => this.errorMessage = <any>error);
-  }
-
-  getDetalleUnidadesSeries(tipoAuto: string = '', idReporte: string, mes: string, strMes: string = ''): void {
-    // Se usa como parametro de departamento el texto de Concepto del primer nivel,
-    // sin las letras N o S que se le agregan al inicio
-    let concepto = this.detalleUnidadesConcepto;
-
-    if (concepto.startsWith('N ')) concepto = concepto.substr(2);
-    else if (concepto.startsWith('S ')) concepto = concepto.substr(2);
-
-    this._service.getDetalleUnidadesSeries({
-      idAgencia: this.selectedCompania,
-      mSucursal: this.selectedSucursal,
-      anio: this.anio,
-      mes: mes === '' ? this.mes : mes, //Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
-      departamento: concepto === 'FLOTILLAS' ? this.deptoFlotillas : concepto,
-      idEstadoDeResultado: 1, //QUITAR HARD CODE CUANDO TIBERIO COMPLETE EL SP
-      idReporte: idReporte,
-      carLine: this.detalleUnidadesConceptoSegundoNivel,
-      tipoAuto: tipoAuto
-    })
-      .subscribe(detalleUnidadesSeries => {
-        this.detalleUnidadesSeries = detalleUnidadesSeries;
-      },
-      error => this.errorMessage = <any>error);
-  }
-
   getDetalleResultadosMensual(concepto: string): void {
     //Este servicio requiere el Id de la sucursal con un cero a la izquierda
     this._service.getDetalleResultadosMensual({
@@ -589,62 +475,15 @@ export class InternosComponent implements OnInit {
       this.showDetalleUnidadesPrimerNivel = true;
       this.detalleUnidadesName = name;
       this.detalleUnidadesValue = value;
-      this.detalleUnidadesConcepto = concepto;
       this.idDetalleUnidades = idDetalleUnidades;
 
-      if (idDetalleUnidades === 1) { // Mensual
-        this.getDetalleUnidadesMensual(concepto);
-      }
-      else if (idDetalleUnidades === 2) { // Acumulado
-        this.getDetalleUnidadesAcumulado();
-      }
+      //QUITAR UNA
+      this.detalleUnidadesConcepto = concepto; // <-----QUITAR despues de refactorizar
+      this.unidadesConcepto = concepto;
     }
   }
 
-  onClickDetalleUnidadesMensual(i: number, value: string, strMes: string, mes: string = '', depto: string = '') {
-    // this.idDetalleUnidades persiste desde onClickUnidades() y controla si se muestra la tabla acumulado o mensual
-    if (value.trim() !== 'Total') {
-      this.showUnidades = false;
-      this.showDetalleUnidadesPrimerNivel = false;
-      this.showDetalleUnidadesSegundoNivel = true;
-      this.detalleUnidadesNameSegundoNivel = strMes;
-      this.detalleUnidadesValueSegundoNivel = value;
-      this.detalleUnidadesTipo = [];
-      this.mesAcumulado = mes;
-      this.fixedHeader('idDetalleUnidadesTipo');
 
-      if (mes === '') { //mensual
-        this.detalleUnidadesConceptoSegundoNivel = this.detalleUnidadesMensual[i].CarLine;
-        this.getDetalleUnidadesTipo(this.detalleUnidadesMensual[i].CarLine, depto, mes);
-      }
-      else { //acumulado
-        this.detalleUnidadesConceptoSegundoNivel = this.detalleUnidadesAcumulado[i].Carline;
-        this.getDetalleUnidadesTipoAcumulado(this.detalleUnidadesAcumulado[i].Carline, depto, '12'); //HARD CODE. en la version prod, siempre muestra los 12 meses (wtf)
-      }
-    }
-  }
-
-  onClickDetalleUnidadesTipo(i: number, value: string, strMes: string = '', mes: string = '') {
-    if (value.trim() !== 'Total') {
-      this.showUnidades = false;
-      this.showDetalleUnidadesPrimerNivel = false;
-      this.showDetalleUnidadesSegundoNivel = false;
-      this.showDetalleUnidadesTercerNivel = true;
-      this.detalleUnidadesNameTercerNivel = strMes;
-      this.detalleUnidadesValueTercerNivel = value;
-      this.fixedHeader('detalleUnidadesSeries');
-      const idReporte = this.detalleName === 'Real' ? 'MRQ' : 'ARQ'; //Real = mensual y AcReal = Acumulado
-
-      if (mes === '') { //mensual
-        this.detalleUnidadesConceptoTercerNivel = value;
-        this.getDetalleUnidadesSeries(value, idReporte, mes);
-      }
-      else { //acumulado
-        this.detalleUnidadesConceptoTercerNivel = this.detalleUnidadesTipo[i].TipoUnidad;
-        this.getDetalleUnidadesSeries(value, idReporte, mes, strMes);
-      }
-    }
-  }
 
   onClickResultado(i: number, value: number, name: string, idEstadoResultado: number, idDetalleResultados: number) {
     this.showDetallePrimerNivel = true;
@@ -793,27 +632,5 @@ export class InternosComponent implements OnInit {
     //Se dispara el evento de cambio en los departamentos seleccionados
     this.onChangeSumaDepartamentos();
   }
-
-  sumaDetalleUnidades = 0;
-  //Sirve para todas las tablas
-  onSelectedCell(index: number, obj: any, prop: string, selected: boolean, objSuma: string): boolean {
-    obj[index][prop + 'Selected'] = !selected;
-    let valorSeleccionado: number = obj[index][prop];
-
-    if (!selected === true) {
-      this[objSuma] = this[objSuma] + valorSeleccionado;
-    }
-    else {
-      const suma = this[objSuma] - valorSeleccionado;
-      this[objSuma] = suma >= 0.01 ? suma : 0; //Fix para decimales 0.0000000001
-    }
-    return !selected;
-  }
-
-  // sumDetalleUnidades() {
-  //   const suma = this.detalleUnidadesMensual.forEach( dum => suma +)
-  // }
-
-
 }
 
