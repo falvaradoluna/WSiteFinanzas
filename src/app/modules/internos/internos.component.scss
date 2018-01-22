@@ -1,4 +1,4 @@
-.table {
+.table, .card-footer {
   font-size: 0.75rem !important;
 }
 .form-control-sm {
@@ -128,5 +128,9 @@
   td {
     background-color: #fff;
   }
+}
+
+.custom-select {
+  padding: 0.375rem 0.1rem 0.375rem 0.75rem;
 }
 
