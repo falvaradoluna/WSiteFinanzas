@@ -74,6 +74,37 @@ internos.prototype.get_estadoresultados = function(req, res, next) {
   });
 };
 
+// /api/internos/sumadepartamentos
+// Funcionalidad de la tabla SUMA DE DEPARMATEMTOS
+internos.prototype.get_sumadepartamentos = function(req, res, next) {
+  var self = this;
+  var idCia = req.query.idcia;
+  var idSucursal = req.query.idsucursal;
+  var departamento = req.query.departamento
+  var mes = req.query.mes;
+  var anio = req.query.anio;
+
+  var params = [
+    { name: 'IdAgencia', value: idCia, type: self.model.types.STRING },
+    { name: 'MSucursal', value: idSucursal, type: self.model.types.STRING },
+    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
+    { name: 'Mes', value: mes, type: self.model.types.STRING },
+    { name: 'Anio', value: anio, type: self.model.types.STRING }
+  ];
+
+  this.model.query('SP_SUMA_DE_DEPARTAMENTOS', params, function (error, result) {
+    console.log('Parametros: ' + params);
+    console.log(req.query);
+    // if (result.length > 0) {
+    //   console.log("Suma de departamentos " + result[0]);
+    // }
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
 // /api/internos/unidadesdepto
 // Funcionalidad de la tabla UNIDADES por departamento
 internos.prototype.get_unidadesdepto = function (req, res, next) {
@@ -172,6 +203,218 @@ internos.prototype.get_departamentos = function (req, res, next) {
     });
   });
 };
+
+// /api/internos/detalleunidadesmensual
+// Funcionalidad para detalle de Unidades mensual (doble click celdas de lado azul)
+internos.prototype.get_detalleunidadesmensual = function (req, res, next) {
+  var self = this;
+  var idAgencia = req.query.idcia;
+  var mSuc = req.query.msuc;
+  var anio = req.query.anio;
+  var mes = req.query.mes;
+  var concepto = req.query.concepto;
+
+  var params = [
+    { name: 'IdAgencia', value: idAgencia, type: self.model.types.STRING },
+    { name: 'MSuc', value: mSuc, type: self.model.types.STRING },
+    { name: 'Anio', value: anio, type: self.model.types.STRING },
+    { name: 'Mes', value: mes, type: self.model.types.STRING },
+    { name: 'Concepto', value: concepto, type: self.model.types.STRING }
+  ];
+
+  this.model.query('SP_DETALLE_DE_UNIDADES_MENSUAL', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/detalleunidadestipo
+// Funcionalidad para tipo de Unidades (tercer nivel de unidades)
+internos.prototype.get_detalleunidadestipo = function (req, res, next) {
+  var self = this;
+  var idAgencia = req.query.idcia;
+  var mSuc = req.query.msuc;
+  var anio = req.query.anio;
+  var mes = req.query.mes;
+  var departamento = req.query.departamento;
+  var xCarLine = req.query.carline;
+  var xTipoAuto = req.query.tipoauto;
+
+  var params = [
+    { name: 'IdAgencia', value: idAgencia, type: self.model.types.STRING },
+    { name: 'MSuc', value: mSuc, type: self.model.types.STRING },
+    { name: 'Anio', value: anio, type: self.model.types.STRING },
+    { name: 'Mes', value: mes, type: self.model.types.STRING },
+    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
+    { name: 'xCarLine', value: xCarLine, type: self.model.types.STRING },
+    { name: 'xTipoAuto', value: xTipoAuto, type: self.model.types.STRING }
+  ];
+
+  this.model.query('SP_TIPO_DE_UNIDADES', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/detalleunidadestipoacumulado
+// Funcionalidad para tipo de Unidades acumulado(tercer nivel de unidades)
+internos.prototype.get_detalleunidadestipoacumulado = function (req, res, next) {
+  var self = this;
+  var idAgencia = req.query.idcia;
+  var anio = req.query.anio;
+  var mes = req.query.mes;
+  var departamento = req.query.departamento;
+  var xCarLine = req.query.carline;
+  var xTipoAuto = req.query.tipoauto;
+
+  var params = [
+    { name: 'IdAgencia', value: idAgencia, type: self.model.types.STRING },
+    { name: 'Anio', value: anio, type: self.model.types.STRING },
+    { name: 'Mes', value: mes, type: self.model.types.STRING },
+    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
+    { name: 'xCarLine', value: xCarLine, type: self.model.types.STRING },
+    { name: 'xTipoAuto', value: xTipoAuto, type: self.model.types.STRING }
+  ];
+
+  this.model.query('SP_TIPO_DE_UNIDADES_ACUMULADO', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/detalleunidadesseries
+// Funcionalidad para series de Unidades (cuarto nivel de unidades)
+internos.prototype.get_detalleunidadesseries = function (req, res, next) {
+  var self = this;
+  var idAgencia = req.query.idcia;
+  var mSuc = req.query.msuc;
+  var anio = req.query.anio;
+  var mes = req.query.mes;
+  var idEstadoDeResultado = req.query.idestadoresultado;
+  var idReporte = req.query.idreporte;
+  var departamento = req.query.departamento;
+  var xCarLine = req.query.carline;
+  var xTipoAuto = req.query.tipoauto;
+
+  var params = [
+    { name: 'IdAgencia', value: idAgencia, type: self.model.types.STRING },
+    { name: 'MSucursal', value: mSuc, type: self.model.types.STRING },
+    { name: 'Anio', value: anio, type: self.model.types.STRING },
+    { name: 'Mes', value: mes, type: self.model.types.STRING },
+    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
+    { name: 'IdEstadoDeResultado', value: idEstadoDeResultado, type: self.model.types.INT },
+    { name: 'IdReporte', value: idReporte, type: self.model.types.STRING },
+    { name: 'xCarLine', value: xCarLine, type: self.model.types.STRING },
+    { name: 'xTipoAuto', value: xTipoAuto, type: self.model.types.STRING }
+  ];
+
+  this.model.query('SP_SERIES', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/detalleunidadesacumulado
+// Funcionalidad para detalle de Unidades Acumulado(segundo nivel de unidades)
+internos.prototype.get_detalleunidadesacumulado = function (req, res, next) {
+  var self = this;
+  var idAgencia = req.query.idcia;
+  var mSuc = req.query.msuc;
+  var anio = req.query.anio;
+  var mes = req.query.mes;
+  var departamento = req.query.departamento;
+
+  var params = [
+    { name: 'IdAgencia', value: idAgencia, type: self.model.types.STRING },
+    { name: 'MSuc', value: mSuc, type: self.model.types.STRING },
+    { name: 'Anio', value: anio, type: self.model.types.STRING },
+    { name: 'Mes', value: mes, type: self.model.types.STRING },
+    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
+  ];
+
+  this.model.query('SP_UNIDADES_REAL_ACUMULADO', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/detalleresultadosmensual
+// Funcionalidad para detalle de Estado de Resultados mensual (doble click celdas de lado azul)
+internos.prototype.get_detalleresultadosmensual = function (req, res, next) {
+  var self = this;
+  var idAgencia = req.query.idcia;
+  var anio = req.query.anio;
+  var mes = req.query.mes;
+  var idSucursal = req.query.idsucursal;
+  var mSucursal = req.query.msucursal;
+  var departamento = req.query.departamento;
+  var concepto = req.query.concepto;
+  var idEstadoResultado = req.query.idEstadoDeResultado;
+  var idDetalle = req.query.idDetalle;
+
+  var params = [
+    { name: 'IdAgencia', value: idAgencia, type: self.model.types.STRING },
+    { name: 'Anio', value: anio, type: self.model.types.STRING },
+    { name: 'Mes', value: mes, type: self.model.types.STRING },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.STRING },
+    { name: 'MSucursal', value: mSucursal, type: self.model.types.STRING },
+    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
+    { name: 'Concepto', value: concepto, type: self.model.types.STRING },
+    { name: 'IdEstadoDeResultado', value: idEstadoResultado, type: self.model.types.STRING },
+    { name: 'IdDetalle', value: idDetalle, type: self.model.types.STRING }
+  ];
+
+  this.model.query('SP_ESTADO_DE_RESULTADOS_DETALLE', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/detalleresultadoscuentas
+// Funcionalidad para detalle de Estado de Resultados mensual (doble click celdas de lado azul)
+internos.prototype.get_detalleresultadoscuentas = function (req, res, next) {
+  var self = this;
+  var servidorAgencia = req.query.servidoragencia;
+  var concentradora = req.query.concentradora;
+  var anio = req.query.anio;
+  var mes = req.query.mes;
+  var numCta = req.query.numcta;
+
+  var params = [
+    { name: 'ServidorAgencia', value: servidorAgencia, type: self.model.types.STRING },
+    { name: 'Concentradora', value: concentradora, type: self.model.types.STRING },
+    { name: 'Anio', value: anio, type: self.model.types.STRING },
+    { name: 'Mes', value: mes, type: self.model.types.STRING },
+    { name: 'NumCta', value: numCta, type: self.model.types.STRING }
+  ];
+
+  this.model.query('SP_ESTADO_DE_RESULTADOS_DETALLE_CUENTAS', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
 
 // /api/internos/efectivoysituacion
 // Funcionalidad para las opciones de efectivo real y situacion financiera
