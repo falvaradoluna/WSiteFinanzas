@@ -1,52 +1,60 @@
 <div class="card-body">
-  <h5>Editar cuenta sin clasificar</h5>
+  <h5>Crear Nueva Cuenta</h5>
 
   <form>
     <div class="form-row">
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-4">
+        <label>Agencias / Sucursales</label>
+        <ngx-dropdown-treeview
+            [buttonClass]="buttonClass"
+            [config]="config"
+            [items]="items"
+            (selectedChange)="onSelectedChange($event)">
+        </ngx-dropdown-treeview>
+      </div>
+      <div class="form-group col-md-4">
+        <label>Departamento</label>
+        <select name="" class="form-control">
+          <option value="0">UNIDADES NVAS. AUTOS</option>
+        </select>
+      </div>
+      <div class="form-group col-md-4">
         <label>No. Cuenta</label>
         <input type="text" class="form-control" placeholder="0000-0000-0000-0000">
-      </div>
-      <div class="form-group col-md-6">
-        <label>Descripción</label>
-        <input type="text" class="form-control" placeholder="Descripción">
       </div>
     </div>
 
     <div class="form-row">
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-4">
+        <label>Descripción</label>
+        <input type="text" class="form-control" placeholder="Descripción">
+      </div>
+      <div class="form-group col-md-4">
         <label>Naturaleza</label>
         <input type="text" class="form-control" placeholder="Naturaleza">
       </div>
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-4">
         <label>ACUMDET</label>
         <input type="text" class="form-control" placeholder="ACUMDET">
       </div>
     </div>
 
     <div class="form-row">
-      <div class="form-group col-md-3">
-        <label>Sucursal</label>
-        <select name="" class="form-control">
-          <option value="0">SUC</option>
-        </select>
-      </div>
-
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-4">
         <label>GPO 1</label>
         <select name="" class="form-control">
           <option value="0">GPO 1</option>
         </select>
       </div>
 
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-4">
         <label>GPO 2</label>
         <select name="" class="form-control">
           <option value="0">GPO 2</option>
         </select>
       </div>
 
-      <div class="form-group col-md-3">
+      <div class="form-group col-md-4">
         <label>GPO 3</label>
         <select name="" class="form-control">
           <option value="0">GPO 3</option>
@@ -56,9 +64,9 @@
 
     <div class="form-row">
       <div class="form-group col-md-4">
-        <label>Departamento</label>
+        <label>Notas Dic</label>
         <select name="" class="form-control">
-          <option value="0">Departamento</option>
+          <option value="0">Notas Dic</option>
         </select>
       </div>
 
@@ -78,13 +86,6 @@
     </div>
 
     <div class="form-row">
-        <div class="form-group col-md-4">
-          <label>Notas Dic</label>
-          <select name="" class="form-control">
-            <option value="0">Notas Dic</option>
-          </select>
-        </div>
-
         <div class="form-group col-md-4">
           <label>Notas Fin</label>
           <select name="" class="form-control">
