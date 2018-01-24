@@ -3,8 +3,8 @@ import { routerTransition } from '../../router.animations';
 import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { trigger,style,transition,animate,keyframes,query,stagger,group, state, animateChild } from '@angular/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { trigger, style, transition, animate, keyframes, query, stagger, group, state, animateChild } from '@angular/animations';
 import { IResultadoInternos } from './resultado-internos';
 import { InternosService } from './internos.service';
 import { ISucursal } from './sucursal';
@@ -88,23 +88,23 @@ export class InternosComponent implements OnInit {
   selectedTipoReporte = 1;
   selectedSucursal = 'AA';
   selectedIndexSucursal = 0;
-  selectedIdSucursal = -3; //El servicio SP_CONSULTA_SUCURSAL regresa varios valores, estamos usando IdSucursal y MSUC
+  selectedIdSucursal = -3; // El servicio SP_CONSULTA_SUCURSAL regresa varios valores, estamos usando IdSucursal y MSUC
   selectedIpSucursal = '';
   selectedConcentradora = '';
   selectedDepartamento = 'Todos';
   selectedDepartamentos: string[] = [''];
   selectedDepartamentosStr: string; // Se formatean los departamentos como los necesita el sp
-  deptoFlotillas: string; //Se guarda el departamento que aparece solo para flotillas segundo nivel
+  deptoFlotillas: string; // Se guarda el departamento que aparece solo para flotillas segundo nivel
   detalleResultadosMensualScroll = false;
   detalleResultadosCuentasScroll = false;
   mes: string;
-  departamentoAcumulado: string; //se usa en int-unidades-nv2 para guardar el mes selecccionado de la tabla acumulado
-  mesAcumulado: string; //Se usa para ocultar los meses que no traen informacion en Unidades Segundo Nivel Acumulado
+  departamentoAcumulado: string; // se usa en int-unidades-nv2 para guardar el mes selecccionado de la tabla acumulado
+  mesAcumulado: string; // Se usa para ocultar los meses que no traen informacion en Unidades Segundo Nivel Acumulado
   carLine: string;
-  idReporte: string; //Se usa en unidades nv 4 para diferenciar real de acumulado
+  idReporte: string; // Se usa en unidades nv 4 para diferenciar real de acumulado
   anio: string;
   periodo: string;
-  //Control de sp SP_ESTADO_DE_RESULTADOS_DETALLE
+  // Control de sp SP_ESTADO_DE_RESULTADOS_DETALLE
   idDetalleResultados: number; // 1 = mensual, 2 = acumulado. Muestra la tabla de acumulado o mensual
   idEstadoResultado: number;
   idDetalleUnidades: number;
@@ -164,19 +164,18 @@ export class InternosComponent implements OnInit {
   }
 
   procesar(): void {
-    let sTipoReporte = this.selectedTipoReporte.toString(); //Aunque se definio como number, la comparacion siempre lo toma como string
-    let sCompania = this.selectedCompania.toString();
+    const sTipoReporte = this.selectedTipoReporte.toString(); // Aunque se definio como number, la comparacion siempre lo toma como string
+    const sCompania = this.selectedCompania.toString();
 
     if ((sTipoReporte === '4' || sTipoReporte === '5') && sCompania !== '0') {
       this.showReporteUnidades = false;
       this.showEfectivoSituacion = true;
       this.getEfectivoSituacion();
-    }
-    else if (sCompania !== '0') {
+    } else if (sCompania !== '0') {
       this.showUnidadesInit();
 
-      //Actualizar info de breadcrumb
-      const a = this.companias.find(x => x.ID == this.selectedCompania);
+      // Actualizar info de breadcrumb
+      const a = this.companias.find(x => x.ID === this.selectedCompania);
       this.selectedNombreCompania = a.NOMBRE;
     }
   }
@@ -192,7 +191,7 @@ export class InternosComponent implements OnInit {
   }
 
   sumaDepartamentos(): void {
-    if (this.selectedDepartamentosStr && this.selectedDepartamentosStr !== "'") {
+    if (this.selectedDepartamentosStr && this.selectedDepartamentosStr !== '\'') {
       this.getSumaDepartamentos();
     }
   }
@@ -204,7 +203,7 @@ export class InternosComponent implements OnInit {
 
   hideSumaDepartamentos(): void {
     this.showUnidadesInit();
-    //TODO: reiniciar objeto de suma
+    // TODO: reiniciar objeto de suma
   }
 
   getResultadoUnidades(): void {
@@ -280,7 +279,7 @@ export class InternosComponent implements OnInit {
     })
       .subscribe(
         sucursales => { this.sucursales = sucursales; },
-        error => { this.errorMessage = <any>error },
+        error => { this.errorMessage = <any>error; },
         () => { this.onChangeSucursal(0); }
       );
   }
@@ -311,10 +310,10 @@ export class InternosComponent implements OnInit {
   }
 
   setDefaultDate(): void {
-    let today = new Date();
-    let mes = today.getMonth() + 1;
+    const today = new Date();
+    const mes = today.getMonth() + 1;
     let mesStr = mes.toString();
-    let anio = today.getFullYear().toString();
+    const anio = today.getFullYear().toString();
 
     if (mes < 10) {
       mesStr = '0' + mesStr;
@@ -326,7 +325,7 @@ export class InternosComponent implements OnInit {
   }
 
   getDetalleResultadosMensual(concepto: string): void {
-    //Este servicio requiere el Id de la sucursal con un cero a la izquierda
+    // Este servicio requiere el Id de la sucursal con un cero a la izquierda
     this._service.getDetalleResultadosMensual({
       idAgencia: this.selectedCompania,
       anio: this.anio,
@@ -346,24 +345,24 @@ export class InternosComponent implements OnInit {
         this.errorMessage = <any>error;
         this.detalleResultadosMensual = [];
       },
-      //Si la lista tiene más de 10 resultados se necesita ajustar
-      //el ancho de tabla para que quepa el scroll (solo mensual)
+      // Si la lista tiene más de 10 resultados se necesita ajustar
+      // el ancho de tabla para que quepa el scroll (solo mensual)
       () => {
         this.detalleResultadosMensualScroll = this.detalleResultadosMensual.length <= 10 ? true : false;
-        this.fixedHeader("detalleResultadosAcumulado");
+        this.fixedHeader('detalleResultadosAcumulado');
       }
     );
   }
 
   getDetalleResultadosCuentas(numCta: string, mes: string = ''): void {
-    //Limpiar tabla antes de consultar
+    // Limpiar tabla antes de consultar
     this.detalleResultadosCuentas = [];
 
     this._service.getDetalleResultadosCuentas({
       servidorAgencia: this.selectedIpSucursal,
       concentradora: this.selectedConcentradora,
       anio: this.anio,
-      mes:  mes === '' ? this.mes : mes, //Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
+      mes:  mes === '' ? this.mes : mes, // Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
       numCta: numCta
     })
       .subscribe(
@@ -372,8 +371,8 @@ export class InternosComponent implements OnInit {
           this.errorMessage = <any>error;
           this.detalleResultadosCuentas = [];
         },
-        //Si la lista tiene más de 10 resultados se necesita ajustar el ancho de tabla para que quepa el scroll
-        () => {this.detalleResultadosCuentasScroll = this.detalleResultadosCuentas.length <= 10 ? true : false;}
+        // Si la lista tiene más de 10 resultados se necesita ajustar el ancho de tabla para que quepa el scroll
+        () => {this.detalleResultadosCuentasScroll = this.detalleResultadosCuentas.length <= 10 ? true : false; }
       );
   }
 
@@ -389,20 +388,20 @@ export class InternosComponent implements OnInit {
       error => this.errorMessage = <any>error);
   }
 
-  //Revisa si la cadena debe ir en negrita
+  // Revisa si la cadena debe ir en negrita
   shouldBeBold(value: string): boolean {
     return this.valuesNegritas.includes(value);
   }
 
   onChangePeriodo(selectedDate): void {
     if (selectedDate) {
-      const mesStr = selectedDate.substring(5,7);
-      const fullYearStr = selectedDate.substring(0,4);
+      const mesStr = selectedDate.substring(5, 7);
+      const fullYearStr = selectedDate.substring(0, 4);
 
       this.mes = mesStr;
       this.anio = fullYearStr;
 
-      if(this.mes && this.anio && this.selectedCompania !== 0 && this.selectedSucursal) {
+      if (this.mes && this.anio && this.selectedCompania !== 0 && this.selectedSucursal) {
         this.getDepartamentos();
       }
     }
@@ -412,7 +411,7 @@ export class InternosComponent implements OnInit {
     this.selectedCompania = newValue;
 
     if (this.selectedCompania !== 0 && this.selectedTipoReporte) {
-      //Llenar dropdown de sucursales
+      // Llenar dropdown de sucursales
       this.getSucursales();
     }
 
@@ -428,7 +427,7 @@ export class InternosComponent implements OnInit {
     this.selectedIpSucursal = sucursal.Servidor;
     this.selectedConcentradora = sucursal.Concentradora;
 
-    if(this.periodo && this.selectedCompania !== 0 && this.selectedSucursal) {
+    if (this.periodo && this.selectedCompania !== 0 && this.selectedSucursal) {
       this.getDepartamentos();
     }
   }
@@ -438,13 +437,13 @@ export class InternosComponent implements OnInit {
   }
 
   onChangeSumaDepartamentos(): void {
-    this.selectedDepartamentosStr = "'";
+    this.selectedDepartamentosStr = '\'';
     this.selectedDepartamentos.forEach(d => {
       this.selectedDepartamentosStr += `''${d}'',`;
     });
-    //Se elimina la última coma
+    // Se elimina la última coma
     this.selectedDepartamentosStr = this.selectedDepartamentosStr.substring(0, this.selectedDepartamentosStr.length - 1);
-    this.selectedDepartamentosStr += "'";
+    this.selectedDepartamentosStr += '\'';
   }
 
   onChangeTipoReporte(newValue: number): void {
@@ -453,8 +452,7 @@ export class InternosComponent implements OnInit {
 
     if (nv === '4' || nv === '5') {
       this.hideReporteUnidades();
-    }
-    else {
+    } else {
       this.showReporteUnidades = true;
       this.setDefaultDate();
       this.getSucursales();
@@ -477,7 +475,7 @@ export class InternosComponent implements OnInit {
       this.detalleUnidadesValue = value;
       this.idDetalleUnidades = idDetalleUnidades;
 
-      //QUITAR UNA
+      // QUITAR UNA
       this.detalleUnidadesConcepto = concepto; // <-----QUITAR despues de refactorizar
       this.unidadesConcepto = concepto;
     }
@@ -491,33 +489,34 @@ export class InternosComponent implements OnInit {
     this.detalleValue = value;
     this.detalleConcepto = this.estadoResultados[i].Concepto;
     this.idDetalleResultados = idDetalleResultados;
-    this.idEstadoResultado = idEstadoResultado
+    this.idEstadoResultado = idEstadoResultado;
     this.getDetalleResultadosMensual(this.detalleConcepto);
   }
 
-  //Usa CSS transforms para dejar los titulos fijos en la tabla
+  // Usa CSS transforms para dejar los titulos fijos en la tabla
   fixedHeader(idTabla): void {
-    //Esperar a que se construya la tabla, delay de 1 segundo
+    // Esperar a que se construya la tabla, delay de 1 segundo
     setTimeout(function () {
-      document.getElementById(idTabla).addEventListener("scroll", function(){
-        var translate = "translate(0,"+this.scrollTop+"px)";
-        this.querySelector("thead").style.transform = translate;
-    })
+      document.getElementById(idTabla).addEventListener('scroll', function(){
+        const translate = 'translate(0,' + this.scrollTop + 'px)';
+        this.querySelector('thead').style.transform = translate;
+    });
    }, 1000);
   }
 
-  //Convierte mes numerico a nombre del mes
+  // Convierte mes numerico a nombre del mes
   toLongMonth(mes: string): string {
-    if (mes !== "") {
-      var objDate = new Date(mes + "/01/2000"),
-        locale = "es-mx",
-        month = objDate.toLocaleString(locale, { month: "long" });
+    if (mes !== '') {
+      const objDate = new Date(mes + '/01/2000'),
+        locale = 'es-mx',
+        month = objDate.toLocaleString(locale, { month: 'long' });
       return month;
+    } else {
+      return '';
     }
-    else return "";
   }
 
-  //Calcula el valor del tooltip para estado de resultados
+  // Calcula el valor del tooltip para estado de resultados
   calculaTooltip(value: number, col: number): number {
     let v = 0;
     if (this.unidadesDepartamento[0]) {
@@ -533,20 +532,18 @@ export class InternosComponent implements OnInit {
           break;
       }
       return value / v;
-    }
-    else {
+    } else {
       return 0;
     }
   }
 
   onClickDetalleSegundoNivel(i: number, value: number, name: string, mes: string = '') {
-    //validar que solo entre cuando viene de real (excluir Ppto y Variacion)
+    // validar que solo entre cuando viene de real (excluir Ppto y Variacion)
     if (this.detalleName === 'Real' || this.detalleName === 'AcReal') {
-      //Etiqueta de mes usada en breadcrumb
+      // Etiqueta de mes usada en breadcrumb
       if (mes !== '') {
         this.detalleNameSegundoNivel = `(${name})`;
-      }
-      else {
+      } else {
         this.detalleNameSegundoNivel = '';
       }
 
@@ -601,35 +598,35 @@ export class InternosComponent implements OnInit {
     this.showResultados = false;
     this.showDetalleSegundoNivel = false;
     this.showDetallePrimerNivel = true;
-    this.fixedHeader("detalleResultadosAcumulado");
+    this.fixedHeader('detalleResultadosAcumulado');
   }
 
-  //Ordenamiento de tabla
+  // Ordenamiento de tabla
   onSorted(event: ColumnSortedEvent, obj: Object[]) {
-    //Se pasa como referencia el objeto que se quiere ordenar
+    // Se pasa como referencia el objeto que se quiere ordenar
     obj.sort(function (a, b) {
       if (event.sortDirection === 'asc') {
         return a[event.sortColumn] - b[event.sortColumn];
-      }
-      else {
+      } else {
         return b[event.sortColumn] - a[event.sortColumn];
       }
     });
   }
 
-  //Selecciona o deselecciona todas las opciones del select suma de departamentos
-  //True = Todos, False = ninguno
+  // Selecciona o deselecciona todas las opciones del select suma de departamentos
+  // True = Todos, False = ninguno
   selectTodosDeptos(selected: boolean) {
     this.selectedDepartamentos = [''];
 
-    //Se actualizan los departamentos seleccionados a TODOS
+    // Se actualizan los departamentos seleccionados a TODOS
     this.departamentos.forEach(d => {
       d.Selected = selected;
-      if(selected === true)
+      if (selected === true) {
         this.selectedDepartamentos.push(d.Depto);
-    })
+      }
+    });
 
-    //Se dispara el evento de cambio en los departamentos seleccionados
+    // Se dispara el evento de cambio en los departamentos seleccionados
     this.onChangeSumaDepartamentos();
   }
 }
