@@ -20,7 +20,7 @@
 </div>
 
 <!--BEGIN Unidades Segundo Nivel Acumulado -->
-<table id="idDetalleUnidadesTipo | async" *ngIf='idDetalleUnidades === 2' class="table table-sm table-bordered table-responsive table-hover-td table-double-scroll"
+<table id="idDetalleUnidadesTipo" *ngIf='idDetalleUnidades === 2' class="table table-sm table-bordered table-responsive table-hover-td table-double-scroll"
   sortable-table (sorted)="onSorted($event, detalleUnidadesTipo)">
   <thead>
     <tr>
@@ -54,7 +54,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor='let dut of detalleUnidadesTipo; let i = index;'>
+    <tr *ngFor='let dut of detalleUnidadesTipo | async; let i = index;'>
       <td>{{ dut.TipoUnidad }}</td>
       <td class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.TipoUnidad, "Enero", "01")'>{{ dut.Ene }}</td>
       <td class="text-right">{{ dut.PercEne | number:'1.2-2' }}</td>

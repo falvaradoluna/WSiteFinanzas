@@ -4,6 +4,7 @@ import { ITipoUnidad } from './tipo-unidad';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'int-unidades-nv3',
   templateUrl: './unidades-nv3.component.html',
   styleUrls: ['./internos.component.scss']
@@ -29,18 +30,22 @@ export class UnidadesNv3Component implements OnInit {
   @Output() detalleUnidadesNameTercerNivel = new EventEmitter<string>();
   @Output() detalleUnidadesValueTercerNivel = new EventEmitter<string>();
   @Output() detalleUnidadesConceptoTercerNivel = new EventEmitter<string>();
+  @Output() mesAcumuladoNv3 = new EventEmitter<string>();
   @Output() idReporte = new EventEmitter<string>();
+  @Output() fixedHeaderId = new EventEmitter<string>();
 
   detalleUnidadesTipo: Observable<ITipoUnidad[]>;
 
   constructor(private _service: InternosService) { }
 
   ngOnInit() {
-    if (this.mesAcumulado === '') { //mensual
+    this.fixedHeaderId.emit('idDetalleUnidadesTipo');
+    if (this.mesAcumulado === '') { // mensual
       this.detalleUnidadesTipo = this.getDetalleUnidadesTipo(this.carLine, this.departamentoAcumulado, this.mes);
-    }
-    else { //acumulado
-      this.detalleUnidadesTipo = this.getDetalleUnidadesTipoAcumulado(this.carLine, this.departamentoAcumulado, '12'); //HARD CODE. en la version prod, siempre muestra los 12 meses (wtf)
+    } else { // acumulado
+      this.detalleUnidadesTipo =
+        // HARD CODE. en la version prod, siempre muestra los 12 meses (wtf)
+        this.getDetalleUnidadesTipoAcumulado(this.carLine, this.departamentoAcumulado, '12');
     }
   }
 
@@ -48,8 +53,11 @@ export class UnidadesNv3Component implements OnInit {
     // Se usa como parametro de departamento el texto de Concepto del primer nivel,
     // sin las letras N o S que se le agregan al inicio
     let concepto = this.detalleUnidadesConcepto;
-    if (concepto.startsWith('N ')) concepto = concepto.substr(2);
-    else if (concepto.startsWith('S ')) concepto = concepto.substr(2);
+    if (concepto.startsWith('N ')) {
+      concepto = concepto.substr(2);
+    } else if (concepto.startsWith('S ')) {
+      concepto = concepto.substr(2);
+    }
 
     this.deptoFlotillas.emit(tipoAuto); // Se usa el departamento que aparece solo para flotillas en el segundo nivel
 
@@ -57,9 +65,10 @@ export class UnidadesNv3Component implements OnInit {
       idAgencia: this.selectedCompania,
       mSucursal: this.selectedSucursal,
       anio: this.anio,
-      mes: mes === '' ? this.mes : mes, //Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
+      mes: mes === '' ? this.mes : mes, // Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
       departamento: concepto,
-      carLine: concepto === 'FLOTILLAS' ? tipoAuto : carLine, //Para el caso de flotillas el sp cambia carLine por tipoAuto (columna depto aparece solo para flotillas)
+      // Para el caso de flotillas el sp cambia carLine por tipoAuto (columna depto aparece solo para flotillas)
+      carLine: concepto === 'FLOTILLAS' ? tipoAuto : carLine,
       tipoAuto: concepto === 'FLOTILLAS' ? carLine : tipoAuto
     });
   }
@@ -69,8 +78,11 @@ export class UnidadesNv3Component implements OnInit {
     // sin las letras N o S que se le agregan al inicio
     let concepto = this.detalleUnidadesConcepto;
 
-    if (concepto.startsWith('N ')) concepto = concepto.substr(2);
-    else if (concepto.startsWith('S ')) concepto = concepto.substr(2);
+    if (concepto.startsWith('N ')) {
+      concepto = concepto.substr(2);
+    } else if (concepto.startsWith('S ')) {
+      concepto = concepto.substr(2);
+    }
 
     this.deptoFlotillas.emit(tipoAuto); // Se usa el departamento que aparece solo para flotillas en el segundo nivel
 
@@ -78,16 +90,17 @@ export class UnidadesNv3Component implements OnInit {
       idAgencia: this.selectedCompania,
       mSucursal: this.selectedSucursal,
       anio: this.anio,
-      mes: mes === '' ? this.mes : mes, //Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
+      mes: mes === '' ? this.mes : mes, // Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
       departamento: concepto,
-      carLine: concepto === 'FLOTILLAS' ? tipoAuto : carLine, //Para el caso de flotillas el sp cambia carLine por tipoAuto (columna depto aparece solo para flotillas)
+      // Para el caso de flotillas el sp cambia carLine por tipoAuto (columna depto aparece solo para flotillas)
+      carLine: concepto === 'FLOTILLAS' ? tipoAuto : carLine,
       tipoAuto: concepto === 'FLOTILLAS' ? carLine : tipoAuto
     });
   }
 
   onClickDetalleUnidadesTipo(i: number, tipoUnidad: string, strMes: string = '', mes: string = '') {
     if (tipoUnidad.trim() !== 'Total') {
-      const idReporte = this.detalleName === 'Real' ? 'MRQ' : 'ARQ'; //Real = mensual y AcReal = Acumulado
+      const idReporte = this.detalleName === 'Real' ? 'MRQ' : 'ARQ'; // Real = mensual y AcReal = Acumulado
 
       this.showUnidades.emit(false);
       this.showDetalleUnidadesPrimerNivel.emit(false);
@@ -97,6 +110,7 @@ export class UnidadesNv3Component implements OnInit {
       this.detalleUnidadesValueTercerNivel.emit(tipoUnidad);
       this.detalleUnidadesConceptoTercerNivel.emit(tipoUnidad);
       this.idReporte.emit(idReporte);
+      this.mesAcumuladoNv3.emit(mes);
       // this.fixedHeader('detalleUnidadesSeries');
     }
   }

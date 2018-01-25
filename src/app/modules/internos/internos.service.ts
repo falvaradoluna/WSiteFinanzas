@@ -43,7 +43,7 @@ export class InternosService {
 
     // Begin assigning parameters
     Params = Params.append('idcia', parameters.idCia);
-    Params = Params.append('idsucursal', parameters.idSucursal)
+    Params = Params.append('idsucursal', parameters.idSucursal);
     Params = Params.append('anio', parameters.anio);
     Params = Params.append('mes', parameters.mes);
 
@@ -52,14 +52,14 @@ export class InternosService {
       .catch(this.handleError);
   }
 
-  getEstadoResultados(parameters): Observable<IResultadoInternos[]> { //Se reutiliza la interfaz de unidades
+  getEstadoResultados(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
     // Initialize Params Object
     let Params = new HttpParams();
 
     // Begin assigning parameters
     Params = Params.append('idcia', parameters.idCia);
-    Params = Params.append('idsucursal', parameters.idSucursal)
-    Params = Params.append('departamento', parameters.departamento)
+    Params = Params.append('idsucursal', parameters.idSucursal);
+    Params = Params.append('departamento', parameters.departamento);
     Params = Params.append('anio', parameters.anio);
     Params = Params.append('mes', parameters.mes);
 
@@ -68,14 +68,14 @@ export class InternosService {
       .catch(this.handleError);
   }
 
-  getSumaDepartamentos(parameters): Observable<IResultadoInternos[]> { //Se reutiliza la interfaz de unidades
+  getSumaDepartamentos(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
     // Initialize Params Object
     let Params = new HttpParams();
 
     // Begin assigning parameters
     Params = Params.append('idcia', parameters.idCia);
-    Params = Params.append('idsucursal', parameters.idSucursal)
-    Params = Params.append('departamento', parameters.departamento)
+    Params = Params.append('idsucursal', parameters.idSucursal);
+    Params = Params.append('departamento', parameters.departamento);
     Params = Params.append('anio', parameters.anio);
     Params = Params.append('mes', parameters.mes);
 
@@ -83,14 +83,14 @@ export class InternosService {
       .catch(this.handleError);
   }
 
-  getUnidadesDepartamento(parameters): Observable<IResultadoInternos[]> { //Se reutiliza la interfaz de unidades
+  getUnidadesDepartamento(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
     // Initialize Params Object
     let Params = new HttpParams();
 
     // Begin assigning parameters
     Params = Params.append('idcia', parameters.idCia);
-    Params = Params.append('idsucursal', parameters.idSucursal)
-    Params = Params.append('departamento', parameters.departamento)
+    Params = Params.append('idsucursal', parameters.idSucursal);
+    Params = Params.append('departamento', parameters.departamento);
     Params = Params.append('anio', parameters.anio);
     Params = Params.append('mes', parameters.mes);
 

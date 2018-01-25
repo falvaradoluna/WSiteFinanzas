@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'cta-cuentas-sin-clasificar-edit',
   templateUrl: './cuentas-sin-clasificar-edit.component.html',
   styleUrls: ['./cuentas-sin-clasificar-edit.component.scss']
 })
 export class CuentasSinClasificarEditComponent implements OnInit {
 
-  buttonClass: string = 'btn-outline-primary';
+  buttonClass = 'btn-outline-primary';
   items: TreeviewItem[];
   config = TreeviewConfig.create({
     hasAllCheckBox: true,

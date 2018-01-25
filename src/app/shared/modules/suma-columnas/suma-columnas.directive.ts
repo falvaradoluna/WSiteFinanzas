@@ -15,8 +15,7 @@ export class SumaColumnasDirective {
     if (this.el.nativeElement.classList.contains('table-success')) {
       this.renderer.removeClass(this.el.nativeElement, 'table-success');
       this.sumaColumnasService.add(-this.valueSelected);
-    }
-    else {
+    } else {
       this.renderer.addClass(this.el.nativeElement, 'table-success');
       this.sumaColumnasService.add(this.valueSelected);
     }

@@ -100,6 +100,7 @@ export class InternosComponent implements OnInit {
   mes: string;
   departamentoAcumulado: string; // se usa en int-unidades-nv2 para guardar el mes selecccionado de la tabla acumulado
   mesAcumulado: string; // Se usa para ocultar los meses que no traen informacion en Unidades Segundo Nivel Acumulado
+  mesAcumuladoNv3 = '';
   carLine: string;
   idReporte: string; // Se usa en unidades nv 4 para diferenciar real de acumulado
   anio: string;
@@ -175,7 +176,7 @@ export class InternosComponent implements OnInit {
       this.showUnidadesInit();
 
       // Actualizar info de breadcrumb
-      const a = this.companias.find(x => x.ID === this.selectedCompania);
+      const a = this.companias.find(x => x.ID === +this.selectedCompania);
       this.selectedNombreCompania = a.NOMBRE;
     }
   }
@@ -585,7 +586,6 @@ export class InternosComponent implements OnInit {
     this.showDetalleUnidadesSegundoNivel = true;
     this.showDetalleUnidadesTercerNivel = false;
     this.showDetalleUnidadesPrimerNivel = false;
-    this.fixedHeader('idDetalleUnidadesTipo');
   }
 
   hideDetallePrimerNivel(): void {

@@ -7,6 +7,7 @@ import { InternosService } from './internos.service';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
+  // tslint:disable-next-line:component-selector
   selector: 'int-unidades-nv2',
   templateUrl: './unidades-nv2.component.html',
   styleUrls: ['./internos.component.scss']
@@ -40,8 +41,7 @@ export class UnidadesNv2Component implements OnInit {
   ngOnInit() {
     if (this.idDetalleUnidades === 1) { // Mensual
       this.detalleUnidadesMensual = this.getDetalleUnidadesMensual(this.unidadesConcepto);
-    }
-    else if (this.idDetalleUnidades === 2) { // Acumulado
+    } else if (this.idDetalleUnidades === 2) { // Acumulado
       this.detalleUnidadesAcumulado = this.getDetalleUnidadesAcumulado(this.unidadesConcepto);
     }
   }
@@ -59,10 +59,11 @@ export class UnidadesNv2Component implements OnInit {
   getDetalleUnidadesAcumulado(concepto: string): Observable<IDetalleUnidadesAcumulado[]> {
     // Se usa como parametro de departamento el texto de Concepto del primer nivel,
     // sin las letras N o S que se le agregan al inicio
-    if (concepto.startsWith('N ')) concepto = concepto.substr(2);
-    else if (concepto.startsWith('S ')) concepto = concepto.substr(2);
-
-    //TODO: Limpiar tabla antes de consultar
+    if (concepto.startsWith('N ')) {
+      concepto = concepto.substr(2);
+    } else if (concepto.startsWith('S ')) {
+      concepto = concepto.substr(2);
+    }
 
     return this._service.getDetalleUnidadesAcumulado({
       idAgencia: this.selectedCompania,
@@ -80,7 +81,7 @@ export class UnidadesNv2Component implements OnInit {
       this.showDetalleUnidadesPrimerNivel.emit(false);
       this.showDetalleUnidadesSegundoNivel.emit(true);
       this.detalleUnidadesNameSegundoNivel.emit(strMes);
-      this.detalleUnidadesValueSegundoNivel.emit(carLine); //Revisar ya que son 3 que usan el mismo valor
+      this.detalleUnidadesValueSegundoNivel.emit(carLine); // Revisar ya que son 3 que usan el mismo valor
       this.detalleUnidadesConceptoSegundoNivel.emit(carLine);
       this.carLine.emit(carLine);
       this.mesAcumulado.emit(mes);
@@ -89,14 +90,13 @@ export class UnidadesNv2Component implements OnInit {
   }
 
 
-  //Ordenamiento de tabla
+  // Ordenamiento de tabla
   onSorted(event: ColumnSortedEvent, obj: Object[]) {
-    //Se pasa como referencia el objeto que se quiere ordenar
+    // Se pasa como referencia el objeto que se quiere ordenar
     obj.sort(function (a, b) {
       if (event.sortDirection === 'asc') {
         return a[event.sortColumn] - b[event.sortColumn];
-      }
-      else {
+      } else {
         return b[event.sortColumn] - a[event.sortColumn];
       }
     });

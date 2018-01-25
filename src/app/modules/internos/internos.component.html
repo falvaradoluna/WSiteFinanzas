@@ -200,7 +200,9 @@
                             (detalleUnidadesNameTercerNivel)='detalleUnidadesNameTercerNivel=$event'
                             (detalleUnidadesValueTercerNivel)='detalleUnidadesValueTercerNivel=$event'
                             (detalleUnidadesConceptoTercerNivel)='detalleUnidadesConceptoTercerNivel=$event'
-                            (idReporte)='idReporte=$event'>
+                            (idReporte)='idReporte=$event'
+                            (fixedHeaderId)='fixedHeader($event)'
+                            (mesAcumuladoNv3)='mesAcumuladoNv3=$event'>
           </int-unidades-nv3>
         </div>
         <!-- END Unidades Tercer Nivel -->
@@ -225,6 +227,7 @@
           <int-unidades-nv4 [detalleUnidadesConcepto]='detalleUnidadesConcepto'
                             [detalleUnidadesConceptoSegundoNivel]='detalleUnidadesConceptoSegundoNivel'
                             [mes]='mes'
+                            [mesAcumuladoNv3]='mesAcumuladoNv3'
                             [anio]='anio'
                             [selectedCompania]='selectedCompania'
                             [selectedSucursal]='selectedSucursal'
