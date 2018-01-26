@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor='let d of detalleUnidadesMensual | async; let i = index;' (dblclick)='onClickDetalleUnidadesMensual(d.CarLine, "TipoUnidades", "", d.Depto)'>
+        <tr *ngFor='let d of detalleUnidadesMensual; let i = index;' (dblclick)='onClickDetalleUnidadesMensual(d.CarLine, "TipoUnidades", "", d.Depto)'>
           <td *ngIf='detalleUnidadesConcepto === "N FLOTILLAS"'>{{ d.Depto }}</td>
           <td>{{ d.CarLine }}</td>
           <td class="text-center" [suma-columnas]='d.Cantidad'>{{ d.Cantidad === null ? 0 : d.Cantidad }}</td>

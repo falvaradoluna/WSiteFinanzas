@@ -5,6 +5,8 @@ import { ColumnSortedEvent } from '../../shared/index';
 import { ITipoUnidad } from './tipo-unidad';
 import { InternosService } from './internos.service';
 import { Observable } from 'rxjs/Observable';
+import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -12,7 +14,7 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: './unidades-nv2.component.html',
   styleUrls: ['./internos.component.scss']
 })
-export class UnidadesNv2Component implements OnInit {
+export class UnidadesNv2Component implements OnInit, OnDestroy {
 
   @Input() idDetalleUnidades: number;
   @Input() unidadesConcepto: string;
@@ -33,30 +35,44 @@ export class UnidadesNv2Component implements OnInit {
   @Output() errorMessage = new EventEmitter<string>();
   // @Output() fixedHeaderId = new EventEmitter<string>();
 
-  detalleUnidadesMensual: Observable<IDetalleUnidadesMensual[]>;
-  detalleUnidadesAcumulado: Observable<IDetalleUnidadesAcumulado[]>;
+  detalleUnidadesMensual: IDetalleUnidadesMensual[];
+  detalleUnidadesAcumulado: IDetalleUnidadesAcumulado[];
+
+  dumSubscription: Subscription;
+  duaSubscription: Subscription;
 
   constructor(private _service: InternosService) { }
 
   ngOnInit() {
     if (this.idDetalleUnidades === 1) { // Mensual
-      this.detalleUnidadesMensual = this.getDetalleUnidadesMensual(this.unidadesConcepto);
+      this.getDetalleUnidadesMensual(this.unidadesConcepto);
     } else if (this.idDetalleUnidades === 2) { // Acumulado
-      this.detalleUnidadesAcumulado = this.getDetalleUnidadesAcumulado(this.unidadesConcepto);
+      this.getDetalleUnidadesAcumulado(this.unidadesConcepto);
     }
   }
 
-  getDetalleUnidadesMensual(concepto: string): Observable<IDetalleUnidadesMensual[]> {
-    return this._service.getDetalleUnidadesMensual({
+  ngOnDestroy() {
+    if (this.idDetalleUnidades === 1) { // Mensual
+      this.dumSubscription.unsubscribe();
+    } else if (this.idDetalleUnidades === 2) { // Acumulado
+      this.duaSubscription.unsubscribe();
+    }
+  }
+
+  getDetalleUnidadesMensual(concepto: string): void {
+    this.dumSubscription = this._service.getDetalleUnidadesMensual({
       idAgencia: this.selectedCompania,
       mSucursal: this.selectedSucursal,
       anio: this.anio,
       mes: this.mes,
       concepto: concepto
-    });
+    }).subscribe(
+      dum => { this.detalleUnidadesMensual = dum; },
+      error => { console.log(error); }
+    );
   }
 
-  getDetalleUnidadesAcumulado(concepto: string): Observable<IDetalleUnidadesAcumulado[]> {
+  getDetalleUnidadesAcumulado(concepto: string): void {
     // Se usa como parametro de departamento el texto de Concepto del primer nivel,
     // sin las letras N o S que se le agregan al inicio
     if (concepto.startsWith('N ')) {
@@ -65,18 +81,21 @@ export class UnidadesNv2Component implements OnInit {
       concepto = concepto.substr(2);
     }
 
-    return this._service.getDetalleUnidadesAcumulado({
+    this.duaSubscription = this._service.getDetalleUnidadesAcumulado({
       idAgencia: this.selectedCompania,
       mSucursal: this.selectedSucursal,
       anio: this.anio,
       mes: this.mes,
       departamento: concepto
-    });
+    }).subscribe(
+      dua => { this.detalleUnidadesAcumulado = dua; },
+      error => { console.log(error); }
+    );
   }
 
   onClickDetalleUnidadesMensual(carLine: string, strMes: string, mes: string = '', depto: string = '') {
-    // this.idDetalleUnidades persiste desde onClickUnidades() y controla si se muestra la tabla acumulado o mensual
     if (carLine.trim() !== 'Total') {
+      // TODO: Ocultar Suma
       this.showUnidades.emit(false);
       this.showDetalleUnidadesPrimerNivel.emit(false);
       this.showDetalleUnidadesSegundoNivel.emit(true);
@@ -88,7 +107,6 @@ export class UnidadesNv2Component implements OnInit {
       this.departamentoAcumulado.emit(depto);
     }
   }
-
 
   // Ordenamiento de tabla
   onSorted(event: ColumnSortedEvent, obj: Object[]) {
