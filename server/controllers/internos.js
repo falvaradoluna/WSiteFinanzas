@@ -16,22 +16,20 @@ this.response = function() {
 // /api/internos/internos
 // Funcionalidad de la tabla UNIDADES
 internos.prototype.get_internos = function(req, res, next) {
-var self = this;
-  var idCia = req.query.idcia;
-  var idSucursal = req.query.idsucursal;
-  var mes = req.query.mes;
-  var anio = req.query.anio;
-  console.log('QueryString = ' + req.query);
+  var self = this;
+  var idSucursal = req.query.idSucursal;
+  var mes = req.query.periodoMes;
+  var anio = req.query.periodoYear;
+  console.log('QueryString Unidades = ' + JSON.stringify(req.query));
 
 var params = [
-  { name: 'IdCia', value: idCia, type: self.model.types.INT },
-  { name: 'IdSucursal', value: idSucursal, type: self.model.types.STRING },
-  { name: 'Mes', value: mes, type: self.model.types.STRING },
-  { name: 'Anio', value: anio , type: self.model.types.STRING }
+  { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+  { name: 'periodoMes', value: mes, type: self.model.types.INT },
+  { name: 'periodoYear', value: anio , type: self.model.types.INT }
 ];
 
-  this.model.query('spInternosUnidades', params, function (error, result) {
-    console.log('Parametros: ' + params);
+  this.model.query('Unidad.ObtenerUnidadesPorSucursal', params, function (error, result) {
+    console.log('Parametros Unidades: ' + JSON.stringify(params));
     if (result.length > 0) {
 
         console.log("resultaaaaaaa " + result[0]);
@@ -144,7 +142,7 @@ internos.prototype.get_companias = function(req, res, next) {
    { name: 'IdUsuario', value: idUsuario , type: self.model.types.INT }
   ];
 
-    this.model.query('SP_CONSULTA_COMPANIA', params, function (error, result) {
+    this.model.query('Catalogo.ObtenerCompaniaPorUsuario', params, function (error, result) {
       console.log(params);
       // if (result.length > 0) {
       //     console.log("SP_CONSULTA_COMPANIA " + result[0]);
@@ -160,15 +158,13 @@ internos.prototype.get_companias = function(req, res, next) {
 // Funcionalidad del dropdown de compañias
 internos.prototype.get_sucursales = function (req, res, next) {
   var self = this;
-  var idAgencia = req.query.idcia;
-  var idEstadoDeResultados = req.query.idreporte;
+  var idCompania = req.query.idCompania;
 
   var params = [
-    { name: 'IdAgencia', value: idAgencia, type: self.model.types.INT },
-    { name: 'IdReporte', value: idEstadoDeResultados, type: self.model.types.INT }
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
   ];
 
-  this.model.query('SP_CONSULTA_SUCURSAL', params, function (error, result) {
+  this.model.query('Catalogo.ObtenerSucursalXCompania', params, function (error, result) {
     console.log(params);
     self.view.expositor(res, {
       error: error,

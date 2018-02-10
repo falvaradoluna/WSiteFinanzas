@@ -15,8 +15,8 @@
                 <label for="inputCompania">Compañía</label>
                 <select name="inputCompania" class="form-control form-control-sm" [(ngModel)]="selectedCompania" (ngModelChange)="onChangeCompania($event)">
                   <option value="0">Seleccione Compañía</option>
-                  <option *ngFor="let compania of companias" [value]="compania.ID">
-                    {{ compania.NOMBRE }}
+                  <option *ngFor="let compania of companias" [value]="compania.id">
+                    {{ compania.nombreComercial }}
                   </option>
                 </select>
               </div>
@@ -43,10 +43,10 @@
                 <label for="inputSucursal">Sucursal</label>
                 <select name="inputSucursal" class="form-control form-control-sm"
                   [disabled]="!showReporteUnidades ? '' : null"
-                  [(ngModel)]='selectedIndexSucursal'
+                  [(ngModel)]='selectedIdSucursal'
                   (change)='onChangeSucursal($event.target.value)'>
-                  <option *ngFor="let sucursal of sucursales;let i = index;" [value]="i">
-                    {{ sucursal.Alias }}
+                  <option *ngFor="let sucursal of sucursales" [value]="sucursal.id">
+                    {{ sucursal.nombreComercial }}
                   </option>
                 </select>
               </div>

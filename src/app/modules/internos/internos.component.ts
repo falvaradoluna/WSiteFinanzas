@@ -86,11 +86,7 @@ export class InternosComponent implements OnInit {
   selectedCompania = 0;
   selectedNombreCompania: string;
   selectedTipoReporte = 1;
-  selectedSucursal = 'AA';
-  selectedIndexSucursal = 0;
-  selectedIdSucursal = -3; // El servicio SP_CONSULTA_SUCURSAL regresa varios valores, estamos usando IdSucursal y MSUC
-  selectedIpSucursal = '';
-  selectedConcentradora = '';
+  selectedIdSucursal = -2;
   selectedDepartamento = 'Todos';
   selectedDepartamentos: string[] = [''];
   selectedDepartamentosStr: string; // Se formatean los departamentos como los necesita el sp
@@ -176,8 +172,8 @@ export class InternosComponent implements OnInit {
       this.showUnidadesInit();
 
       // Actualizar info de breadcrumb
-      const a = this.companias.find(x => x.ID === +this.selectedCompania);
-      this.selectedNombreCompania = a.NOMBRE;
+      const a = this.companias.find(x => x.id === +this.selectedCompania);
+      this.selectedNombreCompania = a.nombreComercial;
     }
   }
 
@@ -209,10 +205,9 @@ export class InternosComponent implements OnInit {
 
   getResultadoUnidades(): void {
     this._service.getUnidades({
-      idCia: this.selectedCompania,
-      idSucursal: this.selectedSucursal,
-      mes: this.mes,
-      anio: this.anio
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : this.selectedCompania,
+      periodoYear: this.anio,
+      periodoMes: this.mes
     })
       .subscribe(resultadoUnidades => {
         this.resultadoUnidades = resultadoUnidades;
@@ -223,7 +218,7 @@ export class InternosComponent implements OnInit {
   getEstadoResultados(): void {
     this._service.getEstadoResultados({
       idCia: this.selectedCompania,
-      idSucursal: this.selectedSucursal,
+      idSucursal: this.selectedIdSucursal,
       departamento: this.selectedDepartamento,
       mes: this.mes,
       anio: this.anio
@@ -237,7 +232,7 @@ export class InternosComponent implements OnInit {
   getSumaDepartamentos(): void {
     this._service.getSumaDepartamentos({
       idCia: this.selectedCompania,
-      idSucursal: this.selectedSucursal,
+      idSucursal: this.selectedIdSucursal,
       departamento: this.selectedDepartamentosStr,
       mes: this.mes,
       anio: this.anio
@@ -252,7 +247,7 @@ export class InternosComponent implements OnInit {
     if (this.selectedDepartamento !== 'Todos') {
       this._service.getUnidadesDepartamento({
         idCia: this.selectedCompania,
-        idSucursal: this.selectedSucursal,
+        idSucursal: this.selectedIdSucursal,
         departamento: this.selectedDepartamento,
         mes: this.mes,
         anio: this.anio
@@ -275,8 +270,7 @@ export class InternosComponent implements OnInit {
 
   getSucursales(): void {
     this._service.getSucursales({
-      idTipoReporte: this.selectedTipoReporte,
-      idAgencia: this.selectedCompania
+      idCompania: this.selectedCompania
     })
       .subscribe(
         sucursales => { this.sucursales = sucursales; },
@@ -286,18 +280,18 @@ export class InternosComponent implements OnInit {
   }
 
   getDepartamentos(): void {
-    this._service.getDepartamentos({
-      idReporte: this.selectedTipoReporte,
-      idSucursal: this.selectedSucursal,
-      idAgencia: this.selectedCompania,
-      anio: this.anio,
-      mes: this.mes
-    })
-      .subscribe(
-        departamentos => { this.departamentos = departamentos; },
-        error => this.errorMessage = <any>error,
-        () => this.procesar()
-      );
+    // this._service.getDepartamentos({
+    //   idReporte: this.selectedTipoReporte,
+    //   idSucursal: this.selectedIdSucursal,
+    //   idAgencia: this.selectedCompania,
+    //   anio: this.anio,
+    //   mes: this.mes
+    // })
+    //   .subscribe(
+    //     departamentos => { this.departamentos = departamentos; },
+    //     error => this.errorMessage = <any>error,
+    //     () => this.procesar()
+    //   );
   }
 
   setTipoReporte(): void {
@@ -332,7 +326,7 @@ export class InternosComponent implements OnInit {
       anio: this.anio,
       mes: this.mes,
       idSucursal: this.selectedIdSucursal >= 0 ? '0' + this.selectedIdSucursal.toString() : '00',
-      mSucursal: this.selectedSucursal,
+      mSucursal: this.selectedIdSucursal,
       departamento: this.selectedDepartamento,
       concepto: concepto,
       idEstadoDeResultado: this.idEstadoResultado,
@@ -355,27 +349,27 @@ export class InternosComponent implements OnInit {
     );
   }
 
-  getDetalleResultadosCuentas(numCta: string, mes: string = ''): void {
-    // Limpiar tabla antes de consultar
-    this.detalleResultadosCuentas = [];
+  // getDetalleResultadosCuentas(numCta: string, mes: string = ''): void {
+  //   // Limpiar tabla antes de consultar
+  //   this.detalleResultadosCuentas = [];
 
-    this._service.getDetalleResultadosCuentas({
-      servidorAgencia: this.selectedIpSucursal,
-      concentradora: this.selectedConcentradora,
-      anio: this.anio,
-      mes:  mes === '' ? this.mes : mes, // Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
-      numCta: numCta
-    })
-      .subscribe(
-        detalleResultadosCuentas => { this.detalleResultadosCuentas = detalleResultadosCuentas; },
-        error => {
-          this.errorMessage = <any>error;
-          this.detalleResultadosCuentas = [];
-        },
-        // Si la lista tiene más de 10 resultados se necesita ajustar el ancho de tabla para que quepa el scroll
-        () => {this.detalleResultadosCuentasScroll = this.detalleResultadosCuentas.length <= 10 ? true : false; }
-      );
-  }
+  //   this._service.getDetalleResultadosCuentas({
+  //     servidorAgencia: this.selectedIpSucursal,
+  //     concentradora: this.selectedConcentradora,
+  //     anio: this.anio,
+  //     mes:  mes === '' ? this.mes : mes, // Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
+  //     numCta: numCta
+  //   })
+  //     .subscribe(
+  //       detalleResultadosCuentas => { this.detalleResultadosCuentas = detalleResultadosCuentas; },
+  //       error => {
+  //         this.errorMessage = <any>error;
+  //         this.detalleResultadosCuentas = [];
+  //       },
+  //       // Si la lista tiene más de 10 resultados se necesita ajustar el ancho de tabla para que quepa el scroll
+  //       () => {this.detalleResultadosCuentasScroll = this.detalleResultadosCuentas.length <= 10 ? true : false; }
+  //     );
+  // }
 
   getEfectivoSituacion(): void {
     this._service.get_EfectivoSituacion({
@@ -402,7 +396,7 @@ export class InternosComponent implements OnInit {
       this.mes = mesStr;
       this.anio = fullYearStr;
 
-      if (this.mes && this.anio && this.selectedCompania !== 0 && this.selectedSucursal) {
+      if (this.mes && this.anio && this.selectedCompania !== 0 && this.selectedIdSucursal) {
         this.getDepartamentos();
       }
     }
@@ -416,19 +410,16 @@ export class InternosComponent implements OnInit {
       this.getSucursales();
     }
 
-    if (this.periodo && this.selectedCompania !== 0 && this.selectedSucursal) {
+    if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal) {
       this.getDepartamentos();
     }
   }
 
   onChangeSucursal(selectedIndex): void {
     const sucursal = this.sucursales[selectedIndex];
-    this.selectedSucursal = sucursal.MSUC;
-    this.selectedIdSucursal = sucursal.IdSucursal;
-    this.selectedIpSucursal = sucursal.Servidor;
-    this.selectedConcentradora = sucursal.Concentradora;
+    this.selectedIdSucursal = sucursal.id;
 
-    if (this.periodo && this.selectedCompania !== 0 && this.selectedSucursal) {
+    if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal) {
       this.getDepartamentos();
     }
   }
@@ -538,24 +529,24 @@ export class InternosComponent implements OnInit {
     }
   }
 
-  onClickDetalleSegundoNivel(i: number, value: number, name: string, mes: string = '') {
-    // validar que solo entre cuando viene de real (excluir Ppto y Variacion)
-    if (this.detalleName === 'Real' || this.detalleName === 'AcReal') {
-      // Etiqueta de mes usada en breadcrumb
-      if (mes !== '') {
-        this.detalleNameSegundoNivel = `(${name})`;
-      } else {
-        this.detalleNameSegundoNivel = '';
-      }
+  // onClickDetalleSegundoNivel(i: number, value: number, name: string, mes: string = '') {
+  //   // validar que solo entre cuando viene de real (excluir Ppto y Variacion)
+  //   if (this.detalleName === 'Real' || this.detalleName === 'AcReal') {
+  //     // Etiqueta de mes usada en breadcrumb
+  //     if (mes !== '') {
+  //       this.detalleNameSegundoNivel = `(${name})`;
+  //     } else {
+  //       this.detalleNameSegundoNivel = '';
+  //     }
 
-      this.showResultados = false;
-      this.showDetallePrimerNivel = false;
-      this.showDetalleSegundoNivel = true;
-      this.detalleValueSegundoNivel = value;
-      this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].Descr;
-      this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].Numcta, mes);
-    }
-  }
+  //     this.showResultados = false;
+  //     this.showDetallePrimerNivel = false;
+  //     this.showDetalleSegundoNivel = true;
+  //     this.detalleValueSegundoNivel = value;
+  //     this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].Descr;
+  //     this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].Numcta, mes);
+  //   }
+  // }
 
   hideDetalles(): void {
     this.showResultados = true;

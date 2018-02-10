@@ -1,10 +1,6 @@
 export interface ICompania {
-  ID: number;
-  NOMBRE: string;
-  BD: string;
-  SERVIDOR: string;
-  MSUC: string;
-  TIPO: string;
-  ALIAS: string;
-  UNICAT: number;
+  id: number;
+  razonSocial: string;
+  nombreComercial: string;
+  idProducto: string;
 }
