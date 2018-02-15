@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { InternosService } from './internos.service';
 import { ITipoUnidad } from './tipo-unidad';
 import { Observable } from 'rxjs/Observable';
+import { ColumnSortedEvent } from '../../shared/index';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -12,12 +13,13 @@ import { Observable } from 'rxjs/Observable';
 export class UnidadesNv3Component implements OnInit {
 
   @Input() idDetalleUnidades: number;
+  @Input() idAutoLinea: number;
   @Input() detalleUnidadesConcepto: string;
   @Input() mes: string;
   @Input() mesAcumulado: string;
   @Input() anio: string;
   @Input() selectedCompania: number;
-  @Input() selectedSucursal: string;
+  @Input() selectedIdSucursal: number;
   @Input() carLine: string;
   @Input() departamentoAcumulado: string;
   @Input() detalleName: string;
@@ -34,22 +36,21 @@ export class UnidadesNv3Component implements OnInit {
   @Output() idReporte = new EventEmitter<string>();
   @Output() fixedHeaderId = new EventEmitter<string>();
 
-  detalleUnidadesTipo: Observable<ITipoUnidad[]>;
+  detalleUnidadesTipo: ITipoUnidad[];
 
   constructor(private _service: InternosService) { }
 
   ngOnInit() {
     this.fixedHeaderId.emit('idDetalleUnidadesTipo');
     if (this.mesAcumulado === '') { // mensual
-      this.detalleUnidadesTipo = this.getDetalleUnidadesTipo(this.carLine, this.departamentoAcumulado, this.mes);
+      this.getDetalleUnidadesTipo(this.carLine, this.departamentoAcumulado, this.mes);
     } else { // acumulado
-      this.detalleUnidadesTipo =
-        // HARD CODE. en la version prod, siempre muestra los 12 meses (wtf)
-        this.getDetalleUnidadesTipoAcumulado(this.carLine, this.departamentoAcumulado, '12');
+      // HARD CODE. en la version prod, siempre muestra los 12 meses (wtf)
+      this.getDetalleUnidadesTipoAcumulado(this.carLine, this.departamentoAcumulado, '12');
     }
   }
 
-  getDetalleUnidadesTipo(carLine: string, tipoAuto: string = '', mes: string): Observable<ITipoUnidad[]> {
+  getDetalleUnidadesTipo(carLine: string, tipoAuto: string = '', mes: string): void {
     // Se usa como parametro de departamento el texto de Concepto del primer nivel,
     // sin las letras N o S que se le agregan al inicio
     let concepto = this.detalleUnidadesConcepto;
@@ -61,16 +62,36 @@ export class UnidadesNv3Component implements OnInit {
 
     this.deptoFlotillas.emit(tipoAuto); // Se usa el departamento que aparece solo para flotillas en el segundo nivel
 
-    return this._service.getDetalleUnidadesTipo({
-      idAgencia: this.selectedCompania,
-      mSucursal: this.selectedSucursal,
-      anio: this.anio,
-      mes: mes === '' ? this.mes : mes, // Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
-      departamento: concepto,
-      // Para el caso de flotillas el sp cambia carLine por tipoAuto (columna depto aparece solo para flotillas)
-      carLine: concepto === 'FLOTILLAS' ? tipoAuto : carLine,
-      tipoAuto: concepto === 'FLOTILLAS' ? carLine : tipoAuto
-    });
+    this._service.getDetalleUnidadesTipo({
+      idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      periodoYear: +this.anio,
+      periodoMes: +this.mes,
+      idAutoLinea: this.idAutoLinea
+    })
+      .subscribe(
+      dut => { this.detalleUnidadesTipo = dut; },
+      error => { console.log(JSON.stringify(error)); },
+      () => {
+        // Se calcula el total y se inserta en el objeto
+        const total: number = this.calculaTotalMensual(this.detalleUnidadesTipo, 'Cantidad');
+        const t: ITipoUnidad = {
+          'UnidadDescripcion': 'Total',
+          'Cantidad': total,
+          'Perc': 100
+        };
+        this.detalleUnidadesTipo.push(t);
+
+        // Se calculan porcentajes
+        this.detalleUnidadesTipo.forEach(dut => dut.Perc = dut.Cantidad / total * 100);
+      }
+      );
+  }
+
+  private calculaTotalMensual(items, prop) {
+    return items.reduce(function (a, b) {
+      return a + b[prop];
+    }, 0);
   }
 
   getDetalleUnidadesTipoAcumulado(carLine: string, tipoAuto: string = '', mes: string): Observable<ITipoUnidad[]> {
@@ -88,7 +109,7 @@ export class UnidadesNv3Component implements OnInit {
 
     return this._service.getDetalleUnidadesTipoAcumulado({
       idAgencia: this.selectedCompania,
-      mSucursal: this.selectedSucursal,
+      mSucursal: this.selectedIdSucursal,
       anio: this.anio,
       mes: mes === '' ? this.mes : mes, // Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
       departamento: concepto,
@@ -113,5 +134,17 @@ export class UnidadesNv3Component implements OnInit {
       this.mesAcumuladoNv3.emit(mes);
       // this.fixedHeader('detalleUnidadesSeries');
     }
+  }
+
+  // Ordenamiento de tabla
+  onSorted(event: ColumnSortedEvent, obj: Object[]) {
+    // Se pasa como referencia el objeto que se quiere ordenar
+    obj.sort(function (a, b) {
+      if (event.sortDirection === 'asc') {
+        return a[event.sortColumn] - b[event.sortColumn];
+      } else {
+        return b[event.sortColumn] - a[event.sortColumn];
+      }
+    });
   }
 }

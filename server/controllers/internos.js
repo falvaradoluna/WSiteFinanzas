@@ -17,22 +17,23 @@ this.response = function() {
 // Funcionalidad de la tabla UNIDADES
 internos.prototype.get_internos = function(req, res, next) {
   var self = this;
+  var idCompania = req.query.idCompania;
   var idSucursal = req.query.idSucursal;
-  var mes = req.query.periodoMes;
-  var anio = req.query.periodoYear;
+  var periodoMes = req.query.periodoMes;
+  var periodoAnio = req.query.periodoYear;
   console.log('QueryString Unidades = ' + JSON.stringify(req.query));
 
 var params = [
+  { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
   { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
-  { name: 'periodoMes', value: mes, type: self.model.types.INT },
-  { name: 'periodoYear', value: anio , type: self.model.types.INT }
+  { name: 'PeriodoMes', value: periodoMes, type: self.model.types.INT },
+  { name: 'periodoYear', value: periodoAnio , type: self.model.types.INT }
 ];
 
-  this.model.query('Unidad.ObtenerUnidadesPorSucursal', params, function (error, result) {
+  this.model.query('Unidad.ObtenerUnidades', params, function (error, result) {
     console.log('Parametros Unidades: ' + JSON.stringify(params));
     if (result.length > 0) {
-
-        console.log("resultaaaaaaa " + result[0]);
+        console.log("UNIDADES Nv1: " + JSON.stringify(result[0]));
     }
     self.view.expositor(res, {
         error: error,
@@ -45,22 +46,20 @@ var params = [
 // Funcionalidad de la tabla ESTADO DE RESULTADOS
 internos.prototype.get_estadoresultados = function(req, res, next) {
   var self = this;
-  var idCia = req.query.idcia;
-  var idSucursal = req.query.idsucursal;
-  var departamento = req.query.departamento
-  var mes = req.query.mes;
-  var anio = req.query.anio;
-  console.log('QueryString = ' + req.query);
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var periodoMes = req.query.periodoMes;
+  var periodoAnio = req.query.periodoYear;
+  console.log('QueryString Unidades = ' + JSON.stringify(req.query));
 
-  var params = [
-    { name: 'IdCia', value: idCia, type: self.model.types.INT },
-    { name: 'IdSucursal', value: idSucursal, type: self.model.types.STRING },
-    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
-    { name: 'Mes', value: mes, type: self.model.types.STRING },
-    { name: 'Anio', value: anio, type: self.model.types.STRING }
-  ];
+var params = [
+  { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+  { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+  { name: 'PeriodoMes', value: periodoMes, type: self.model.types.INT },
+  { name: 'periodoYear', value: periodoAnio , type: self.model.types.INT }
+];
 
-  this.model.query('SP_CONSULTA_ESTADO_RESULTADOS', params, function (error, result) {
+  this.model.query('Contabilidad.ObtenerEstadoResultados', params, function (error, result) {
     console.log('Parametros: ' + params);
     if (result.length > 0) {
       console.log("Estado de Resultados " + result[0]);
@@ -204,21 +203,23 @@ internos.prototype.get_departamentos = function (req, res, next) {
 // Funcionalidad para detalle de Unidades mensual (doble click celdas de lado azul)
 internos.prototype.get_detalleunidadesmensual = function (req, res, next) {
   var self = this;
-  var idAgencia = req.query.idcia;
-  var mSuc = req.query.msuc;
-  var anio = req.query.anio;
-  var mes = req.query.mes;
-  var concepto = req.query.concepto;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var periodoYear = req.query.periodoYear;
+  var periodoMes = req.query.periodoMes;
+  var idDetalle = req.query.idDetalle;
+
+  console.log('QueryString Unidades Nv2 = ' + JSON.stringify(req.query));
 
   var params = [
-    { name: 'IdAgencia', value: idAgencia, type: self.model.types.STRING },
-    { name: 'MSuc', value: mSuc, type: self.model.types.STRING },
-    { name: 'Anio', value: anio, type: self.model.types.STRING },
-    { name: 'Mes', value: mes, type: self.model.types.STRING },
-    { name: 'Concepto', value: concepto, type: self.model.types.STRING }
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'idDetalle', value: idDetalle, type: self.model.types.INT }
   ];
 
-  this.model.query('SP_DETALLE_DE_UNIDADES_MENSUAL', params, function (error, result) {
+  this.model.query('Unidad.ObtenerCantidadXAutoLinea', params, function (error, result) {
     console.log(params);
     self.view.expositor(res, {
       error: error,
@@ -231,25 +232,23 @@ internos.prototype.get_detalleunidadesmensual = function (req, res, next) {
 // Funcionalidad para tipo de Unidades (tercer nivel de unidades)
 internos.prototype.get_detalleunidadestipo = function (req, res, next) {
   var self = this;
-  var idAgencia = req.query.idcia;
-  var mSuc = req.query.msuc;
-  var anio = req.query.anio;
-  var mes = req.query.mes;
-  var departamento = req.query.departamento;
-  var xCarLine = req.query.carline;
-  var xTipoAuto = req.query.tipoauto;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var periodoYear = req.query.periodoYear;
+  var periodoMes = req.query.periodoMes;
+  var idAutoLinea = req.query.idAutoLinea;
+
+  console.log('QueryString Unidades Nv3 = ' + JSON.stringify(req.query));
 
   var params = [
-    { name: 'IdAgencia', value: idAgencia, type: self.model.types.STRING },
-    { name: 'MSuc', value: mSuc, type: self.model.types.STRING },
-    { name: 'Anio', value: anio, type: self.model.types.STRING },
-    { name: 'Mes', value: mes, type: self.model.types.STRING },
-    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
-    { name: 'xCarLine', value: xCarLine, type: self.model.types.STRING },
-    { name: 'xTipoAuto', value: xTipoAuto, type: self.model.types.STRING }
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'idAutoLinea', value: idAutoLinea, type: self.model.types.INT }
   ];
 
-  this.model.query('SP_TIPO_DE_UNIDADES', params, function (error, result) {
+  this.model.query('Unidad.ObtenerCantidadXUnidadDescripcion', params, function (error, result) {
     console.log(params);
     self.view.expositor(res, {
       error: error,

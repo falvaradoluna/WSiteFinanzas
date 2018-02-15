@@ -1,15 +1,14 @@
 export interface IResultadoInternos {
-  Concepto: string;
-  Real: number;
-  Perc1: number;
-  PPto: number;
-  Perc2: number;
-  Variacion: number;
-  Perc3: number;
-  AcReal: number;
-  AcPerc1: number;
-  AcPPto: number;
-  AcPerc2: number;
-  AcVariacion: number;
-  AcPerc3: number;
+  idDetalle: number;
+  descripcion: string;
+  cantidad: number;
+  presupuesto: number;
+  presupuestoPorcentaje: number;
+  porcentaje: number;
+  variacion: number;
+  cantidadAcumulado: number;
+  PresupuestoAcumulado: number;
+  presupuestoPorcentajeAcumulado: number;
+  porcentajeAcumulado: number;
+  variacionAcumulado: number;
 }

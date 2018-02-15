@@ -42,6 +42,7 @@ export class InternosService {
     let Params = new HttpParams();
 
     // Begin assigning parameters
+    Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
@@ -56,11 +57,10 @@ export class InternosService {
     let Params = new HttpParams();
 
     // Begin assigning parameters
-    Params = Params.append('idcia', parameters.idCia);
-    Params = Params.append('idsucursal', parameters.idSucursal);
-    Params = Params.append('departamento', parameters.departamento);
-    Params = Params.append('anio', parameters.anio);
-    Params = Params.append('mes', parameters.mes);
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
 
     return this._http.get<IResultadoInternos[]>(this._urlEstadoResultados, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
@@ -144,11 +144,11 @@ export class InternosService {
     let Params = new HttpParams();
 
     // Begin assigning parameters
-    Params = Params.append('idcia', parameters.idAgencia);
-    Params = Params.append('msuc', parameters.mSucursal);
-    Params = Params.append('anio', parameters.anio);
-    Params = Params.append('mes', parameters.mes);
-    Params = Params.append('concepto', parameters.concepto);
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    Params = Params.append('idDetalle', parameters.idDetalle);
 
     return this._http.get<IDetalleUnidadesMensual[]>(this._urlDetalleUnidadesMensual, { params: Params })
       .catch(this.handleError);
@@ -159,13 +159,11 @@ export class InternosService {
     let Params = new HttpParams();
 
     // Begin assigning parameters
-    Params = Params.append('idcia', parameters.idAgencia);
-    Params = Params.append('msuc', parameters.mSucursal);
-    Params = Params.append('anio', parameters.anio);
-    Params = Params.append('mes', parameters.mes);
-    Params = Params.append('departamento', parameters.departamento);
-    Params = Params.append('carline', parameters.carLine);
-    Params = Params.append('tipoauto', parameters.tipoAuto);
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    Params = Params.append('idAutoLinea', parameters.idAutoLinea);
 
     return this._http.get<ITipoUnidad[]>(this._urlDetalleUnidadesTipo, { params: Params })
       .catch(this.handleError);

@@ -105,6 +105,8 @@ export class InternosComponent implements OnInit {
   idDetalleResultados: number; // 1 = mensual, 2 = acumulado. Muestra la tabla de acumulado o mensual
   idEstadoResultado: number;
   idDetalleUnidades: number;
+  idAutoLinea: number;
+  idDetalle: number;
 
   unidadesConcepto: string;
   detalleUnidadesConcepto: string;
@@ -184,7 +186,7 @@ export class InternosComponent implements OnInit {
     this.showSumaDepartamentos = false;
     this.getResultadoUnidades();
     this.getEstadoResultados();
-    this.getUnidadesDepartamento();
+    // this.getUnidadesDepartamento();
   }
 
   sumaDepartamentos(): void {
@@ -205,7 +207,8 @@ export class InternosComponent implements OnInit {
 
   getResultadoUnidades(): void {
     this._service.getUnidades({
-      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : this.selectedCompania,
+      idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       periodoYear: this.anio,
       periodoMes: this.mes
     })
@@ -217,11 +220,10 @@ export class InternosComponent implements OnInit {
 
   getEstadoResultados(): void {
     this._service.getEstadoResultados({
-      idCia: this.selectedCompania,
-      idSucursal: this.selectedIdSucursal,
-      departamento: this.selectedDepartamento,
-      mes: this.mes,
-      anio: this.anio
+      idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      periodoYear: this.anio,
+      periodoMes: this.mes
     })
       .subscribe(estadoResultados => {
         this.estadoResultados = estadoResultados;
@@ -275,7 +277,7 @@ export class InternosComponent implements OnInit {
       .subscribe(
         sucursales => { this.sucursales = sucursales; },
         error => { this.errorMessage = <any>error; },
-        () => { this.onChangeSucursal(0); }
+        () => { this.onChangeSucursal(-2); }
       );
   }
 
@@ -416,8 +418,7 @@ export class InternosComponent implements OnInit {
   }
 
   onChangeSucursal(selectedIndex): void {
-    const sucursal = this.sucursales[selectedIndex];
-    this.selectedIdSucursal = sucursal.id;
+    this.selectedIdSucursal = selectedIndex;
 
     if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal) {
       this.getDepartamentos();
@@ -459,13 +460,15 @@ export class InternosComponent implements OnInit {
   }
 
   onClickUnidades(i: number, value: number, name: string, idDetalleUnidades: number) {
-    const concepto = this.resultadoUnidades[i].Concepto;
+    const concepto = this.resultadoUnidades[i].descripcion;
+    const idDetalle = this.resultadoUnidades[i].idDetalle;
 
     if (concepto !== 'Total Unidades') {
       this.showDetalleUnidadesPrimerNivel = true;
       this.detalleUnidadesName = name;
       this.detalleUnidadesValue = value;
       this.idDetalleUnidades = idDetalleUnidades;
+      this.idDetalle = idDetalle;
 
       // QUITAR UNA
       this.detalleUnidadesConcepto = concepto; // <-----QUITAR despues de refactorizar
@@ -479,7 +482,7 @@ export class InternosComponent implements OnInit {
     this.showDetallePrimerNivel = true;
     this.detalleName = name;
     this.detalleValue = value;
-    this.detalleConcepto = this.estadoResultados[i].Concepto;
+    this.detalleConcepto = this.estadoResultados[i].descripcion;
     this.idDetalleResultados = idDetalleResultados;
     this.idEstadoResultado = idEstadoResultado;
     this.getDetalleResultadosMensual(this.detalleConcepto);
@@ -514,14 +517,14 @@ export class InternosComponent implements OnInit {
     if (this.unidadesDepartamento[0]) {
       const ud = this.unidadesDepartamento[0];
       switch (col) {
-        case 1: v = ud.Real;
+        case 1: v = ud.cantidad;
           break;
-        case 3: v = ud.PPto;
+        // case 3: v = ud.PPto;
+        //   break;
+        case 7: v = ud.cantidadAcumulado;
           break;
-        case 7: v = ud.AcReal;
-          break;
-        case 9: v = ud.AcPPto;
-          break;
+        // case 9: v = ud.AcPPto;
+        //   break;
       }
       return value / v;
     } else {

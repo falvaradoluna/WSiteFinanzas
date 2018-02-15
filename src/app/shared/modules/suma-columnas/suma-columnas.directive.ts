@@ -6,7 +6,7 @@ import { SumaColumnasService } from './suma-columnas.service';
 })
 export class SumaColumnasDirective {
 
-  constructor(private el: ElementRef, private renderer :Renderer2, private sumaColumnasService: SumaColumnasService) { }
+  constructor(private el: ElementRef, private renderer: Renderer2, private sumaColumnasService: SumaColumnasService) { }
 
   @Input('suma-columnas') valueSelected;
 

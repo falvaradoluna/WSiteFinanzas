@@ -15,13 +15,13 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./internos.component.scss']
 })
 export class UnidadesNv2Component implements OnInit, OnDestroy {
-
   @Input() idDetalleUnidades: number;
   @Input() unidadesConcepto: string;
   @Input() mes: string;
   @Input() anio: string;
   @Input() selectedCompania: number;
-  @Input() selectedSucursal: string;
+  @Input() selectedIdSucursal: number;
+  @Input() idDetalle: number;
 
   @Output() showUnidades = new EventEmitter<boolean>();
   @Output() showDetalleUnidadesPrimerNivel = new EventEmitter<boolean>();
@@ -30,8 +30,8 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
   @Output() detalleUnidadesValueSegundoNivel = new EventEmitter<string>();
   @Output() detalleUnidadesConceptoSegundoNivel = new EventEmitter<string>();
   @Output() mesAcumulado = new EventEmitter<string>();
-  @Output() departamentoAcumulado = new EventEmitter<string>();
   @Output() carLine = new EventEmitter<string>();
+  @Output() idAutoLinea = new EventEmitter<number>();
   @Output() errorMessage = new EventEmitter<string>();
   // @Output() fixedHeaderId = new EventEmitter<string>();
 
@@ -45,7 +45,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.idDetalleUnidades === 1) { // Mensual
-      this.getDetalleUnidadesMensual(this.unidadesConcepto);
+      this.getDetalleUnidadesMensual();
     } else if (this.idDetalleUnidades === 2) { // Acumulado
       this.getDetalleUnidadesAcumulado(this.unidadesConcepto);
     }
@@ -59,17 +59,38 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
     }
   }
 
-  getDetalleUnidadesMensual(concepto: string): void {
+  getDetalleUnidadesMensual(): void {
     this.dumSubscription = this._service.getDetalleUnidadesMensual({
-      idAgencia: this.selectedCompania,
-      mSucursal: this.selectedSucursal,
-      anio: this.anio,
-      mes: this.mes,
-      concepto: concepto
+      idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      periodoYear: +this.anio,
+      periodoMes: +this.mes,
+      idDetalle: this.idDetalle // Quitar hardcode cuando expliquen que es
     }).subscribe(
       dum => { this.detalleUnidadesMensual = dum; },
-      error => { console.log(error); }
+      error => { console.log(error); },
+      () => {
+        // Se calcula el total y se inserta en el objeto
+        const total: number = this.calculaTotalMensual(this.detalleUnidadesMensual, 'cantidad');
+        const t: IDetalleUnidadesMensual = {
+          'IdAutoLinea': -1,
+          'AutoLinea': 'Total',
+          'cantidad': total,
+          'CantidadSelected': false,
+          'Perc': 100
+        };
+        this.detalleUnidadesMensual.push(t);
+
+        // Se calculan porcentajes
+        this.detalleUnidadesMensual.forEach(dum => dum.Perc = dum.cantidad / total * 100);
+      }
     );
+  }
+
+  calculaTotalMensual(items, prop) {
+    return items.reduce(function (a, b) {
+      return a + b[prop];
+    }, 0);
   }
 
   getDetalleUnidadesAcumulado(concepto: string): void {
@@ -83,7 +104,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
 
     this.duaSubscription = this._service.getDetalleUnidadesAcumulado({
       idAgencia: this.selectedCompania,
-      mSucursal: this.selectedSucursal,
+      mSucursal: this.selectedIdSucursal,
       anio: this.anio,
       mes: this.mes,
       departamento: concepto
@@ -93,18 +114,18 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
     );
   }
 
-  onClickDetalleUnidadesMensual(carLine: string, strMes: string, mes: string = '', depto: string = '') {
+  onClickDetalleUnidadesMensual(idAutoLinea: number, carLine: string, mes: string = '') {
     if (carLine.trim() !== 'Total') {
       // TODO: Ocultar Suma
       this.showUnidades.emit(false);
       this.showDetalleUnidadesPrimerNivel.emit(false);
       this.showDetalleUnidadesSegundoNivel.emit(true);
-      this.detalleUnidadesNameSegundoNivel.emit(strMes);
+      this.detalleUnidadesNameSegundoNivel.emit(mes);
       this.detalleUnidadesValueSegundoNivel.emit(carLine); // Revisar ya que son 3 que usan el mismo valor
       this.detalleUnidadesConceptoSegundoNivel.emit(carLine);
       this.carLine.emit(carLine);
       this.mesAcumulado.emit(mes);
-      this.departamentoAcumulado.emit(depto);
+      this.idAutoLinea.emit(idAutoLinea);
     }
   }
 
