@@ -234,6 +234,7 @@ internos.prototype.get_detalleunidadestipo = function (req, res, next) {
   var self = this;
   var idCompania = req.query.idCompania;
   var idSucursal = req.query.idSucursal;
+  var idOrigen = req.query.idOrigen;
   var periodoYear = req.query.periodoYear;
   var periodoMes = req.query.periodoMes;
   var idAutoLinea = req.query.idAutoLinea;
@@ -245,7 +246,8 @@ internos.prototype.get_detalleunidadestipo = function (req, res, next) {
     { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
     { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
     { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
-    { name: 'idAutoLinea', value: idAutoLinea, type: self.model.types.INT }
+    { name: 'idAutoLinea', value: idAutoLinea, type: self.model.types.INT },
+    { name: 'idOrigen', value: idOrigen, type: self.model.types.INT }
   ];
 
   this.model.query('Unidad.ObtenerCantidadXUnidadDescripcion', params, function (error, result) {
@@ -292,6 +294,7 @@ internos.prototype.get_detalleunidadesseries = function (req, res, next) {
   var self = this;
   var idCompania = req.query.idCompania;
   var idSucursal = req.query.idSucursal;
+  var idOrigen = req.query.idOrigen;
   var periodoYear = req.query.periodoYear;
   var periodoMes = req.query.periodoMes;
   var unidadDescripcion = req.query.unidadDescripcion;
@@ -301,6 +304,7 @@ internos.prototype.get_detalleunidadesseries = function (req, res, next) {
   var params = [
     { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
     { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'idOrigen', value: idOrigen, type: self.model.types.INT },
     { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
     { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
     { name: 'unidadDescripcion', value: unidadDescripcion, type: self.model.types.STRING }

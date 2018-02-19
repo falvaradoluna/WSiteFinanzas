@@ -13,6 +13,7 @@ export class UnidadesNv4Component implements OnInit {
 
   @Input() detalleUnidadesConcepto: string;
   @Input() detalleUnidadesConceptoSegundoNivel: string;
+  @Input() idOrigen: number;
   @Input() anio: string;
   @Input() mes: string;
   @Input() mesAcumuladoNv3: string;
@@ -35,6 +36,7 @@ export class UnidadesNv4Component implements OnInit {
     return this._service.getDetalleUnidadesSeries({
       idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      idOrigen: this.idOrigen,
       periodoYear: +this.anio,
       periodoMes: +this.mes,
       unidadDescripcion: this.tipoAuto

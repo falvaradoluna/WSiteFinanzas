@@ -161,6 +161,7 @@ export class InternosService {
     // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('idOrigen', parameters.idOrigen);
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('idAutoLinea', parameters.idAutoLinea);
@@ -192,6 +193,7 @@ export class InternosService {
     // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('idOrigen', parameters.idOrigen);
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);

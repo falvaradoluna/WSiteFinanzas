@@ -14,6 +14,7 @@ export class UnidadesNv3Component implements OnInit {
 
   @Input() idDetalleUnidades: number;
   @Input() idAutoLinea: number;
+  @Input() idOrigen: number;
   @Input() detalleUnidadesConcepto: string;
   @Input() mes: string;
   @Input() mesAcumulado: string;
@@ -65,6 +66,7 @@ export class UnidadesNv3Component implements OnInit {
     this._service.getDetalleUnidadesTipo({
       idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      idOrigen: this.idOrigen,
       periodoYear: +this.anio,
       periodoMes: +this.mes,
       idAutoLinea: this.idAutoLinea
