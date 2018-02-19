@@ -190,15 +190,11 @@ export class InternosService {
     let Params = new HttpParams();
 
     // Begin assigning parameters
-    Params = Params.append('idcia', parameters.idAgencia);
-    Params = Params.append('msuc', parameters.mSucursal);
-    Params = Params.append('anio', parameters.anio);
-    Params = Params.append('mes', parameters.mes);
-    Params = Params.append('departamento', parameters.departamento);
-    Params = Params.append('idestadoresultado', parameters.idEstadoDeResultado);
-    Params = Params.append('idreporte', parameters.idReporte);
-    Params = Params.append('carline', parameters.carLine);
-    Params = Params.append('tipoauto', parameters.tipoAuto);
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
 
     return this._http.get<ISeries[]>(this._urlDetalleUnidadesSeries, { params: Params })
       .catch(this.handleError);
@@ -209,11 +205,11 @@ export class InternosService {
     let Params = new HttpParams();
 
     // Begin assigning parameters
-    Params = Params.append('idcia', parameters.idAgencia);
-    Params = Params.append('msuc', parameters.mSucursal);
-    Params = Params.append('anio', parameters.anio);
-    Params = Params.append('mes', parameters.mes);
-    Params = Params.append('departamento', parameters.departamento);
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    Params = Params.append('idDetalle', parameters.idDetalle);
 
     return this._http.get<IDetalleUnidadesAcumulado[]>(this._urlDetalleUnidadesAcumulado, { params: Params })
       .catch(this.handleError);

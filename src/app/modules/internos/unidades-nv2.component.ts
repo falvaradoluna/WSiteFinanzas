@@ -16,7 +16,6 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class UnidadesNv2Component implements OnInit, OnDestroy {
   @Input() idDetalleUnidades: number;
-  @Input() unidadesConcepto: string;
   @Input() mes: string;
   @Input() anio: string;
   @Input() selectedCompania: number;
@@ -47,7 +46,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
     if (this.idDetalleUnidades === 1) { // Mensual
       this.getDetalleUnidadesMensual();
     } else if (this.idDetalleUnidades === 2) { // Acumulado
-      this.getDetalleUnidadesAcumulado(this.unidadesConcepto);
+      this.getDetalleUnidadesAcumulado();
     }
   }
 
@@ -65,7 +64,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       periodoYear: +this.anio,
       periodoMes: +this.mes,
-      idDetalle: this.idDetalle // Quitar hardcode cuando expliquen que es
+      idDetalle: this.idDetalle // Nuevas, usadas, etc.
     }).subscribe(
       dum => { this.detalleUnidadesMensual = dum; },
       error => { console.log(error); },
@@ -87,31 +86,63 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
     );
   }
 
+  getDetalleUnidadesAcumulado(): void {
+    this.duaSubscription = this._service.getDetalleUnidadesAcumulado({
+      idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      periodoYear: +this.anio,
+      periodoMes: +this.mes,
+      idDetalle: this.idDetalle // Nuevas, usadas, etc.
+    }).subscribe(
+      dua => { this.detalleUnidadesAcumulado = dua; },
+      error => { console.log(JSON.stringify(error)); },
+      () => {
+        // Se calcula el total y se inserta en el objeto
+        let total: number = this.calculaTotalMensual(this.detalleUnidadesAcumulado, 'enero');
+
+        let t: IDetalleUnidadesAcumulado = {
+          'IdAutoLinea': -1,
+          'autoLinea': 'Total',
+          'enero': total,
+          'eneroPerc': 100,
+          'febrero': 0,
+          'marzo': 0,
+          'abril': 0,
+          'mayo': 0,
+          'junio': 0,
+          'julio': 0,
+          'agosto': 0,
+          'septiembre': 0,
+          'octubre': 0,
+          'noviembre': 0,
+          'diciembre': 0
+        };
+        this.detalleUnidadesAcumulado.push(t);
+
+        // Se calculan porcentajes
+        this.detalleUnidadesAcumulado.forEach(dua => dua['eneroPerc'] = dua['enero'] / total * 100);
+      }
+    );
+  }
+
   calculaTotalMensual(items, prop) {
     return items.reduce(function (a, b) {
       return a + b[prop];
     }, 0);
   }
 
-  getDetalleUnidadesAcumulado(concepto: string): void {
-    // Se usa como parametro de departamento el texto de Concepto del primer nivel,
-    // sin las letras N o S que se le agregan al inicio
-    if (concepto.startsWith('N ')) {
-      concepto = concepto.substr(2);
-    } else if (concepto.startsWith('S ')) {
-      concepto = concepto.substr(2);
+  // Convierte mes numerico a nombre del mes
+  toLongMonth(mes: number) {
+    let mesStr = mes.toString();
+
+    if (mes < 10) {
+      mesStr = '0' + mesStr;
     }
 
-    this.duaSubscription = this._service.getDetalleUnidadesAcumulado({
-      idAgencia: this.selectedCompania,
-      mSucursal: this.selectedIdSucursal,
-      anio: this.anio,
-      mes: this.mes,
-      departamento: concepto
-    }).subscribe(
-      dua => { this.detalleUnidadesAcumulado = dua; },
-      error => { console.log(error); }
-    );
+    const objDate = new Date(mes + '/01/2000'),
+      locale = 'es-mx',
+      month = objDate.toLocaleString(locale, { month: 'long' });
+    return month;
   }
 
   onClickDetalleUnidadesMensual(idAutoLinea: number, carLine: string, mes: string = '') {

@@ -9,7 +9,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor='let d of detalleUnidadesTipo; let i = index;' (dblclick)='onClickDetalleUnidadesTipo(i, d.TipoUnidad)'>
+        <tr *ngFor='let d of detalleUnidadesTipo; let i = index;' (dblclick)='onClickDetalleUnidadesTipo(i, d.UnidadDescripcion)'>
           <td>{{ d.UnidadDescripcion }}</td>
           <td class="text-center">{{ d.Cantidad }}</td>
           <td class="text-right">{{ d.Perc | number: '1.2-2' }}</td>

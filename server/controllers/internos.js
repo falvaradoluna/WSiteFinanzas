@@ -290,29 +290,23 @@ internos.prototype.get_detalleunidadestipoacumulado = function (req, res, next) 
 // Funcionalidad para series de Unidades (cuarto nivel de unidades)
 internos.prototype.get_detalleunidadesseries = function (req, res, next) {
   var self = this;
-  var idAgencia = req.query.idcia;
-  var mSuc = req.query.msuc;
-  var anio = req.query.anio;
-  var mes = req.query.mes;
-  var idEstadoDeResultado = req.query.idestadoresultado;
-  var idReporte = req.query.idreporte;
-  var departamento = req.query.departamento;
-  var xCarLine = req.query.carline;
-  var xTipoAuto = req.query.tipoauto;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var periodoYear = req.query.periodoYear;
+  var periodoMes = req.query.periodoMes;
+  var unidadDescripcion = req.query.unidadDescripcion;
+
+  console.log('QueryString Unidades Nv3 = ' + JSON.stringify(req.query));
 
   var params = [
-    { name: 'IdAgencia', value: idAgencia, type: self.model.types.STRING },
-    { name: 'MSucursal', value: mSuc, type: self.model.types.STRING },
-    { name: 'Anio', value: anio, type: self.model.types.STRING },
-    { name: 'Mes', value: mes, type: self.model.types.STRING },
-    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
-    { name: 'IdEstadoDeResultado', value: idEstadoDeResultado, type: self.model.types.INT },
-    { name: 'IdReporte', value: idReporte, type: self.model.types.STRING },
-    { name: 'xCarLine', value: xCarLine, type: self.model.types.STRING },
-    { name: 'xTipoAuto', value: xTipoAuto, type: self.model.types.STRING }
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'unidadDescripcion', value: unidadDescripcion, type: self.model.types.STRING }
   ];
 
-  this.model.query('SP_SERIES', params, function (error, result) {
+  this.model.query('Unidad.ObtenerDetalleUnidades', params, function (error, result) {
     console.log(params);
     self.view.expositor(res, {
       error: error,
@@ -325,21 +319,23 @@ internos.prototype.get_detalleunidadesseries = function (req, res, next) {
 // Funcionalidad para detalle de Unidades Acumulado(segundo nivel de unidades)
 internos.prototype.get_detalleunidadesacumulado = function (req, res, next) {
   var self = this;
-  var idAgencia = req.query.idcia;
-  var mSuc = req.query.msuc;
-  var anio = req.query.anio;
-  var mes = req.query.mes;
-  var departamento = req.query.departamento;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var periodoYear = req.query.periodoYear;
+  var periodoMes = req.query.periodoMes;
+  var idDetalle = req.query.idDetalle;
+
+  console.log('QueryString Unidades Nv2 Acumulado = ' + JSON.stringify(req.query));
 
   var params = [
-    { name: 'IdAgencia', value: idAgencia, type: self.model.types.STRING },
-    { name: 'MSuc', value: mSuc, type: self.model.types.STRING },
-    { name: 'Anio', value: anio, type: self.model.types.STRING },
-    { name: 'Mes', value: mes, type: self.model.types.STRING },
-    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'idDetalle', value: idDetalle, type: self.model.types.INT }
   ];
 
-  this.model.query('SP_UNIDADES_REAL_ACUMULADO', params, function (error, result) {
+  this.model.query('Unidad.ObtenerCantidadXAutoLineaAcumulado', params, function (error, result) {
     console.log(params);
     self.view.expositor(res, {
       error: error,

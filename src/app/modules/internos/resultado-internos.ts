@@ -2,13 +2,15 @@ export interface IResultadoInternos {
   idDetalle: number;
   descripcion: string;
   cantidad: number;
-  presupuesto: number;
+  cantidadPresupuesto: number;
   presupuestoPorcentaje: number;
   porcentaje: number;
   variacion: number;
+  porcentajeVariacion: number;
   cantidadAcumulado: number;
-  PresupuestoAcumulado: number;
+  cantidadPresupuestoAcumulado: number;
   presupuestoPorcentajeAcumulado: number;
   porcentajeAcumulado: number;
   variacionAcumulado: number;
+  porcentajeVariacionAcumulado: number;
 }

@@ -17,10 +17,11 @@ export class UnidadesNv4Component implements OnInit {
   @Input() mes: string;
   @Input() mesAcumuladoNv3: string;
   @Input() selectedCompania: number;
-  @Input() selectedSucursal: string;
+  @Input() selectedIdSucursal: number;
   @Input() tipoAuto: string;
   @Input() idReporte: string;
   @Input() deptoFlotillas: string;
+
 
   detalleUnidadesSeries: Observable<ISeries[]>;
 
@@ -31,27 +32,12 @@ export class UnidadesNv4Component implements OnInit {
   }
 
   getDetalleUnidadesSeries(): Observable<ISeries[]> {
-    // Se usa como parametro de departamento el texto de Concepto del primer nivel,
-    // sin las letras N o S que se le agregan al inicio
-    let concepto = this.detalleUnidadesConcepto;
-
-    if (concepto.startsWith('N ')) {
-      concepto = concepto.substr(2);
-    } else if (concepto.startsWith('S ')) {
-      concepto = concepto.substr(2);
-    }
-
     return this._service.getDetalleUnidadesSeries({
-      idAgencia: this.selectedCompania,
-      mSucursal: this.selectedSucursal,
-      anio: this.anio,
-      // Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
-      mes: this.mesAcumuladoNv3 === '' ? this.mes : this.mesAcumuladoNv3,
-      departamento: concepto === 'FLOTILLAS' ? this.deptoFlotillas : concepto,
-      idEstadoDeResultado: 1, // QUITAR HARD CODE CUANDO TIBERIO COMPLETE EL SP
-      idReporte: this.idReporte,
-      carLine: this.detalleUnidadesConceptoSegundoNivel,
-      tipoAuto: this.tipoAuto
+      idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      periodoYear: +this.anio,
+      periodoMes: +this.mes,
+      unidadDescripcion: this.tipoAuto
     });
   }
 }

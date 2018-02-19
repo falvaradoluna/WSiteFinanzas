@@ -215,7 +215,53 @@ export class InternosComponent implements OnInit {
       .subscribe(resultadoUnidades => {
         this.resultadoUnidades = resultadoUnidades;
       },
-      error => this.errorMessage = <any>error);
+      error => this.errorMessage = <any>error,
+      () => {
+        const total = this.resultadoUnidades.find(x => x.descripcion.trim() === 'Total');
+        const totalCantidad = total.cantidad;
+        const totalPresupuesto = total.cantidadPresupuesto;
+        const totalCantidadAcumulado = total.cantidadAcumulado;
+        const totalPresupuestoAcumulado = total.cantidadPresupuestoAcumulado;
+
+        this.resultadoUnidades.forEach(ru => {
+          // Calcula porcentaje de variacion
+          if (ru.cantidadPresupuesto === 0) {
+            // Evitar division entre cero
+            ru.porcentajeVariacion = 100;
+          } else {
+            ru.porcentajeVariacion = ru.variacion / ru.cantidadPresupuesto * 100;
+          }
+
+          // Calcula porcentaje de variacion acumulado
+          if (ru.cantidadPresupuestoAcumulado === 0) {
+            // Evitar division entre cero
+            ru.porcentajeVariacionAcumulado = 100;
+          } else {
+            ru.porcentajeVariacionAcumulado = ru.variacionAcumulado / ru.cantidadPresupuestoAcumulado * 100;
+          }
+
+          // Calcula porcentajes de cantidad real y presupuesto (mensual y acumulado)
+          if (ru.descripcion.trim() === 'Intercambios') {
+            // Intercambios no se toma en cuenta
+            ru.porcentaje = 0;
+            ru.presupuestoPorcentaje = 0;
+            ru.porcentajeAcumulado = 0;
+            ru.presupuestoPorcentajeAcumulado = 0;
+          } else {
+            ru.porcentaje = ru.cantidad / totalCantidad * 100;
+            ru.presupuestoPorcentaje = ru.cantidadPresupuesto / totalPresupuesto * 100;
+            ru.porcentajeAcumulado = ru.cantidadAcumulado / totalCantidadAcumulado * 100;
+            ru.presupuestoPorcentajeAcumulado = ru.cantidadPresupuestoAcumulado / totalPresupuestoAcumulado * 100;
+          }
+        });
+      }
+    );
+  }
+
+  calculaTotalMensual(items, prop) {
+    return items.reduce(function (a, b) {
+      return a + b[prop];
+    }, 0);
   }
 
   getEstadoResultados(): void {
