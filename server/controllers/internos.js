@@ -207,7 +207,7 @@ internos.prototype.get_detalleunidadesmensual = function (req, res, next) {
   var idSucursal = req.query.idSucursal;
   var periodoYear = req.query.periodoYear;
   var periodoMes = req.query.periodoMes;
-  var idDetalle = req.query.idDetalle;
+  var idOrigen = req.query.idOrigen;
 
   console.log('QueryString Unidades Nv2 = ' + JSON.stringify(req.query));
 
@@ -216,7 +216,7 @@ internos.prototype.get_detalleunidadesmensual = function (req, res, next) {
     { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
     { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
     { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
-    { name: 'idDetalle', value: idDetalle, type: self.model.types.INT }
+    { name: 'idOrigen', value: idOrigen, type: self.model.types.INT }
   ];
 
   this.model.query('Unidad.ObtenerCantidadXAutoLinea', params, function (error, result) {
@@ -323,7 +323,7 @@ internos.prototype.get_detalleunidadesacumulado = function (req, res, next) {
   var idSucursal = req.query.idSucursal;
   var periodoYear = req.query.periodoYear;
   var periodoMes = req.query.periodoMes;
-  var idDetalle = req.query.idDetalle;
+  var idOrigen = req.query.idOrigen;
 
   console.log('QueryString Unidades Nv2 Acumulado = ' + JSON.stringify(req.query));
 
@@ -332,7 +332,7 @@ internos.prototype.get_detalleunidadesacumulado = function (req, res, next) {
     { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
     { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
     { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
-    { name: 'idDetalle', value: idDetalle, type: self.model.types.INT }
+    { name: 'idOrigen', value: idOrigen, type: self.model.types.INT }
   ];
 
   this.model.query('Unidad.ObtenerCantidadXAutoLineaAcumulado', params, function (error, result) {

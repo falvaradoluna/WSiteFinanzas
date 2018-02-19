@@ -106,7 +106,7 @@ export class InternosComponent implements OnInit {
   idEstadoResultado: number;
   idDetalleUnidades: number;
   idAutoLinea: number;
-  idDetalle: number;
+  idOrigen: number;
 
   unidadesConcepto: string;
   detalleUnidadesConcepto: string;
@@ -507,14 +507,14 @@ export class InternosComponent implements OnInit {
 
   onClickUnidades(i: number, value: number, name: string, idDetalleUnidades: number) {
     const concepto = this.resultadoUnidades[i].descripcion;
-    const idDetalle = this.resultadoUnidades[i].idDetalle;
+    const idOrigen = this.resultadoUnidades[i].idOrigen;
 
     if (concepto !== 'Total Unidades') {
       this.showDetalleUnidadesPrimerNivel = true;
       this.detalleUnidadesName = name;
       this.detalleUnidadesValue = value;
       this.idDetalleUnidades = idDetalleUnidades;
-      this.idDetalle = idDetalle;
+      this.idOrigen = idOrigen;
 
       // QUITAR UNA
       this.detalleUnidadesConcepto = concepto; // <-----QUITAR despues de refactorizar

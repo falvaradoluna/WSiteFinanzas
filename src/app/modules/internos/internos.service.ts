@@ -148,7 +148,7 @@ export class InternosService {
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
-    Params = Params.append('idDetalle', parameters.idDetalle);
+    Params = Params.append('idOrigen', parameters.idOrigen);
 
     return this._http.get<IDetalleUnidadesMensual[]>(this._urlDetalleUnidadesMensual, { params: Params })
       .catch(this.handleError);
@@ -209,7 +209,7 @@ export class InternosService {
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
-    Params = Params.append('idDetalle', parameters.idDetalle);
+    Params = Params.append('idOrigen', parameters.idOrigen);
 
     return this._http.get<IDetalleUnidadesAcumulado[]>(this._urlDetalleUnidadesAcumulado, { params: Params })
       .catch(this.handleError);

@@ -15,12 +15,12 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['./internos.component.scss']
 })
 export class UnidadesNv2Component implements OnInit, OnDestroy {
-  @Input() idDetalleUnidades: number;
+  @Input() idDetalleUnidades: number; // 1 = mensual, 2 = acumulado
   @Input() mes: string;
   @Input() anio: string;
   @Input() selectedCompania: number;
   @Input() selectedIdSucursal: number;
-  @Input() idDetalle: number;
+  @Input() idOrigen: number;
 
   @Output() showUnidades = new EventEmitter<boolean>();
   @Output() showDetalleUnidadesPrimerNivel = new EventEmitter<boolean>();
@@ -64,7 +64,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       periodoYear: +this.anio,
       periodoMes: +this.mes,
-      idDetalle: this.idDetalle // Nuevas, usadas, etc.
+      idOrigen: this.idOrigen // Nuevas, usadas, etc.
     }).subscribe(
       dum => { this.detalleUnidadesMensual = dum; },
       error => { console.log(error); },
@@ -92,7 +92,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       periodoYear: +this.anio,
       periodoMes: +this.mes,
-      idDetalle: this.idDetalle // Nuevas, usadas, etc.
+      idOrigen: this.idOrigen // Nuevas, usadas, etc.
     }).subscribe(
       dua => { this.detalleUnidadesAcumulado = dua; },
       error => { console.log(JSON.stringify(error)); },

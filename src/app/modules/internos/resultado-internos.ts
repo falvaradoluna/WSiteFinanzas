@@ -1,5 +1,5 @@
 export interface IResultadoInternos {
-  idDetalle: number;
+  idOrigen: number;
   descripcion: string;
   cantidad: number;
   cantidadPresupuesto: number;
