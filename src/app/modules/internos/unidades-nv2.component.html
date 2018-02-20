@@ -52,41 +52,41 @@
       <th *ngIf='mes >= "11"' class="bg-secondary text-white text-center"> % </th>
       <th *ngIf='mes >= "12"' class="bg-secondary text-white" sortable-column='diciembre'>DIC</th>
       <th *ngIf='mes >= "12"' class="bg-secondary text-white text-center"> % </th>
-      <th class="bg-secondary text-white" sortable-column='TOTAL'>TOTAL</th>
+      <th class="bg-secondary text-white" sortable-column='totalAnual'>TOTAL</th>
       <th class="bg-secondary text-white text-center"> % </th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor='let dra of detalleUnidadesAcumulado; let i = index;'>
-      <td *ngIf='unidadesConcepto === "N FLOTILLAS"'>{{ dra.Depto }}</td>
-      <td>{{ dra.autoLinea }}</td>
-      <td class="text-center" (click)='onClickDetalleUnidadesMensual(dra.autoLinea, "Enero", "01", dra.Depto)'>{{ dra.enero }}</td>
-      <td class="text-right">{{ dra.eneroPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "02"' class="text-center" (click)='onClickDetalleUnidadesMensual(dra.autoLinea, "Febrero", "02", dra.Depto)'>{{ dra.febrero }}</td>
-      <td *ngIf='mes >= "02"' class="text-right">{{ dra.PtcFeb | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "03"' class="text-center" (click)='onClickDetalleUnidadesMensual(dra.autoLinea, "Marzo", "03", dra.Depto)'>{{ dra.marzo }}</td>
-      <td *ngIf='mes >= "03"' class="text-right">{{ dra.PtcMar | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "04"' class="text-center" (click)='onClickDetalleUnidadesMensual(dra.autoLinea, "Abril", "04", dra.Depto)'>{{ dra.abril }}</td>
-      <td *ngIf='mes >= "04"' class="text-right">{{ dra.PtcAbr | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "05"' class="text-center" (click)='onClickDetalleUnidadesMensual(dra.autoLinea, "Mayo", "05", dra.Depto)'>{{ dra.mayo }}</td>
-      <td *ngIf='mes >= "05"' class="text-right">{{ dra.PtcMay | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "06"' class="text-center" (click)='onClickDetalleUnidadesMensual(dra.autoLinea, "Junio", "06", dra.Depto)'>{{ dra.junio }}</td>
-      <td *ngIf='mes >= "06"' class="text-right">{{ dra.PtcJun | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "07"' class="text-center" (click)='onClickDetalleUnidadesMensual(dra.autoLinea, "Julio", "07", dra.Depto)'>{{ dra.julio }}</td>
-      <td *ngIf='mes >= "07"' class="text-right">{{ dra.PtcJul | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "08"' class="text-center" (click)='onClickDetalleUnidadesMensual(dra.autoLinea, "Agosto", "08", dra.Depto)'>{{ dra.agosto }}</td>
-      <td *ngIf='mes >= "08"' class="text-right">{{ dra.PtcAgo | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "09"' class="text-center" (click)='onClickDetalleUnidadesMensual(dra.autoLinea, "Septiembre", "09", dra.Depto)'>{{ dra.septiembre }}</td>
-      <td *ngIf='mes >= "09"' class="text-right">{{ dra.PtcSep | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "10"' class="text-center" (click)='onClickDetalleUnidadesMensual(dra.autoLinea, "Octubre", "10", dra.Depto)'>{{ dra.octubre }}</td>
-      <td *ngIf='mes >= "10"' class="text-right">{{ dra.PtcOct | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "11"' class="text-center" (click)='onClickDetalleUnidadesMensual(dra.autoLinea, "Noviembre", "11", dra.Depto)'>{{ dra.noviembre }}</td>
-      <td *ngIf='mes >= "11"' class="text-right">{{ dra.PtcNov | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "12"' class="text-center" (click)='onClickDetalleUnidadesMensual(dra.autoLinea, "Diciembre", "12", dra.Depto)'>{{ dra.diciembre }}</td>
-      <td *ngIf='mes >= "12"' class="text-right">{{ dra.PtcDic | number:'1.2-2' }}</td>
-      <td class="text-center">{{ dra.TOTAL }}</td>
-      <td class="text-right">{{ dra.PctTotal | number:'1.2-2' }}</td>
-      <!-- <td *ngIf='idEstadoResultado === 3' class="text-right">{{ dra.Pct | number:'1.2-2' }}</td> -->
+    <tr *ngFor='let dua of detalleUnidadesAcumulado; let i = index;'>
+      <td *ngIf='unidadesConcepto === "N FLOTILLAS"'>{{ dua.Depto }}</td>
+      <td>{{ dua.autoLinea }}</td>
+      <td class="text-center" (click)='onClickDetalleUnidadesMensual(dua.IdAutoLinea ,dua.autoLinea, 1)'>{{ dua.enero }}</td>
+      <td class="text-right">{{ dua.eneroPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "02"' class="text-center" (click)='onClickDetalleUnidadesMensual(dua.autoLinea, "Febrero", "02", dua.Depto)'>{{ dua.febrero }}</td>
+      <td *ngIf='mes >= "02"' class="text-right">{{ dua.febreroPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "03"' class="text-center" (click)='onClickDetalleUnidadesMensual(dua.autoLinea, "Marzo", "03", dua.Depto)'>{{ dua.marzo }}</td>
+      <td *ngIf='mes >= "03"' class="text-right">{{ dua.marzoPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "04"' class="text-center" (click)='onClickDetalleUnidadesMensual(dua.autoLinea, "Abril", "04", dua.Depto)'>{{ dua.abril }}</td>
+      <td *ngIf='mes >= "04"' class="text-right">{{ dua.abrilPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "05"' class="text-center" (click)='onClickDetalleUnidadesMensual(dua.autoLinea, "Mayo", "05", dua.Depto)'>{{ dua.mayo }}</td>
+      <td *ngIf='mes >= "05"' class="text-right">{{ dua.mayoPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "06"' class="text-center" (click)='onClickDetalleUnidadesMensual(dua.autoLinea, "Junio", "06", dua.Depto)'>{{ dua.junio }}</td>
+      <td *ngIf='mes >= "06"' class="text-right">{{ dua.junioPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "07"' class="text-center" (click)='onClickDetalleUnidadesMensual(dua.autoLinea, "Julio", "07", dua.Depto)'>{{ dua.julio }}</td>
+      <td *ngIf='mes >= "07"' class="text-right">{{ dua.julioPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "08"' class="text-center" (click)='onClickDetalleUnidadesMensual(dua.autoLinea, "Agosto", "08", dua.Depto)'>{{ dua.agosto }}</td>
+      <td *ngIf='mes >= "08"' class="text-right">{{ dua.agostoPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "09"' class="text-center" (click)='onClickDetalleUnidadesMensual(dua.autoLinea, "Septiembre", "09", dua.Depto)'>{{ dua.septiembre }}</td>
+      <td *ngIf='mes >= "09"' class="text-right">{{ dua.septiembrePerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "10"' class="text-center" (click)='onClickDetalleUnidadesMensual(dua.autoLinea, "Octubre", "10", dua.Depto)'>{{ dua.octubre }}</td>
+      <td *ngIf='mes >= "10"' class="text-right">{{ dua.octubrePerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "11"' class="text-center" (click)='onClickDetalleUnidadesMensual(dua.autoLinea, "Noviembre", "11", dua.Depto)'>{{ dua.noviembre }}</td>
+      <td *ngIf='mes >= "11"' class="text-right">{{ dua.noviembrePerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "12"' class="text-center" (click)='onClickDetalleUnidadesMensual(dua.autoLinea, "Diciembre", "12", dua.Depto)'>{{ dua.diciembre }}</td>
+      <td *ngIf='mes >= "12"' class="text-right">{{ dua.diciembrePerc | number:'1.2-2' }}</td>
+      <td class="text-center">{{ dua.totalAnual }}</td>
+      <td class="text-right">{{ dua.totalAnualPerc | number:'1.2-2' }}</td>
+      <!-- <td *ngIf='idEstadoResultado === 3' class="text-right">{{ dua.Pct | number:'1.2-2' }}</td> -->
     </tr>
   </tbody>
 </table>

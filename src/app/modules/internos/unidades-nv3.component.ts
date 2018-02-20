@@ -110,14 +110,12 @@ export class UnidadesNv3Component implements OnInit {
     this.deptoFlotillas.emit(tipoAuto); // Se usa el departamento que aparece solo para flotillas en el segundo nivel
 
     return this._service.getDetalleUnidadesTipoAcumulado({
-      idAgencia: this.selectedCompania,
-      mSucursal: this.selectedIdSucursal,
-      anio: this.anio,
-      mes: mes === '' ? this.mes : mes, // Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
-      departamento: concepto,
-      // Para el caso de flotillas el sp cambia carLine por tipoAuto (columna depto aparece solo para flotillas)
-      carLine: concepto === 'FLOTILLAS' ? tipoAuto : carLine,
-      tipoAuto: concepto === 'FLOTILLAS' ? carLine : tipoAuto
+      idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      idOrigen: this.idOrigen,
+      periodoYear: +this.anio,
+      periodoMes: mes,
+      idAutoLinea: this.idAutoLinea
     });
   }
 

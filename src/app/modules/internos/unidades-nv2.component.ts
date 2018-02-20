@@ -97,30 +97,66 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
       dua => { this.detalleUnidadesAcumulado = dua; },
       error => { console.log(JSON.stringify(error)); },
       () => {
-        // Se calcula el total y se inserta en el objeto
-        let total: number = this.calculaTotalMensual(this.detalleUnidadesAcumulado, 'enero');
-
-        let t: IDetalleUnidadesAcumulado = {
+        const totales: IDetalleUnidadesAcumulado = {
           'IdAutoLinea': -1,
           'autoLinea': 'Total',
-          'enero': total,
+          'enero': 0,
           'eneroPerc': 100,
           'febrero': 0,
+          'febreroPerc': 100,
           'marzo': 0,
+          'marzoPerc': 100,
           'abril': 0,
+          'abrilPerc': 100,
           'mayo': 0,
+          'mayoPerc': 100,
           'junio': 0,
+          'junioPerc': 100,
           'julio': 0,
+          'julioPerc': 100,
           'agosto': 0,
+          'agostoPerc': 100,
           'septiembre': 0,
+          'septiembrePerc': 100,
           'octubre': 0,
+          'octubrePerc': 100,
           'noviembre': 0,
-          'diciembre': 0
+          'noviembrePerc': 100,
+          'diciembre': 0,
+          'diciembrePerc': 100,
+          'totalAnual': 0,
+          'totalAnualPerc': 100
         };
-        this.detalleUnidadesAcumulado.push(t);
 
-        // Se calculan porcentajes
-        this.detalleUnidadesAcumulado.forEach(dua => dua['eneroPerc'] = dua['enero'] / total * 100);
+        // Ciclo de 12 meses
+        for (let mes = 1; mes <= 12; mes++) {
+          const nombreMes = this.toLongMonth(mes);
+
+          // Se calcula el total
+          const totalMensual: number = this.calculaTotalMensual(this.detalleUnidadesAcumulado, nombreMes);
+
+          // Se actualiza el valor del mes correspondiente
+          totales[nombreMes] = totalMensual;
+
+          // Se calculan porcentajes del mes correspondiente
+          this.detalleUnidadesAcumulado.forEach(dua => {
+            dua[nombreMes + 'Perc'] = dua[nombreMes] / totalMensual * 100;
+            dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
+                             dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
+            dua.totalAnualPerc = 0;
+          });
+        }
+
+        // Se actualiza el total anual de todas las autoLineas
+        totales.totalAnual = this.calculaTotalMensual(this.detalleUnidadesAcumulado, 'totalAnual');
+
+        // Se calculan los porcentajes de totales
+        this.detalleUnidadesAcumulado.forEach(dua => {
+          dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+        });
+
+        // Se agregan totales al objeto
+        this.detalleUnidadesAcumulado.push(totales);
       }
     );
   }
