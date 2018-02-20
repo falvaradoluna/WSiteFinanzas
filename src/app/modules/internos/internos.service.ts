@@ -15,6 +15,7 @@ import { IDetalleResultadosCuentas } from './detalle-resultados-cuentas';
 import { ITipoUnidad } from './tipo-unidad';
 import { IDetalleUnidadesAcumulado } from './detalle-unidades-acumulado';
 import { ISeries } from './series';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 @Injectable()
 export class InternosService {
@@ -183,8 +184,11 @@ export class InternosService {
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('idAutoLinea', parameters.idAutoLinea);
 
-    return this._http.get<ITipoUnidad[]>(this._urlDetalleUnidadesTipoAcumulado, { params: Params })
-      .catch(this.handleError);
+    return this._http.get<any>(this._urlDetalleUnidadesTipoAcumulado, { params: Params })
+    .catch((err: Response) => {
+      const details = err.json();
+      return Observable.throw(details);
+   });
   }
 
   getDetalleUnidadesSeries(parameters): Observable<ISeries[]> {

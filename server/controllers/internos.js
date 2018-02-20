@@ -275,7 +275,7 @@ internos.prototype.get_detalleunidadestipoacumulado = function (req, res, next) 
   var params = [
     { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
     { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
-    { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'PeriodoMes', value: periodoMes, type: self.model.types.INT },
     { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
     { name: 'idAutoLinea', value: idAutoLinea, type: self.model.types.INT },
     { name: 'idOrigen', value: idOrigen, type: self.model.types.INT }
