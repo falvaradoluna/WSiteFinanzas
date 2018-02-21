@@ -59,8 +59,8 @@ export class InternosService {
 
     // Begin assigning parameters
     Params = Params.append('idcia', parameters.idCia);
-    Params = Params.append('idsucursal', parameters.idSucursal)
-    Params = Params.append('departamento', parameters.departamento)
+    Params = Params.append('idsucursal', parameters.idSucursal);
+    Params = Params.append('departamento', parameters.departamento);
     Params = Params.append('anio', parameters.anio);
     Params = Params.append('mes', parameters.mes);
 
@@ -247,8 +247,10 @@ export class InternosService {
     let Params = new HttpParams();
 
     // Begin assigning parameters
-    Params = Params.append('servidoragencia', parameters.servidorAgencia);
-    Params = Params.append('concentradora', parameters.concentradora);
+    // Params = Params.append('servidoragencia', parameters.servidorAgencia);
+    // Params = Params.append('concentradora', parameters.concentradora);
+
+    Params = Params.append('IdCia', parameters.IdCia);
     Params = Params.append('anio', parameters.anio);
     Params = Params.append('mes', parameters.mes);
     Params = Params.append('numcta', parameters.numCta);

@@ -390,15 +390,15 @@ internos.prototype.get_detalleresultadosmensual = function (req, res, next) {
 // Funcionalidad para detalle de Estado de Resultados mensual (doble click celdas de lado azul)
 internos.prototype.get_detalleresultadoscuentas = function (req, res, next) {
   var self = this;
-  var servidorAgencia = req.query.servidoragencia;
-  var concentradora = req.query.concentradora;
+  var IdCia = req.query.IdCia;
+  // var servidorAgencia = req.query.servidoragencia;
+  // var concentradora = req.query.concentradora;
   var anio = req.query.anio;
   var mes = req.query.mes;
   var numCta = req.query.numcta;
 
   var params = [
-    { name: 'ServidorAgencia', value: servidorAgencia, type: self.model.types.STRING },
-    { name: 'Concentradora', value: concentradora, type: self.model.types.STRING },
+    { name: 'IdCia', value: IdCia, type: self.model.types.INT },
     { name: 'Anio', value: anio, type: self.model.types.STRING },
     { name: 'Mes', value: mes, type: self.model.types.STRING },
     { name: 'NumCta', value: numCta, type: self.model.types.STRING }

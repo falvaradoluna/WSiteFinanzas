@@ -397,27 +397,28 @@ export class InternosComponent implements OnInit {
     );
   }
 
-  // getDetalleResultadosCuentas(numCta: string, mes: string = ''): void {
-  //   // Limpiar tabla antes de consultar
-  //   this.detalleResultadosCuentas = [];
+  getDetalleResultadosCuentas(numCta: string, mes: string = ''): void {
+    // Limpiar tabla antes de consultar
+    this.detalleResultadosCuentas = [];
 
-  //   this._service.getDetalleResultadosCuentas({
-  //     servidorAgencia: this.selectedIpSucursal,
-  //     concentradora: this.selectedConcentradora,
-  //     anio: this.anio,
-  //     mes:  mes === '' ? this.mes : mes, // Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
-  //     numCta: numCta
-  //   })
-  //     .subscribe(
-  //       detalleResultadosCuentas => { this.detalleResultadosCuentas = detalleResultadosCuentas; },
-  //       error => {
-  //         this.errorMessage = <any>error;
-  //         this.detalleResultadosCuentas = [];
-  //       },
-  //       // Si la lista tiene más de 10 resultados se necesita ajustar el ancho de tabla para que quepa el scroll
-  //       () => {this.detalleResultadosCuentasScroll = this.detalleResultadosCuentas.length <= 10 ? true : false; }
-  //     );
-  // }
+    this._service.getDetalleResultadosCuentas({
+      // servidorAgencia: this.selectedIpSucursal,
+      // concentradora: this.selectedConcentradora,
+      IdCia: this.selectedCompania,
+      anio: this.anio,
+      mes:  mes === '' ? this.mes : mes, // Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
+      numCta: numCta
+    })
+      .subscribe(
+        detalleResultadosCuentas => { this.detalleResultadosCuentas = detalleResultadosCuentas; },
+        error => {
+          this.errorMessage = <any>error;
+          this.detalleResultadosCuentas = [];
+        },
+        // Si la lista tiene más de 10 resultados se necesita ajustar el ancho de tabla para que quepa el scroll
+        () => {this.detalleResultadosCuentasScroll = this.detalleResultadosCuentas.length <= 10 ? true : false; }
+      );
+  }
 
   getEfectivoSituacion(): void {
     this._service.get_EfectivoSituacion({
@@ -565,12 +566,12 @@ export class InternosComponent implements OnInit {
       switch (col) {
         case 1: v = ud.cantidad;
           break;
-        // case 3: v = ud.PPto;
-        //   break;
+        case 3: v = ud.PPto;
+          break;
         case 7: v = ud.cantidadAcumulado;
           break;
-        // case 9: v = ud.AcPPto;
-        //   break;
+        case 9: v = ud.AcPPto;
+          break;
       }
       return value / v;
     } else {
@@ -578,24 +579,24 @@ export class InternosComponent implements OnInit {
     }
   }
 
-  // onClickDetalleSegundoNivel(i: number, value: number, name: string, mes: string = '') {
-  //   // validar que solo entre cuando viene de real (excluir Ppto y Variacion)
-  //   if (this.detalleName === 'Real' || this.detalleName === 'AcReal') {
-  //     // Etiqueta de mes usada en breadcrumb
-  //     if (mes !== '') {
-  //       this.detalleNameSegundoNivel = `(${name})`;
-  //     } else {
-  //       this.detalleNameSegundoNivel = '';
-  //     }
+  onClickDetalleSegundoNivel(i: number, value: number, name: string, mes: string = '') {
+    // validar que solo entre cuando viene de real (excluir Ppto y Variacion)
+    if (this.detalleName === 'Real' || this.detalleName === 'AcReal') {
+      // Etiqueta de mes usada en breadcrumb
+      if (mes !== '') {
+        this.detalleNameSegundoNivel = `(${name})`;
+      } else {
+        this.detalleNameSegundoNivel = '';
+      }
 
-  //     this.showResultados = false;
-  //     this.showDetallePrimerNivel = false;
-  //     this.showDetalleSegundoNivel = true;
-  //     this.detalleValueSegundoNivel = value;
-  //     this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].Descr;
-  //     this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].Numcta, mes);
-  //   }
-  // }
+      this.showResultados = false;
+      this.showDetallePrimerNivel = false;
+      this.showDetalleSegundoNivel = true;
+      this.detalleValueSegundoNivel = value;
+      this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].Descr;
+      this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].Numcta, mes);
+    }
+  }
 
   hideDetalles(): void {
     this.showResultados = true;
