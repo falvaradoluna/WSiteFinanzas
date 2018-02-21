@@ -186,7 +186,7 @@ export class InternosComponent implements OnInit {
     this.showSumaDepartamentos = false;
     this.getResultadoUnidades();
     this.getEstadoResultados();
-    // this.getUnidadesDepartamento();
+    this.getUnidadesDepartamento();
   }
 
   sumaDepartamentos(): void {
@@ -217,7 +217,7 @@ export class InternosComponent implements OnInit {
       },
       error => this.errorMessage = <any>error,
       () => {
-        const total = this.resultadoUnidades.find(x => x.descripcion.trim() === 'Total');
+        const total = this.resultadoUnidades.find(x => x.descripcion.trim() === 'Total Unidades');
         const totalCantidad = total.cantidad;
         const totalPresupuesto = total.cantidadPresupuesto;
         const totalCantidadAcumulado = total.cantidadAcumulado;
@@ -296,7 +296,7 @@ export class InternosComponent implements OnInit {
     if (this.selectedDepartamento !== 'Todos') {
       this._service.getUnidadesDepartamento({
         idCia: this.selectedCompania,
-        idSucursal: this.selectedIdSucursal,
+        idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
         departamento: this.selectedDepartamento,
         mes: this.mes,
         anio: this.anio
@@ -564,11 +564,11 @@ export class InternosComponent implements OnInit {
     if (this.unidadesDepartamento[0]) {
       const ud = this.unidadesDepartamento[0];
       switch (col) {
-        case 1: v = ud.cantidad;
+        case 1: v = ud.Real;
           break;
         case 3: v = ud.PPto;
           break;
-        case 7: v = ud.cantidadAcumulado;
+        case 7: v = ud.AcReal;
           break;
         case 9: v = ud.AcPPto;
           break;
