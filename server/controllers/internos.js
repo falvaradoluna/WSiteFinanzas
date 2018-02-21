@@ -46,20 +46,22 @@ var params = [
 // Funcionalidad de la tabla ESTADO DE RESULTADOS
 internos.prototype.get_estadoresultados = function(req, res, next) {
   var self = this;
-  var idCompania = req.query.idCompania;
-  var idSucursal = req.query.idSucursal;
-  var periodoMes = req.query.periodoMes;
-  var periodoAnio = req.query.periodoYear;
-  console.log('QueryString Unidades = ' + JSON.stringify(req.query));
+  var idCia = req.query.idcia;
+  var idSucursal = req.query.idsucursal;
+  var departamento = req.query.departamento
+  var mes = req.query.mes;
+  var anio = req.query.anio;
+  console.log('QueryString = ' + req.query);
 
-var params = [
-  { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
-  { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
-  { name: 'PeriodoMes', value: periodoMes, type: self.model.types.INT },
-  { name: 'periodoYear', value: periodoAnio , type: self.model.types.INT }
-];
+  var params = [
+    { name: 'IdCia', value: idCia, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.STRING },
+    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
+    { name: 'Mes', value: mes, type: self.model.types.STRING },
+    { name: 'Anio', value: anio, type: self.model.types.STRING }
+  ];
 
-  this.model.query('Contabilidad.ObtenerEstadoResultados', params, function (error, result) {
+  this.model.query('SP_CONSULTA_ESTADO_RESULTADOS', params, function (error, result) {
     console.log('Parametros: ' + params);
     if (result.length > 0) {
       console.log("Estado de Resultados " + result[0]);
@@ -183,7 +185,6 @@ internos.prototype.get_departamentos = function (req, res, next) {
   var mes = req.query.mes;
 
   var params = [
-    { name: 'IdReporte', value: idReporte, type: self.model.types.INT },
     { name: 'IdSucursal', value: idSucursal, type: self.model.types.STRING },
     { name: 'IdAgencia', value: idAgencia, type: self.model.types.INT },
     { name: 'Anio', value: anio, type: self.model.types.STRING },

@@ -266,10 +266,11 @@ export class InternosComponent implements OnInit {
 
   getEstadoResultados(): void {
     this._service.getEstadoResultados({
-      idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
+      idCia: this.selectedCompania,
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
-      periodoYear: this.anio,
-      periodoMes: this.mes
+      departamento: this.selectedDepartamento,
+      mes: this.mes,
+      anio: this.anio
     })
       .subscribe(estadoResultados => {
         this.estadoResultados = estadoResultados;
@@ -328,18 +329,17 @@ export class InternosComponent implements OnInit {
   }
 
   getDepartamentos(): void {
-    // this._service.getDepartamentos({
-    //   idReporte: this.selectedTipoReporte,
-    //   idSucursal: this.selectedIdSucursal,
-    //   idAgencia: this.selectedCompania,
-    //   anio: this.anio,
-    //   mes: this.mes
-    // })
-    //   .subscribe(
-    //     departamentos => { this.departamentos = departamentos; },
-    //     error => this.errorMessage = <any>error,
-    //     () => this.procesar()
-    //   );
+    this._service.getDepartamentos({
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      idAgencia: this.selectedCompania,
+      anio: this.anio,
+      mes: +this.mes
+    })
+      .subscribe(
+        departamentos => { this.departamentos = departamentos; },
+        error => this.errorMessage = <any>error,
+        () => this.procesar()
+      );
   }
 
   setTipoReporte(): void {
@@ -372,9 +372,9 @@ export class InternosComponent implements OnInit {
     this._service.getDetalleResultadosMensual({
       idAgencia: this.selectedCompania,
       anio: this.anio,
-      mes: this.mes,
+      mes: +this.mes,
       idSucursal: this.selectedIdSucursal >= 0 ? '0' + this.selectedIdSucursal.toString() : '00',
-      mSucursal: this.selectedIdSucursal,
+      mSucursal: this.selectedIdSucursal >= 0 ? '0' + this.selectedIdSucursal.toString() : '00',
       departamento: this.selectedDepartamento,
       concepto: concepto,
       idEstadoDeResultado: this.idEstadoResultado,
@@ -528,7 +528,7 @@ export class InternosComponent implements OnInit {
     this.showDetallePrimerNivel = true;
     this.detalleName = name;
     this.detalleValue = value;
-    this.detalleConcepto = this.estadoResultados[i].descripcion;
+    this.detalleConcepto = this.estadoResultados[i].Concepto;
     this.idDetalleResultados = idDetalleResultados;
     this.idEstadoResultado = idEstadoResultado;
     this.getDetalleResultadosMensual(this.detalleConcepto);
