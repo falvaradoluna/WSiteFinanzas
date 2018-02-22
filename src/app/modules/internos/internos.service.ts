@@ -20,21 +20,21 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 @Injectable()
 export class InternosService {
 
-  private _urlUnidades = 'api/internos/internos';
-  private _urlEstadoResultados = 'api/internos/estadoresultados';
-  private _urlSumaDepartamentos = 'api/internos/sumadepartamentos';
-  private _urlCompanias = 'api/internos/companias';
-  private _urlSucursales = 'api/internos/sucursales';
-  private _urlDepartamentos = 'api/internos/departamentos';
-  private _urlUnidadesDepartamento = 'api/internos/unidadesdepto';
-  private _urlEfectivoSituacion = 'api/internos/efectivoysituacion';
-  private _urlDetalleUnidadesMensual = 'api/internos/detalleunidadesmensual';
-  private _urlDetalleUnidadesTipo = 'api/internos/detalleunidadestipo';
-  private _urlDetalleUnidadesTipoAcumulado = 'api/internos/detalleunidadestipoacumulado';
-  private _urlDetalleUnidadesSeries = 'api/internos/detalleunidadesseries';
-  private _urlDetalleUnidadesAcumulado = 'api/internos/detalleunidadesacumulado';
-  private _urlDetalleResultadosMensual = 'api/internos/detalleresultadosmensual';
-  private _urlDetalleResultadosCuentas = 'api/internos/detalleresultadoscuentas';
+  private _urlUnidades                      = 'api/internos/internos';
+  private _urlEstadoResultados              = 'api/internos/estadoresultados';
+  private _urlSumaDepartamentos             = 'api/internos/sumadepartamentos';
+  private _urlCompanias                     = 'api/internos/companias';
+  private _urlSucursales                    = 'api/internos/sucursales';
+  private _urlDepartamentos                 = 'api/internos/departamentos';
+  private _urlUnidadesDepartamento          = 'api/internos/unidadesdepto';
+  private _urlEfectivoSituacion             = 'api/internos/efectivoysituacion';
+  private _urlDetalleUnidadesMensual        = 'api/internos/detalleunidadesmensual';
+  private _urlDetalleUnidadesTipo           = 'api/internos/detalleunidadestipo';
+  private _urlDetalleUnidadesTipoAcumulado  = 'api/internos/detalleunidadestipoacumulado';
+  private _urlDetalleUnidadesSeries         = 'api/internos/detalleunidadesseries';
+  private _urlDetalleUnidadesAcumulado      = 'api/internos/detalleunidadesacumulado';
+  private _urlDetalleResultadosMensual      = 'api/internos/detalleresultadosmensual';
+  private _urlDetalleResultadosCuentas      = 'api/internos/detalleresultadoscuentas';
 
   constructor(private _http: HttpClient) { }
 

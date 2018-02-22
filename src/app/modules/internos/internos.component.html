@@ -678,7 +678,7 @@
         <div class="card-header bg-primary text-white text-center">
           FLUJO DE EFECTIVO REAL
         </div>
-        <table class="table table-sm table-bordered table-responsive">
+        <table class="table table-lg table-bordered table-responsive">
           <thead>
             <tr>
               <th class="bg-success text-white">Concepto</th>
@@ -700,7 +700,7 @@
           <tbody>
             <ng-container *ngFor='let es of efectivoSituacion; let i = index;'>
               <tr>
-                <td class="">{{ es.Concepto }}</td>
+                <td class="">{{ es.concepto }}</td>
                 <td class="text-right">{{ es.Ene | number:'1.2-2' }}</td>
                 <td class="text-right">{{ es.Feb | number:'1.2-2' }}</td>
                 <td class="text-right">{{ es.Mar | number:'1.2-2' }}</td>
