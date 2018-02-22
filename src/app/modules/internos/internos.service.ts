@@ -9,6 +9,7 @@ import { ICompania } from './compania';
 import { ISucursal } from './sucursal';
 import { IDepartamento } from './departamento';
 import { IEfectivoSituacion } from './efectivo-y-situacion-financiera';
+import { IEstadoSituacion } from "./estado-Situacion-Financiera";
 import { IDetalleUnidadesMensual } from './detalle-unidades-mensual';
 import { IDetalleResultadosMensual } from './detalle-resultados-mensual';
 import { IDetalleResultadosCuentas } from './detalle-resultados-cuentas';
@@ -28,6 +29,7 @@ export class InternosService {
   private _urlDepartamentos                 = 'api/internos/departamentos';
   private _urlUnidadesDepartamento          = 'api/internos/unidadesdepto';
   private _urlEfectivoSituacion             = 'api/internos/efectivoysituacion';
+  private _urlEstadoSituacion               = "api/internos/estadosituaciofinanciera";
   private _urlDetalleUnidadesMensual        = 'api/internos/detalleunidadesmensual';
   private _urlDetalleUnidadesTipo           = 'api/internos/detalleunidadestipo';
   private _urlDetalleUnidadesTipoAcumulado  = 'api/internos/detalleunidadestipoacumulado';
@@ -270,6 +272,19 @@ export class InternosService {
 
     return this._http.get<IEfectivoSituacion[]>(this._urlEfectivoSituacion, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  get_EstadoSituacion(parameters): Observable<IEstadoSituacion[]> {
+    // Initialize Params Object
+    let Params = new HttpParams();
+
+    // Begin assigning parameters
+    Params = Params.append('idreporte', parameters.idTipoReporte);
+    Params = Params.append('idcia', parameters.idAgencia);
+    Params = Params.append('anio', parameters.anio);
+    console.log("ServiceParams", Params);
+    return this._http.get<IEstadoSituacion[]>(this._urlEstadoSituacion, { params: Params })
       .catch(this.handleError);
   }
 

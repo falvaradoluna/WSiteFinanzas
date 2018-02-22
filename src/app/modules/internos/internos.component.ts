@@ -12,6 +12,7 @@ import { ICompania } from './compania';
 import { IDepartamento } from './departamento';
 import { ITipoReporte } from './tipo-reporte';
 import { IEfectivoSituacion } from './efectivo-y-situacion-financiera';
+import { IEstadoSituacion } from "./estado-Situacion-Financiera";
 import { IDetalleUnidadesMensual } from './detalle-unidades-mensual';
 import { IDetalleResultadosMensual } from './detalle-resultados-mensual';
 import { IDetalleResultadosCuentas } from './detalle-resultados-cuentas';
@@ -72,6 +73,7 @@ export class InternosComponent implements OnInit {
   resultadoSumaDepartamentos: IResultadoInternos[] = [];
   unidadesDepartamento: IResultadoInternos[] = [];
   efectivoSituacion: IEfectivoSituacion[];
+  estadoSituacion: IEstadoSituacion[] = [];
   companias: ICompania[];
   sucursales: ISucursal[];
   departamentos: IDepartamento[] = [];
@@ -421,15 +423,30 @@ export class InternosComponent implements OnInit {
   }
 
   getEfectivoSituacion(): void {
-    this._service.get_EfectivoSituacion({
-      idTipoReporte: this.selectedTipoReporte,
-      idAgencia: this.selectedCompania,
-      anio: this.anio
-    })
-      .subscribe(efectivoSituacion => {
-        this.efectivoSituacion = efectivoSituacion;
-      },
-      error => this.errorMessage = <any>error);
+    if(this.selectedTipoReporte == 4){
+      this._service.get_EfectivoSituacion({
+        idTipoReporte: this.selectedTipoReporte,
+        idAgencia: this.selectedCompania,
+        anio: this.anio
+      })
+        .subscribe(efectivoSituacion => {
+          this.efectivoSituacion = efectivoSituacion;
+          this.fixedHeader("tableEfectivo");
+        },
+        error => this.errorMessage = <any>error);
+    }else if(this.selectedTipoReporte == 5){
+      this._service.get_EstadoSituacion({
+        idTipoReporte: this.selectedTipoReporte,
+        idAgencia: this.selectedCompania,
+        anio: this.anio
+      })
+        .subscribe(estadoSituacion => {
+          this.estadoSituacion = estadoSituacion;
+          this.fixedHeader("tableEstado");
+        },
+        error => this.errorMessage = <any>error);
+    }
+    
   }
 
   // Revisa si la cadena debe ir en negrita

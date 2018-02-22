@@ -449,6 +449,28 @@ internos.prototype.get_efectivoysituacion = function (req, res, next) {
   });
 };
 
+// /api/internos/estadosituaciofinanciera
+internos.prototype.get_estadosituaciofinanciera = function (req, res, next) {
+  console.log("Hola");
+  var self = this;
+  var IdCompania  = req.query.idcia
+  var periodoYear = req.query.anio
+
+  var params = [
+    { name: 'IdCompania', value: IdCompania, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.STRING }
+  ];
+  console.log(params);
+  this.model.query('[Interno].[ObtenerEstadoSituacionFinanciera]', params, function (error, result) {
+    console.log( "Error", error );
+    console.log( "Result", result );
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
 // internos.prototype.post_internos = function(req, res, next) {
 // var self = this;
 // var name = req.body.name;
