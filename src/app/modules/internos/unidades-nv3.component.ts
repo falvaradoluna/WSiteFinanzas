@@ -22,7 +22,7 @@ export class UnidadesNv3Component implements OnInit {
   @Input() selectedCompania: number;
   @Input() selectedIdSucursal: number;
   @Input() carLine: string;
-  @Input() departamentoAcumulado: string;
+  @Input() idDepartamento: string;
   @Input() detalleName: string;
 
   @Output() deptoFlotillas = new EventEmitter<string>();
@@ -43,27 +43,92 @@ export class UnidadesNv3Component implements OnInit {
 
   ngOnInit() {
     this.fixedHeaderId.emit('idDetalleUnidadesTipo');
-    if (this.mesAcumulado === '') { // mensual
-      this.getDetalleUnidadesTipo(this.carLine, this.departamentoAcumulado, this.mes);
-    } else { // acumulado
-      // En la version prod, siempre muestra los mismos meses que se escogieron desde un inicio
-      this.getDetalleUnidadesTipoAcumulado(this.carLine, this.departamentoAcumulado, this.mes);
+    if (this.idDetalleUnidades === 1) { // Mensual
+      if (this.idOrigen === 3) { // Flotillas
+        this.getDetalleUnidadesTipoFlotillas(this.carLine, this.idDepartamento, this.mes);
+      } else {
+        this.getDetalleUnidadesTipo(this.carLine, this.idDepartamento, this.mes);
+      }
+    } else if (this.idDetalleUnidades === 2) { // Acumulado
+      if (this.idOrigen === 3) {
+        this.getDetalleUnidadesTipoAcumuladoFlotillas(this.carLine, this.idDepartamento, this.mes);
+      } else {
+        // En la version prod, siempre muestra los mismos meses que se escogieron desde un inicio
+      this.getDetalleUnidadesTipoAcumulado(this.carLine, this.idDepartamento, this.mes);
+      }
     }
   }
 
-  getDetalleUnidadesTipo(carLine: string, tipoAuto: string = '', mes: string): void {
+  getDetalleUnidadesTipo(carLine: string, idDepartamento: string = '', mes: string): void {
     // Se usa como parametro de departamento el texto de Concepto del primer nivel,
     // sin las letras N o S que se le agregan al inicio
-    let concepto = this.detalleUnidadesConcepto;
-    if (concepto.startsWith('N ')) {
-      concepto = concepto.substr(2);
-    } else if (concepto.startsWith('S ')) {
-      concepto = concepto.substr(2);
-    }
+    const concepto = this.detalleUnidadesConcepto;
 
-    this.deptoFlotillas.emit(tipoAuto); // Se usa el departamento que aparece solo para flotillas en el segundo nivel
+    // this.deptoFlotillas.emit(tipoAuto); // Se usa el departamento que aparece solo para flotillas en el segundo nivel
 
     this._service.getDetalleUnidadesTipo({
+      idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      idOrigen: this.idOrigen,
+      periodoYear: +this.anio,
+      periodoMes: +this.mes,
+      idAutoLinea: this.idAutoLinea
+    })
+      .subscribe(
+      dut => { this.detalleUnidadesTipo = dut; },
+      error => { console.log(JSON.stringify(error)); },
+      () => {
+        // Se calcula el total y se inserta en el objeto
+        const total: number = this.calculaTotalMensual(this.detalleUnidadesTipo, 'Cantidad');
+        const t: ITipoUnidad = {
+          'UnidadDescripcion': 'Total',
+          'Cantidad': total,
+          'Perc': 100,
+          'enero': 0,
+          'eneroPerc': 100,
+          'febrero': 0,
+          'febreroPerc': 100,
+          'marzo': 0,
+          'marzoPerc': 100,
+          'abril': 0,
+          'abrilPerc': 100,
+          'mayo': 0,
+          'mayoPerc': 100,
+          'junio': 0,
+          'junioPerc': 100,
+          'julio': 0,
+          'julioPerc': 100,
+          'agosto': 0,
+          'agostoPerc': 100,
+          'septiembre': 0,
+          'septiembrePerc': 100,
+          'octubre': 0,
+          'octubrePerc': 100,
+          'noviembre': 0,
+          'noviembrePerc': 100,
+          'diciembre': 0,
+          'diciembrePerc': 100,
+          'totalAnual': 0,
+          'totalAnualPerc': 100
+        };
+        this.detalleUnidadesTipo.push(t);
+
+        // Se calculan porcentajes
+        this.detalleUnidadesTipo.forEach(dut => dut.Perc = dut.Cantidad / total * 100);
+      }
+      );
+  }
+
+  // Flotillas
+  getDetalleUnidadesTipoFlotillas(carLine: string, idDepartamento: string = '', mes: string): void {
+    // Se usa como parametro de departamento el texto de Concepto del primer nivel,
+    // sin las letras N o S que se le agregan al inicio
+    const concepto = this.detalleUnidadesConcepto;
+
+    // this.deptoFlotillas.emit(idDepartamento); // Se usa el departamento que aparece solo para flotillas en el segundo nivel
+
+    this._service.getDetalleUnidadesTipoFlotillas({
+      idDepartamento: this.idDepartamento,
       idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       idOrigen: this.idOrigen,
@@ -122,20 +187,98 @@ export class UnidadesNv3Component implements OnInit {
     }, 0);
   }
 
-  getDetalleUnidadesTipoAcumulado(carLine: string, tipoAuto: string = '', mes: string) {
+  getDetalleUnidadesTipoAcumulado(carLine: string, idDepartamento: string = '', mes: string) {
     // Se usa como parametro de departamento el texto de Concepto del primer nivel,
     // sin las letras N o S que se le agregan al inicio
-    let concepto = this.detalleUnidadesConcepto;
+    const concepto = this.detalleUnidadesConcepto;
 
-    if (concepto.startsWith('N ')) {
-      concepto = concepto.substr(2);
-    } else if (concepto.startsWith('S ')) {
-      concepto = concepto.substr(2);
-    }
-
-    this.deptoFlotillas.emit(tipoAuto); // Se usa el departamento que aparece solo para flotillas en el segundo nivel
+    // this.deptoFlotillas.emit(tipoAuto); // Se usa el departamento que aparece solo para flotillas en el segundo nivel
 
     this._service.getDetalleUnidadesTipoAcumulado({
+      idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      idOrigen: this.idOrigen,
+      periodoYear: +this.anio,
+      periodoMes: mes,
+      idAutoLinea: this.idAutoLinea
+    }).subscribe(
+      dut => { this.detalleUnidadesTipo = dut; },
+      error => { console.log(JSON.stringify(error)); },
+      () => {
+        const totales: ITipoUnidad = {
+          'UnidadDescripcion': 'Total',
+          'Cantidad': 0,
+          'Perc': 100,
+          'enero': 0,
+          'eneroPerc': 100,
+          'febrero': 0,
+          'febreroPerc': 100,
+          'marzo': 0,
+          'marzoPerc': 100,
+          'abril': 0,
+          'abrilPerc': 100,
+          'mayo': 0,
+          'mayoPerc': 100,
+          'junio': 0,
+          'junioPerc': 100,
+          'julio': 0,
+          'julioPerc': 100,
+          'agosto': 0,
+          'agostoPerc': 100,
+          'septiembre': 0,
+          'septiembrePerc': 100,
+          'octubre': 0,
+          'octubrePerc': 100,
+          'noviembre': 0,
+          'noviembrePerc': 100,
+          'diciembre': 0,
+          'diciembrePerc': 100,
+          'totalAnual': 0,
+          'totalAnualPerc': 100
+        };
+
+        // Ciclo de 12 meses
+        for (let m = 1; m <= 12; m++) {
+          const nombreMes = this.toLongMonth(m);
+
+          // Se calcula el total
+          const totalMensual: number = this.calculaTotalMensual(this.detalleUnidadesTipo, nombreMes);
+
+          // Se actualiza el valor del mes correspondiente
+          totales[nombreMes] = totalMensual;
+
+          // Se calculan porcentajes del mes correspondiente
+          this.detalleUnidadesTipo.forEach(dua => {
+            dua[nombreMes + 'Perc'] = dua[nombreMes] / totalMensual * 100;
+            dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
+                             dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
+            dua.totalAnualPerc = 0;
+          });
+        }
+
+        // Se actualiza el total anual de todas las autoLineas
+        totales.totalAnual = this.calculaTotalMensual(this.detalleUnidadesTipo, 'totalAnual');
+
+        // Se calculan los porcentajes de totales
+        this.detalleUnidadesTipo.forEach(dua => {
+          dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+        });
+
+        // Se agregan totales al objeto
+        this.detalleUnidadesTipo.push(totales);
+      }
+      );
+  }
+
+  getDetalleUnidadesTipoAcumuladoFlotillas(carLine: string, idDepartamento: string = '', mes: string) {
+    // Se usa como parametro de departamento el texto de Concepto del primer nivel,
+    // sin las letras N o S que se le agregan al inicio
+    const concepto = this.detalleUnidadesConcepto;
+
+    // this.deptoFlotillas.emit(tipoAuto); // Se usa el departamento que aparece solo para flotillas en el segundo nivel
+
+    this._service.getDetalleUnidadesTipoAcumuladoFlotillas({
+      idDepartamento: idDepartamento,
       idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       idOrigen: this.idOrigen,
@@ -225,7 +368,7 @@ export class UnidadesNv3Component implements OnInit {
     return month;
   }
 
-  onClickDetalleUnidadesTipo(i: number, tipoUnidad: string, strMes: string = '', mes: string = '') {
+  onClickDetalleUnidadesTipo(tipoUnidad: string, mes: string = '') {
     if (tipoUnidad.trim() !== 'Total') {
       const idReporte = this.detalleName === 'Real' ? 'MRQ' : 'ARQ'; // Real = mensual y AcReal = Acumulado
 
@@ -233,7 +376,7 @@ export class UnidadesNv3Component implements OnInit {
       this.showDetalleUnidadesPrimerNivel.emit(false);
       this.showDetalleUnidadesSegundoNivel.emit(false);
       this.showDetalleUnidadesTercerNivel.emit(true);
-      this.detalleUnidadesNameTercerNivel.emit(strMes);
+      this.detalleUnidadesNameTercerNivel.emit(mes);
       this.detalleUnidadesValueTercerNivel.emit(tipoUnidad);
       this.detalleUnidadesConceptoTercerNivel.emit(tipoUnidad);
       this.idReporte.emit(idReporte);

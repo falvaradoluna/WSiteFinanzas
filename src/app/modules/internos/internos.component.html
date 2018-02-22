@@ -162,9 +162,11 @@
                             (detalleUnidadesConceptoSegundoNivel)='detalleUnidadesConceptoSegundoNivel=$event'
                             (departamentoAcumulado)='departamentoAcumulado=$event'
                             (mesAcumulado)='mesAcumulado=$event'
+                            (idDepartamento)='idDepartamento=$event'
                             (carLine)='carLine=$event'
                             (errorMessage)='errorMessage=$event'
-                            (idAutoLinea)='idAutoLinea=$event'>
+                            (idAutoLinea)='idAutoLinea=$event'
+                            (fixedHeaderId)='fixedHeader($event)'>
           </int-unidades-nv2>
         </div>
         <!-- END Unidades Segundo Nivel -->
@@ -193,7 +195,7 @@
                             [selectedCompania]='selectedCompania'
                             [selectedIdSucursal]='selectedIdSucursal'
                             [carLine]='carLine'
-                            [departamentoAcumulado]='departamentoAcumulado'
+                            [idDepartamento]='idDepartamento'
                             [detalleName]='detalleName'
                             (deptoFlotillas)='deptoFlotillas=$event'
                             (showUnidades)='showUnidades=$event'

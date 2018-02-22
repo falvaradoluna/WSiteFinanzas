@@ -90,7 +90,7 @@ export class InternosComponent implements OnInit {
   selectedDepartamento = 'Todos';
   selectedDepartamentos: string[] = [''];
   selectedDepartamentosStr: string; // Se formatean los departamentos como los necesita el sp
-  deptoFlotillas: string; // Se guarda el departamento que aparece solo para flotillas segundo nivel
+  idDepartamento: string; // Se guarda el departamento que aparece solo para flotillas segundo nivel
   detalleResultadosMensualScroll = false;
   detalleResultadosCuentasScroll = false;
   mes: string;
@@ -539,11 +539,13 @@ export class InternosComponent implements OnInit {
   fixedHeader(idTabla): void {
     // Esperar a que se construya la tabla, delay de 1 segundo
     setTimeout(function () {
-      document.getElementById(idTabla).addEventListener('scroll', function(){
-        const translate = 'translate(0,' + this.scrollTop + 'px)';
-        this.querySelector('thead').style.transform = translate;
-    });
-   }, 1000);
+      if (document.getElementById(idTabla)) {
+        document.getElementById(idTabla).addEventListener('scroll', function () {
+          const translate = 'translate(0,' + this.scrollTop + 'px)';
+          this.querySelector('thead').style.transform = translate;
+        });
+      }
+    }, 1000);
   }
 
   // Convierte mes numerico a nombre del mes

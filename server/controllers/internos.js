@@ -229,6 +229,35 @@ internos.prototype.get_detalleunidadesmensual = function (req, res, next) {
   });
 };
 
+// /api/internos/detalleunidadesmensualflotillas
+// Funcionalidad para detalle de Unidades mensual (doble click celdas de lado azul)
+internos.prototype.get_detalleunidadesmensualflotillas = function (req, res, next) {
+  var self = this;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var periodoYear = req.query.periodoYear;
+  var periodoMes = req.query.periodoMes;
+  var idOrigen = req.query.idOrigen;
+
+  console.log('QueryString Unidades Nv2 Flotillas = ' + JSON.stringify(req.query));
+
+  var params = [
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'idOrigen', value: idOrigen, type: self.model.types.INT }
+  ];
+
+  this.model.query('Unidad.ObtenerCantidadFlotillaXAutoLinea', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
 // /api/internos/detalleunidadestipo
 // Funcionalidad para tipo de Unidades (tercer nivel de unidades)
 internos.prototype.get_detalleunidadestipo = function (req, res, next) {
@@ -252,6 +281,39 @@ internos.prototype.get_detalleunidadestipo = function (req, res, next) {
   ];
 
   this.model.query('Unidad.ObtenerCantidadXUnidadDescripcion', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/detalleunidadestipoflotillas
+// Funcionalidad para tipo de Unidades (tercer nivel de unidades)
+internos.prototype.get_detalleunidadestipoflotillas = function (req, res, next) {
+  var self = this;
+  var idDepartamento = req.query.idDepartamento;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var idOrigen = req.query.idOrigen;
+  var periodoYear = req.query.periodoYear;
+  var periodoMes = req.query.periodoMes;
+  var idAutoLinea = req.query.idAutoLinea;
+
+  console.log('QueryString Unidades Nv3 Flotillas = ' + JSON.stringify(req.query));
+
+  var params = [
+    { name: 'departamentoOri', value: idDepartamento, type: self.model.types.STRING },
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'idAutoLinea', value: idAutoLinea, type: self.model.types.INT },
+    { name: 'idOrigen', value: idOrigen, type: self.model.types.INT }
+  ];
+
+  this.model.query('Unidad.ObtenerCantidadFlotillaXUnidadDescripcion', params, function (error, result) {
     console.log(params);
     self.view.expositor(res, {
       error: error,
@@ -291,6 +353,40 @@ internos.prototype.get_detalleunidadestipoacumulado = function (req, res, next) 
   });
 };
 
+
+// /api/internos/detalleunidadestipoacumuladoflotillas
+// Funcionalidad para tipo de Unidades acumulado(tercer nivel de unidades)
+internos.prototype.get_detalleunidadestipoacumuladoflotillas = function (req, res, next) {
+  var self = this;
+  var idDepartamento = req.query.idDepartamento;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var idOrigen = req.query.idOrigen;
+  var periodoYear = req.query.periodoYear;
+  var periodoMes = req.query.periodoMes;
+  var idAutoLinea = req.query.idAutoLinea;
+
+  console.log('QueryString Unidades Nv3 Flotillas = ' + JSON.stringify(req.query));
+
+  var params = [
+    { name: 'departamentoOri', value: idDepartamento, type: self.model.types.STRING },
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'idAutoLinea', value: idAutoLinea, type: self.model.types.INT },
+    { name: 'idOrigen', value: idOrigen, type: self.model.types.INT }
+  ];
+
+  this.model.query('Unidad.ObtenerCantidadFlotillaXDescripcionAcumulado', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
 // /api/internos/detalleunidadesseries
 // Funcionalidad para series de Unidades (cuarto nivel de unidades)
 internos.prototype.get_detalleunidadesseries = function (req, res, next) {
@@ -302,7 +398,7 @@ internos.prototype.get_detalleunidadesseries = function (req, res, next) {
   var periodoMes = req.query.periodoMes;
   var unidadDescripcion = req.query.unidadDescripcion;
 
-  console.log('QueryString Unidades Nv3 = ' + JSON.stringify(req.query));
+  console.log('QueryString Unidades Nv4 = ' + JSON.stringify(req.query));
 
   var params = [
     { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
@@ -343,6 +439,35 @@ internos.prototype.get_detalleunidadesacumulado = function (req, res, next) {
   ];
 
   this.model.query('Unidad.ObtenerCantidadXAutoLineaAcumulado', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/detalleunidadesacumuladoflotillas
+// Funcionalidad para detalle de Unidades Acumulado flotillas(segundo nivel de unidades)
+internos.prototype.get_detalleunidadesacumuladoflotillas = function (req, res, next) {
+  var self = this;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var periodoYear = req.query.periodoYear;
+  var periodoMes = req.query.periodoMes;
+  var idOrigen = req.query.idOrigen;
+
+  console.log('QueryString Unidades Nv2 Acumulado flotillas= ' + JSON.stringify(req.query));
+
+  var params = [
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'idOrigen', value: idOrigen, type: self.model.types.INT }
+  ];
+
+  this.model.query('Unidad.[ObtenerCantidadFlotillaXAutoLineaAcumulado]', params, function (error, result) {
     console.log(params);
     self.view.expositor(res, {
       error: error,
