@@ -57,6 +57,7 @@ export class InternosComponent implements OnInit {
   showResultados = true;
   showUnidadesDepartamento = true;
   showEfectivoSituacion = false;
+  showAcumuladoReal = false;
   showReporteUnidades = true;
   showDetalleUnidadesPrimerNivel = false;
   showDetalleUnidadesSegundoNivel = false;
@@ -163,6 +164,15 @@ export class InternosComponent implements OnInit {
     this.showUnidadesDepartamento = !this.showUnidadesDepartamento;
   }
 
+  disabledSucursalDepartamento(): boolean {
+    const sTipoReporte = this.selectedTipoReporte.toString();
+    if (sTipoReporte === '4' || sTipoReporte === '5') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   procesar(): void {
     const sTipoReporte = this.selectedTipoReporte.toString(); // Aunque se definio como number, la comparacion siempre lo toma como string
     const sCompania = this.selectedCompania.toString();
@@ -171,6 +181,10 @@ export class InternosComponent implements OnInit {
       this.showReporteUnidades = false;
       this.showEfectivoSituacion = true;
       this.getEfectivoSituacion();
+    } else if (sTipoReporte === '2' && sCompania !== '0') { // Acumulado real
+      this.showReporteUnidades = false;
+      this.showEfectivoSituacion = false;
+      this.showAcumuladoReal = true;
     } else if (sCompania !== '0') {
       this.showUnidadesInit();
 

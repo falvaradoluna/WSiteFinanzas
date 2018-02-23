@@ -42,7 +42,7 @@
               <div class="form-group col-md-5">
                 <label for="inputSucursal">Sucursal</label>
                 <select name="inputSucursal" class="form-control form-control-sm"
-                  [disabled]="!showReporteUnidades ? '' : null"
+                  [disabled]="disabledSucursalDepartamento()"
                   [(ngModel)]='selectedIdSucursal'
                   (change)='onChangeSucursal($event.target.value)'>
                   <option *ngFor="let sucursal of sucursales" [value]="sucursal.id">
@@ -53,7 +53,7 @@
               <div class="form-group col-md-4">
                 <label for="inputDepartamento">Departamento</label>
                 <select name="inputDepartamento" class="form-control form-control-sm"
-                  [disabled]="!showReporteUnidades ? '' : null"
+                  [disabled]="disabledSucursalDepartamento()"
                   [(ngModel)]='selectedIdDepartamento'
                   (ngModelChange)='onChangeDepartamento($event)'>
                   <option *ngIf='departamentos.length > 0' value="0">Todos</option>
@@ -110,7 +110,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor='let r of resultadoUnidades;let i = index;' [ngClass]="{'table-info': r.descripcion.trim() === 'Total'}">
+            <tr *ngFor='let r of resultadoUnidades;let i = index;' [ngClass]="{'table-info': r.descripcion.trim() === 'Total Unidades'}">
               <td>
                 {{ r.descripcion }}
               </td>
@@ -680,6 +680,84 @@
     </div>
   </div>
   <!-- END Suma de departamentos -->
+
+  <!-- BEGIN Acumulado real -->
+    <div *ngIf='showAcumuladoReal' class="row">
+      <div class="col-md-12 mt-2">
+        <div class="card">
+          <div class="card-header bg-primary text-white text-center">
+            UNIDADES ACUMULADO
+            <button type="button" class="btn btn-primary text-white btn-sm btn-vm" (click)='toggleUnidades()'>
+              <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
+            </button>
+          </div>
+
+          <!-- BEGIN Unidades Primer Nivel -->
+          <table class="table table-sm table-bordered table-hover-td">
+            <thead>
+              <tr>
+                <th class="bg-secondary text-white">Departamento</th>
+                <th class="bg-primary text-white">Enero</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Febrero</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Marzo</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Abril</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Mayo</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Junio</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Julio</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Agosto</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Septiembre</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Octubre</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Noviembre</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Diciembre</th>
+                <th class="bg-primary text-white">%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Nombre depto</td>
+                <td class="text-center">{{ 1000 }}</td>
+                <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
+                <td class="text-center">{{ 1000 }}</td>
+                <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
+                <td class="text-center">{{ 1000 }}</td>
+                <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
+                <td class="text-center">{{ 1000 }}</td>
+                <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
+                <td class="text-center">{{ 1000 }}</td>
+                <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
+                <td class="text-center">{{ 1000 }}</td>
+                <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
+                <td class="text-center">{{ 1000 }}</td>
+                <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
+                <td class="text-center">{{ 1000 }}</td>
+                <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
+                <td class="text-center">{{ 1000 }}</td>
+                <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
+                <td class="text-center">{{ 1000 }}</td>
+                <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
+                <td class="text-center">{{ 1000 }}</td>
+                <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
+                <td class="text-center">{{ 1000 }}</td>
+                <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- END Unidades Primer Nivel -->
+        </div>
+      </div>
+    </div>
+  <!-- END Acumulado Real -->
 
   <!-- BEGIN Estado de situacion financiera -->
   <div *ngIf='showEfectivoSituacion' class="row">
