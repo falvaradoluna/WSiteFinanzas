@@ -287,18 +287,18 @@
                 <!-- 1 = Mensual -->
                 {{ r.cantidad }}
               </td>
-              <td class="text-right">{{ r.porcentaje | number:'1.2-2' }}</td>
+              <td class="text-right">{{ 100 | number:'1.2-2' }}</td>
               <td class="text-center">{{ r.cantidadPresupuesto }}</td>
-              <td class="text-right">{{ r.presupuestoPorcentaje | number:'1.2-2' }}</td>
+              <td class="text-right">{{ 100 | number:'1.2-2' }}</td>
               <td class="text-center">{{ r.variacion }}</td>
               <td class="text-right">{{ r.porcentajeVariacion | number:'1.2-2' }}</td>
               <td class="text-center" (click)="onClickUnidades(i, r.AcReal, 'AcReal', 2)">
                 <!-- 2 = Acumulado -->
                 {{ r.cantidadAcumulado }}
               </td>
-              <td class="text-right">{{ r.porcentajeAcumulado | number:'1.2-2' }}</td>
+              <td class="text-right">{{ 100 | number:'1.2-2' }}</td>
               <td class="text-center">{{ r.cantidadPresupuestoAcumulado }}</td>
-              <td class="text-right">{{ r.presupuestoPorcentajeAcumulado | number:'1.2-2' }}</td>
+              <td class="text-right">{{ 100 | number:'1.2-2' }}</td>
               <td class="text-center">{{ r.variacionAcumulado }}</td>
               <td class="text-right">{{ r.porcentajeVariacionAcumulado | number:'1.2-2' }}</td>
             </tr>

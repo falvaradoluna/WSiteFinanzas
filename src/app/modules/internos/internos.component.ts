@@ -297,6 +297,7 @@ export class InternosComponent implements OnInit {
     if (this.selectedIdDepartamento !== 0) {
       this._service.getUnidadesDepartamento({
         idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
+        idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
         periodoYear: +this.anio,
         periodoMes: +this.mes,
         idPestana: +this.selectedIdDepartamento
@@ -304,7 +305,19 @@ export class InternosComponent implements OnInit {
         .subscribe(unidadesDepartamento => {
           this.unidadesDepartamento = unidadesDepartamento;
         },
-        error => this.errorMessage = <any>error);
+        error => { this.errorMessage = <any>error; },
+        () => {
+          if (this.unidadesDepartamento.length === 1) {
+            // Se actualizan valores de variacion y % variacion
+            const d = this.unidadesDepartamento[0];
+            d.variacion = d.cantidad - d.cantidadPresupuesto;
+            d.porcentajeVariacion = d.variacion / d.cantidadPresupuesto * 100;
+
+            d.variacionAcumulado = d.cantidadAcumulado - d.cantidadPresupuestoAcumulado;
+            d.porcentajeVariacionAcumulado = d.variacionAcumulado / d.cantidadPresupuestoAcumulado * 100;
+          }
+        }
+        );
     } else {
       this.unidadesDepartamento = [];
     }

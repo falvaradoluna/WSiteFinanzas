@@ -109,6 +109,7 @@ internos.prototype.get_sumadepartamentos = function(req, res, next) {
 internos.prototype.get_unidadesdepto = function (req, res, next) {
   var self = this;
   var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
   var periodoMes = req.query.periodoMes;
   var periodoYear = req.query.periodoYear;
   var idPestana = req.query.idPestana;
@@ -117,6 +118,7 @@ internos.prototype.get_unidadesdepto = function (req, res, next) {
 
   var params = [
     { name: 'idCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
     { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
     { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
     { name: 'idPestana', value: idPestana, type: self.model.types.INT }
