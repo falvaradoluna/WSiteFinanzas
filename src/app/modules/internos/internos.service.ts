@@ -93,11 +93,10 @@ export class InternosService {
     let Params = new HttpParams();
 
     // Begin assigning parameters
-    Params = Params.append('idcia', parameters.idCia);
-    Params = Params.append('idsucursal', parameters.idSucursal);
-    Params = Params.append('departamento', parameters.departamento);
-    Params = Params.append('anio', parameters.anio);
-    Params = Params.append('mes', parameters.mes);
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    Params = Params.append('idPestana', parameters.idPestana);
 
     return this._http.get<IResultadoInternos[]>(this._urlUnidadesDepartamento, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))

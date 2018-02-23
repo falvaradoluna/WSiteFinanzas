@@ -88,6 +88,7 @@ export class InternosComponent implements OnInit {
   selectedTipoReporte = 1;
   selectedIdSucursal = -2;
   selectedDepartamento = 'Todos';
+  selectedIdDepartamento = 0;
   selectedDepartamentos: string[] = [''];
   selectedDepartamentosStr: string; // Se formatean los departamentos como los necesita el sp
   idDepartamento: string; // Se guarda el departamento que aparece solo para flotillas segundo nivel
@@ -293,13 +294,12 @@ export class InternosComponent implements OnInit {
   }
 
   getUnidadesDepartamento(): void {
-    if (this.selectedDepartamento !== 'Todos') {
+    if (this.selectedIdDepartamento !== 0) {
       this._service.getUnidadesDepartamento({
-        idCia: this.selectedCompania,
-        idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
-        departamento: this.selectedDepartamento,
-        mes: this.mes,
-        anio: this.anio
+        idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
+        periodoYear: +this.anio,
+        periodoMes: +this.mes,
+        idPestana: +this.selectedIdDepartamento
       })
         .subscribe(unidadesDepartamento => {
           this.unidadesDepartamento = unidadesDepartamento;
@@ -473,7 +473,7 @@ export class InternosComponent implements OnInit {
   }
 
   onChangeDepartamento(newValue): void {
-    this.selectedDepartamento = newValue;
+    this.selectedIdDepartamento = newValue;
   }
 
   onChangeSumaDepartamentos(): void {

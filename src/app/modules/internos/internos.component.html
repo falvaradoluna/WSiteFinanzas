@@ -54,9 +54,9 @@
                 <label for="inputDepartamento">Departamento</label>
                 <select name="inputDepartamento" class="form-control form-control-sm"
                   [disabled]="!showReporteUnidades ? '' : null"
-                  [(ngModel)]='selectedDepartamento'
+                  [(ngModel)]='selectedIdDepartamento'
                   (ngModelChange)='onChangeDepartamento($event)'>
-                  <option *ngIf='departamentos.length > 0' value="Todos">Todos</option>
+                  <option *ngIf='departamentos.length > 0' value="0">Todos</option>
                   <option *ngFor='let depto of departamentos' [value]='depto.idPestana'>
                     {{ depto.pestanaNombre }}
                   </option>
@@ -280,19 +280,27 @@
           </thead>
           <tbody>
             <tr *ngFor='let r of unidadesDepartamento'>
-              <td>{{ r.Concepto }}</td>
-              <td class="text-center">{{ r.Real }}</td>
-              <td class="text-right">{{ r.Perc1 | number:'1.2-2' }}</td>
-              <td class="text-center">{{ r.PPto }}</td>
-              <td class="text-right">{{ r.Perc2 | number:'1.2-2' }}</td>
-              <td class="text-center">{{ r.Variacion }}</td>
-              <td class="text-right">{{ r.Perc3 | number:'1.2-2' }}</td>
-              <td class="text-center">{{ r.AcReal }}</td>
-              <td class="text-right">{{ r.AcPerc1 | number:'1.2-2' }}</td>
-              <td class="text-center">{{ r.AcPPto }}</td>
-              <td class="text-right">{{ r.AcPerc2 | number:'1.2-2' }}</td>
-              <td class="text-center">{{ r.AcVariacion }}</td>
-              <td class="text-right">{{ r.AcPerc3 | number:'1.2-2' }}</td>
+              <td>
+                {{ r.descripcion }}
+              </td>
+              <td class="text-center" (click)="onClickUnidades(i, r.Cantidad, 'Real', 1)">
+                <!-- 1 = Mensual -->
+                {{ r.cantidad }}
+              </td>
+              <td class="text-right">{{ r.porcentaje | number:'1.2-2' }}</td>
+              <td class="text-center">{{ r.cantidadPresupuesto }}</td>
+              <td class="text-right">{{ r.presupuestoPorcentaje | number:'1.2-2' }}</td>
+              <td class="text-center">{{ r.variacion }}</td>
+              <td class="text-right">{{ r.porcentajeVariacion | number:'1.2-2' }}</td>
+              <td class="text-center" (click)="onClickUnidades(i, r.AcReal, 'AcReal', 2)">
+                <!-- 2 = Acumulado -->
+                {{ r.cantidadAcumulado }}
+              </td>
+              <td class="text-right">{{ r.porcentajeAcumulado | number:'1.2-2' }}</td>
+              <td class="text-center">{{ r.cantidadPresupuestoAcumulado }}</td>
+              <td class="text-right">{{ r.presupuestoPorcentajeAcumulado | number:'1.2-2' }}</td>
+              <td class="text-center">{{ r.variacionAcumulado }}</td>
+              <td class="text-right">{{ r.porcentajeVariacionAcumulado | number:'1.2-2' }}</td>
             </tr>
           </tbody>
         </table>
