@@ -29,10 +29,11 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
   @Output() detalleUnidadesValueSegundoNivel = new EventEmitter<string>();
   @Output() detalleUnidadesConceptoSegundoNivel = new EventEmitter<string>();
   @Output() mesAcumulado = new EventEmitter<string>();
+  @Output() idDepartamento = new EventEmitter<string>();
   @Output() carLine = new EventEmitter<string>();
   @Output() idAutoLinea = new EventEmitter<number>();
   @Output() errorMessage = new EventEmitter<string>();
-  // @Output() fixedHeaderId = new EventEmitter<string>();
+  @Output() fixedHeaderId = new EventEmitter<string>();
 
   detalleUnidadesMensual: IDetalleUnidadesMensual[];
   detalleUnidadesAcumulado: IDetalleUnidadesAcumulado[];
@@ -43,10 +44,19 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
   constructor(private _service: InternosService) { }
 
   ngOnInit() {
+    this.fixedHeaderId.emit('idDetalleUnidadesAcumulado');
     if (this.idDetalleUnidades === 1) { // Mensual
-      this.getDetalleUnidadesMensual();
+      if (this.idOrigen === 3) { // Flotillas
+        this.getDetalleUnidadesMensualFlotillas();
+      } else {
+        this.getDetalleUnidadesMensual();
+      }
     } else if (this.idDetalleUnidades === 2) { // Acumulado
-      this.getDetalleUnidadesAcumulado();
+      if (this.idOrigen === 3) {
+        this.getDetalleUnidadesAcumuladoFlotillas();
+      } else {
+        this.getDetalleUnidadesAcumulado();
+      }
     }
   }
 
@@ -72,11 +82,44 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
         // Se calcula el total y se inserta en el objeto
         const total: number = this.calculaTotalMensual(this.detalleUnidadesMensual, 'cantidad');
         const t: IDetalleUnidadesMensual = {
-          'IdAutoLinea': -1,
-          'AutoLinea': 'Total',
+          'idAutoLinea': -1,
+          'autoLinea': 'Total',
           'cantidad': total,
           'CantidadSelected': false,
-          'Perc': 100
+          'Perc': 100,
+          'departamento': '',
+          'departamentoOri': ''
+        };
+        this.detalleUnidadesMensual.push(t);
+
+        // Se calculan porcentajes
+        this.detalleUnidadesMensual.forEach(dum => dum.Perc = dum.cantidad / total * 100);
+      }
+    );
+  }
+
+  // Flotillas
+  getDetalleUnidadesMensualFlotillas(): void {
+    this.dumSubscription = this._service.getDetalleUnidadesMensualFlotillas({
+      idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      periodoYear: +this.anio,
+      periodoMes: +this.mes,
+      idOrigen: this.idOrigen // Nuevas, usadas, etc.
+    }).subscribe(
+      dum => { this.detalleUnidadesMensual = dum; },
+      error => { console.log(error); },
+      () => {
+        // Se calcula el total y se inserta en el objeto
+        const total: number = this.calculaTotalMensual(this.detalleUnidadesMensual, 'cantidad');
+        const t: IDetalleUnidadesMensual = {
+          'idAutoLinea': -1,
+          'autoLinea': 'Total',
+          'cantidad': total,
+          'CantidadSelected': false,
+          'Perc': 100,
+          'departamento': '',
+          'departamentoOri': ''
         };
         this.detalleUnidadesMensual.push(t);
 
@@ -98,6 +141,83 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
       error => { console.log(JSON.stringify(error)); },
       () => {
         const totales: IDetalleUnidadesAcumulado = {
+          'departamento': '',
+          'IdAutoLinea': -1,
+          'autoLinea': 'Total',
+          'enero': 0,
+          'eneroPerc': 100,
+          'febrero': 0,
+          'febreroPerc': 100,
+          'marzo': 0,
+          'marzoPerc': 100,
+          'abril': 0,
+          'abrilPerc': 100,
+          'mayo': 0,
+          'mayoPerc': 100,
+          'junio': 0,
+          'junioPerc': 100,
+          'julio': 0,
+          'julioPerc': 100,
+          'agosto': 0,
+          'agostoPerc': 100,
+          'septiembre': 0,
+          'septiembrePerc': 100,
+          'octubre': 0,
+          'octubrePerc': 100,
+          'noviembre': 0,
+          'noviembrePerc': 100,
+          'diciembre': 0,
+          'diciembrePerc': 100,
+          'totalAnual': 0,
+          'totalAnualPerc': 100
+        };
+
+        // Ciclo de 12 meses
+        for (let mes = 1; mes <= 12; mes++) {
+          const nombreMes = this.toLongMonth(mes);
+
+          // Se calcula el total
+          const totalMensual: number = this.calculaTotalMensual(this.detalleUnidadesAcumulado, nombreMes);
+
+          // Se actualiza el valor del mes correspondiente
+          totales[nombreMes] = totalMensual;
+
+          // Se calculan porcentajes del mes correspondiente
+          this.detalleUnidadesAcumulado.forEach(dua => {
+            dua[nombreMes + 'Perc'] = dua[nombreMes] / totalMensual * 100;
+            dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
+                             dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
+            dua.totalAnualPerc = 0;
+          });
+        }
+
+        // Se actualiza el total anual de todas las autoLineas
+        totales.totalAnual = this.calculaTotalMensual(this.detalleUnidadesAcumulado, 'totalAnual');
+
+        // Se calculan los porcentajes de totales
+        this.detalleUnidadesAcumulado.forEach(dua => {
+          dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+        });
+
+        // Se agregan totales al objeto
+        this.detalleUnidadesAcumulado.push(totales);
+      }
+    );
+  }
+
+  getDetalleUnidadesAcumuladoFlotillas(): void {
+    this.duaSubscription = this._service.getDetalleUnidadesAcumuladoFlotillas({
+      idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      periodoYear: +this.anio,
+      periodoMes: +this.mes,
+      idOrigen: this.idOrigen // Nuevas, usadas, etc.
+    }).subscribe(
+      dua => { this.detalleUnidadesAcumulado = dua; },
+      error => { console.log(JSON.stringify(error)); },
+      () => {
+        const totales: IDetalleUnidadesAcumulado = {
+          'departamento': '',
           'IdAutoLinea': -1,
           'autoLinea': 'Total',
           'enero': 0,
@@ -181,7 +301,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
     return month;
   }
 
-  onClickDetalleUnidadesMensual(idAutoLinea: number, carLine: string, mes: string = '') {
+  onClickDetalleUnidadesMensual(idAutoLinea: number, carLine: string, mes: string = '', idDepartamento: string = '') {
     if (carLine.trim() !== 'Total') {
       // TODO: Ocultar Suma
       this.showUnidades.emit(false);
@@ -193,6 +313,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
       this.carLine.emit(carLine);
       this.mesAcumulado.emit(mes);
       this.idAutoLinea.emit(idAutoLinea);
+      this.idDepartamento.emit(idDepartamento);
     }
   }
 

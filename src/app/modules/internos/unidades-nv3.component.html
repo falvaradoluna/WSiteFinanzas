@@ -9,7 +9,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor='let d of detalleUnidadesTipo; let i = index;' (dblclick)='onClickDetalleUnidadesTipo(i, d.UnidadDescripcion)'>
+        <tr *ngFor='let d of detalleUnidadesTipo; let i = index;' (dblclick)='onClickDetalleUnidadesTipo(d.UnidadDescripcion)'>
           <td>{{ d.UnidadDescripcion }}</td>
           <td class="text-center">{{ d.Cantidad }}</td>
           <td class="text-right">{{ d.Perc | number: '1.2-2' }}</td>
@@ -56,29 +56,29 @@
   <tbody>
     <tr *ngFor='let dut of detalleUnidadesTipo; let i = index;'>
       <td>{{ dut.UnidadDescripcion }}</td>
-      <td class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.unidadDescripcion, "Enero", "01")'>{{ dut.enero }}</td>
+      <td class="text-center" (click)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "01")'>{{ dut.enero }}</td>
       <td class="text-right">{{ dut.eneroPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "02"' class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.unidadDescripcion, "Febrero", "02")'>{{ dut.febrero }}</td>
+      <td *ngIf='mes >= "02"' class="text-center" (click)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "02")'>{{ dut.febrero }}</td>
       <td *ngIf='mes >= "02"' class="text-right">{{ dut.febreroPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "03"' class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.unidadDescripcion, "Marzo", "03")'>{{ dut.marzo }}</td>
+      <td *ngIf='mes >= "03"' class="text-center" (click)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "03")'>{{ dut.marzo }}</td>
       <td *ngIf='mes >= "03"' class="text-right">{{ dut.marzoPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "04"' class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.unidadDescripcion, "Abril", "04")'>{{ dut.abril }}</td>
+      <td *ngIf='mes >= "04"' class="text-center" (click)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "04")'>{{ dut.abril }}</td>
       <td *ngIf='mes >= "04"' class="text-right">{{ dut.abrilPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "05"' class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.unidadDescripcion, "Mayo", "05")'>{{ dut.mayo }}</td>
+      <td *ngIf='mes >= "05"' class="text-center" (click)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "05")'>{{ dut.mayo }}</td>
       <td *ngIf='mes >= "05"' class="text-right">{{ dut.mayoPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "06"' class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.unidadDescripcion, "Junio", "06")'>{{ dut.junio }}</td>
+      <td *ngIf='mes >= "06"' class="text-center" (click)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "06")'>{{ dut.junio }}</td>
       <td *ngIf='mes >= "06"' class="text-right">{{ dut.junioPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "07"' class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.unidadDescripcion, "Julio", "07")'>{{ dut.julio }}</td>
+      <td *ngIf='mes >= "07"' class="text-center" (click)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "07")'>{{ dut.julio }}</td>
       <td *ngIf='mes >= "07"' class="text-right">{{ dut.julioPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "08"' class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.unidadDescripcion, "Agosto", "08")'>{{ dut.agosto }}</td>
+      <td *ngIf='mes >= "08"' class="text-center" (click)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "08")'>{{ dut.agosto }}</td>
       <td *ngIf='mes >= "08"' class="text-right">{{ dut.agostoPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "09"' class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.unidadDescripcion, "Septiembre", "09")'>{{ dut.septiembre }}</td>
+      <td *ngIf='mes >= "09"' class="text-center" (click)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "09")'>{{ dut.septiembre }}</td>
       <td *ngIf='mes >= "09"' class="text-right">{{ dut.septiembrePerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "10"' class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.unidadDescripcion, "Octubre", "10")'>{{ dut.octubre }}</td>
+      <td *ngIf='mes >= "10"' class="text-center" (click)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "10")'>{{ dut.octubre }}</td>
       <td *ngIf='mes >= "10"' class="text-right">{{ dut.octubrePerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "11"' class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.unidadDescripcion, "Noviembre", "11")'>{{ dut.noviembre }}</td>
+      <td *ngIf='mes >= "11"' class="text-center" (click)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "11")'>{{ dut.noviembre }}</td>
       <td *ngIf='mes >= "11"' class="text-right">{{ dut.noviembrePerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "12"' class="text-center" (click)='onClickDetalleUnidadesTipo(i, dut.unidadDescripcion, "Diciembre", "12")'>{{ dut.diciembre }}</td>
+      <td *ngIf='mes >= "12"' class="text-center" (click)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "12")'>{{ dut.diciembre }}</td>
       <td *ngIf='mes >= "12"' class="text-right">{{ dut.diciembrePerc | number:'1.2-2' }}</td>
       <td class="text-center">{{ dut.totalAnual }}</td>
       <td class="text-right">{{ dut.totalAnualPerc | number:'1.2-2' }}</td>

@@ -1,4 +1,5 @@
 export interface IDetalleUnidadesAcumulado {
+  departamento: string;
   IdAutoLinea: number;
   autoLinea: string;
   enero: number;

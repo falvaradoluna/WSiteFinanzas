@@ -58,6 +58,7 @@ export class InternosComponent implements OnInit {
   showResultados = true;
   showUnidadesDepartamento = true;
   showEfectivoSituacion = false;
+  showAcumuladoReal = false;
   showReporteUnidades = true;
   showDetalleUnidadesPrimerNivel = false;
   showDetalleUnidadesSegundoNivel = false;
@@ -90,9 +91,10 @@ export class InternosComponent implements OnInit {
   selectedTipoReporte = 1;
   selectedIdSucursal = -2;
   selectedDepartamento = 'Todos';
+  selectedIdDepartamento = 0;
   selectedDepartamentos: string[] = [''];
   selectedDepartamentosStr: string; // Se formatean los departamentos como los necesita el sp
-  deptoFlotillas: string; // Se guarda el departamento que aparece solo para flotillas segundo nivel
+  idDepartamento: string; // Se guarda el departamento que aparece solo para flotillas segundo nivel
   detalleResultadosMensualScroll = false;
   detalleResultadosCuentasScroll = false;
   mes: string;
@@ -164,6 +166,15 @@ export class InternosComponent implements OnInit {
     this.showUnidadesDepartamento = !this.showUnidadesDepartamento;
   }
 
+  disabledSucursalDepartamento(): boolean {
+    const sTipoReporte = this.selectedTipoReporte.toString();
+    if (sTipoReporte === '4' || sTipoReporte === '5') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   procesar(): void {
     const sTipoReporte = this.selectedTipoReporte.toString(); // Aunque se definio como number, la comparacion siempre lo toma como string
     const sCompania = this.selectedCompania.toString();
@@ -172,6 +183,10 @@ export class InternosComponent implements OnInit {
       this.showReporteUnidades = false;
       this.showEfectivoSituacion = true;
       this.getEfectivoSituacion();
+    } else if (sTipoReporte === '2' && sCompania !== '0') { // Acumulado real
+      this.showReporteUnidades = false;
+      this.showEfectivoSituacion = false;
+      this.showAcumuladoReal = true;
     } else if (sCompania !== '0') {
       this.showUnidadesInit();
 
@@ -295,18 +310,30 @@ export class InternosComponent implements OnInit {
   }
 
   getUnidadesDepartamento(): void {
-    if (this.selectedDepartamento !== 'Todos') {
+    if (this.selectedIdDepartamento !== 0) {
       this._service.getUnidadesDepartamento({
-        idCia: this.selectedCompania,
+        idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
         idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
-        departamento: this.selectedDepartamento,
-        mes: this.mes,
-        anio: this.anio
+        periodoYear: +this.anio,
+        periodoMes: +this.mes,
+        idPestana: +this.selectedIdDepartamento
       })
         .subscribe(unidadesDepartamento => {
           this.unidadesDepartamento = unidadesDepartamento;
         },
-        error => this.errorMessage = <any>error);
+        error => { this.errorMessage = <any>error; },
+        () => {
+          if (this.unidadesDepartamento.length === 1) {
+            // Se actualizan valores de variacion y % variacion
+            const d = this.unidadesDepartamento[0];
+            d.variacion = d.cantidad - d.cantidadPresupuesto;
+            d.porcentajeVariacion = d.variacion / d.cantidadPresupuesto * 100;
+
+            d.variacionAcumulado = d.cantidadAcumulado - d.cantidadPresupuestoAcumulado;
+            d.porcentajeVariacionAcumulado = d.variacionAcumulado / d.cantidadPresupuestoAcumulado * 100;
+          }
+        }
+        );
     } else {
       this.unidadesDepartamento = [];
     }
@@ -332,10 +359,10 @@ export class InternosComponent implements OnInit {
 
   getDepartamentos(): void {
     this._service.getDepartamentos({
-      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
-      idAgencia: this.selectedCompania,
-      anio: this.anio,
-      mes: +this.mes
+      // idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      // idAgencia: this.selectedCompania,
+      // anio: this.anio,
+      // mes: +this.mes
     })
       .subscribe(
         departamentos => { this.departamentos = departamentos; },
@@ -490,7 +517,7 @@ export class InternosComponent implements OnInit {
   }
 
   onChangeDepartamento(newValue): void {
-    this.selectedDepartamento = newValue;
+    this.selectedIdDepartamento = newValue;
   }
 
   onChangeSumaDepartamentos(): void {
@@ -556,11 +583,13 @@ export class InternosComponent implements OnInit {
   fixedHeader(idTabla): void {
     // Esperar a que se construya la tabla, delay de 1 segundo
     setTimeout(function () {
-      document.getElementById(idTabla).addEventListener('scroll', function(){
-        const translate = 'translate(0,' + this.scrollTop + 'px)';
-        this.querySelector('thead').style.transform = translate;
-    });
-   }, 1000);
+      if (document.getElementById(idTabla)) {
+        document.getElementById(idTabla).addEventListener('scroll', function () {
+          const translate = 'translate(0,' + this.scrollTop + 'px)';
+          this.querySelector('thead').style.transform = translate;
+        });
+      }
+    }, 1000);
   }
 
   // Convierte mes numerico a nombre del mes
@@ -680,7 +709,7 @@ export class InternosComponent implements OnInit {
     this.departamentos.forEach(d => {
       d.Selected = selected;
       if (selected === true) {
-        this.selectedDepartamentos.push(d.Depto);
+        this.selectedDepartamentos.push(d.pestanaNombre);
       }
     });
 

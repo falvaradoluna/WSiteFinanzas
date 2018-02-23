@@ -1,6 +1,6 @@
 export interface IDepartamento {
-  Departamento: string;
-  Depto: string;
-  Orden: number;
+  idPestana: number;
+  pestanaNombre: string;
+  pestanaOrdenId: number;
   Selected: boolean;
 }
