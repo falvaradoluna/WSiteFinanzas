@@ -678,7 +678,7 @@
         <div class="card-header bg-primary text-white text-center">
           FLUJO DE EFECTIVO REAL
         </div>
-        <table id="tableEfectivo" class="table table-lg table-bordered table-responsive table-hover-td table-double-scroll" *ngIf="selectedTipoReporte === '4'">
+        <table id="tableEfectivo" class="table table-lg table-bordered table-responsive table-double-scroller" *ngIf="selectedTipoReporte === '4'">
           <thead>
             <tr>
               <th class="bg-success text-white">Concepto</th>
@@ -694,7 +694,6 @@
               <th width = "6%" class="bg-success text-white">Oct</th>
               <th width = "6%" class="bg-success text-white">Nov</th>
               <th width = "6%" class="bg-success text-white">Dic</th>
-              <!-- <th *ngIf="selectedTipoReporte === '5'" class="bg-success text-white">DicAñoAnt</th> -->
             </tr>
           </thead>
           <tbody>
@@ -713,12 +712,11 @@
                 <td class="text-right">{{ es.Oct | number:'1.2-2' }}</td>
                 <td class="text-right">{{ es.Nov | number:'1.2-2' }}</td>
                 <td class="text-right">{{ es.Dic | number:'1.2-2' }}</td>
-                <!-- <td *ngIf="selectedTipoReporte === '5'" class="text-right">{{ es.SaldoINI | number:'1.2-2' }}</td> -->
               </tr>
             </ng-container>
           </tbody>
         </table>
-        <table id="tableEstado" class="table table-lg table-bordered table-responsive table-hover-td table-double-scroll" *ngIf="selectedTipoReporte === '5'">
+        <table id="tableEstado" class="table table-lg table-bordered table-responsive table-double-scroller" *ngIf="selectedTipoReporte === '5'">
           <thead>
             <tr>
               <th class="bg-success text-white">Concepto</th>
