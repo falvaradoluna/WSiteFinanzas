@@ -178,20 +178,22 @@ internos.prototype.get_sucursales = function (req, res, next) {
 // Funcionalidad del dropdown de departamentos
 internos.prototype.get_departamentos = function (req, res, next) {
   var self = this;
-  var idReporte = req.query.idreporte;
-  var idSucursal = req.query.idsucursal;
-  var idAgencia = req.query.idcia;
-  var anio = req.query.anio;
-  var mes = req.query.mes;
+  // var idReporte = req.query.idreporte;
+  // var idSucursal = req.query.idsucursal;
+  // var idAgencia = req.query.idcia;
+  // var anio = req.query.anio;
+  // var mes = req.query.mes;
 
-  var params = [
-    { name: 'IdSucursal', value: idSucursal, type: self.model.types.STRING },
-    { name: 'IdAgencia', value: idAgencia, type: self.model.types.INT },
-    { name: 'Anio', value: anio, type: self.model.types.STRING },
-    { name: 'Mes', value: mes, type: self.model.types.STRING }
-  ];
+  // var params = [
+  //   { name: 'IdSucursal', value: idSucursal, type: self.model.types.STRING },
+  //   { name: 'IdAgencia', value: idAgencia, type: self.model.types.INT },
+  //   { name: 'Anio', value: anio, type: self.model.types.STRING },
+  //   { name: 'Mes', value: mes, type: self.model.types.STRING }
+  // ];
 
-  this.model.query('SP_CONSULTA_DEPARTAMENTO', params, function (error, result) {
+  var params = [];
+
+  this.model.query('Unidad.ObtienePestania', params, function (error, result) {
     console.log(params);
     self.view.expositor(res, {
       error: error,

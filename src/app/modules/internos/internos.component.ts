@@ -330,10 +330,10 @@ export class InternosComponent implements OnInit {
 
   getDepartamentos(): void {
     this._service.getDepartamentos({
-      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
-      idAgencia: this.selectedCompania,
-      anio: this.anio,
-      mes: +this.mes
+      // idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      // idAgencia: this.selectedCompania,
+      // anio: this.anio,
+      // mes: +this.mes
     })
       .subscribe(
         departamentos => { this.departamentos = departamentos; },
@@ -665,7 +665,7 @@ export class InternosComponent implements OnInit {
     this.departamentos.forEach(d => {
       d.Selected = selected;
       if (selected === true) {
-        this.selectedDepartamentos.push(d.Depto);
+        this.selectedDepartamentos.push(d.pestanaNombre);
       }
     });
 

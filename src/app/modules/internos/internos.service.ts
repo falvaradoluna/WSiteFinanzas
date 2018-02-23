@@ -131,16 +131,18 @@ export class InternosService {
 
   getDepartamentos(parameters): Observable<IDepartamento[]> {
     // Initialize Params Object
-    let Params = new HttpParams();
+    // let Params = new HttpParams();
 
     // Begin assigning parameters
-    Params = Params.append('idreporte', parameters.idReporte);
-    Params = Params.append('idsucursal', parameters.idSucursal);
-    Params = Params.append('idcia', parameters.idAgencia);
-    Params = Params.append('anio', parameters.anio);
-    Params = Params.append('mes', parameters.mes);
+    // Params = Params.append('idreporte', parameters.idReporte);
+    // Params = Params.append('idsucursal', parameters.idSucursal);
+    // Params = Params.append('idcia', parameters.idAgencia);
+    // Params = Params.append('anio', parameters.anio);
+    // Params = Params.append('mes', parameters.mes);
 
-    return this._http.get<IDepartamento[]>(this._urlDepartamentos, { params: Params })
+    // return this._http.get<IDepartamento[]>(this._urlDepartamentos, { params: Params })
+
+    return this._http.get<IDepartamento[]>(this._urlDepartamentos)
       // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
