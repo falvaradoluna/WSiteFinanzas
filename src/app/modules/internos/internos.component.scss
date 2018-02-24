@@ -134,6 +134,22 @@
   }
 }
 
+.table-double-scroller {
+  height: 410px !important;
+  border-spacing: 0px;
+  border-collapse: separate;
+  overflow: auto;
+
+  th, td {
+    border-bottom: 1px solid #e9ecef;
+    border-right: 1px solid #e9ecef;
+  }
+
+  td {
+    background-color: #fff;
+  }
+}
+
 .custom-select {
   padding: 0.375rem 0.1rem 0.375rem 0.75rem;
 }
