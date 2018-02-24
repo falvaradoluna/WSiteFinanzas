@@ -1,21 +1,21 @@
 var internosView = require('../views/reference'),
-InternosModel = require('../models/dataAccess');
+  InternosModel = require('../models/dataAccess');
 
-var internos = function(conf) {
-this.conf = conf || {};
-this.view = new internosView();
-this.model = new InternosModel({
+var internos = function (conf) {
+  this.conf = conf || {};
+  this.view = new internosView();
+  this.model = new InternosModel({
     parameters: this.conf.parameters
-});
+  });
 
-this.response = function() {
+  this.response = function () {
     this[this.conf.funcionalidad](this.conf.req, this.conf.res, this.conf.next);
-};
+  };
 };
 
 // /api/internos/internos
 // Funcionalidad de la tabla UNIDADES
-internos.prototype.get_internos = function(req, res, next) {
+internos.prototype.get_internos = function (req, res, next) {
   var self = this;
   var idCompania = req.query.idCompania;
   var idSucursal = req.query.idSucursal;
@@ -23,28 +23,28 @@ internos.prototype.get_internos = function(req, res, next) {
   var periodoAnio = req.query.periodoYear;
   console.log('QueryString Unidades = ' + JSON.stringify(req.query));
 
-var params = [
-  { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
-  { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
-  { name: 'PeriodoMes', value: periodoMes, type: self.model.types.INT },
-  { name: 'periodoYear', value: periodoAnio , type: self.model.types.INT }
-];
+  var params = [
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'PeriodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoAnio, type: self.model.types.INT }
+  ];
 
   this.model.query('Unidad.ObtenerUnidades', params, function (error, result) {
     console.log('Parametros Unidades: ' + JSON.stringify(params));
     if (result.length > 0) {
-        console.log("UNIDADES Nv1: " + JSON.stringify(result[0]));
+      console.log("UNIDADES Nv1: " + JSON.stringify(result[0]));
     }
     self.view.expositor(res, {
-        error: error,
-        result: result,
+      error: error,
+      result: result,
     });
   });
 };
 
 // /api/internos/estadoresultados
 // Funcionalidad de la tabla ESTADO DE RESULTADOS
-internos.prototype.get_estadoresultados = function(req, res, next) {
+internos.prototype.get_estadoresultados = function (req, res, next) {
   var self = this;
   var idCia = req.query.idcia;
   var idSucursal = req.query.idsucursal;
@@ -75,7 +75,7 @@ internos.prototype.get_estadoresultados = function(req, res, next) {
 
 // /api/internos/sumadepartamentos
 // Funcionalidad de la tabla SUMA DE DEPARMATEMTOS
-internos.prototype.get_sumadepartamentos = function(req, res, next) {
+internos.prototype.get_sumadepartamentos = function (req, res, next) {
   var self = this;
   var idCia = req.query.idcia;
   var idSucursal = req.query.idsucursal;
@@ -137,24 +137,24 @@ internos.prototype.get_unidadesdepto = function (req, res, next) {
 
 // /api/internos/companias
 // Funcionalidad del dropdown de compañias
-internos.prototype.get_companias = function(req, res, next) {
+internos.prototype.get_companias = function (req, res, next) {
   var self = this;
   var idUsuario = req.query.idusuario;
 
   var params = [
-   { name: 'IdUsuario', value: idUsuario , type: self.model.types.INT }
+    { name: 'IdUsuario', value: idUsuario, type: self.model.types.INT }
   ];
 
-    this.model.query('Catalogo.ObtenerCompaniaPorUsuario', params, function (error, result) {
-      console.log(params);
-      // if (result.length > 0) {
-      //     console.log("SP_CONSULTA_COMPANIA " + result[0]);
-      // }
-      self.view.expositor(res, {
-          error: error,
-          result: result,
-      });
+  this.model.query('Catalogo.ObtenerCompaniaPorUsuario', params, function (error, result) {
+    console.log(params);
+    // if (result.length > 0) {
+    //     console.log("SP_CONSULTA_COMPANIA " + result[0]);
+    // }
+    self.view.expositor(res, {
+      error: error,
+      result: result,
     });
+  });
 };
 
 // /api/internos/sucursales
@@ -548,14 +548,14 @@ internos.prototype.get_detalleresultadoscuentas = function (req, res, next) {
 internos.prototype.get_efectivoysituacion = function (req, res, next) {
   //Variables nuevas
   var self = this;
-  var IdCompania  = req.query.idcia
+  var IdCompania = req.query.idcia
   var periodoYear = req.query.anio
 
   var params = [
     { name: 'IdCompania', value: IdCompania, type: self.model.types.INT },
     { name: 'periodoYear', value: periodoYear, type: self.model.types.STRING }
   ];
-  
+
   this.model.query('[Interno].[ObtenerFlujoEfectivoReal]', params, function (error, result) {
     console.log(params);
     self.view.expositor(res, {
@@ -565,7 +565,6 @@ internos.prototype.get_efectivoysituacion = function (req, res, next) {
   });
 };
 
-<<<<<<< HEAD
 // /api/internos/unidadesacumuladopresupuesto
 // Funcionalidad para Unidades nv1 Acumulado presupuesto
 internos.prototype.get_unidadesacumuladopresupuesto = function (req, res, next) {
@@ -583,12 +582,20 @@ internos.prototype.get_unidadesacumuladopresupuesto = function (req, res, next) 
   ];
 
   this.model.query('Unidad.ObtenerPresupuestoAcumulado', params, function (error, result) {
-    console.log(params);
-=======
+    console.log("Error", error);
+    console.log("Result", result);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+
 // /api/internos/estadosituaciofinanciera
 internos.prototype.get_estadosituaciofinanciera = function (req, res, next) {
   var self = this;
-  var IdCompania  = req.query.idcia
+  var IdCompania = req.query.idcia
   var periodoYear = req.query.anio
 
   var params = [
@@ -597,9 +604,8 @@ internos.prototype.get_estadosituaciofinanciera = function (req, res, next) {
   ];
   console.log(params);
   this.model.query('[Interno].[ObtenerEstadoSituacionFinanciera]', params, function (error, result) {
-    console.log( "Error", error );
-    console.log( "Result", result );
->>>>>>> d4ed9a1ef13b9c0ccf584725de9ef015bd676b70
+    console.log("Error", error);
+    console.log("Result", result);
     self.view.expositor(res, {
       error: error,
       result: result,
@@ -607,7 +613,6 @@ internos.prototype.get_estadosituaciofinanciera = function (req, res, next) {
   });
 };
 
-<<<<<<< HEAD
 // /api/internos/unidadesacumuladopresupuestodepartamento
 // Funcionalidad para Unidades nv1 Acumulado presupuesto
 internos.prototype.get_unidadesacumuladopresupuestodepartamento = function (req, res, next) {
@@ -627,25 +632,30 @@ internos.prototype.get_unidadesacumuladopresupuestodepartamento = function (req,
   ];
 
   this.model.query('Unidad.ObtenerPresupuestoAcumuladoPorPestania', params, function (error, result) {
-    console.log(params);
-=======
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
 // /api/internos/acumuladoreal
 // Funcionalidad para las opciones de AcumuladoReal
 internos.prototype.get_acumuladoreal = function (req, res, next) {
-  
+
   var self = this;
-  var IdSucursal    = req.query.IdSucursal;
-  var IdCompania    = req.query.IdCompania;
-  var periodoYear   = req.query.anio;
+  var IdSucursal = req.query.IdSucursal;
+  var IdCompania = req.query.IdCompania;
+  var periodoYear = req.query.anio;
 
   var params = [
-    { name: 'IdSucursal',   value: IdSucursal, type: self.model.types.INT },
-    { name: 'IdCompania',   value: IdCompania, type: self.model.types.INT },
-    { name: 'periodoYear',  value: periodoYear, type: self.model.types.STRING }
+    { name: 'IdSucursal', value: IdSucursal, type: self.model.types.INT },
+    { name: 'IdCompania', value: IdCompania, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.STRING }
   ];
-  
+
   this.model.query('[Unidad].[ObtenerUnidadesXAcumulado]', params, function (error, result) {
-    
+
     self.view.expositor(res, {
       error: error,
       result: result,
@@ -656,26 +666,25 @@ internos.prototype.get_acumuladoreal = function (req, res, next) {
 // /api/internos/autolineaacumulado
 // Funcionalidad para las opciones de AutolineaAcumulado
 internos.prototype.get_autolineaacumulado = function (req, res, next) {
-  
+
   var self = this;
-  var IdCompania    = req.query.IdCompania;
-  var IdSucursal    = req.query.IdSucursal;
-  var periodoYear   = req.query.anio;
-  var PeriodoMes    = req.query.mes;
-  var IdOrigen      = req.query.IdOrigen
+  var IdCompania = req.query.IdCompania;
+  var IdSucursal = req.query.IdSucursal;
+  var periodoYear = req.query.anio;
+  var PeriodoMes = req.query.mes;
+  var IdOrigen = req.query.IdOrigen
 
   var params = [
-    { name: 'IdCompania',   value: IdCompania, type: self.model.types.INT },
-    { name: 'IdSucursal',   value: IdSucursal, type: self.model.types.INT },
-    { name: 'periodoYear',  value: periodoYear, type: self.model.types.INT },
-    { name: 'PeriodoMes',   value: PeriodoMes, type: self.model.types.INT },
-    { name: 'IdOrigen',     value: IdOrigen, type: self.model.types.INT }
+    { name: 'IdCompania', value: IdCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: IdSucursal, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'PeriodoMes', value: PeriodoMes, type: self.model.types.INT },
+    { name: 'IdOrigen', value: IdOrigen, type: self.model.types.INT }
   ];
 
   this.model.query('[Unidad].[ObtenerCantidadXAutoLineaAcumulado]', params, function (error, result) {
-    console.log( "error", error );
-    console.log( "result", result );
->>>>>>> d4ed9a1ef13b9c0ccf584725de9ef015bd676b70
+    console.log("error", error);
+    console.log("result", result);
     self.view.expositor(res, {
       error: error,
       result: result,
@@ -713,3 +722,4 @@ internos.prototype.get_autolineaacumulado = function (req, res, next) {
 // };
 
 module.exports = internos;
+

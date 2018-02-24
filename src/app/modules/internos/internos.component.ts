@@ -3,34 +3,34 @@ import { routerTransition } from '../../router.animations';
 import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { BrowserAnimationsModule }    from '@angular/platform-browser/animations';
-import { trigger, 
-         style, 
-         transition, 
-         animate, 
-         keyframes, 
-         query, 
-         stagger, 
-         group, 
-         state, 
-         animateChild }               from '@angular/animations';
-import { IResultadoInternos }         from './resultado-internos';
-import { InternosService }            from './internos.service';
-import { ISucursal }                  from './sucursal';
-import { ICompania }                  from './compania';
-import { IDepartamento }              from './departamento';
-import { ITipoReporte }               from './tipo-reporte';
-import { IEfectivoSituacion }         from './efectivo-y-situacion-financiera';
-import { IEstadoSituacion }           from "./estado-Situacion-Financiera";
-import { IAcumuladoReal }             from "./acumuladoreal";
-import { IDetalleUnidadesMensual }    from './detalle-unidades-mensual';
-import { IDetalleResultadosMensual }  from './detalle-resultados-mensual';
-import { IDetalleResultadosCuentas }  from './detalle-resultados-cuentas';
-import { ITipoUnidad }                from './tipo-unidad';
-import { IDetalleUnidadesAcumulado }  from './detalle-unidades-acumulado';
-import { ISeries }                    from './series';
-import { ColumnSortedEvent }          from '../../shared/services/sort.service';
-import { IAutoLineaAcumulado }        from "./auto-linea-acumulado";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { trigger,
+         style,
+         transition,
+         animate,
+         keyframes,
+         query,
+         stagger,
+         group,
+         state,
+         animateChild } from '@angular/animations';
+import { IResultadoInternos } from './resultado-internos';
+import { InternosService } from './internos.service';
+import { ISucursal } from './sucursal';
+import { ICompania } from './compania';
+import { IDepartamento } from './departamento';
+import { ITipoReporte } from './tipo-reporte';
+import { IEfectivoSituacion } from './efectivo-y-situacion-financiera';
+import { IEstadoSituacion } from './estado-Situacion-Financiera';
+import { IAcumuladoReal } from './acumuladoreal';
+import { IDetalleUnidadesMensual } from './detalle-unidades-mensual';
+import { IDetalleResultadosMensual } from './detalle-resultados-mensual';
+import { IDetalleResultadosCuentas } from './detalle-resultados-cuentas';
+import { ITipoUnidad } from './tipo-unidad';
+import { IDetalleUnidadesAcumulado } from './detalle-unidades-acumulado';
+import { ISeries } from './series';
+import { ColumnSortedEvent } from '../../shared/services/sort.service';
+import { IAutoLineaAcumulado } from './auto-linea-acumulado';
 
 
 @Component({
@@ -209,19 +209,15 @@ export class InternosComponent implements OnInit {
     if ((sTipoReporte === '4' || sTipoReporte === '5') && sCompania !== '0') {
       this.showReporteUnidades = false;
       this.showEfectivoSituacion = true;
-<<<<<<< HEAD
       this.showEfectivoSituacion = false;
       this.showAcumuladoReal = false;
       this.showAcumuladoPresupuesto = false;
-=======
       this.showAcumuladoReal = false;
->>>>>>> d4ed9a1ef13b9c0ccf584725de9ef015bd676b70
       this.getEfectivoSituacion();
     } else if (sTipoReporte === '2' && sCompania !== '0') { // Acumulado real
       this.showReporteUnidades = false;
       this.showEfectivoSituacion = false;
       this.showAcumuladoReal = true;
-<<<<<<< HEAD
       this.showAcumuladoPresupuesto = false;
     } else if (sTipoReporte === '3' && sCompania !== '0') { // Acumulado presupuesto
       this.showReporteUnidades = false;
@@ -230,9 +226,7 @@ export class InternosComponent implements OnInit {
       this.showAcumuladoPresupuesto = true;
       this.getUnidadesAcumuladoPresupuesto();
       this.getUnidadesAcumuladoPresupuestoDepartamento();
-=======
       this.getAcumuladoReal();
->>>>>>> d4ed9a1ef13b9c0ccf584725de9ef015bd676b70
     } else if (sCompania !== '0') {
       this.showUnidadesInit();
 
@@ -499,7 +493,7 @@ export class InternosComponent implements OnInit {
   }
 
   getEfectivoSituacion(): void {
-    if(this.selectedTipoReporte == 4){
+    if (this.selectedTipoReporte === 4) {
       this._service.get_EfectivoSituacion({
         idTipoReporte: this.selectedTipoReporte,
         idAgencia: this.selectedCompania,
@@ -507,10 +501,10 @@ export class InternosComponent implements OnInit {
       })
         .subscribe(efectivoSituacion => {
           this.efectivoSituacion = efectivoSituacion;
-          this.fixedHeader("tableEfectivo");
+          this.fixedHeader('tableEfectivo');
         },
         error => this.errorMessage = <any>error);
-    }else if(this.selectedTipoReporte == 5){
+    }else if (this.selectedTipoReporte === 5) {
       this._service.get_EstadoSituacion({
         idTipoReporte: this.selectedTipoReporte,
         idAgencia: this.selectedCompania,
@@ -518,11 +512,11 @@ export class InternosComponent implements OnInit {
       })
         .subscribe(estadoSituacion => {
           this.estadoSituacion = estadoSituacion;
-          this.fixedHeader("tableEstado");
+          this.fixedHeader('tableEstado');
         },
         error => this.errorMessage = <any>error);
     }
-    
+
   }
 
   getAcumuladoReal(): void {
@@ -533,13 +527,13 @@ export class InternosComponent implements OnInit {
     })
     .subscribe(acumuladoReal => {
       this.acumuladoReal = acumuladoReal;
-      this.fixedHeader("tableAcumuladoReal");
+      this.fixedHeader('tableAcumuladoReal');
     },
     error => this.errorMessage = <any>error);
   }
 
   getAutoLineaAcumulado(): void {
-    console.log( "getAutoLineaAcumulado" );
+    console.log( 'getAutoLineaAcumulado' );
     this._service.get_AutoLineaAcumulado({
       IdCompania: 31,
       IdSucursal: 0,
@@ -549,11 +543,11 @@ export class InternosComponent implements OnInit {
     })
     .subscribe(autoLineaAcumulado => {
       this.autoLineaAcumulado = autoLineaAcumulado;
-      console.log( "autoLineaAcumulado", this.autoLineaAcumulado );
+      console.log( 'autoLineaAcumulado', this.autoLineaAcumulado );
     },
     error => this.errorMessage = <any>error);
     // setTimeout(function () {
-      
+
     // }, 5000);
   }
 
