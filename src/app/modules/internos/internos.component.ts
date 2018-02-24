@@ -3,23 +3,34 @@ import { routerTransition } from '../../router.animations';
 import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { trigger, style, transition, animate, keyframes, query, stagger, group, state, animateChild } from '@angular/animations';
-import { IResultadoInternos } from './resultado-internos';
-import { InternosService } from './internos.service';
-import { ISucursal } from './sucursal';
-import { ICompania } from './compania';
-import { IDepartamento } from './departamento';
-import { ITipoReporte } from './tipo-reporte';
-import { IEfectivoSituacion } from './efectivo-y-situacion-financiera';
-import { IEstadoSituacion } from "./estado-Situacion-Financiera";
-import { IDetalleUnidadesMensual } from './detalle-unidades-mensual';
-import { IDetalleResultadosMensual } from './detalle-resultados-mensual';
-import { IDetalleResultadosCuentas } from './detalle-resultados-cuentas';
-import { ITipoUnidad } from './tipo-unidad';
-import { IDetalleUnidadesAcumulado } from './detalle-unidades-acumulado';
-import { ISeries } from './series';
-import { ColumnSortedEvent } from '../../shared/services/sort.service';
+import { BrowserAnimationsModule }    from '@angular/platform-browser/animations';
+import { trigger, 
+         style, 
+         transition, 
+         animate, 
+         keyframes, 
+         query, 
+         stagger, 
+         group, 
+         state, 
+         animateChild }               from '@angular/animations';
+import { IResultadoInternos }         from './resultado-internos';
+import { InternosService }            from './internos.service';
+import { ISucursal }                  from './sucursal';
+import { ICompania }                  from './compania';
+import { IDepartamento }              from './departamento';
+import { ITipoReporte }               from './tipo-reporte';
+import { IEfectivoSituacion }         from './efectivo-y-situacion-financiera';
+import { IEstadoSituacion }           from "./estado-Situacion-Financiera";
+import { IAcumuladoReal }             from "./acumuladoreal";
+import { IDetalleUnidadesMensual }    from './detalle-unidades-mensual';
+import { IDetalleResultadosMensual }  from './detalle-resultados-mensual';
+import { IDetalleResultadosCuentas }  from './detalle-resultados-cuentas';
+import { ITipoUnidad }                from './tipo-unidad';
+import { IDetalleUnidadesAcumulado }  from './detalle-unidades-acumulado';
+import { ISeries }                    from './series';
+import { ColumnSortedEvent }          from '../../shared/services/sort.service';
+import { IAutoLineaAcumulado }        from "./auto-linea-acumulado";
 
 
 @Component({
@@ -75,6 +86,8 @@ export class InternosComponent implements OnInit {
   unidadesDepartamento: IResultadoInternos[] = [];
   efectivoSituacion: IEfectivoSituacion[];
   estadoSituacion: IEstadoSituacion[] = [];
+  acumuladoReal: IAcumuladoReal[] = [];
+  autoLineaAcumulado: IAutoLineaAcumulado[] = [];
   companias: ICompania[];
   sucursales: ISucursal[];
   departamentos: IDepartamento[] = [];
@@ -148,6 +161,7 @@ export class InternosComponent implements OnInit {
     this.setDefaultDate();
     this.setTipoReporte();
     this.getCompanias();
+    this.getAutoLineaAcumulado();
   }
 
   toggleFilters(): void {
@@ -182,11 +196,13 @@ export class InternosComponent implements OnInit {
     if ((sTipoReporte === '4' || sTipoReporte === '5') && sCompania !== '0') {
       this.showReporteUnidades = false;
       this.showEfectivoSituacion = true;
+      this.showAcumuladoReal = false;
       this.getEfectivoSituacion();
     } else if (sTipoReporte === '2' && sCompania !== '0') { // Acumulado real
       this.showReporteUnidades = false;
       this.showEfectivoSituacion = false;
       this.showAcumuladoReal = true;
+      this.getAcumuladoReal();
     } else if (sCompania !== '0') {
       this.showUnidadesInit();
 
@@ -476,6 +492,38 @@ export class InternosComponent implements OnInit {
     
   }
 
+  getAcumuladoReal(): void {
+    this._service.get_AcumuladoReal({
+      IdSucursal: this.selectedIdSucursal,
+      IdCompania: this.selectedCompania,
+      anio: this.anio
+    })
+    .subscribe(acumuladoReal => {
+      this.acumuladoReal = acumuladoReal;
+      this.fixedHeader("tableAcumuladoReal");
+    },
+    error => this.errorMessage = <any>error);
+  }
+
+  getAutoLineaAcumulado(): void {
+    console.log( "getAutoLineaAcumulado" );
+    this._service.get_AutoLineaAcumulado({
+      IdCompania: 31,
+      IdSucursal: 0,
+      anio: 2018,
+      mes: 12,
+      IdOrigen: 1
+    })
+    .subscribe(autoLineaAcumulado => {
+      this.autoLineaAcumulado = autoLineaAcumulado;
+      console.log( "autoLineaAcumulado", this.autoLineaAcumulado );
+    },
+    error => this.errorMessage = <any>error);
+    // setTimeout(function () {
+      
+    // }, 5000);
+  }
+
   // Revisa si la cadena debe ir en negrita
   shouldBeBold(value: string): boolean {
     return this.valuesNegritas.includes(value);
@@ -536,6 +584,7 @@ export class InternosComponent implements OnInit {
 
     if (nv === '4' || nv === '5') {
       this.hideReporteUnidades();
+      this.showAcumuladoReal = false;
     } else {
       this.showReporteUnidades = true;
       this.setDefaultDate();
