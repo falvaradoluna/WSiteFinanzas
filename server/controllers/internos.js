@@ -546,18 +546,17 @@ internos.prototype.get_detalleresultadoscuentas = function (req, res, next) {
 // /api/internos/efectivoysituacion
 // Funcionalidad para las opciones de efectivo real y situacion financiera
 internos.prototype.get_efectivoysituacion = function (req, res, next) {
+  //Variables nuevas
   var self = this;
-  var idReporte = req.query.idreporte;
-  var idAgencia = req.query.idcia;
-  var anio = req.query.anio;
+  var IdCompania  = req.query.idcia
+  var periodoYear = req.query.anio
 
   var params = [
-    { name: 'IdAgencia', value: idAgencia, type: self.model.types.INT },
-    { name: 'IdReporte', value: idReporte, type: self.model.types.INT },
-    { name: 'Anio', value: anio, type: self.model.types.STRING }
+    { name: 'IdCompania', value: IdCompania, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.STRING }
   ];
-
-  this.model.query('SP_EFECTIVO_REAL_Y_SITUACION_FINANCIERA', params, function (error, result) {
+  
+  this.model.query('[Interno].[ObtenerFlujoEfectivoReal]', params, function (error, result) {
     console.log(params);
     self.view.expositor(res, {
       error: error,
@@ -566,6 +565,7 @@ internos.prototype.get_efectivoysituacion = function (req, res, next) {
   });
 };
 
+<<<<<<< HEAD
 // /api/internos/unidadesacumuladopresupuesto
 // Funcionalidad para Unidades nv1 Acumulado presupuesto
 internos.prototype.get_unidadesacumuladopresupuesto = function (req, res, next) {
@@ -584,6 +584,22 @@ internos.prototype.get_unidadesacumuladopresupuesto = function (req, res, next) 
 
   this.model.query('Unidad.ObtenerPresupuestoAcumulado', params, function (error, result) {
     console.log(params);
+=======
+// /api/internos/estadosituaciofinanciera
+internos.prototype.get_estadosituaciofinanciera = function (req, res, next) {
+  var self = this;
+  var IdCompania  = req.query.idcia
+  var periodoYear = req.query.anio
+
+  var params = [
+    { name: 'IdCompania', value: IdCompania, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.STRING }
+  ];
+  console.log(params);
+  this.model.query('[Interno].[ObtenerEstadoSituacionFinanciera]', params, function (error, result) {
+    console.log( "Error", error );
+    console.log( "Result", result );
+>>>>>>> d4ed9a1ef13b9c0ccf584725de9ef015bd676b70
     self.view.expositor(res, {
       error: error,
       result: result,
@@ -591,6 +607,7 @@ internos.prototype.get_unidadesacumuladopresupuesto = function (req, res, next) 
   });
 };
 
+<<<<<<< HEAD
 // /api/internos/unidadesacumuladopresupuestodepartamento
 // Funcionalidad para Unidades nv1 Acumulado presupuesto
 internos.prototype.get_unidadesacumuladopresupuestodepartamento = function (req, res, next) {
@@ -611,6 +628,54 @@ internos.prototype.get_unidadesacumuladopresupuestodepartamento = function (req,
 
   this.model.query('Unidad.ObtenerPresupuestoAcumuladoPorPestania', params, function (error, result) {
     console.log(params);
+=======
+// /api/internos/acumuladoreal
+// Funcionalidad para las opciones de AcumuladoReal
+internos.prototype.get_acumuladoreal = function (req, res, next) {
+  
+  var self = this;
+  var IdSucursal    = req.query.IdSucursal;
+  var IdCompania    = req.query.IdCompania;
+  var periodoYear   = req.query.anio;
+
+  var params = [
+    { name: 'IdSucursal',   value: IdSucursal, type: self.model.types.INT },
+    { name: 'IdCompania',   value: IdCompania, type: self.model.types.INT },
+    { name: 'periodoYear',  value: periodoYear, type: self.model.types.STRING }
+  ];
+  
+  this.model.query('[Unidad].[ObtenerUnidadesXAcumulado]', params, function (error, result) {
+    
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/autolineaacumulado
+// Funcionalidad para las opciones de AutolineaAcumulado
+internos.prototype.get_autolineaacumulado = function (req, res, next) {
+  
+  var self = this;
+  var IdCompania    = req.query.IdCompania;
+  var IdSucursal    = req.query.IdSucursal;
+  var periodoYear   = req.query.anio;
+  var PeriodoMes    = req.query.mes;
+  var IdOrigen      = req.query.IdOrigen
+
+  var params = [
+    { name: 'IdCompania',   value: IdCompania, type: self.model.types.INT },
+    { name: 'IdSucursal',   value: IdSucursal, type: self.model.types.INT },
+    { name: 'periodoYear',  value: periodoYear, type: self.model.types.INT },
+    { name: 'PeriodoMes',   value: PeriodoMes, type: self.model.types.INT },
+    { name: 'IdOrigen',     value: IdOrigen, type: self.model.types.INT }
+  ];
+
+  this.model.query('[Unidad].[ObtenerCantidadXAutoLineaAcumulado]', params, function (error, result) {
+    console.log( "error", error );
+    console.log( "result", result );
+>>>>>>> d4ed9a1ef13b9c0ccf584725de9ef015bd676b70
     self.view.expositor(res, {
       error: error,
       result: result,
