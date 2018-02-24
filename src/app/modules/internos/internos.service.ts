@@ -28,6 +28,8 @@ export class InternosService {
   private _urlDepartamentos = 'api/internos/departamentos';
   private _urlUnidadesDepartamento = 'api/internos/unidadesdepto';
   private _urlEfectivoSituacion = 'api/internos/efectivoysituacion';
+  private _urlUnidadesAcumuladoPresupuesto = 'api/internos/unidadesacumuladopresupuesto';
+  private _urlUnidadesAcumuladoPresupuestoDepartamento = 'api/internos/unidadesacumuladopresupuestodepartamento';
   private _urlDetalleUnidadesMensual = 'api/internos/detalleunidadesmensual';
   private _urlDetalleUnidadesMensualFlotillas = 'api/internos/detalleunidadesmensualflotillas';
   private _urlDetalleUnidadesTipo = 'api/internos/detalleunidadestipo';
@@ -349,6 +351,35 @@ export class InternosService {
   private handleError(err: HttpErrorResponse) {
     console.error(err.message);
     return Observable.throw(err.message);
+  }
+
+  getUnidadesAcumuladoPresupuesto(parameters): Observable<IDetalleUnidadesAcumulado[]> {
+    // Initialize Params Object
+    let Params = new HttpParams();
+
+    // Begin assigning parameters
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+
+    return this._http.get<IDetalleUnidadesAcumulado[]>(this._urlUnidadesAcumuladoPresupuesto, { params: Params })
+      // .do(data => console.log('All:' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  getUnidadesAcumuladoPresupuestoDepartamento(parameters): Observable<IDetalleUnidadesAcumulado[]> {
+    // Initialize Params Object
+    let Params = new HttpParams();
+
+    // Begin assigning parameters
+    Params = Params.append('idPestana', parameters.idPestana);
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+
+    return this._http.get<IDetalleUnidadesAcumulado[]>(this._urlUnidadesAcumuladoPresupuestoDepartamento, { params: Params })
+      // .do(data => console.log('All:' + JSON.stringify(data)))
+      .catch(this.handleError);
   }
 
 }

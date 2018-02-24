@@ -566,6 +566,58 @@ internos.prototype.get_efectivoysituacion = function (req, res, next) {
   });
 };
 
+// /api/internos/unidadesacumuladopresupuesto
+// Funcionalidad para Unidades nv1 Acumulado presupuesto
+internos.prototype.get_unidadesacumuladopresupuesto = function (req, res, next) {
+  var self = this;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var periodoYear = req.query.periodoYear;
+
+  console.log('QueryString Unidades Nv1 Acumulado presupuesto= ' + JSON.stringify(req.query));
+
+  var params = [
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT }
+  ];
+
+  this.model.query('Unidad.ObtenerPresupuestoAcumulado', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/unidadesacumuladopresupuestodepartamento
+// Funcionalidad para Unidades nv1 Acumulado presupuesto
+internos.prototype.get_unidadesacumuladopresupuestodepartamento = function (req, res, next) {
+  var self = this;
+  var idPestana = req.query.idPestana;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var periodoYear = req.query.periodoYear;
+
+  console.log('QueryString Unidades Nv1 Acumulado presupuesto x depto= ' + JSON.stringify(req.query));
+
+  var params = [
+    { name: 'idPestana', value: idPestana, type: self.model.types.INT },
+    { name: 'idCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT }
+  ];
+
+  this.model.query('Unidad.ObtenerPresupuestoAcumuladoPorPestania', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
 // internos.prototype.post_internos = function(req, res, next) {
 // var self = this;
 // var name = req.body.name;

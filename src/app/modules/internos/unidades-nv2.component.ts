@@ -142,6 +142,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
       () => {
         const totales: IDetalleUnidadesAcumulado = {
           'departamento': '',
+          'descripcion': '',
           'IdAutoLinea': -1,
           'autoLinea': 'Total',
           'enero': 0,
@@ -218,6 +219,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
       () => {
         const totales: IDetalleUnidadesAcumulado = {
           'departamento': '',
+          'descripcion': '',
           'IdAutoLinea': -1,
           'autoLinea': 'Total',
           'enero': 0,
