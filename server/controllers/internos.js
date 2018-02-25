@@ -46,22 +46,22 @@ internos.prototype.get_internos = function (req, res, next) {
 // Funcionalidad de la tabla ESTADO DE RESULTADOS
 internos.prototype.get_estadoresultados = function (req, res, next) {
   var self = this;
-  var idCia = req.query.idcia;
-  var idSucursal = req.query.idsucursal;
-  var departamento = req.query.departamento
-  var mes = req.query.mes;
-  var anio = req.query.anio;
-  console.log('QueryString = ' + req.query);
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var periodoMes = req.query.periodoMes;
+  var periodoYear = req.query.periodoYear;
+  var idDepartamento = req.query.idDepartamento;
+  console.log('QueryString ER Nv1 = ' + JSON.stringify(req.query));
 
   var params = [
-    { name: 'IdCia', value: idCia, type: self.model.types.INT },
-    { name: 'IdSucursal', value: idSucursal, type: self.model.types.STRING },
-    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
-    { name: 'Mes', value: mes, type: self.model.types.STRING },
-    { name: 'Anio', value: anio, type: self.model.types.STRING }
+    { name: 'idCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'PeriodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'PeriodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'IdDepartamento', value: idDepartamento, type: self.model.types.INT }
   ];
 
-  this.model.query('SP_CONSULTA_ESTADO_RESULTADOS', params, function (error, result) {
+  this.model.query('Contabilidad.ObtieneEstadoDeResultados', params, function (error, result) {
     console.log('Parametros: ' + params);
     if (result.length > 0) {
       console.log("Estado de Resultados " + result[0]);

@@ -338,16 +338,65 @@ export class InternosComponent implements OnInit {
 
   getEstadoResultados(): void {
     this._service.getEstadoResultados({
-      idCia: this.selectedCompania,
+      idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
-      departamento: this.selectedDepartamento,
-      mes: this.mes,
-      anio: this.anio
+      periodoYear: this.anio,
+      periodoMes: this.mes,
+      idDepartamento: this.selectedIdDepartamento
     })
       .subscribe(estadoResultados => {
         this.estadoResultados = estadoResultados;
       },
-      error => this.errorMessage = <any>error);
+      error => { this.errorMessage = <any>error; },
+      () => {
+        // const total = this.estadoResultados.find(x => x.descripcion.trim() === 'Total Unidades');
+        // const totalCantidad = total.cantidad;
+        // const totalPresupuesto = total.cantidadPresupuesto;
+        // const totalCantidadAcumulado = total.cantidadAcumulado;
+        // const totalPresupuestoAcumulado = total.cantidadPresupuestoAcumulado;
+
+        this.estadoResultados.forEach(er => {
+          // Calcula la variacion
+          er.variacion = er.cantidad - er.cantidadPresupuesto;
+          er.variacionAcumulado = er.cantidadAcumulado - er.cantidadPresupuestoAcumulado;
+
+          er.porcentaje = 0;
+          er.presupuestoPorcentaje = 0;
+          er.porcentajeAcumulado = 0;
+          er.presupuestoPorcentajeAcumulado = 0;
+
+          // Calcula porcentaje de variacion
+          if (er.cantidadPresupuesto === 0) {
+            // Evitar division entre cero
+            er.porcentajeVariacion = 100;
+          } else {
+            er.porcentajeVariacion = er.variacion / er.cantidadPresupuesto * 100;
+          }
+
+          // Calcula porcentaje de variacion acumulado
+          if (er.cantidadPresupuestoAcumulado === 0) {
+            // Evitar division entre cero
+            er.porcentajeVariacionAcumulado = 100;
+          } else {
+            er.porcentajeVariacionAcumulado = er.variacionAcumulado / er.cantidadPresupuestoAcumulado * 100;
+          }
+
+          // // Calcula porcentajes de cantidad real y presupuesto (mensual y acumulado)
+          // if (er.descripcion.trim() === 'Intercambios') {
+          //   // Intercambios no se toma en cuenta
+          //   er.porcentaje = 0;
+          //   er.presupuestoPorcentaje = 0;
+          //   er.porcentajeAcumulado = 0;
+          //   er.presupuestoPorcentajeAcumulado = 0;
+          // } else {
+          //   er.porcentaje = er.cantidad / totalCantidad * 100;
+          //   er.presupuestoPorcentaje = er.cantidadPresupuesto / totalPresupuesto * 100;
+          //   er.porcentajeAcumulado = er.cantidadAcumulado / totalCantidadAcumulado * 100;
+          //   er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / totalPresupuestoAcumulado * 100;
+          // }
+        });
+      }
+    );
   }
 
   getSumaDepartamentos(): void {
@@ -787,6 +836,22 @@ export class InternosComponent implements OnInit {
     }
   }
 
+  onClickUnidadesAcumuladoReal(i: number, value: number, name: string, idDetalleUnidades: number) {
+    const concepto = this.resultadoUnidades[i].descripcion;
+    const idOrigen = this.resultadoUnidades[i].idOrigen;
+
+    if (concepto !== 'Total Unidades') {
+      this.showDetalleUnidadesPrimerNivel = true;
+      this.detalleUnidadesName = name;
+      this.detalleUnidadesValue = value;
+      this.idDetalleUnidades = idDetalleUnidades;
+      this.idOrigen = idOrigen;
+
+      // QUITAR UNA
+      this.detalleUnidadesConcepto = concepto; // <-----QUITAR despues de refactorizar
+      this.unidadesConcepto = concepto;
+    }
+  }
 
 
   onClickResultado(i: number, value: number, name: string, idEstadoResultado: number, idDetalleResultados: number) {
