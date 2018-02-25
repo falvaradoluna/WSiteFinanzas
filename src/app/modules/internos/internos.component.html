@@ -682,18 +682,19 @@
   <!-- END Suma de departamentos -->
 
   <!-- BEGIN Acumulado real -->
-    <div *ngIf='showAcumuladoReal' class="row">
+  <div *ngIf='showAcumuladoReal'>
+    <div class="row">
       <div class="col-md-12 mt-2">
         <div class="card">
           <div class="card-header bg-primary text-white text-center">
-            UNIDADES ACUMULADO
-            <button type="button" class="btn btn-primary text-white btn-sm btn-vm" (click)='toggleUnidades()'>
+            UNIDADES ACUMULADO REAL
+            <button type="button" class="btn btn-primary text-white btn-sm btn-vm" (click)='toggleUnidadesAcumuladoReal()'>
               <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
             </button>
           </div>
 
           <!-- BEGIN Unidades Primer Nivel -->
-          <table id=tableAcumuladoReal class="table table-sm table-bordered table-hover-td table-double-scroller">
+          <table *ngIf='showUnidadesAcumuladoReal' class="table table-sm table-bordered table-hover-td table-responsive">
             <thead>
               <tr>
                 <th class="bg-secondary text-white">Departamento</th>
@@ -721,37 +722,41 @@
                 <th class="bg-primary text-white">%</th>
                 <th class="bg-primary text-white">Diciembre</th>
                 <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Suma</th>
+                <th class="bg-primary text-white">%</th>
               </tr>
             </thead>
             <tbody>
               <ng-container *ngFor='let ar of acumuladoReal; let i = index;'>
-                  <tr>
-                    <td>{{ ar.descripcion }}</td>
-                    <td class="text-center">{{ ar.enero }}</td>
-                    <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
-                    <td class="text-center">{{ ar.febrero }}</td>
-                    <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
-                    <td class="text-center">{{ ar.marzo }}</td>
-                    <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
-                    <td class="text-center">{{ ar.abril }}</td>
-                    <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
-                    <td class="text-center">{{ ar.mayo }}</td>
-                    <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
-                    <td class="text-center">{{ ar.junio }}</td>
-                    <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
-                    <td class="text-center">{{ ar.julio }}</td>
-                    <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
-                    <td class="text-center">{{ ar.agosto }}</td>
-                    <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
-                    <td class="text-center">{{ ar.septiembre }}</td>
-                    <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
-                    <td class="text-center">{{ ar.octubre }}</td>
-                    <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
-                    <td class="text-center">{{ ar.noviembre }}</td>
-                    <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
-                    <td class="text-center">{{ ar.diciembre }}</td>
-                    <td class="text-center">{{ 100 | number:'1.2-2' }}</td>
-                  </tr>
+                <tr [ngClass]="{'table-info': ar.descripcion.trim() === 'Total Unidades'}">
+                  <td>{{ ar.descripcion }}</td>
+                  <td class="text-center">{{ ar.enero }}</td>
+                  <td class="text-center">{{ ar.eneroPerc | number:'1.2-2' }}</td>
+                  <td class="text-center">{{ ar.febrero }}</td>
+                  <td class="text-center">{{ ar.febreroPerc | number:'1.2-2' }}</td>
+                  <td class="text-center">{{ ar.marzo }}</td>
+                  <td class="text-center">{{ ar.marzoPerc | number:'1.2-2' }}</td>
+                  <td class="text-center">{{ ar.abril }}</td>
+                  <td class="text-center">{{ ar.abrilPerc | number:'1.2-2' }}</td>
+                  <td class="text-center">{{ ar.mayo }}</td>
+                  <td class="text-center">{{ ar.mayoPerc | number:'1.2-2' }}</td>
+                  <td class="text-center">{{ ar.junio }}</td>
+                  <td class="text-center">{{ ar.junioPerc | number:'1.2-2' }}</td>
+                  <td class="text-center">{{ ar.julio }}</td>
+                  <td class="text-center">{{ ar.julioPerc | number:'1.2-2' }}</td>
+                  <td class="text-center">{{ ar.agosto }}</td>
+                  <td class="text-center">{{ ar.agostoPerc | number:'1.2-2' }}</td>
+                  <td class="text-center">{{ ar.septiembre }}</td>
+                  <td class="text-center">{{ ar.septiembrePerc | number:'1.2-2' }}</td>
+                  <td class="text-center">{{ ar.octubre }}</td>
+                  <td class="text-center">{{ ar.octubrePerc | number:'1.2-2' }}</td>
+                  <td class="text-center">{{ ar.noviembre }}</td>
+                  <td class="text-center">{{ ar.noviembrePerc | number:'1.2-2' }}</td>
+                  <td class="text-center">{{ ar.diciembre }}</td>
+                  <td class="text-center">{{ ar.diciembrePerc | number:'1.2-2' }}</td>
+                  <td class="text-center">{{ ar.totalAnual }}</td>
+                  <td class="text-center">{{ ar.totalAnualPerc | number:'1.2-2' }}</td>
+                </tr>
               </ng-container>
             </tbody>
           </table>
@@ -759,6 +764,86 @@
         </div>
       </div>
     </div>
+
+    <!-- BEGIN Unidades Por Departamento -->
+    <div class="row">
+      <div class="col-md-12 mt-2">
+        <div class="card">
+          <div class="card-header bg-primary text-white text-center">
+            UNIDADES ACUMULADO REAL
+            <button type="button" class="btn btn-primary text-white btn-sm btn-vm" (click)='toggleUnidadesDepartamentoReal()'>
+              <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
+            </button>
+          </div>
+          <table *ngIf='showUnidadesDepartamentoReal' class="table table-sm table-bordered table-responsive">
+            <thead>
+              <tr>
+                <th class="bg-secondary text-white">Departamento</th>
+                <th class="bg-primary text-white">Enero</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Febrero</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Marzo</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Abril</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Mayo</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Junio</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Julio</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Agosto</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Septiembre</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Octubre</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Noviembre</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Diciembre</th>
+                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white">Suma</th>
+                <th class="bg-primary text-white">%</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor='let uad of acumuladoRealDepartamento' [ngClass]="{'table-info': uad.descripcion.trim() === 'Total Unidades'}">
+                <td>{{ uad.descripcion }}</td>
+                <td class="text-center">{{ uad.enero }}</td>
+                <td class="text-center">{{ uad.eneroPerc | number:'1.2-2' }}</td>
+                <td class="text-center">{{ uad.febrero }}</td>
+                <td class="text-center">{{ uad.febreroPerc | number:'1.2-2' }}</td>
+                <td class="text-center">{{ uad.marzo }}</td>
+                <td class="text-center">{{ uad.marzoPerc | number:'1.2-2' }}</td>
+                <td class="text-center">{{ uad.abril }}</td>
+                <td class="text-center">{{ uad.abrilPerc | number:'1.2-2' }}</td>
+                <td class="text-center">{{ uad.mayo }}</td>
+                <td class="text-center">{{ uad.mayoPerc | number:'1.2-2' }}</td>
+                <td class="text-center">{{ uad.junio }}</td>
+                <td class="text-center">{{ uad.junioPerc | number:'1.2-2' }}</td>
+                <td class="text-center">{{ uad.julio }}</td>
+                <td class="text-center">{{ uad.julioPerc | number:'1.2-2' }}</td>
+                <td class="text-center">{{ uad.agosto }}</td>
+                <td class="text-center">{{ uad.agostoPerc | number:'1.2-2' }}</td>
+                <td class="text-center">{{ uad.septiembre }}</td>
+                <td class="text-center">{{ uad.septiembrePerc | number:'1.2-2' }}</td>
+                <td class="text-center">{{ uad.octubre }}</td>
+                <td class="text-center">{{ uad.octubrePerc | number:'1.2-2' }}</td>
+                <td class="text-center">{{ uad.noviembre }}</td>
+                <td class="text-center">{{ uad.noviembrePerc | number:'1.2-2' }}</td>
+                <td class="text-center">{{ uad.diciembre }}</td>
+                <td class="text-center">{{ uad.diciembrePerc | number:'1.2-2' }}</td>
+                <td class="text-center">{{ uad.totalAnual }}</td>
+                <td class="text-center">{{ uad.totalAnualPerc | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- END Unidades por departamento -->
+  </div>
   <!-- END Acumulado Real -->
 
   <!-- BEGIN Acumulado Presupuesto -->
@@ -844,7 +929,7 @@
           <div class="col-md-12 mt-2">
             <div class="card">
               <div class="card-header bg-primary text-white text-center">
-                UNIDADES UNIDADES ACUMULADO PRESUPUESTO
+                UNIDADES ACUMULADO PRESUPUESTO
                 <button type="button" class="btn btn-primary text-white btn-sm btn-vm" (click)='toggleUnidadesDepartamentoAcumulado()'>
                   <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
                 </button>

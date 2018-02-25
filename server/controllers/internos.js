@@ -639,6 +639,32 @@ internos.prototype.get_unidadesacumuladopresupuestodepartamento = function (req,
   });
 };
 
+// /api/internos/unidadesacumuladorealdepartamento
+// Funcionalidad para Unidades nv1 Acumulado real
+internos.prototype.get_unidadesacumuladorealdepartamento = function (req, res, next) {
+  var self = this;
+  var idPestana = req.query.idPestana;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var periodoYear = req.query.periodoYear;
+
+  console.log('QueryString Unidades Nv1 Acumulado real x depto= ' + JSON.stringify(req.query));
+
+  var params = [
+    { name: 'idPestania', value: idPestana, type: self.model.types.INT },
+    { name: 'idCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT }
+  ];
+
+  this.model.query('Unidad.ObtenerUnidadesXPestaniaXAcumulado', params, function (error, result) {
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
 // /api/internos/acumuladoreal
 // Funcionalidad para las opciones de AcumuladoReal
 internos.prototype.get_acumuladoreal = function (req, res, next) {

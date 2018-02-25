@@ -33,6 +33,7 @@ export class InternosService {
   private _urlEfectivoSituacion = 'api/internos/efectivoysituacion';
   private _urlUnidadesAcumuladoPresupuesto = 'api/internos/unidadesacumuladopresupuesto';
   private _urlUnidadesAcumuladoPresupuestoDepartamento = 'api/internos/unidadesacumuladopresupuestodepartamento';
+  private _urlUnidadesAcumuladoRealDepartamento = 'api/internos/unidadesacumuladorealdepartamento';
   private _urlDetalleUnidadesMensual = 'api/internos/detalleunidadesmensual';
   private _urlDetalleUnidadesMensualFlotillas = 'api/internos/detalleunidadesmensualflotillas';
   private _urlDetalleUnidadesTipo = 'api/internos/detalleunidadestipo';
@@ -422,6 +423,21 @@ export class InternosService {
     Params = Params.append('periodoYear', parameters.periodoYear);
 
     return this._http.get<IDetalleUnidadesAcumulado[]>(this._urlUnidadesAcumuladoPresupuestoDepartamento, { params: Params })
+      // .do(data => console.log('All:' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  getUnidadesAcumuladoRealDepartamento(parameters): Observable<IAcumuladoReal[]> {
+    // Initialize Params Object
+    let Params = new HttpParams();
+
+    // Begin assigning parameters
+    Params = Params.append('idPestana', parameters.idPestana);
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+
+    return this._http.get<IAcumuladoReal[]>(this._urlUnidadesAcumuladoRealDepartamento, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
