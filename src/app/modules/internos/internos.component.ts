@@ -67,7 +67,7 @@ export class InternosComponent implements OnInit {
   showFilters = true;
   showUnidades = true;
   showUnidadesAcumuladoPresupuesto = true;
-  showUnidadesAcumuladoReal = true;
+  showUnidadesAcumuladoReal = 1;
   showResultados = true;
   showUnidadesDepartamento = true;
   showUnidadesDepartamentoAcumulado = true;
@@ -96,6 +96,7 @@ export class InternosComponent implements OnInit {
   acumuladoReal: IAcumuladoReal[] = [];
   acumuladoRealDepartamento: IAcumuladoReal[] = [];
   autoLineaAcumulado: IAutoLineaAcumulado[] = [];
+  tipoUnidadAcumulado: IAutoLineaAcumulado[] = [];
   companias: ICompania[];
   sucursales: ISucursal[];
   departamentos: IDepartamento[] = [];
@@ -169,7 +170,6 @@ export class InternosComponent implements OnInit {
     this.setDefaultDate();
     this.setTipoReporte();
     this.getCompanias();
-    this.getAutoLineaAcumulado();
   }
 
   toggleFilters(): void {
@@ -185,7 +185,7 @@ export class InternosComponent implements OnInit {
   }
 
   toggleUnidadesAcumuladoReal() {
-    this.showUnidadesAcumuladoReal = !this.showUnidadesAcumuladoReal;
+    this.showUnidadesAcumuladoReal = this.showUnidadesAcumuladoReal === 1 ? 0 : 1;
   }
 
   toggleResultados(): void {
@@ -230,6 +230,7 @@ export class InternosComponent implements OnInit {
       this.showEfectivoSituacion = false;
       this.showAcumuladoReal = true;
       this.showAcumuladoPresupuesto = false;
+      this.showUnidadesAcumuladoReal = 1;
       this.getAcumuladoReal();
       this.getUnidadesAcumuladoRealDepartamento();
     } else if (sTipoReporte === '3' && sCompania !== '0') { // Acumulado presupuesto
@@ -631,25 +632,6 @@ export class InternosComponent implements OnInit {
       });
   }
 
-  getAutoLineaAcumulado(): void {
-    console.log( 'getAutoLineaAcumulado' );
-    this._service.get_AutoLineaAcumulado({
-      IdCompania: 31,
-      IdSucursal: 0,
-      anio: 2018,
-      mes: 12,
-      IdOrigen: 1
-    })
-    .subscribe(autoLineaAcumulado => {
-      this.autoLineaAcumulado = autoLineaAcumulado;
-      console.log( 'autoLineaAcumulado', this.autoLineaAcumulado );
-    },
-    error => this.errorMessage = <any>error);
-    // setTimeout(function () {
-
-    // }, 5000);
-  }
-
   getUnidadesAcumuladoPresupuesto(): void {
     this._service.getUnidadesAcumuladoPresupuesto({
       idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
@@ -841,7 +823,7 @@ export class InternosComponent implements OnInit {
     const idOrigen = this.resultadoUnidades[i].idOrigen;
 
     if (concepto !== 'Total Unidades') {
-      this.showDetalleUnidadesPrimerNivel = true;
+      this.showUnidadesAcumuladoReal = 2;
       this.detalleUnidadesName = name;
       this.detalleUnidadesValue = value;
       this.idDetalleUnidades = idDetalleUnidades;
@@ -850,7 +832,82 @@ export class InternosComponent implements OnInit {
       // QUITAR UNA
       this.detalleUnidadesConcepto = concepto; // <-----QUITAR despues de refactorizar
       this.unidadesConcepto = concepto;
+
+      this.getDetalleUnidadesAcumuladoReal();
     }
+  }
+
+  onClickUnidadesAcumuladoRealNv2(idAutoLinea: number, carLine: string) {
+    if (carLine.trim() !== 'Total') {
+      this.showUnidadesAcumuladoReal = 3;
+      this.detalleUnidadesNameSegundoNivel = '';
+      this.detalleUnidadesValueSegundoNivel = carLine; // Revisar ya que son 3 que usan el mismo valor
+      this.detalleUnidadesConceptoSegundoNivel = carLine;
+      this.carLine = carLine;
+      this.idAutoLinea = idAutoLinea;
+      this.getDetalleUnidadesAcumuladoRealNv3();
+    }
+  }
+
+  getDetalleUnidadesAcumuladoReal(): void {
+    this._service.get_AutoLineaAcumulado({
+      IdCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
+      IdSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      anio: +this.anio,
+      mes: +this.mes,
+      IdOrigen: this.idOrigen // Nuevas, usadas, etc.
+    }).subscribe(
+      dum => { this.autoLineaAcumulado = dum; },
+      error => { console.log(error); },
+      () => {
+        // Se calcula el total y se inserta en el objeto
+        // const total: number = this.calculaTotalAcumuladoReal(this.autoLineaAcumulado, 'cantidad');
+        // const t: IAcumuladoReal = {
+        //   'idAutoLinea': -1,
+        //   'autoLinea': 'Total',
+        //   'cantidad': total,
+        //   'CantidadSelected': false,
+        //   'Perc': 100,
+        //   'departamento': '',
+        //   'departamentoOri': ''
+        // };
+        // this.autoLineaAcumulado.push(t);
+
+        // // Se calculan porcentajes
+        // this.autoLineaAcumulado.forEach(dum => dum.Perc = dum.cantidad / total * 100);
+      }
+    );
+  }
+
+  getDetalleUnidadesAcumuladoRealNv3(): void {
+    this._service.get_TipoUnidadAcumulado({
+      idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      periodoYear: this.anio,
+      periodoMes: this.mes,
+      idOrigen: this.idOrigen,
+      idAutoLinea: this.idAutoLinea
+    }).subscribe(
+      unidadesNv3 => { this.tipoUnidadAcumulado = unidadesNv3; },
+      error => { console.log(error); },
+      () => {
+        // Se calcula el total y se inserta en el objeto
+        // const total: number = this.calculaTotalAcumuladoReal(this.autoLineaAcumulado, 'cantidad');
+        // const t: IAcumuladoReal = {
+        //   'idAutoLinea': -1,
+        //   'autoLinea': 'Total',
+        //   'cantidad': total,
+        //   'CantidadSelected': false,
+        //   'Perc': 100,
+        //   'departamento': '',
+        //   'departamentoOri': ''
+        // };
+        // this.autoLineaAcumulado.push(t);
+
+        // // Se calculan porcentajes
+        // this.autoLineaAcumulado.forEach(dum => dum.Perc = dum.cantidad / total * 100);
+      }
+    );
   }
 
 
@@ -971,6 +1028,10 @@ export class InternosComponent implements OnInit {
     this.showDetalleSegundoNivel = false;
     this.showDetallePrimerNivel = true;
     this.fixedHeader('detalleResultadosAcumulado');
+  }
+
+  showUnidadesAcumuladoByLevel(level: number) {
+    this.showUnidadesAcumuladoReal = level;
   }
 
   // Ordenamiento de tabla

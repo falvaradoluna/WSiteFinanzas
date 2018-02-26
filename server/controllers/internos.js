@@ -451,6 +451,37 @@ internos.prototype.get_detalleunidadesacumulado = function (req, res, next) {
   });
 };
 
+// /api/internos/tipounidadacumulado
+// Funcionalidad para detalle de Unidades Acumulado(tercer nivel de unidades)
+internos.prototype.get_tipounidadacumulado = function (req, res, next) {
+  var self = this;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var periodoYear = req.query.periodoYear;
+  var periodoMes = req.query.periodoMes;
+  var idOrigen = req.query.idOrigen;
+  var idAutoLinea = req.query.idAutoLinea;
+
+  console.log('QueryString Unidades Nv3 Acumulado = ' + JSON.stringify(req.query));
+
+  var params = [
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'PeriodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'IdOrigen', value: idOrigen, type: self.model.types.INT },
+    { name: 'idAutoLinea', value: idAutoLinea, type: self.model.types.INT }
+  ];
+
+  this.model.query('Unidad.ObtenerCantidadXDescripcionAcumulado', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
 // /api/internos/detalleunidadesacumuladoflotillas
 // Funcionalidad para detalle de Unidades Acumulado flotillas(segundo nivel de unidades)
 internos.prototype.get_detalleunidadesacumuladoflotillas = function (req, res, next) {

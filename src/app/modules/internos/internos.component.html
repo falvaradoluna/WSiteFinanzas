@@ -694,7 +694,7 @@
           </div>
 
           <!-- BEGIN Unidades Primer Nivel -->
-          <table *ngIf='showUnidadesAcumuladoReal' class="table table-sm table-bordered table-hover-td table-responsive">
+          <table *ngIf='showUnidadesAcumuladoReal === 1' class="table table-sm table-bordered table-hover-td table-responsive">
             <thead>
               <tr>
                 <th class="bg-secondary text-white">Departamento</th>
@@ -730,7 +730,7 @@
               <ng-container *ngFor='let ar of acumuladoReal; let i = index;'>
                 <tr [ngClass]="{'table-info': ar.descripcion.trim() === 'Total Unidades'}">
                   <td>{{ ar.descripcion }}</td>
-                  <td class="text-center">{{ ar.enero }}</td>
+                  <td class="text-center" (click)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)">{{ ar.enero }}</td>
                   <td class="text-center">{{ ar.eneroPerc | number:'1.2-2' }}</td>
                   <td class="text-center">{{ ar.febrero }}</td>
                   <td class="text-center">{{ ar.febreroPerc | number:'1.2-2' }}</td>
@@ -763,38 +763,166 @@
           <!-- END Unidades Primer Nivel -->
 
           <!-- BEGIN Unidades Segundo Nivel -->
-        <!-- <div *ngIf='showUnidadesAcumuladoRealNv2' class="card-body" wsf-close-button (onClose)='hideUnidadesAcumuladoNv2()'>
-          <nav role="navigation">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a href="javascript:void(0)" (click)='hideUnidadesAcumuladoNv1()'>{{ selectedNombreCompania }}</a>
-              </li>
-              <li class="breadcrumb-item active">{{ detalleUnidadesConcepto }}</li>
-            </ol>
-          </nav>
+          <div *ngIf='showUnidadesAcumuladoReal === 2' class="card-body" wsf-close-button (onClose)='showUnidadesAcumuladoByLevel(1)'>
+            <nav role="navigation">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="javascript:void(0)" (click)='showUnidadesAcumuladoByLevel(1)'>{{ selectedNombreCompania }}</a>
+                </li>
+                <li class="breadcrumb-item active">{{ detalleUnidadesConcepto }}</li>
+              </ol>
+            </nav>
 
-          <int-unidades-nv2 [idDetalleUnidades]='idDetalleUnidades'
-                            [mes]='mes'
-                            [anio]='anio'
-                            [selectedCompania]='selectedCompania'
-                            [selectedIdSucursal]='selectedIdSucursal'
-                            [idOrigen]='idOrigen'
-                            (showUnidades)='showUnidades=$event'
-                            (showDetalleUnidadesPrimerNivel)='showDetalleUnidadesPrimerNivel=$event'
-                            (showDetalleUnidadesSegundoNivel)='showDetalleUnidadesSegundoNivel=$event'
-                            (detalleUnidadesNameSegundoNivel)='detalleUnidadesNameSegundoNivel=$event'
-                            (detalleUnidadesValueSegundoNivel)='detalleUnidadesValueSegundoNivel=$event'
-                            (detalleUnidadesConceptoSegundoNivel)='detalleUnidadesConceptoSegundoNivel=$event'
-                            (departamentoAcumulado)='departamentoAcumulado=$event'
-                            (mesAcumulado)='mesAcumulado=$event'
-                            (idDepartamento)='idDepartamento=$event'
-                            (carLine)='carLine=$event'
-                            (errorMessage)='errorMessage=$event'
-                            (idAutoLinea)='idAutoLinea=$event'
-                            (fixedHeaderId)='fixedHeader($event)'>
-          </int-unidades-nv2>
-        </div> -->
-        <!-- END Unidades Segundo Nivel -->
+            <table *ngIf='showUnidadesAcumuladoReal === 2' class="table table-sm table-bordered table-hover-td table-responsive">
+              <thead>
+                <tr>
+                  <th class="bg-secondary text-white">Departamento</th>
+                  <th class="bg-primary text-white">Enero</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Febrero</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Marzo</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Abril</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Mayo</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Junio</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Julio</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Agosto</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Septiembre</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Octubre</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Noviembre</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Diciembre</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Suma</th>
+                  <th class="bg-primary text-white">%</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor='let al of autoLineaAcumulado; let i = index;'>
+                  <tr>
+                    <td>{{ al.autoLinea }}</td>
+                    <td class="text-center" (click)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)">{{ al.enero }}</td>
+                    <td class="text-center">{{ al.eneroPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.febrero }}</td>
+                    <td class="text-center">{{ al.febreroPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.marzo }}</td>
+                    <td class="text-center">{{ al.marzoPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.abril }}</td>
+                    <td class="text-center">{{ al.abrilPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.mayo }}</td>
+                    <td class="text-center">{{ al.mayoPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.junio }}</td>
+                    <td class="text-center">{{ al.junioPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.julio }}</td>
+                    <td class="text-center">{{ al.julioPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.agosto }}</td>
+                    <td class="text-center">{{ al.agostoPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.septiembre }}</td>
+                    <td class="text-center">{{ al.septiembrePerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.octubre }}</td>
+                    <td class="text-center">{{ al.octubrePerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.noviembre }}</td>
+                    <td class="text-center">{{ al.noviembrePerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.diciembre }}</td>
+                    <td class="text-center">{{ al.diciembrePerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.totalAnual }}</td>
+                    <td class="text-center">{{ al.totalAnualPerc | number:'1.2-2' }}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <!-- END Unidades Segundo Nivel -->
+
+          <!-- BEGIN Unidades Tercer Nivel -->
+          <div *ngIf='showUnidadesAcumuladoReal === 3' class="card-body" wsf-close-button (onClose)='showUnidadesAcumuladoByLevel(2)'>
+            <nav role="navigation">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="javascript:void(0)" (click)='showUnidadesAcumuladoByLevel(1)'>{{ selectedNombreCompania }}</a>
+                </li>
+                <li class="breadcrumb-item">
+                  <a href="javascript:void(0)" (click)='showUnidadesAcumuladoByLevel(2)'>{{ detalleUnidadesConcepto }}</a>
+                </li>
+                <li class="breadcrumb-item active">{{ detalleUnidadesConceptoSegundoNivel }}</li>
+              </ol>
+            </nav>
+
+            <table *ngIf='showUnidadesAcumuladoReal === 3' class="table table-sm table-bordered table-hover-td table-responsive">
+              <thead>
+                <tr>
+                  <th class="bg-secondary text-white">Departamento</th>
+                  <th class="bg-primary text-white">Enero</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Febrero</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Marzo</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Abril</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Mayo</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Junio</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Julio</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Agosto</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Septiembre</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Octubre</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Noviembre</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Diciembre</th>
+                  <th class="bg-primary text-white">%</th>
+                  <th class="bg-primary text-white">Suma</th>
+                  <th class="bg-primary text-white">%</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor='let al of tipoUnidadAcumulado; let i = index;'>
+                  <tr>
+                    <td>{{ al.UnidadDescripcion }}</td>
+                    <td class="text-center" (click)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)">{{ al.enero }}</td>
+                    <td class="text-center">{{ al.eneroPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.febrero }}</td>
+                    <td class="text-center">{{ al.febreroPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.marzo }}</td>
+                    <td class="text-center">{{ al.marzoPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.abril }}</td>
+                    <td class="text-center">{{ al.abrilPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.mayo }}</td>
+                    <td class="text-center">{{ al.mayoPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.junio }}</td>
+                    <td class="text-center">{{ al.junioPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.julio }}</td>
+                    <td class="text-center">{{ al.julioPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.agosto }}</td>
+                    <td class="text-center">{{ al.agostoPerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.septiembre }}</td>
+                    <td class="text-center">{{ al.septiembrePerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.octubre }}</td>
+                    <td class="text-center">{{ al.octubrePerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.noviembre }}</td>
+                    <td class="text-center">{{ al.noviembrePerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.diciembre }}</td>
+                    <td class="text-center">{{ al.diciembrePerc | number:'1.2-2' }}</td>
+                    <td class="text-center">{{ al.totalAnual }}</td>
+                    <td class="text-center">{{ al.totalAnualPerc | number:'1.2-2' }}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

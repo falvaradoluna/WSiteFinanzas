@@ -1,5 +1,7 @@
 export interface IAcumuladoReal {
   descripcion: string;
+  idAutoLinea: number;
+  autoLinea: string;
   enero: number;
   febrero: number;
   marzo: number;
