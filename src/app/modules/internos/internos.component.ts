@@ -220,7 +220,6 @@ export class InternosComponent implements OnInit {
     if ((sTipoReporte === '4' || sTipoReporte === '5') && sCompania !== '0') {
       this.showReporteUnidades = false;
       this.showEfectivoSituacion = true;
-      this.showEfectivoSituacion = false;
       this.showAcumuladoReal = false;
       this.showAcumuladoPresupuesto = false;
       this.showAcumuladoReal = false;
@@ -555,7 +554,7 @@ export class InternosComponent implements OnInit {
   }
 
   getEfectivoSituacion(): void {
-    if (this.selectedTipoReporte === 4) {
+    if (this.selectedTipoReporte.toString() === '4') {
       this._service.get_EfectivoSituacion({
         idTipoReporte: this.selectedTipoReporte,
         idAgencia: this.selectedCompania,
@@ -566,7 +565,7 @@ export class InternosComponent implements OnInit {
           this.fixedHeader('tableEfectivo');
         },
         error => this.errorMessage = <any>error);
-    }else if (this.selectedTipoReporte === 5) {
+    }else if (this.selectedTipoReporte.toString() === '5') {
       this._service.get_EstadoSituacion({
         idTipoReporte: this.selectedTipoReporte,
         idAgencia: this.selectedCompania,
