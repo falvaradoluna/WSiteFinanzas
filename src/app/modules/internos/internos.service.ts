@@ -1,50 +1,54 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { IResultadoInternos }         from './resultado-internos';
+import { IResultadoInternos } from './resultado-internos';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
-import { ICompania }                  from './compania';
-import { ISucursal }                  from './sucursal';
-import { IDepartamento }              from './departamento';
-import { IEfectivoSituacion }         from './efectivo-y-situacion-financiera';
-import { IEstadoSituacion }           from "./estado-Situacion-Financiera";
-import { IDetalleUnidadesMensual }    from './detalle-unidades-mensual';
-import { IDetalleResultadosMensual }  from './detalle-resultados-mensual';
-import { IDetalleResultadosCuentas }  from './detalle-resultados-cuentas';
-import { ITipoUnidad }                from './tipo-unidad';
-import { IDetalleUnidadesAcumulado }  from './detalle-unidades-acumulado';
-import { IAcumuladoReal }             from "./acumuladoreal";
-import { IAutoLineaAcumulado }        from "./auto-linea-acumulado";
-import { ISeries }                    from './series';
-import { ErrorObservable }            from 'rxjs/observable/ErrorObservable';
+import { ICompania } from './compania';
+import { ISucursal } from './sucursal';
+import { IDepartamento } from './departamento';
+import { IEfectivoSituacion } from './efectivo-y-situacion-financiera';
+import { IEstadoSituacion } from './estado-Situacion-Financiera';
+import { IDetalleUnidadesMensual } from './detalle-unidades-mensual';
+import { IDetalleResultadosMensual } from './detalle-resultados-mensual';
+import { IDetalleResultadosCuentas } from './detalle-resultados-cuentas';
+import { ITipoUnidad } from './tipo-unidad';
+import { IDetalleUnidadesAcumulado } from './detalle-unidades-acumulado';
+import { IAcumuladoReal } from './acumuladoreal';
+import { IAutoLineaAcumulado } from './auto-linea-acumulado';
+import { ISeries } from './series';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 @Injectable()
 export class InternosService {
 
-  private _urlUnidades                              = 'api/internos/internos';
-  private _urlEstadoResultados                      = 'api/internos/estadoresultados';
-  private _urlSumaDepartamentos                     = 'api/internos/sumadepartamentos';
-  private _urlCompanias                             = 'api/internos/companias';
-  private _urlSucursales                            = 'api/internos/sucursales';
-  private _urlDepartamentos                         = 'api/internos/departamentos';
-  private _urlUnidadesDepartamento                  = 'api/internos/unidadesdepto';
-  private _urlEfectivoSituacion                     = 'api/internos/efectivoysituacion';
-  private _urlEstadoSituacion                       = "api/internos/estadosituaciofinanciera";
-  private _urlDetalleUnidadesMensual                = 'api/internos/detalleunidadesmensual';
-  private _urlDetalleUnidadesTipo                   = 'api/internos/detalleunidadestipo';
-  private _urlDetalleUnidadesTipoAcumulado          = 'api/internos/detalleunidadestipoacumulado';
-  private _urlDetalleUnidadesSeries                 = 'api/internos/detalleunidadesseries';
-  private _urlDetalleUnidadesAcumulado              = 'api/internos/detalleunidadesacumulado';
-  private _urlDetalleResultadosMensual              = 'api/internos/detalleresultadosmensual';
-  private _urlDetalleResultadosCuentas              = 'api/internos/detalleresultadoscuentas';
-  private _urlDetalleUnidadesMensualFlotillas       = 'api/internos/detalleunidadesmensualflotillas';
-  private _urlDetalleUnidadesTipoFlotillas          = 'api/internos/detalleunidadestipoflotillas';
+  private _urlUnidades = 'api/internos/internos';
+  private _urlEstadoResultados = 'api/internos/estadoresultados';
+  private _urlSumaDepartamentos = 'api/internos/sumadepartamentos';
+  private _urlCompanias = 'api/internos/companias';
+  private _urlSucursales = 'api/internos/sucursales';
+  private _urlDepartamentos = 'api/internos/departamentos';
+  private _urlUnidadesDepartamento = 'api/internos/unidadesdepto';
+  private _urlEfectivoSituacion = 'api/internos/efectivoysituacion';
+  private _urlUnidadesAcumuladoPresupuesto = 'api/internos/unidadesacumuladopresupuesto';
+  private _urlUnidadesAcumuladoPresupuestoDepartamento = 'api/internos/unidadesacumuladopresupuestodepartamento';
+  private _urlUnidadesAcumuladoRealDepartamento = 'api/internos/unidadesacumuladorealdepartamento';
+  private _urlDetalleUnidadesMensual = 'api/internos/detalleunidadesmensual';
+  private _urlDetalleUnidadesMensualFlotillas = 'api/internos/detalleunidadesmensualflotillas';
+  private _urlDetalleUnidadesTipo = 'api/internos/detalleunidadestipo';
+  private _urlDetalleUnidadesTipoFlotillas = 'api/internos/detalleunidadestipoflotillas';
+  private _urlDetalleUnidadesTipoAcumulado = 'api/internos/detalleunidadestipoacumulado';
+  private _urlEstadoSituacion = 'api/internos/estadosituaciofinanciera';
+  private _urlDetalleUnidadesSeries = 'api/internos/detalleunidadesseries';
+  private _urlDetalleUnidadesAcumulado = 'api/internos/detalleunidadesacumulado';
+  private _urlDetalleResultadosMensual = 'api/internos/detalleresultadosmensual';
+  private _urlDetalleResultadosCuentas = 'api/internos/detalleresultadoscuentas';
   private _urlDetalleUnidadesTipoAcumuladoFlotillas = 'api/internos/detalleunidadestipoacumuladoflotillas';
-  private _urlDetalleUnidadesAcumuladoFlotillas     = 'api/internos/detalleunidadesacumuladoflotillas';
-  private _urlAcumuladoReal                         = "api/internos/acumuladoreal";
-  private _urlAutoLineaAcumulado                    = "api/internos/autolineaacumulado";
+  private _urlDetalleUnidadesAcumuladoFlotillas = 'api/internos/detalleunidadesacumuladoflotillas';
+  private _urlAcumuladoReal = 'api/internos/acumuladoreal';
+  private _urlAutoLineaAcumulado = 'api/internos/autolineaacumulado';
+  private _urlTipoUnidadAcumulado = 'api/internos/tipounidadacumulado';
 
   constructor(private _http: HttpClient) { }
 
@@ -68,11 +72,11 @@ export class InternosService {
     let Params = new HttpParams();
 
     // Begin assigning parameters
-    Params = Params.append('idcia', parameters.idCia);
-    Params = Params.append('idsucursal', parameters.idSucursal);
-    Params = Params.append('departamento', parameters.departamento);
-    Params = Params.append('anio', parameters.anio);
-    Params = Params.append('mes', parameters.mes);
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    Params = Params.append('idDepartamento', parameters.idDepartamento);
 
     return this._http.get<IResultadoInternos[]>(this._urlEstadoResultados, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
@@ -360,12 +364,12 @@ export class InternosService {
     Params = Params.append('idreporte', parameters.idTipoReporte);
     Params = Params.append('idcia', parameters.idAgencia);
     Params = Params.append('anio', parameters.anio);
-    console.log("ServiceParams", Params);
+    console.log('ServiceParams', Params);
     return this._http.get<IEstadoSituacion[]>(this._urlEstadoSituacion, { params: Params })
       .catch(this.handleError);
   }
 
-  get_AcumuladoReal(parameters): Observable<IAcumuladoReal[]>{
+  get_AcumuladoReal(parameters): Observable<IAcumuladoReal[]> {
     // Initialize Params Object
     let Params = new HttpParams();
     // Begin assigning parameters
@@ -376,7 +380,7 @@ export class InternosService {
       .catch(this.handleError);
   }
 
-  get_AutoLineaAcumulado(parameters): Observable<IAutoLineaAcumulado[]>{  
+  get_AutoLineaAcumulado(parameters): Observable<IAutoLineaAcumulado[]> {
     // Initialize Params Object
     let Params = new HttpParams();
     // Begin assigning parameters
@@ -385,14 +389,73 @@ export class InternosService {
     Params = Params.append('anio',        parameters.anio);
     Params = Params.append('mes',         parameters.mes);
     Params = Params.append('IdOrigen',    parameters.IdOrigen);
-    
+
     return this._http.get<IAutoLineaAcumulado[]>(this._urlAutoLineaAcumulado, { params: Params })
+      .catch(this.handleError);
+  }
+
+  get_TipoUnidadAcumulado(parameters): Observable<IAutoLineaAcumulado[]> {
+    // Initialize Params Object
+    let Params = new HttpParams();
+    // Begin assigning parameters
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    Params = Params.append('idOrigen', parameters.idOrigen);
+    Params = Params.append('idAutoLinea', parameters.idAutoLinea);
+
+    return this._http.get<IAutoLineaAcumulado[]>(this._urlTipoUnidadAcumulado, { params: Params })
       .catch(this.handleError);
   }
 
   private handleError(err: HttpErrorResponse) {
     console.error(err.message);
     return Observable.throw(err.message);
+  }
+
+  getUnidadesAcumuladoPresupuesto(parameters): Observable<IDetalleUnidadesAcumulado[]> {
+    // Initialize Params Object
+    let Params = new HttpParams();
+
+    // Begin assigning parameters
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+
+    return this._http.get<IDetalleUnidadesAcumulado[]>(this._urlUnidadesAcumuladoPresupuesto, { params: Params })
+      // .do(data => console.log('All:' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  getUnidadesAcumuladoPresupuestoDepartamento(parameters): Observable<IDetalleUnidadesAcumulado[]> {
+    // Initialize Params Object
+    let Params = new HttpParams();
+
+    // Begin assigning parameters
+    Params = Params.append('idPestana', parameters.idPestana);
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+
+    return this._http.get<IDetalleUnidadesAcumulado[]>(this._urlUnidadesAcumuladoPresupuestoDepartamento, { params: Params })
+      // .do(data => console.log('All:' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  getUnidadesAcumuladoRealDepartamento(parameters): Observable<IAcumuladoReal[]> {
+    // Initialize Params Object
+    let Params = new HttpParams();
+
+    // Begin assigning parameters
+    Params = Params.append('idPestana', parameters.idPestana);
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+
+    return this._http.get<IAcumuladoReal[]>(this._urlUnidadesAcumuladoRealDepartamento, { params: Params })
+      // .do(data => console.log('All:' + JSON.stringify(data)))
+      .catch(this.handleError);
   }
 
 }
