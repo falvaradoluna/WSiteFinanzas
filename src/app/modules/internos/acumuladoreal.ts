@@ -17,4 +17,5 @@ export interface IAcumuladoReal {
   orderid: number;
   totalAnual: number;
   totalAnualPerc: number;
+  idEstadoResultadosI: number;
 }

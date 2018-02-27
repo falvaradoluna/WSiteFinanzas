@@ -461,7 +461,7 @@ internos.prototype.get_tipounidadacumulado = function (req, res, next) {
   var periodoMes = req.query.periodoMes;
   var idOrigen = req.query.idOrigen;
   var idAutoLinea = req.query.idAutoLinea;
-
+  console.log("===============================================================");
   console.log('QueryString Unidades Nv3 Acumulado = ' + JSON.stringify(req.query));
 
   var params = [
@@ -722,7 +722,7 @@ internos.prototype.get_acumuladoreal = function (req, res, next) {
 
 // /api/internos/autolineaacumulado
 // Funcionalidad para las opciones de AutolineaAcumulado
-internos.prototype.get_autolineaacumulado = function (req, res, next) {
+internos.prototype.get_autolineaacumulado = function (req, res, next) { 
 
   var self = this;
   var IdCompania = req.query.IdCompania;
@@ -740,6 +740,33 @@ internos.prototype.get_autolineaacumulado = function (req, res, next) {
   ];
 
   this.model.query('[Unidad].[ObtenerCantidadXAutoLineaAcumulado]', params, function (error, result) {
+    console.log("error", error);
+    console.log("result", result);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/estadoresultadospresupuesto
+// Funcionalidad para las obtener estado de resultados presupuesto
+internos.prototype.get_estadoresultadospresupuesto = function (req, res, next) {
+
+  var self = this;
+  var idCompania      = req.query.idCompania;
+  var IdSucursal      = req.query.IdSucursal;
+  var periodoYear     = req.query.anio;
+  var IdDepartamento  = req.query.IdDepartamento
+
+  var params = [
+    { name: 'idCompania',     value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal',     value: IdSucursal, type: self.model.types.INT },
+    { name: 'periodoYear',    value: periodoYear, type: self.model.types.INT },
+    { name: 'IdDepartamento', value: IdDepartamento, type: self.model.types.INT }
+  ];
+    console.log("params", params);
+  this.model.query('[Contabilidad].[ObtieneEstadoDeResultadosPresupuesto]', params, function (error, result) {
     console.log("error", error);
     console.log("result", result);
     self.view.expositor(res, {
