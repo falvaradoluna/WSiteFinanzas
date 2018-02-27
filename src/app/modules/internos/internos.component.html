@@ -466,7 +466,7 @@
                 <td [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">{{ drm.numeroCuenta }}</td>
                 <td class="col-md-3">{{ drm.descripcion || "descripcion" }}</td>
                 <td *ngIf='idEstadoResultado !== 3' class="col-md-3 text-right"
-                    (click)="onClickDetalleSegundoNivel(i, drm.SaldoMes, 'Saldomes')">{{ drm.SaldoMonto | number:'1.2-2' }}</td>
+                    (click)="onClickDetalleSegundoNivel(i, drm.SaldoMes, 'Saldomes')">{{ drm.SaldoMonto || drm.enero | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"
                     (click)="onClickDetalleSegundoNivel(i, drm.Real, 'Real')">{{ drm.Real | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right">{{ drm.Pspsto | number:'1.2-2' }}</td>
@@ -504,21 +504,21 @@
             <tbody>
               <tr *ngFor='let drm of detalleResultadosMensual; let i = index;'
                   [ngClass]="{'font-weight-bold': shouldBeBold(drm.Concepto)}">
-                <td class="">{{ drm.Concepto }}</td>
-                <td class="">{{ drm.Numcta }}</td>
-                <td class="">{{ drm.Descr }}</td>
-                <td class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.Ene, 'Enero', '01')">{{ drm.Ene | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "02"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.Feb, 'Febrero', '02')">{{ drm.Feb | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "03"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.Mar, 'Marzo', '03')">{{ drm.Mar | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "04"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.Abr, 'Abril', '04')">{{ drm.Abr | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "05"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.May, 'Mayo', '05')">{{ drm.May | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "06"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.Jun, 'Junio', '06')">{{ drm.Jun | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "07"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.Jul, 'Julio', '07')">{{ drm.Jul | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "08"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.Ago, 'Agosto', '08')">{{ drm.Ago | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "09"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.Sep, 'Septiembre', '09')">{{ drm.Sep | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "10"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.Oct, 'Octubre', '10')">{{ drm.Oct | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "11"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.Nov, 'Noviembre', '11')">{{ drm.Nov | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "12"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.Dic, 'Diciembre', '12')">{{ drm.Dic | number:'1.2-2' }}</td>
+                <td class="">{{ drm.titulo }}</td>
+                <td class="">{{ drm.numeroCuenta }}</td>
+                <td class="">{{ drm.descripcion }}</td>
+                <td class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.enero, 'Enero', '01')">{{ drm.enero | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "02"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.febrero, 'Febrero', '02')">{{ drm.febrero | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "03"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.marzo, 'Marzo', '03')">{{ drm.marzo | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "04"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.abril, 'Abril', '04')">{{ drm.abril | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "05"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.may, 'Mayo', '05')">{{ drm.may | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "06"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.junio, 'Junio', '06')">{{ drm.junio | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "07"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.julio, 'Julio', '07')">{{ drm.julio | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "08"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.agosto, 'Agosto', '08')">{{ drm.agosto | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "09"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.septiembre, 'Septiembre', '09')">{{ drm.septiembre | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "10"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.octubre, 'Octubre', '10')">{{ drm.octubre | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "11"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.noviembre, 'Noviembre', '11')">{{ drm.noviembre | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "12"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.diciembre, 'Diciembre', '12')">{{ drm.diciembre | number:'1.2-2' }}</td>
                 <td *ngIf='mes >= "02"' class="text-right">{{ drm.Suma | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Real | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Pspsto | number:'1.2-2' }}</td>

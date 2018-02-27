@@ -26,6 +26,7 @@ export class InternosService {
   private _urlUnidades = 'api/internos/internos';
   private _urlEstadoResultados = 'api/internos/estadoresultados';
   private _urlEstadoResultadosNv2 = 'api/internos/estadoresultadosnv2';
+  private _urlEstadoResultadosPresupuestoNv2 = 'api/internos/estadoresultadospresupuestonv2';
   private _urlEstadoResultadosAcumuladoReal = 'api/internos/estadoresultadosacumuladoreal';
   private _urlSumaDepartamentos = 'api/internos/sumadepartamentos';
   private _urlCompanias = 'api/internos/companias';
@@ -103,6 +104,24 @@ export class InternosService {
     Params = Params.append('esAnual', parameters.esAnual);
 
     return this._http.get<IDetalleResultadosMensual[]>(this._urlEstadoResultadosNv2, { params: Params })
+      // .do(data => console.log('All:' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  getEstadoResultadosPresupuestoNv2(parameters): Observable<IDetalleResultadosMensual[]> { // Se reutiliza la interfaz de unidades
+    // Initialize Params Object
+    let Params = new HttpParams();
+
+    // Begin assigning parameters
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    Params = Params.append('idDepartamento', parameters.idDepartamento);
+    Params = Params.append('idEstadoResultadosI', parameters.idEstadoResultadosI);
+    Params = Params.append('idOrden', parameters.idOrden);
+
+    return this._http.get<IDetalleResultadosMensual[]>(this._urlEstadoResultadosPresupuestoNv2, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }

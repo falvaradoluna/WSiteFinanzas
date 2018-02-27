@@ -617,6 +617,33 @@ export class InternosComponent implements OnInit {
     );
   }
 
+  getDetalleResultadosMensualPresupuesto(idOrden: number): void {
+    // Este servicio requiere el Id de la sucursal con un cero a la izquierda
+    this._service.getEstadoResultadosPresupuestoNv2({
+      idCompania: this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      periodoYear: this.anio,
+      periodoMes: this.mes,
+      idDepartamento: this.selectedIdDepartamentoEr,
+      idEstadoResultadosI: this.idEstadoResultado || 0,
+      idOrden: idOrden,
+    })
+      .subscribe(detalleResultadosMensual => {
+        this.detalleResultadosMensual = detalleResultadosMensual;
+      },
+      error => {
+        this.errorMessage = <any>error;
+        this.detalleResultadosMensual = [];
+      },
+      // Si la lista tiene más de 10 resultados se necesita ajustar
+      // el ancho de tabla para que quepa el scroll (solo mensual)
+      () => {
+        this.detalleResultadosMensualScroll = this.detalleResultadosMensual.length <= 10 ? true : false;
+        this.fixedHeader('detalleResultadosAcumulado');
+      }
+    );
+  }
+
   getDetalleResultadosCuentas(numCta: string, mes: string = ''): void {
     // Limpiar tabla antes de consultar
     this.detalleResultadosCuentas = [];
@@ -736,8 +763,8 @@ export class InternosComponent implements OnInit {
           const nombreMes = this.toLongMonth(mes.toString());
           const ventas = this.acumuladoReal.find(x => x.descripcion === 'Ventas');
           const utilidadBrutaNeta = this.acumuladoReal.find(x => x.descripcion === 'Utilidad Bruta Neta');
-          console.log( "ventas", ventas );
-          console.log( "utilidadBrutaNeta", utilidadBrutaNeta );
+          console.log( 'ventas', ventas );
+          console.log( 'utilidadBrutaNeta', utilidadBrutaNeta );
           // Se calculan porcentajes del mes correspondiente
           this.acumuladoReal.forEach(er => {
             switch (er.descripcion) {
@@ -1048,7 +1075,7 @@ export class InternosComponent implements OnInit {
             dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
                              dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
             dua.totalAnualPerc = 0;
-            //console.log("TotalAnual", dua.totalAnual);
+            // console.log("TotalAnual", dua.totalAnual);
           });
         }
 
@@ -1125,7 +1152,7 @@ export class InternosComponent implements OnInit {
             dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
                              dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
             dua.totalAnualPerc = 0;
-            
+
           });
         }
           // // Se actualiza el total anual de todas las autoLineas
@@ -1138,7 +1165,7 @@ export class InternosComponent implements OnInit {
 
           // // Se agregan totales al objeto
           this.tipoUnidadAcumulado.push(totales);
-          console.log( "TotalesNv3", totales );
+          console.log( 'TotalesNv3', totales );
 
       }
     );
@@ -1153,7 +1180,11 @@ export class InternosComponent implements OnInit {
     this.detalleConcepto = this.estadoResultados[i].Concepto;
     this.idDetalleResultados = idDetalleResultados;
     this.idEstadoResultado = this.estadoResultados[i].idEstadoResultadosI;
-    this.getDetalleResultadosMensual(idOrden, idDetalleResultados);
+    if (name === 'Real' || name === 'AcReal') {
+      this.getDetalleResultadosMensual(idOrden, idDetalleResultados);
+    } else {
+      this.getDetalleResultadosMensualPresupuesto(idOrden);
+    }
   }
 
   // Usa CSS transforms para dejar los titulos fijos en la tabla
