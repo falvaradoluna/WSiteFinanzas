@@ -245,6 +245,7 @@ export class InternosComponent implements OnInit {
       this.showAcumuladoPresupuesto = true;
       this.getUnidadesAcumuladoPresupuesto();
       this.getUnidadesAcumuladoPresupuestoDepartamento();
+      this.getResultadosPresupuesto();
     } else if (sCompania !== '0') {
       this.showUnidadesInit();
 
@@ -717,6 +718,59 @@ export class InternosComponent implements OnInit {
       });
   }
 
+  getResultadosPresupuesto(): void {
+    this._service.get_ResultadosPresupuesto({
+      idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
+      IdSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      anio: this.anio,
+      IdDepartamento: this.selectedIdDepartamento
+    })
+      .subscribe(acumuladoReal => {
+        this.acumuladoReal = acumuladoReal;
+        this.fixedHeader('tableAcumuladoPresupuesto');
+      },
+      error => this.errorMessage = <any>error,
+      () => {
+         // Ciclo de 12 meses
+         for (let mes = 1; mes <= 12; mes++) {
+          const nombreMes = this.toLongMonth(mes.toString());
+          const ventas = this.acumuladoReal.find(x => x.descripcion === 'Ventas');
+          const utilidadBrutaNeta = this.acumuladoReal.find(x => x.descripcion === 'Utilidad Bruta Neta');
+          console.log( "ventas", ventas );
+          console.log( "utilidadBrutaNeta", utilidadBrutaNeta );
+          // Se calculan porcentajes del mes correspondiente
+          this.acumuladoReal.forEach(er => {
+            switch (er.descripcion) {
+              case 'Ventas': {
+                er[nombreMes + 'Perc'] = 100;
+                break;
+              }
+              case 'Utilidad bruta': {
+                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                break;
+              }
+              case 'Utilidad Bruta Neta': {
+                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                break;
+              }
+              case 'Costo de Ventas': {
+                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                break;
+              }
+              case 'Otros Costos': {
+                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                break;
+              }
+              default: {
+                er[nombreMes + 'Perc'] = er[nombreMes] / utilidadBrutaNeta[nombreMes] * 100;
+                break;
+              }
+            }
+          });
+        }
+      });
+  }
+
   getUnidadesAcumuladoPresupuesto(): void {
     this._service.getUnidadesAcumuladoPresupuesto({
       idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
@@ -947,21 +1001,67 @@ export class InternosComponent implements OnInit {
       dum => { this.autoLineaAcumulado = dum; },
       error => { console.log(error); },
       () => {
-        // Se calcula el total y se inserta en el objeto
-        // const total: number = this.calculaTotalAcumuladoReal(this.autoLineaAcumulado, 'cantidad');
-        // const t: IAcumuladoReal = {
-        //   'idAutoLinea': -1,
-        //   'autoLinea': 'Total',
-        //   'cantidad': total,
-        //   'CantidadSelected': false,
-        //   'Perc': 100,
-        //   'departamento': '',
-        //   'departamentoOri': ''
-        // };
-        // this.autoLineaAcumulado.push(t);
+        const totales: IAutoLineaAcumulado = {
+          'UnidadDescripcion': '',
+          'idAutoLinea': '',
+          'autoLinea': '',
+          'enero': 0,
+          'eneroPerc': 100,
+          'febrero': 0,
+          'febreroPerc': 100,
+          'marzo': 0,
+          'marzoPerc': 100,
+          'abril': 0,
+          'abrilPerc': 100,
+          'mayo': 0,
+          'mayoPerc': 100,
+          'junio': 0,
+          'junioPerc': 100,
+          'julio': 0,
+          'julioPerc': 100,
+          'agosto': 0,
+          'agostoPerc': 100,
+          'septiembre': 0,
+          'septiembrePerc': 100,
+          'octubre': 0,
+          'octubrePerc': 100,
+          'noviembre': 0,
+          'noviembrePerc': 100,
+          'diciembre': 0,
+          'diciembrePerc': 100,
+          'totalAnual': 0,
+          'totalAnualPerc': 100
+        };
 
-        // // Se calculan porcentajes
-        // this.autoLineaAcumulado.forEach(dum => dum.Perc = dum.cantidad / total * 100);
+        // Ciclo de 12 meses
+        for (let mes = 1; mes <= 12; mes++) {
+          const nombreMes = this.toLongMonth(mes.toString());
+          // // Se calcula el total
+          const totalMensual: number = this.calculaTotalMensual(this.autoLineaAcumulado, nombreMes);
+
+          // // Se actualiza el valor del mes correspondiente
+          totales[nombreMes] = totalMensual;
+
+          // // Se calculan porcentajes del mes correspondiente
+          this.autoLineaAcumulado.forEach(dua => {
+            dua[nombreMes + 'Perc'] = dua[nombreMes] / totalMensual * 100;
+            dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
+                             dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
+            dua.totalAnualPerc = 0;
+            //console.log("TotalAnual", dua.totalAnual);
+          });
+        }
+
+        // // Se actualiza el total anual de todas las autoLineas
+        totales.totalAnual = this.calculaTotalMensual(this.autoLineaAcumulado, 'totalAnual');
+
+        // // Se calculan los porcentajes de totales
+        this.autoLineaAcumulado.forEach(dua => {
+          dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+        });
+
+        // // Se agregan totales al objeto
+        this.autoLineaAcumulado.push(totales);
       }
     );
   }
@@ -978,21 +1078,68 @@ export class InternosComponent implements OnInit {
       unidadesNv3 => { this.tipoUnidadAcumulado = unidadesNv3; },
       error => { console.log(error); },
       () => {
-        // Se calcula el total y se inserta en el objeto
-        // const total: number = this.calculaTotalAcumuladoReal(this.autoLineaAcumulado, 'cantidad');
-        // const t: IAcumuladoReal = {
-        //   'idAutoLinea': -1,
-        //   'autoLinea': 'Total',
-        //   'cantidad': total,
-        //   'CantidadSelected': false,
-        //   'Perc': 100,
-        //   'departamento': '',
-        //   'departamentoOri': ''
-        // };
-        // this.autoLineaAcumulado.push(t);
+        const totales: IAutoLineaAcumulado = {
+          'UnidadDescripcion': '',
+          'idAutoLinea': '',
+          'autoLinea': '',
+          'enero': 0,
+          'eneroPerc': 100,
+          'febrero': 0,
+          'febreroPerc': 100,
+          'marzo': 0,
+          'marzoPerc': 100,
+          'abril': 0,
+          'abrilPerc': 100,
+          'mayo': 0,
+          'mayoPerc': 100,
+          'junio': 0,
+          'junioPerc': 100,
+          'julio': 0,
+          'julioPerc': 100,
+          'agosto': 0,
+          'agostoPerc': 100,
+          'septiembre': 0,
+          'septiembrePerc': 100,
+          'octubre': 0,
+          'octubrePerc': 100,
+          'noviembre': 0,
+          'noviembrePerc': 100,
+          'diciembre': 0,
+          'diciembrePerc': 100,
+          'totalAnual': 0,
+          'totalAnualPerc': 100
+        };
 
-        // // Se calculan porcentajes
-        // this.autoLineaAcumulado.forEach(dum => dum.Perc = dum.cantidad / total * 100);
+        // Ciclo de 12 meses
+        for (let mes = 1; mes <= 12; mes++) {
+          const nombreMes = this.toLongMonth(mes.toString());
+          // // Se calcula el total
+          const totalMensual: number = this.calculaTotalMensual(this.tipoUnidadAcumulado, nombreMes);
+
+          // // Se actualiza el valor del mes correspondiente
+          totales[nombreMes] = totalMensual;
+
+          // Se calculan porcentajes del mes correspondiente
+          this.tipoUnidadAcumulado.forEach(dua => {
+            dua[nombreMes + 'Perc'] = dua[nombreMes] / totalMensual * 100;
+            dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
+                             dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
+            dua.totalAnualPerc = 0;
+            
+          });
+        }
+          // // Se actualiza el total anual de todas las autoLineas
+          totales.totalAnual = this.calculaTotalMensual(this.tipoUnidadAcumulado, 'totalAnual');
+
+          // // Se calculan los porcentajes de totales
+          this.tipoUnidadAcumulado.forEach(dua => {
+            dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+          });
+
+          // // Se agregan totales al objeto
+          this.tipoUnidadAcumulado.push(totales);
+          console.log( "TotalesNv3", totales );
+
       }
     );
   }
