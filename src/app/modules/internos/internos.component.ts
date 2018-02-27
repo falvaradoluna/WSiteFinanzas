@@ -936,7 +936,11 @@ export class InternosComponent implements OnInit {
 
   onChangeDepartamento(newValue): void {
     this.selectedIdDepartamento = newValue;
-    this.selectedIdDepartamentoEr = this.departamentos.find(x => x.idPestana === +newValue).idER;
+    if (this.departamentos.find(x => x.idPestana === +newValue)) {
+      this.selectedIdDepartamentoEr = this.departamentos.find(x => x.idPestana === +newValue).idER || 0;
+    } else {
+      this.selectedIdDepartamentoEr = 0;
+    }
   }
 
   onChangeSumaDepartamentos(): void {
