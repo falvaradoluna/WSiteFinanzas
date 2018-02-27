@@ -880,6 +880,38 @@ internos.prototype.get_estadoresultadospresupuesto = function (req, res, next) {
   });
 };
 
+// /api/internos/estadoresultadosacumuladobyider
+// Funcionalidad para las obtener estado de resultados acumulado por ID
+internos.prototype.get_estadoresultadosacumuladobyider = function (req, res, next) {
+
+  var self = this;
+  var idCompania          = req.query.idCompania;
+  var IdSucursal          = req.query.IdSucursal;
+  var PeriodoYear         = req.query.anio;
+  var IdDepartamento      = req.query.IdDepartamento;
+  var idEstadoDeResultado = req.query.idEstadoDeResultado;
+  var IdOrden             = req.query.IdOrden;
+
+  var params = [
+    { name: 'idCompania',           value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal',           value: IdSucursal, type: self.model.types.INT },
+    { name: 'PeriodoYear',          value: PeriodoYear, type: self.model.types.INT },
+    { name: 'IdDepartamento',       value: IdDepartamento, type: self.model.types.INT },
+    { name: 'idEstadoDeResultado',  value: idEstadoDeResultado, type: self.model.types.INT },
+    { name: 'IdOrden',              value: IdOrden, type: self.model.types.INT }
+  ];
+
+    console.log("params", params);
+  this.model.query('[Contabilidad].[ObtieneEstadoDeResultadosAcumuladoXIdER]', params, function (error, result) {
+    console.log("error", error);
+    console.log("result", result);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
 // internos.prototype.post_internos = function(req, res, next) {
 // var self = this;
 // var name = req.body.name;

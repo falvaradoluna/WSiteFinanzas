@@ -96,6 +96,7 @@ export class InternosComponent implements OnInit {
   efectivoSituacion: IEfectivoSituacion[];
   estadoSituacion: IEstadoSituacion[] = [];
   acumuladoReal: IAcumuladoReal[] = [];
+  acumuladoRealNv2: IAcumuladoReal[] = []
   acumuladoRealDepartamento: IAcumuladoReal[] = [];
   autoLineaAcumulado: IAutoLineaAcumulado[] = [];
   tipoUnidadAcumulado: IAutoLineaAcumulado[] = [];
@@ -750,7 +751,7 @@ export class InternosComponent implements OnInit {
       idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
       IdSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       anio: this.anio,
-      IdDepartamento: this.selectedIdDepartamento
+      IdDepartamento: this.selectedIdDepartamentoEr
     })
       .subscribe(acumuladoReal => {
         this.acumuladoReal = acumuladoReal;
@@ -1000,8 +1001,6 @@ export class InternosComponent implements OnInit {
       // QUITAR UNA
       this.detalleUnidadesConcepto = concepto; // <-----QUITAR despues de refactorizar
       this.unidadesConcepto = concepto;
-
-      this.getDetalleUnidadesAcumuladoReal();
     }
   }
 
@@ -1015,6 +1014,43 @@ export class InternosComponent implements OnInit {
       this.idAutoLinea = idAutoLinea;
       this.getDetalleUnidadesAcumuladoRealNv3();
     }
+  }
+
+  getResultadosAcumuladoXIdER(): void {
+    this._service.get_ResultadosAcumuladoXIdER({
+      idCompania:           2,//this.selectedCompania,
+      IdSucursal:           0,//this.selectedIdSucursal,
+      anio:                 2018,//this.anio,
+      IdDepartamento:       1,//this.selectedIdDepartamentoEr,
+      idEstadoDeResultado: 0,
+      IdOrden: 3
+    })
+      .subscribe(acumuladoRealNv2 => {
+        this.acumuladoRealNv2 = acumuladoRealNv2;
+        this.fixedHeader('tableAcumuladoRealNv2');
+      },
+      error => this.errorMessage = <any>error);
+  }
+
+  onClickEstadoResultadosAcumuladoReal(/*i: number, value: number, name: string, idDetalleUnidades: number*/) {
+    // const concepto = this.resultadoUnidades[i].descripcion;
+    // const idOrigen = this.resultadoUnidades[i].idOrigen;
+
+    // if (concepto !== 'Total Unidades') {
+    //   this.showUnidadesAcumuladoReal = 2;
+    //   this.detalleUnidadesName = name;
+    //   this.detalleUnidadesValue = value;
+    //   this.idDetalleUnidades = idDetalleUnidades;
+    //   this.idOrigen = idOrigen;
+
+    //   // QUITAR UNA
+    //   this.detalleUnidadesConcepto = concepto; // <-----QUITAR despues de refactorizar
+    //   this.unidadesConcepto = concepto;
+      console.log("HolaFuncion");
+      this.showEstadoResultadoAcumuladoReal = 2;
+      this.getResultadosAcumuladoXIdER();
+      console.log("showEstadoResultadoAcumuladoReal", this.showEstadoResultadoAcumuladoReal);
+    //}
   }
 
   getDetalleUnidadesAcumuladoReal(): void {
@@ -1301,6 +1337,10 @@ export class InternosComponent implements OnInit {
   }
 
   showEstadoResultadoAcumuladoByLevel(level: number) {
+    this.showEstadoResultadoAcumuladoReal = level;
+  }
+
+  showEstadoResultadosAcumuladoRealByLevel(level: number) {
     this.showEstadoResultadoAcumuladoReal = level;
   }
 

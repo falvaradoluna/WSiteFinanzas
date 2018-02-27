@@ -53,6 +53,7 @@ export class InternosService {
   private _urlAutoLineaAcumulado = 'api/internos/autolineaacumulado';
   private _urlTipoUnidadAcumulado = 'api/internos/tipounidadacumulado';
   private _urlEstadoResultadosPresupuesto = "api/internos/estadoresultadospresupuesto";
+  private _urlEstadoResultadosAcumuladoByIdER = "api/internos/estadoresultadosacumuladobyider";
 
   constructor(private _http: HttpClient) { }
 
@@ -526,6 +527,21 @@ export class InternosService {
     Params = Params.append('IdDepartamento',  parameters.IdDepartamento);
 
     return this._http.get<IAcumuladoReal[]>(this._urlEstadoResultadosPresupuesto, { params: Params })
+      .catch(this.handleError);
+  }
+
+  get_ResultadosAcumuladoXIdER(parameters): Observable<IAcumuladoReal[]> {
+    // Initialize Params Object
+    let Params = new HttpParams();
+    // Begin assigning parameters
+    Params = Params.append('idCompania',          parameters.idCompania);
+    Params = Params.append('IdSucursal',          parameters.IdSucursal);
+    Params = Params.append('anio',                parameters.anio);
+    Params = Params.append('IdDepartamento',      parameters.IdDepartamento);
+    Params = Params.append('idEstadoDeResultado', parameters.idEstadoDeResultado);
+    Params = Params.append('IdOrden',             parameters.IdOrden);
+
+    return this._http.get<IAcumuladoReal[]>(this._urlEstadoResultadosAcumuladoByIdER, { params: Params })
       .catch(this.handleError);
   }
 

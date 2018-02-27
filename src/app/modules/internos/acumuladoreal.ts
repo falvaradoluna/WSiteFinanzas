@@ -30,4 +30,6 @@ export interface IAcumuladoReal {
   totalAnual: number;
   totalAnualPerc: number;
   idEstadoResultadosI: number;
+  numeroCuenta: string;
+  titulo: string;
 }
