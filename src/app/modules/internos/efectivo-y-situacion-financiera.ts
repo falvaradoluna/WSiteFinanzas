@@ -1,5 +1,6 @@
 export interface IEfectivoSituacion {
-  id:         number;
+  id: number;
+  tituloTabla: string;
   idConcepto: number;
   concepto:   string;
   Ene:        number;

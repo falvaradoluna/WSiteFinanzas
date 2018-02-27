@@ -116,6 +116,40 @@ internos.prototype.get_estadoresultadosnv2 = function (req, res, next) {
   });
 };
 
+// /api/internos/estadoresultados
+// Funcionalidad de la tabla ESTADO DE RESULTADOS
+internos.prototype.get_estadoresultadospresupuestonv2 = function (req, res, next) {
+  var self = this;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var periodoMes = req.query.periodoMes;
+  var periodoYear = req.query.periodoYear;
+  var idDepartamento = req.query.idDepartamento;
+  var idEstadoResultadosI = req.query.idEstadoResultadosI;
+  var idOrden = req.query.idOrden;
+
+  console.log('QueryString ER Nv2 Presupuesto= ' + JSON.stringify(req.query));
+
+  var params = [
+    { name: 'idCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'PeriodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'PeriodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'IdDepartamento', value: idDepartamento, type: self.model.types.INT },
+    { name: 'idEstadoResultadosI', value: idEstadoResultadosI, type: self.model.types.INT },
+    { name: 'idOrden', value: idOrden, type: self.model.types.INT }
+  ];
+
+  this.model.query('Contabilidad.ObtienePresupuestoAcumuladoXidER', params, function (error, result) {
+    console.log('Parametros: ' + params);
+
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
 // /api/internos/estadoresultadosacumuladoreal
 // Funcionalidad de la tabla ESTADO DE RESULTADOS ACUMULADO REAL
 internos.prototype.get_estadoresultadosacumuladoreal = function (req, res, next) {
@@ -792,7 +826,7 @@ internos.prototype.get_acumuladoreal = function (req, res, next) {
 
 // /api/internos/autolineaacumulado
 // Funcionalidad para las opciones de AutolineaAcumulado
-internos.prototype.get_autolineaacumulado = function (req, res, next) { 
+internos.prototype.get_autolineaacumulado = function (req, res, next) {
 
   var self = this;
   var IdCompania = req.query.IdCompania;
