@@ -51,6 +51,8 @@ internos.prototype.get_estadoresultados = function (req, res, next) {
   var periodoMes = req.query.periodoMes;
   var periodoYear = req.query.periodoYear;
   var idDepartamento = req.query.idDepartamento;
+  var idSucursalSecuencia = req.query.idSucursalSecuencia;
+
   console.log('QueryString ER Nv1 = ' + JSON.stringify(req.query));
 
   var params = [
@@ -58,7 +60,8 @@ internos.prototype.get_estadoresultados = function (req, res, next) {
     { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
     { name: 'PeriodoMes', value: periodoMes, type: self.model.types.INT },
     { name: 'PeriodoYear', value: periodoYear, type: self.model.types.INT },
-    { name: 'IdDepartamento', value: idDepartamento, type: self.model.types.INT }
+    { name: 'IdDepartamento', value: idDepartamento, type: self.model.types.INT },
+    { name: 'idSucursalSecuencia', value: idSucursalSecuencia, type: self.model.types.INT }
   ];
 
   this.model.query('Contabilidad.ObtieneEstadoDeResultados', params, function (error, result) {
@@ -66,6 +69,33 @@ internos.prototype.get_estadoresultados = function (req, res, next) {
     if (result.length > 0) {
       console.log("Estado de Resultados " + result[0]);
     }
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/estadoresultadosacumuladoreal
+// Funcionalidad de la tabla ESTADO DE RESULTADOS ACUMULADO REAL
+internos.prototype.get_estadoresultadosacumuladoreal = function (req, res, next) {
+  var self = this;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var periodoYear = req.query.periodoYear;
+  var idDepartamento = req.query.idDepartamento;
+  console.log('QueryString ER Nv1 Acumulado real = ' + JSON.stringify(req.query));
+
+  var params = [
+    { name: 'idCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'PeriodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'IdDepartamento', value: idDepartamento, type: self.model.types.INT }
+  ];
+
+  this.model.query('Contabilidad.ObtieneEstadoDeResultadosAcumulado', params, function (error, result) {
+    console.log('Parametros: ' + JSON.stringify(params));
+
     self.view.expositor(res, {
       error: error,
       result: result,

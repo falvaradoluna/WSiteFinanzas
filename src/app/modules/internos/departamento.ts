@@ -3,4 +3,5 @@ export interface IDepartamento {
   pestanaNombre: string;
   pestanaOrdenId: number;
   Selected: boolean;
+  idER: number;
 }

@@ -13,6 +13,7 @@ export interface IResultadoInternos {
   porcentajeAcumulado: number;
   variacionAcumulado: number;
   porcentajeVariacionAcumulado: number;
+  idEstadoResultadosI: number;
   Concepto: string;
   Real: number;
   Perc1: number;
