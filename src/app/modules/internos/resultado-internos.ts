@@ -1,5 +1,6 @@
 export interface IResultadoInternos {
   idOrigen: number;
+  idOrden: number;
   descripcion: string;
   cantidad: number;
   cantidadPresupuesto: number;

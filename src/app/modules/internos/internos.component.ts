@@ -588,19 +588,18 @@ export class InternosComponent implements OnInit {
     this.periodo = anio + '-' + mesStr;
   }
 
-  getDetalleResultadosMensual(concepto: string): void {
+  getDetalleResultadosMensual(idOrden: number, esAnual: number): void {
     // Este servicio requiere el Id de la sucursal con un cero a la izquierda
-    this._service.getDetalleResultadosMensual({
-      idAgencia: this.selectedCompania,
-      anio: this.anio,
-      mes: +this.mes,
-      idSucursal: this.selectedIdSucursal >= 0 ? '0' + this.selectedIdSucursal.toString() : '00',
-      mSucursal: this.selectedIdSucursal >= 0 ? '0' + this.selectedIdSucursal.toString() : '00',
-      departamento: this.selectedDepartamento,
-      concepto: concepto,
-      idEstadoDeResultado: this.idEstadoResultado,
-      idDetalle: this.idDetalleResultados,
-      idEstadoResultado: this.idEstadoResultado
+    this._service.getEstadoResultadosNv2({
+      idCompania: this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      periodoYear: this.anio,
+      periodoMes: this.mes,
+      idDepartamento: this.selectedIdDepartamentoEr,
+      idSucursalSecuencia: this.selectedIdSucursalSecuencia,
+      idEstadoResultadosI: this.idEstadoResultado || 0,
+      idOrden: idOrden,
+      esAnual: esAnual
     })
       .subscribe(detalleResultadosMensual => {
         this.detalleResultadosMensual = detalleResultadosMensual;
@@ -1147,13 +1146,14 @@ export class InternosComponent implements OnInit {
 
 
   onClickResultado(i: number, value: number, name: string, idEstadoResultado: number, idDetalleResultados: number) {
+    const idOrden = this.estadoResultados[i].idOrden;
     this.showDetallePrimerNivel = true;
     this.detalleName = name;
     this.detalleValue = value;
     this.detalleConcepto = this.estadoResultados[i].Concepto;
     this.idDetalleResultados = idDetalleResultados;
-    this.idEstadoResultado = idEstadoResultado;
-    this.getDetalleResultadosMensual(this.detalleConcepto);
+    this.idEstadoResultado = this.estadoResultados[i].idEstadoResultadosI;
+    this.getDetalleResultadosMensual(idOrden, idDetalleResultados);
   }
 
   // Usa CSS transforms para dejar los titulos fijos en la tabla
@@ -1187,13 +1187,13 @@ export class InternosComponent implements OnInit {
     if (this.unidadesDepartamento[0]) {
       const ud = this.unidadesDepartamento[0];
       switch (col) {
-        case 1: v = ud.Real;
+        case 1: v = ud.cantidad;
           break;
-        case 3: v = ud.PPto;
+        case 3: v = ud.cantidadPresupuesto;
           break;
-        case 7: v = ud.AcReal;
+        case 7: v = ud.cantidadAcumulado;
           break;
-        case 9: v = ud.AcPPto;
+        case 9: v = ud.cantidadPresupuestoAcumulado;
           break;
       }
       return value / v;
@@ -1217,7 +1217,7 @@ export class InternosComponent implements OnInit {
       this.showDetalleSegundoNivel = true;
       this.detalleValueSegundoNivel = value;
       this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].Descr;
-      this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].Numcta, mes);
+      this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].numeroCuenta, mes);
     }
   }
 

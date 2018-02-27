@@ -1,4 +1,8 @@
 export interface IDetalleResultadosMensual {
+  IdEstadoResultadosI: number;
+  titulo: string;
+  numeroCuenta: string;
+  SaldoMonto: number;
   Concepto: string;
   Numcta: string;
   Descr: string;
