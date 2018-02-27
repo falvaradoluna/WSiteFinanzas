@@ -729,9 +729,47 @@ export class InternosComponent implements OnInit {
       .subscribe(acumuladoReal => {
         this.acumuladoReal = acumuladoReal;
         this.fixedHeader('tableAcumuladoPresupuesto');
-        console.log( "Acumulado Real", this.acumuladoReal );
       },
-      error => this.errorMessage = <any>error);
+      error => this.errorMessage = <any>error,
+      () => {
+         // Ciclo de 12 meses
+         for (let mes = 1; mes <= 12; mes++) {
+          const nombreMes = this.toLongMonth(mes.toString());
+          const ventas = this.acumuladoReal.find(x => x.descripcion === 'Ventas');
+          const utilidadBrutaNeta = this.acumuladoReal.find(x => x.descripcion === 'Utilidad Bruta Neta');
+          console.log( "ventas", ventas );
+          console.log( "utilidadBrutaNeta", utilidadBrutaNeta );
+          // Se calculan porcentajes del mes correspondiente
+          this.acumuladoReal.forEach(er => {
+            switch (er.descripcion) {
+              case 'Ventas': {
+                er[nombreMes + 'Perc'] = 100;
+                break;
+              }
+              case 'Utilidad bruta': {
+                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                break;
+              }
+              case 'Utilidad Bruta Neta': {
+                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                break;
+              }
+              case 'Costo de Ventas': {
+                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                break;
+              }
+              case 'Otros Costos': {
+                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                break;
+              }
+              default: {
+                er[nombreMes + 'Perc'] = er[nombreMes] / utilidadBrutaNeta[nombreMes] * 100;
+                break;
+              }
+            }
+          });
+        }
+      });
   }
 
   getUnidadesAcumuladoPresupuesto(): void {
