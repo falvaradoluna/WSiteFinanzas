@@ -495,7 +495,7 @@ export class InternosComponent implements OnInit {
       anio: this.anio
     })
       .subscribe(sumaDepartamentos => {
-        this.resultadoSumaDepartamentos = sumaDepartamentos;
+        // this.resultadoSumaDepartamentos = sumaDepartamentos;
       },
       error => this.errorMessage = <any>error);
   }
