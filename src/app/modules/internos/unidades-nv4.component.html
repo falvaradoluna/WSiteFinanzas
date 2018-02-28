@@ -35,15 +35,15 @@
       <td>{{ dus.factura }}</td>
       <td>{{ dus.InventarioNumero }}</td>
       <td>{{ dus.serieNumero }}</td>
-      <td class="text-right">{{ dus.precioBase | number:'1.2-2' }}</td>
-      <td class="text-right">{{ dus.impuestoISAN | number:'1.2-2' }}</td>
-      <td class="text-right">{{ dus.ivaPorcentaje | number:'1.0-2' }}</td>
-      <td class="text-right">{{ dus.ivaImporte | number:'1.2-2' }}</td>
-      <td class="text-right">{{ dus.importeTotal | number:'1.2-2' }}</td>
-      <td class="text-right">{{ dus.costo | number:'1.2-2' }}</td>
-      <td class="text-right">{{ dus.incentivo | number:'1.2-2' }}</td>
-      <td class="text-right">{{ dus.costoTotal | number:'1.2-2' }}</td>
-      <td class="text-right">{{ dus.utilidad | number:'1.2-2' }}</td>
+      <td class="text-right" [suma-columnas]='dus.precioBase'>{{ dus.precioBase | number:'1.2-2' }}</td>
+      <td class="text-right" [suma-columnas]='dus.impuestoISAN'>{{ dus.impuestoISAN | number:'1.2-2' }}</td>
+      <td class="text-right" [suma-columnas]='dus.ivaPorcentaje'>{{ dus.ivaPorcentaje | number:'1.0-2' }}</td>
+      <td class="text-right" [suma-columnas]='dus.ivaImporte'>{{ dus.ivaImporte | number:'1.2-2' }}</td>
+      <td class="text-right" [suma-columnas]='dus.importeTotal'>{{ dus.importeTotal | number:'1.2-2' }}</td>
+      <td class="text-right" [suma-columnas]='dus.costo'>{{ dus.costo | number:'1.2-2' }}</td>
+      <td class="text-right" [suma-columnas]='dus.incentivo'>{{ dus.incentivo | number:'1.2-2' }}</td>
+      <td class="text-right" [suma-columnas]='dus.costoTotal'>{{ dus.costoTotal | number:'1.2-2' }}</td>
+      <td class="text-right" [suma-columnas]='dus.utilidad'>{{ dus.utilidad | number:'1.2-2' }}</td>
     </tr>
   </tbody>
 </table>
