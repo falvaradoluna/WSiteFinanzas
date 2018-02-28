@@ -64,15 +64,7 @@ internos.prototype.get_estadoresultados = function (req, res, next) {
     { name: 'idSucursalSecuencia', value: idSucursalSecuencia, type: self.model.types.INT }
   ];
 
-  var sp = '';
-  if (idSucursal > 0 && idDepartamento === 0) {
-    sp = 'Contabilidad.ObtieneEstadoDeResultadosPorSecuencia';
-  } else {
-    sp = 'Contabilidad.ObtieneEstadoDeResultados';
-  }
-
-
-  this.model.query(sp, params, function (error, result) {
+  this.model.query('Contabilidad.ObtieneEstadoDeResultados', params, function (error, result) {
     console.log('Parametros: ' + params);
     if (result.length > 0) {
       console.log("Estado de Resultados " + result[0]);
