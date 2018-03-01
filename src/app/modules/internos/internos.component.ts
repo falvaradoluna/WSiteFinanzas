@@ -112,6 +112,7 @@ export class InternosComponent implements OnInit {
   detalleResultadosCuentas: IDetalleResultadosCuentas[];
   resultadoUnidades: IResultadoInternos[] = [];
   selectedCompania = 0;
+  fechaActualizacion = null;
   selectedNombreCompania: string;
   selectedTipoReporte = 1;
   selectedIdSucursal = -2;
@@ -914,6 +915,9 @@ export class InternosComponent implements OnInit {
 
   onChangeCompania(newValue: number): void {
     this.selectedCompania = newValue;
+    if (this.companias.find(x => x.id === +newValue)) {
+      this.fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;
+    }
 
     if (this.selectedCompania !== 0 && this.selectedTipoReporte) {
       // Llenar dropdown de sucursales

@@ -3,4 +3,5 @@ export interface ICompania {
   razonSocial: string;
   nombreComercial: string;
   idProducto: string;
+  fechaActualizacion: Date;
 }
