@@ -1053,7 +1053,7 @@
             <ng-container *ngFor='let ar of estadoResultadosAcumuladoReal; let i = index;'>
               <tr>
                 <td>{{ ar.descripcion }}</td>
-                <td class="text-center" (click)="onClickEstadoResultadosAcumuladoReal(i, ar.Cantidad, 'Real', 1)">{{ ar.enero | number:'1.2-2' }}</td>
+                <td class="text-center" (click)="onClickEstadoResultadosAcumuladoReal(ar.idOrden, ar.idEstadoResultadosI)">{{ ar.enero | number:'1.2-2' }}</td>
                 <td class="text-center">{{ ar.eneroPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ ar.febrero | number:'1.2-2' }}</td>
                 <td class="text-center">{{ ar.febreroPerc | number:'1.2-2' }}</td>
@@ -1111,21 +1111,21 @@
             <tbody>
               <ng-container *ngFor='let ar of acumuladoRealNv2; let i = index;'>
                 <tr>
-                  <td>{{ ar.titulo || "Concepto" }}</td>
-                  <td>{{ ar.numeroCuenta }}</td>
-                  <td>{{ ar.descripcion || "Descripcion" }}</td>
-                  <td class="text-center">{{ ar.enero | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ ar.febrero | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ ar.marzo | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ ar.abril | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ ar.mayo | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ ar.junio | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ ar.julio | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ ar.agosto | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ ar.septiembre | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ ar.octubre | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ ar.noviembre | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ ar.diciembre | number:'1.2-2' }}</td>
+                  <td  width = "6%">{{ ar.titulo || "Concepto" }}</td>
+                  <td  width = "6%">{{ ar.numeroCuenta }}</td>
+                  <td  width = "6%">{{ ar.descripcion || "Descripcion" }}</td>
+                  <td  width = "6%" class="text-center">{{ ar.enero | number:'1.2-2' }}</td>
+                  <td  width = "6%" class="text-center">{{ ar.febrero | number:'1.2-2' }}</td>
+                  <td  width = "6%" class="text-center">{{ ar.marzo | number:'1.2-2' }}</td>
+                  <td  width = "6%" class="text-center">{{ ar.abril | number:'1.2-2' }}</td>
+                  <td  width = "6%" class="text-center">{{ ar.mayo | number:'1.2-2' }}</td>
+                  <td  width = "6%" class="text-center">{{ ar.junio | number:'1.2-2' }}</td>
+                  <td  width = "6%" class="text-center">{{ ar.julio | number:'1.2-2' }}</td>
+                  <td  width = "6%" class="text-center">{{ ar.agosto | number:'1.2-2' }}</td>
+                  <td  width = "6%" class="text-center">{{ ar.septiembre | number:'1.2-2' }}</td>
+                  <td  width = "6%" class="text-center">{{ ar.octubre | number:'1.2-2' }}</td>
+                  <td  width = "6%" class="text-center">{{ ar.noviembre | number:'1.2-2' }}</td>
+                  <td  width = "6%" class="text-center">{{ ar.diciembre | number:'1.2-2' }}</td>
                   <!-- <td class="text-center">{{ ar.totalAnual | number:'1.2-2' }}</td> -->
                 </tr>
               </ng-container>

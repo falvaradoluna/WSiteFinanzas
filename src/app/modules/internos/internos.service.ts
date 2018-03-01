@@ -132,11 +132,12 @@ export class InternosService {
     let Params = new HttpParams();
 
     // Begin assigning parameters
-    Params = Params.append('idCompania', parameters.idCompania);
-    Params = Params.append('idSucursal', parameters.idSucursal);
-    Params = Params.append('periodoYear', parameters.periodoYear);
-    Params = Params.append('idDepartamento', parameters.idDepartamento);
-
+    Params = Params.append('idCompania',            parameters.idCompania);
+    Params = Params.append('idSucursal',            parameters.idSucursal);
+    Params = Params.append('periodoYear',           parameters.periodoYear);
+    Params = Params.append('idDepartamento',        parameters.idDepartamento);
+    Params = Params.append('idSucursalSecuencia',   parameters.idSucursalSecuencia);
+    
     return this._http.get<IAcumuladoReal[]>(this._urlEstadoResultadosAcumuladoReal, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
@@ -539,6 +540,7 @@ export class InternosService {
     Params = Params.append('anio',                parameters.anio);
     Params = Params.append('IdDepartamento',      parameters.IdDepartamento);
     Params = Params.append('idEstadoDeResultado', parameters.idEstadoDeResultado);
+    Params = Params.append('idSucursalSecuencia', parameters.idSucursalSecuencia);
     Params = Params.append('IdOrden',             parameters.IdOrden);
 
     return this._http.get<IAcumuladoReal[]>(this._urlEstadoResultadosAcumuladoByIdER, { params: Params })

@@ -170,7 +170,9 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
           'diciembre': 0,
           'diciembrePerc': 100,
           'totalAnual': 0,
-          'totalAnualPerc': 100
+          'totalAnualPerc': 100,
+          'idOrden': 0,
+          'idEstadoResultadosI': 0
         };
 
         // Ciclo de 12 meses
@@ -247,7 +249,9 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
           'diciembre': 0,
           'diciembrePerc': 100,
           'totalAnual': 0,
-          'totalAnualPerc': 100
+          'totalAnualPerc': 100,
+          'idOrden': 0,
+          'idEstadoResultadosI': 0
         };
 
         // Ciclo de 12 meses
