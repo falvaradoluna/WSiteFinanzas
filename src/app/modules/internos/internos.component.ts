@@ -116,6 +116,7 @@ export class InternosComponent implements OnInit {
   xmlSend: any;
 
   selectedCompania = 0;
+  fechaActualizacion = null;
   selectedNombreCompania: string;
   selectedTipoReporte = 1;
   selectedIdSucursal = -2;
@@ -317,22 +318,6 @@ export class InternosComponent implements OnInit {
         const totalPresupuestoAcumulado = total.cantidadPresupuestoAcumulado;
 
         this.resultadoUnidades.forEach(ru => {
-          // Calcula porcentaje de variacion
-          if (ru.cantidadPresupuesto === 0) {
-            // Evitar division entre cero
-            ru.porcentajeVariacion = 100;
-          } else {
-            ru.porcentajeVariacion = ru.variacion / ru.cantidadPresupuesto * 100;
-          }
-
-          // Calcula porcentaje de variacion acumulado
-          if (ru.cantidadPresupuestoAcumulado === 0) {
-            // Evitar division entre cero
-            ru.porcentajeVariacionAcumulado = 100;
-          } else {
-            ru.porcentajeVariacionAcumulado = ru.variacionAcumulado / ru.cantidadPresupuestoAcumulado * 100;
-          }
-
           // Calcula porcentajes de cantidad real y presupuesto (mensual y acumulado)
           if (ru.descripcion.trim() === 'Intercambios') {
             // Intercambios no se toma en cuenta
@@ -345,6 +330,22 @@ export class InternosComponent implements OnInit {
             ru.presupuestoPorcentaje = ru.cantidadPresupuesto / totalPresupuesto * 100;
             ru.porcentajeAcumulado = ru.cantidadAcumulado / totalCantidadAcumulado * 100;
             ru.presupuestoPorcentajeAcumulado = ru.cantidadPresupuestoAcumulado / totalPresupuestoAcumulado * 100;
+          }
+
+          // Calcula porcentaje de variacion
+          if (ru.cantidadPresupuesto === 0) {
+            // Evitar division entre cero
+            ru.porcentajeVariacion = 100;
+          } else {
+            ru.porcentajeVariacion = ru.porcentaje - ru.presupuestoPorcentaje;
+          }
+
+          // Calcula porcentaje de variacion acumulado
+          if (ru.cantidadPresupuestoAcumulado === 0) {
+            // Evitar division entre cero
+            ru.porcentajeVariacionAcumulado = 100;
+          } else {
+            ru.porcentajeVariacionAcumulado = ru.porcentajeAcumulado - ru.presupuestoPorcentajeAcumulado;
           }
         });
       }
@@ -434,7 +435,7 @@ export class InternosComponent implements OnInit {
             // Evitar division entre cero
             er.porcentajeVariacion = 100;
           } else {
-            er.porcentajeVariacion = er.variacion / er.cantidadPresupuesto * 100;
+            er.porcentajeVariacion = er.porcentaje - er.presupuestoPorcentaje;
           }
 
           // Calcula porcentaje de variacion acumulado
@@ -442,7 +443,7 @@ export class InternosComponent implements OnInit {
             // Evitar division entre cero
             er.porcentajeVariacionAcumulado = 100;
           } else {
-            er.porcentajeVariacionAcumulado = er.variacionAcumulado / er.cantidadPresupuestoAcumulado * 100;
+            er.porcentajeVariacionAcumulado = er.porcentajeAcumulado - er.presupuestoPorcentajeAcumulado;
           }
         });
       }
@@ -654,6 +655,7 @@ export class InternosComponent implements OnInit {
       // Si la lista tiene más de 10 resultados se necesita ajustar
       // el ancho de tabla para que quepa el scroll (solo mensual)
       () => {
+        this.detalleResultadosMensual.forEach(x => x.saldoMonto = x[this.toLongMonth(this.mes)]);
         this.detalleResultadosMensualScroll = this.detalleResultadosMensual.length <= 10 ? true : false;
         this.fixedHeader('detalleResultadosAcumulado');
       }
@@ -929,6 +931,9 @@ export class InternosComponent implements OnInit {
 
   onChangeCompania(newValue: number): void {
     this.selectedCompania = newValue;
+    if (this.companias.find(x => x.id === +newValue)) {
+      this.fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;
+    }
 
     if (this.selectedCompania !== 0 && this.selectedTipoReporte) {
       // Llenar dropdown de sucursales
@@ -951,7 +956,11 @@ export class InternosComponent implements OnInit {
 
   onChangeDepartamento(newValue): void {
     this.selectedIdDepartamento = newValue;
-    this.selectedIdDepartamentoEr = this.departamentos.find(x => x.idPestana === +newValue).idER;
+    if (this.departamentos.find(x => x.idPestana === +newValue)) {
+      this.selectedIdDepartamentoEr = this.departamentos.find(x => x.idPestana === +newValue).idER || 0;
+    } else {
+      this.selectedIdDepartamentoEr = 0;
+    }
   }
 
   onChangeSumaDepartamentos(): void {
