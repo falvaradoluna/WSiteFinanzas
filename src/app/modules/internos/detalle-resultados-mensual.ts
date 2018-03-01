@@ -6,6 +6,7 @@ export interface IDetalleResultadosMensual {
   Concepto: string;
   Numcta: string;
   descripcion: string;
+  Descr: string;
   SaldoMes: number;
   Real: number;
   Pspsto: number;
