@@ -29,4 +29,7 @@ export interface IDetalleUnidadesAcumulado {
   diciembrePerc: number;
   totalAnual: number;
   totalAnualPerc: number;
+  idOrden: number;
+  idEstadoResultadosI: number;
+
 }

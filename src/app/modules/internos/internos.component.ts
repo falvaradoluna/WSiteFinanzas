@@ -111,6 +111,10 @@ export class InternosComponent implements OnInit {
   detalleResultadosMensual: IDetalleResultadosMensual[];
   detalleResultadosCuentas: IDetalleResultadosCuentas[];
   resultadoUnidades: IResultadoInternos[] = [];
+
+  xmlDepartamento:any = [];
+  xmlSend: any;
+
   selectedCompania = 0;
   fechaActualizacion = null;
   selectedNombreCompania: string;
@@ -277,6 +281,15 @@ export class InternosComponent implements OnInit {
   }
 
   showSuma(): void {
+    console.log( "Suma" );
+    this._service.getDepartamentos({
+    })
+    .subscribe( departamentos => { 
+      this.departamentos = departamentos; 
+      console.log( "DepartamentosShowSuma", this.departamentos );
+    },
+    error => this.errorMessage = <any>error
+    );
     this.showReporteUnidades = false;
     this.showSumaDepartamentos = true;
   }
@@ -442,10 +455,12 @@ export class InternosComponent implements OnInit {
       idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       periodoYear: this.anio,
-      idDepartamento: this.selectedIdDepartamento
+      idDepartamento: this.selectedIdDepartamento,
+      idSucursalSecuencia: this.selectedIdSucursalSecuencia
     })
       .subscribe(estadoResultadosAcumuladoReal => {
         this.estadoResultadosAcumuladoReal = estadoResultadosAcumuladoReal;
+        console.log( "estadoResultadosAcumulado", this.estadoResultadosAcumuladoReal );
       },
       error => { this.errorMessage = <any>error; },
       () => {
@@ -949,13 +964,19 @@ export class InternosComponent implements OnInit {
   }
 
   onChangeSumaDepartamentos(): void {
+    let arrIds = [];
     this.selectedDepartamentosStr = '\'';
     this.selectedDepartamentos.forEach(d => {
-      this.selectedDepartamentosStr += `''${d}'',`;
+      this.selectedDepartamentosStr += `${d},`;
+      arrIds.push( `${d}` )
     });
-    // Se elimina la última coma
-    this.selectedDepartamentosStr = this.selectedDepartamentosStr.substring(0, this.selectedDepartamentosStr.length - 1);
-    this.selectedDepartamentosStr += '\'';
+
+    for( let i = 0; i <= (arrIds.length - 1); i++ ){
+      this.xmlDepartamento.push('<departamento><id>'+ arrIds[ i ] +'</id></departamento>');  
+    }
+    
+    this.xmlSend = "<departamentos>" + this.xmlDepartamento.join("") + "</departamentos>" 
+    console.log( "xmlSend", this.xmlSend );
   }
 
   onChangeTipoReporte(newValue: number): void {
@@ -1025,14 +1046,18 @@ export class InternosComponent implements OnInit {
     }
   }
 
-  getResultadosAcumuladoXIdER(): void {
+  getResultadosAcumuladoXIdER(idOrden: number, idEstado:number): void {
+    console.log( "getResultadosAcumuladoXIdER" );
+    console.log("idOrden",  idOrden);
+    console.log("idEstado", idEstado);
     this._service.get_ResultadosAcumuladoXIdER({
-      idCompania:           2,//this.selectedCompania,
-      IdSucursal:           0,//this.selectedIdSucursal,
-      anio:                 2018,//this.anio,
-      IdDepartamento:       1,//this.selectedIdDepartamentoEr,
-      idEstadoDeResultado: 0,
-      IdOrden: 3
+      idCompania:           this.selectedCompania,
+      IdSucursal:           this.selectedIdSucursal,
+      anio:                 this.anio,
+      IdDepartamento:       this.selectedIdDepartamentoEr,
+      idEstadoDeResultado:  idEstado,
+      idSucursalSecuencia:  this.selectedIdSucursalSecuencia,
+      IdOrden:              idOrden
     })
       .subscribe(acumuladoRealNv2 => {
         this.acumuladoRealNv2 = acumuladoRealNv2;
@@ -1041,25 +1066,15 @@ export class InternosComponent implements OnInit {
       error => this.errorMessage = <any>error);
   }
 
-  onClickEstadoResultadosAcumuladoReal(/*i: number, value: number, name: string, idDetalleUnidades: number*/) {
-    // const concepto = this.resultadoUnidades[i].descripcion;
-    // const idOrigen = this.resultadoUnidades[i].idOrigen;
-
-    // if (concepto !== 'Total Unidades') {
-    //   this.showUnidadesAcumuladoReal = 2;
-    //   this.detalleUnidadesName = name;
-    //   this.detalleUnidadesValue = value;
-    //   this.idDetalleUnidades = idDetalleUnidades;
-    //   this.idOrigen = idOrigen;
-
-    //   // QUITAR UNA
-    //   this.detalleUnidadesConcepto = concepto; // <-----QUITAR despues de refactorizar
-    //   this.unidadesConcepto = concepto;
-      console.log("HolaFuncion");
+  onClickEstadoResultadosAcumuladoReal(idOrden: number, idEstado:number) {
+      if( idEstado == null ){
+        idEstado = 0;
+      }
+      console.log( "onClickEstadoResultadosAcumuladoReal" );
+      console.log( "idOrden", idOrden );
+      console.log( "idEstado", idEstado );
       this.showEstadoResultadoAcumuladoReal = 2;
-      this.getResultadosAcumuladoXIdER();
-      console.log("showEstadoResultadoAcumuladoReal", this.showEstadoResultadoAcumuladoReal);
-    //}
+      this.getResultadosAcumuladoXIdER(idOrden, idEstado);
   }
 
   getDetalleUnidadesAcumuladoReal(): void {

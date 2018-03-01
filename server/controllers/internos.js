@@ -153,22 +153,26 @@ internos.prototype.get_estadoresultadospresupuestonv2 = function (req, res, next
 // Funcionalidad de la tabla ESTADO DE RESULTADOS ACUMULADO REAL
 internos.prototype.get_estadoresultadosacumuladoreal = function (req, res, next) {
   var self = this;
-  var idCompania = req.query.idCompania;
-  var idSucursal = req.query.idSucursal;
-  var periodoYear = req.query.periodoYear;
-  var idDepartamento = req.query.idDepartamento;
-  console.log('QueryString ER Nv1 Acumulado real = ' + JSON.stringify(req.query));
+  var idCompania          = req.query.idCompania;
+  var idSucursal          = req.query.idSucursal;
+  var periodoYear         = req.query.periodoYear;
+  var idDepartamento      = req.query.idDepartamento;
+  var idSucursalSecuencia = req.query.idSucursalSecuencia;
+  //console.log('QueryString ER Nv1 Acumulado real = ' + JSON.stringify(req.query));
 
   var params = [
     { name: 'idCompania', value: idCompania, type: self.model.types.INT },
     { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
     { name: 'PeriodoYear', value: periodoYear, type: self.model.types.INT },
-    { name: 'IdDepartamento', value: idDepartamento, type: self.model.types.INT }
+    { name: 'IdDepartamento', value: idDepartamento, type: self.model.types.INT },
+    { name: 'idSucursalSecuencia', value: idSucursalSecuencia, type: self.model.types.INT },
   ];
-
-  this.model.query('Contabilidad.ObtieneEstadoDeResultadosAcumulado', params, function (error, result) {
-    console.log('Parametros: ' + JSON.stringify(params));
-
+  // console.log( "Params", params );
+  this.model.query('[Contabilidad].[ObtieneEstadoDeResultadosAcumuladoReal]', params, function (error, result) {
+    // console.log('Parametros: ' + JSON.stringify(params));
+    // console.log("=======================================================");
+    // console.log( "error", error );
+    // console.log( "result", result );
     self.view.expositor(res, {
       error: error,
       result: result,
@@ -882,13 +886,14 @@ internos.prototype.get_estadoresultadospresupuesto = function (req, res, next) {
 // /api/internos/estadoresultadosacumuladobyider
 // Funcionalidad para las obtener estado de resultados acumulado por ID
 internos.prototype.get_estadoresultadosacumuladobyider = function (req, res, next) {
-
+  console.log( "get_estadoresultadosacumuladobyider" );
   var self = this;
   var idCompania          = req.query.idCompania;
   var IdSucursal          = req.query.IdSucursal;
   var PeriodoYear         = req.query.anio;
   var IdDepartamento      = req.query.IdDepartamento;
   var idEstadoDeResultado = req.query.idEstadoDeResultado;
+  var idSucursalSecuencia = req.query.idSucursalSecuencia;
   var IdOrden             = req.query.IdOrden;
 
   var params = [
@@ -897,11 +902,12 @@ internos.prototype.get_estadoresultadosacumuladobyider = function (req, res, nex
     { name: 'PeriodoYear',          value: PeriodoYear, type: self.model.types.INT },
     { name: 'IdDepartamento',       value: IdDepartamento, type: self.model.types.INT },
     { name: 'idEstadoDeResultado',  value: idEstadoDeResultado, type: self.model.types.INT },
+    { name: 'idSucursalSecuencia',  value: idSucursalSecuencia, type: self.model.types.INT },
     { name: 'IdOrden',              value: IdOrden, type: self.model.types.INT }
   ];
-
+    console.log("========================================================");
     console.log("params", params);
-  this.model.query('[Contabilidad].[ObtieneEstadoDeResultadosAcumuladoXIdER]', params, function (error, result) {
+  this.model.query('[Contabilidad].[ObtieneDetalleEstadoDeResultadosAcumuladoRealSegundoNivel]', params, function (error, result) {
     console.log("error", error);
     console.log("result", result);
     self.view.expositor(res, {
