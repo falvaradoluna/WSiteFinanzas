@@ -640,6 +640,7 @@ export class InternosComponent implements OnInit {
       // Si la lista tiene más de 10 resultados se necesita ajustar
       // el ancho de tabla para que quepa el scroll (solo mensual)
       () => {
+        this.detalleResultadosMensual.forEach(x => x.saldoMonto = x[this.toLongMonth(this.mes)]);
         this.detalleResultadosMensualScroll = this.detalleResultadosMensual.length <= 10 ? true : false;
         this.fixedHeader('detalleResultadosAcumulado');
       }

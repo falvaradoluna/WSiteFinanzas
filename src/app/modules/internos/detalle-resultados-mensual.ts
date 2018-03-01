@@ -2,10 +2,10 @@ export interface IDetalleResultadosMensual {
   IdEstadoResultadosI: number;
   titulo: string;
   numeroCuenta: string;
-  SaldoMonto: number;
+  saldoMonto: number;
   Concepto: string;
   Numcta: string;
-  Descr: string;
+  descripcion: string;
   SaldoMes: number;
   Real: number;
   Pspsto: number;

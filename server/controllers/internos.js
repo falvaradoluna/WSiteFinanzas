@@ -104,7 +104,7 @@ internos.prototype.get_estadoresultadosnv2 = function (req, res, next) {
     { name: 'EsAnual', value: esAnual, type: self.model.types.INT }
   ];
 
-  this.model.query('Contabilidad.ObtieneEstadoDeResultadosXEstadoDeResultadoI', params, function (error, result) {
+  this.model.query('Contabilidad.ObtieneDetalleEstadoDeResultadosSegundoNivel', params, function (error, result) {
     console.log('Parametros: ' + params);
     if (result.length > 0) {
       console.log("Estado de Resultados " + result[0]);
@@ -133,14 +133,13 @@ internos.prototype.get_estadoresultadospresupuestonv2 = function (req, res, next
   var params = [
     { name: 'idCompania', value: idCompania, type: self.model.types.INT },
     { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
-    { name: 'PeriodoMes', value: periodoMes, type: self.model.types.INT },
     { name: 'PeriodoYear', value: periodoYear, type: self.model.types.INT },
     { name: 'IdDepartamento', value: idDepartamento, type: self.model.types.INT },
-    { name: 'idEstadoResultadosI', value: idEstadoResultadosI, type: self.model.types.INT },
+    { name: 'IdEstadoDeResultado', value: idEstadoResultadosI, type: self.model.types.INT },
     { name: 'idOrden', value: idOrden, type: self.model.types.INT }
   ];
 
-  this.model.query('Contabilidad.ObtienePresupuestoAcumuladoXidER', params, function (error, result) {
+  this.model.query('Contabilidad.ObtieneEstadoDeResultadosAcumuladoPresupuestoSegundoNivel', params, function (error, result) {
     console.log('Parametros: ' + params);
 
     self.view.expositor(res, {
