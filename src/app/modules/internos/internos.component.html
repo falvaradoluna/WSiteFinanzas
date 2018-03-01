@@ -603,8 +603,8 @@
               </div>
               <select name="inputDepartamentoMulti" class="custom-select custom-select-sm" multiple size="13" [(ngModel)]='selectedDepartamentos'
                 (change)='onChangeSumaDepartamentos()'>
-                <option *ngFor='let depto of departamentos' [value]='depto.Depto' [selected]='depto.Selected'>
-                  {{ depto.Departamento }}
+                <option *ngFor='let depto of departamentos' [value]='depto.idPestana' [selected]='depto.Selected'>
+                  {{ depto.pestanaNombre }}
                 </option>
               </select>
             </form>

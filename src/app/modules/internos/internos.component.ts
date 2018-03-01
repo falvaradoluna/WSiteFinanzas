@@ -111,6 +111,10 @@ export class InternosComponent implements OnInit {
   detalleResultadosMensual: IDetalleResultadosMensual[];
   detalleResultadosCuentas: IDetalleResultadosCuentas[];
   resultadoUnidades: IResultadoInternos[] = [];
+
+  xmlDepartamento:any = [];
+  xmlSend: any;
+
   selectedCompania = 0;
   selectedNombreCompania: string;
   selectedTipoReporte = 1;
@@ -276,6 +280,15 @@ export class InternosComponent implements OnInit {
   }
 
   showSuma(): void {
+    console.log( "Suma" );
+    this._service.getDepartamentos({
+    })
+    .subscribe( departamentos => { 
+      this.departamentos = departamentos; 
+      console.log( "DepartamentosShowSuma", this.departamentos );
+    },
+    error => this.errorMessage = <any>error
+    );
     this.showReporteUnidades = false;
     this.showSumaDepartamentos = true;
   }
@@ -942,13 +955,19 @@ export class InternosComponent implements OnInit {
   }
 
   onChangeSumaDepartamentos(): void {
+    let arrIds = [];
     this.selectedDepartamentosStr = '\'';
     this.selectedDepartamentos.forEach(d => {
-      this.selectedDepartamentosStr += `''${d}'',`;
+      this.selectedDepartamentosStr += `${d},`;
+      arrIds.push( `${d}` )
     });
-    // Se elimina la última coma
-    this.selectedDepartamentosStr = this.selectedDepartamentosStr.substring(0, this.selectedDepartamentosStr.length - 1);
-    this.selectedDepartamentosStr += '\'';
+
+    for( let i = 0; i <= (arrIds.length - 1); i++ ){
+      this.xmlDepartamento.push('<departamento><id>'+ arrIds[ i ] +'</id></departamento>');  
+    }
+    
+    this.xmlSend = "<departamentos>" + this.xmlDepartamento.join("") + "</departamentos>" 
+    console.log( "xmlSend", this.xmlSend );
   }
 
   onChangeTipoReporte(newValue: number): void {
