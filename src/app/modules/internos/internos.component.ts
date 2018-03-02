@@ -83,7 +83,7 @@ export class InternosComponent implements OnInit {
   showDetallePrimerNivel = false;
   showDetalleSegundoNivel = false;
   showSumaDepartamentos = false;
-
+  resultadosSeriesArNv4: ISeries[] = [];
   isCollapsed = true;
 
   resultadoUnidadesService: IResultadoInternos[] = [];
@@ -149,6 +149,7 @@ export class InternosComponent implements OnInit {
   detalleUnidadesName: string;
   detalleUnidadesValue: number;
   detalleUnidadesConceptoSegundoNivel: string;
+  detalleUnidadesAcumuladoRealCuartoNivel: string;
   detalleUnidadesNameSegundoNivel: string;
   detalleUnidadesValueSegundoNivel: string;
   detalleUnidadesConceptoTercerNivel: string;
@@ -284,8 +285,8 @@ export class InternosComponent implements OnInit {
     console.log( "Suma" );
     this._service.getDepartamentos({
     })
-    .subscribe( departamentos => { 
-      this.departamentos = departamentos; 
+    .subscribe( departamentos => {
+      this.departamentos = departamentos;
       console.log( "DepartamentosShowSuma", this.departamentos );
     },
     error => this.errorMessage = <any>error
@@ -460,7 +461,7 @@ export class InternosComponent implements OnInit {
     })
       .subscribe(estadoResultadosAcumuladoReal => {
         this.estadoResultadosAcumuladoReal = estadoResultadosAcumuladoReal;
-        console.log( "estadoResultadosAcumulado", this.estadoResultadosAcumuladoReal );
+        // console.log( "estadoResultadosAcumulado", this.estadoResultadosAcumuladoReal );
       },
       error => { this.errorMessage = <any>error; },
       () => {
@@ -502,6 +503,39 @@ export class InternosComponent implements OnInit {
         }
       }
     );
+  }
+
+  onClickUnidadesAcumuladoRealNv3(UnidadDescripcion: string) {
+    // if (carLine.trim() !== 'Total') {
+    //   this.showUnidadesAcumuladoReal = 3;
+    //   this.detalleUnidadesNameSegundoNivel = '';
+    //   this.detalleUnidadesValueSegundoNivel = carLine; // Revisar ya que son 3 que usan el mismo valor
+    //   this.detalleUnidadesConceptoSegundoNivel = carLine;
+    //   this.carLine = carLine;
+    //   this.idAutoLinea = idAutoLinea;
+    //   this.getDetalleUnidadesAcumuladoRealNv3();
+    // }
+    this.detalleUnidadesAcumuladoRealCuartoNivel = UnidadDescripcion
+    this.showUnidadesAcumuladoReal = 4;
+    this.getDetalleUnidadesSeriesArNv4(UnidadDescripcion)
+    console.log( "UnidadDescripcion", UnidadDescripcion );
+  }
+
+  getDetalleUnidadesSeriesArNv4(UnidadDescripcion): void {
+    console.log("Hola Final ArNv4");
+     this._service.getDetalleUnidadesSeriesAr({
+      idCompania:         this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
+      idSucursal:         this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      idOrigen:           this.idOrigen,
+      periodoYear:        this.anio,
+      periodoMes:         this.mes,
+      unidadDescripcion:  UnidadDescripcion
+    })
+    .subscribe(resultadosSeriesArNv4 => {
+      this.resultadosSeriesArNv4 = resultadosSeriesArNv4;
+      console.log( "resultadosSeriesArNv4", this.resultadosSeriesArNv4 );
+    },
+    error => this.errorMessage = <any>error);
   }
 
   getSumaDepartamentos(): void {
@@ -591,18 +625,20 @@ export class InternosComponent implements OnInit {
   }
 
   setDefaultDate(): void {
-    const today = new Date();
-    const mes = today.getMonth() + 1;
-    let mesStr = mes.toString();
-    const anio = today.getFullYear().toString();
+    if (!this.mes) {
+      const today = new Date();
+      const mes = today.getMonth() + 1;
+      let mesStr = mes.toString();
+      const anio = today.getFullYear().toString();
 
-    if (mes < 10) {
-      mesStr = '0' + mesStr;
+      if (mes < 10) {
+        mesStr = '0' + mesStr;
+      }
+
+      this.mes = mesStr;
+      this.anio = anio;
+      this.periodo = anio + '-' + mesStr;
     }
-
-    this.mes = mesStr;
-    this.anio = anio;
-    this.periodo = anio + '-' + mesStr;
   }
 
   getDetalleResultadosMensual(idOrden: number, esAnual: number): void {
@@ -670,6 +706,7 @@ export class InternosComponent implements OnInit {
       // servidorAgencia: this.selectedIpSucursal,
       // concentradora: this.selectedConcentradora,
       IdCia: this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       anio: this.anio,
       mes:  mes === '' ? this.mes : mes, // Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
       numCta: numCta
@@ -781,8 +818,8 @@ export class InternosComponent implements OnInit {
           const nombreMes = this.toLongMonth(mes.toString());
           const ventas = this.acumuladoReal.find(x => x.descripcion === 'Ventas');
           const utilidadBrutaNeta = this.acumuladoReal.find(x => x.descripcion === 'Utilidad Bruta Neta');
-          console.log( 'ventas', ventas );
-          console.log( 'utilidadBrutaNeta', utilidadBrutaNeta );
+          // console.log( 'ventas', ventas );
+          // console.log( 'utilidadBrutaNeta', utilidadBrutaNeta );
           // Se calculan porcentajes del mes correspondiente
           this.acumuladoReal.forEach(er => {
             switch (er.descripcion) {
@@ -972,10 +1009,10 @@ export class InternosComponent implements OnInit {
     });
 
     for( let i = 0; i <= (arrIds.length - 1); i++ ){
-      this.xmlDepartamento.push('<departamento><id>'+ arrIds[ i ] +'</id></departamento>');  
+      this.xmlDepartamento.push('<departamento><id>'+ arrIds[ i ] +'</id></departamento>');
     }
-    
-    this.xmlSend = "<departamentos>" + this.xmlDepartamento.join("") + "</departamentos>" 
+
+    this.xmlSend = "<departamentos>" + this.xmlDepartamento.join("") + "</departamentos>"
     console.log( "xmlSend", this.xmlSend );
   }
 
@@ -1018,7 +1055,7 @@ export class InternosComponent implements OnInit {
   }
 
   onClickUnidadesAcumuladoReal(i: number, value: number, name: string, idDetalleUnidades: number) {
-    console.log( "Aqui" );
+    // console.log( "Aqui" );
     const concepto = this.resultadoUnidades[i].descripcion;
     const idOrigen = this.resultadoUnidades[i].idOrigen;
 
@@ -1080,7 +1117,7 @@ export class InternosComponent implements OnInit {
   }
 
   getDetalleUnidadesAcumuladoReal(): void {
-    console.log( "Hola" );
+    //console.log( "Hola" );
     this._service.get_AutoLineaAcumulado({
       IdCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
       IdSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,

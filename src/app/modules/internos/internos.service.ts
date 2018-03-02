@@ -54,6 +54,7 @@ export class InternosService {
   private _urlTipoUnidadAcumulado = 'api/internos/tipounidadacumulado';
   private _urlEstadoResultadosPresupuesto = "api/internos/estadoresultadospresupuesto";
   private _urlEstadoResultadosAcumuladoByIdER = "api/internos/estadoresultadosacumuladobyider";
+  private _urlDetalleUnidadesSeriesAr = 'api/internos/detalleunidadesseriesar';
 
   constructor(private _http: HttpClient) { }
 
@@ -137,7 +138,7 @@ export class InternosService {
     Params = Params.append('periodoYear',           parameters.periodoYear);
     Params = Params.append('idDepartamento',        parameters.idDepartamento);
     Params = Params.append('idSucursalSecuencia',   parameters.idSucursalSecuencia);
-    
+
     return this._http.get<IAcumuladoReal[]>(this._urlEstadoResultadosAcumuladoReal, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
@@ -394,6 +395,7 @@ export class InternosService {
     // Params = Params.append('concentradora', parameters.concentradora);
 
     Params = Params.append('IdCia', parameters.IdCia);
+    Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('anio', parameters.anio);
     Params = Params.append('mes', parameters.mes);
     Params = Params.append('numcta', parameters.numCta);
@@ -544,6 +546,22 @@ export class InternosService {
     Params = Params.append('IdOrden',             parameters.IdOrden);
 
     return this._http.get<IAcumuladoReal[]>(this._urlEstadoResultadosAcumuladoByIdER, { params: Params })
+      .catch(this.handleError);
+  }
+
+  getDetalleUnidadesSeriesAr(parameters): Observable<ISeries[]> {
+    // Initialize Params Object
+    let Params = new HttpParams();
+
+    // Begin assigning parameters
+    Params = Params.append('idCompania',        parameters.idCompania);
+    Params = Params.append('idSucursal',        parameters.idSucursal);
+    Params = Params.append('idOrigen',          parameters.idOrigen);
+    Params = Params.append('periodoYear',       parameters.periodoYear);
+    Params = Params.append('periodoMes',        parameters.periodoMes);
+    Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
+    console.log("ParamsServiceArNv4", Params);
+    return this._http.get<ISeries[]>(this._urlDetalleUnidadesSeriesAr, { params: Params })
       .catch(this.handleError);
   }
 
