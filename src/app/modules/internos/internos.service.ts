@@ -138,7 +138,7 @@ export class InternosService {
     Params = Params.append('periodoYear',           parameters.periodoYear);
     Params = Params.append('idDepartamento',        parameters.idDepartamento);
     Params = Params.append('idSucursalSecuencia',   parameters.idSucursalSecuencia);
-    
+
     return this._http.get<IAcumuladoReal[]>(this._urlEstadoResultadosAcumuladoReal, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
@@ -395,6 +395,7 @@ export class InternosService {
     // Params = Params.append('concentradora', parameters.concentradora);
 
     Params = Params.append('IdCia', parameters.IdCia);
+    Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('anio', parameters.anio);
     Params = Params.append('mes', parameters.mes);
     Params = Params.append('numcta', parameters.numCta);

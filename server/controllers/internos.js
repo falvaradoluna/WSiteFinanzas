@@ -663,16 +663,18 @@ internos.prototype.get_detalleresultadoscuentas = function (req, res, next) {
   var anio = req.query.anio;
   var mes = req.query.mes;
   var numCta = req.query.numcta;
+  var idSucursal = req.query.idSucursal;
 
   var params = [
-    { name: 'IdCia', value: IdCia, type: self.model.types.INT },
-    { name: 'Anio', value: anio, type: self.model.types.STRING },
-    { name: 'Mes', value: mes, type: self.model.types.STRING },
+    { name: 'idCompania', value: IdCia, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'PeriodoYear', value: anio, type: self.model.types.INT },
+    { name: 'PeriodoMes', value: mes, type: self.model.types.INT },
     { name: 'NumCta', value: numCta, type: self.model.types.STRING }
   ];
 
-  this.model.query('SP_ESTADO_DE_RESULTADOS_DETALLE_CUENTAS', params, function (error, result) {
-    // console.log(params);
+  this.model.query('[Contabilidad].[ObtieneMovimientoCuenta]', params, function (error, result) {
+    console.log(params);
     self.view.expositor(res, {
       error: error,
       result: result,
