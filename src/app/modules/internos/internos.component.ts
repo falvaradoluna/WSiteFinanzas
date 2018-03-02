@@ -284,8 +284,8 @@ export class InternosComponent implements OnInit {
     console.log( "Suma" );
     this._service.getDepartamentos({
     })
-    .subscribe( departamentos => { 
-      this.departamentos = departamentos; 
+    .subscribe( departamentos => {
+      this.departamentos = departamentos;
       console.log( "DepartamentosShowSuma", this.departamentos );
     },
     error => this.errorMessage = <any>error
@@ -670,6 +670,7 @@ export class InternosComponent implements OnInit {
       // servidorAgencia: this.selectedIpSucursal,
       // concentradora: this.selectedConcentradora,
       IdCia: this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       anio: this.anio,
       mes:  mes === '' ? this.mes : mes, // Cuando se manda a llamar desde acumulado (lado verde) contiene el parametro de mes
       numCta: numCta
@@ -972,10 +973,10 @@ export class InternosComponent implements OnInit {
     });
 
     for( let i = 0; i <= (arrIds.length - 1); i++ ){
-      this.xmlDepartamento.push('<departamento><id>'+ arrIds[ i ] +'</id></departamento>');  
+      this.xmlDepartamento.push('<departamento><id>'+ arrIds[ i ] +'</id></departamento>');
     }
-    
-    this.xmlSend = "<departamentos>" + this.xmlDepartamento.join("") + "</departamentos>" 
+
+    this.xmlSend = "<departamentos>" + this.xmlDepartamento.join("") + "</departamentos>"
     console.log( "xmlSend", this.xmlSend );
   }
 
