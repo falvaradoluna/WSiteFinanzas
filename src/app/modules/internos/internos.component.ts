@@ -31,6 +31,7 @@ import { IDetalleUnidadesAcumulado } from './detalle-unidades-acumulado';
 import { ISeries } from './series';
 import { ColumnSortedEvent } from '../../shared/services/sort.service';
 import { IAutoLineaAcumulado } from './auto-linea-acumulado';
+import { FechaActualizacionService } from '../../shared';
 
 
 @Component({
@@ -62,7 +63,7 @@ import { IAutoLineaAcumulado } from './auto-linea-acumulado';
 export class InternosComponent implements OnInit {
   errorMessage: any;
 
-  constructor(private _service: InternosService) { }
+  constructor(private _service: InternosService, private _fechaActualizacionService: FechaActualizacionService) { }
 
   showFilters = true;
   showUnidades = true;
@@ -116,7 +117,6 @@ export class InternosComponent implements OnInit {
   xmlSend: any;
 
   selectedCompania = 0;
-  fechaActualizacion = null;
   selectedNombreCompania: string;
   selectedTipoReporte = 1;
   selectedIdSucursal = -2;
@@ -969,7 +969,8 @@ export class InternosComponent implements OnInit {
   onChangeCompania(newValue: number): void {
     this.selectedCompania = newValue;
     if (this.companias.find(x => x.id === +newValue)) {
-      this.fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;
+      const fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;
+      this._fechaActualizacionService.onChangeFecha(fechaActualizacion);
     }
 
     if (this.selectedCompania !== 0 && this.selectedTipoReporte) {
