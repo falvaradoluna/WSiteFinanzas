@@ -1019,6 +1019,7 @@ export class InternosComponent implements OnInit {
   }
 
   onClickUnidadesAcumuladoReal(i: number, value: number, name: string, idDetalleUnidades: number) {
+    console.log( "Aqui" );
     const concepto = this.resultadoUnidades[i].descripcion;
     const idOrigen = this.resultadoUnidades[i].idOrigen;
 
@@ -1032,6 +1033,7 @@ export class InternosComponent implements OnInit {
       // QUITAR UNA
       this.detalleUnidadesConcepto = concepto; // <-----QUITAR despues de refactorizar
       this.unidadesConcepto = concepto;
+      this.getDetalleUnidadesAcumuladoReal();
     }
   }
 
@@ -1079,6 +1081,7 @@ export class InternosComponent implements OnInit {
   }
 
   getDetalleUnidadesAcumuladoReal(): void {
+    console.log( "Hola" );
     this._service.get_AutoLineaAcumulado({
       IdCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
       IdSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
