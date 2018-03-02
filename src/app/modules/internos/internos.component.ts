@@ -591,18 +591,20 @@ export class InternosComponent implements OnInit {
   }
 
   setDefaultDate(): void {
-    const today = new Date();
-    const mes = today.getMonth() + 1;
-    let mesStr = mes.toString();
-    const anio = today.getFullYear().toString();
+    if (!this.mes) {
+      const today = new Date();
+      const mes = today.getMonth() + 1;
+      let mesStr = mes.toString();
+      const anio = today.getFullYear().toString();
 
-    if (mes < 10) {
-      mesStr = '0' + mesStr;
+      if (mes < 10) {
+        mesStr = '0' + mesStr;
+      }
+
+      this.mes = mesStr;
+      this.anio = anio;
+      this.periodo = anio + '-' + mesStr;
     }
-
-    this.mes = mesStr;
-    this.anio = anio;
-    this.periodo = anio + '-' + mesStr;
   }
 
   getDetalleResultadosMensual(idOrden: number, esAnual: number): void {
