@@ -7,7 +7,7 @@
           <th *ngIf='idOrigen === 3' class="bg-secondary text-white">Depto</th>
           <th class="bg-secondary text-white">CarLine</th>
           <th class="bg-secondary text-white text-center" sortable-column='cantidad'>Cantidad</th>
-          <th class="bg-secondary text-white text-center" sortable-column='Perc'>%</th>
+          <th *ngIf='showPercents' class="bg-secondary text-white text-center" sortable-column='Perc'>%</th>
         </tr>
       </thead>
       <tbody>
@@ -15,7 +15,7 @@
           <td *ngIf='idOrigen === 3'>{{ d.departamento }}</td>
           <td>{{ d.autoLinea }}</td>
           <td class="text-center" [suma-columnas]='d.cantidad'>{{ d.cantidad }}</td>
-          <td class="text-right" [suma-columnas]='d.Perc'>{{ d.Perc | number: '1.2-2' }}</td>
+          <td *ngIf='showPercents' class="text-right" [suma-columnas]='d.Perc'>{{ d.Perc | number: '1.2-2' }}</td>
         </tr>
       </tbody>
     </table>
@@ -29,31 +29,31 @@
       <th *ngIf='idOrigen === 3' class="bg-secondary text-white min-width-220">Depto</th>
       <th class="bg-secondary text-white min-width-135">CarLine</th>
       <th class="bg-secondary text-white" sortable-column='enero'>ENE</th>
-      <th class="bg-secondary text-white text-center"> % </th>
+      <th *ngIf='showPercents' class="bg-secondary text-white text-center"> % </th>
       <th *ngIf='mes >= "02"' class="bg-secondary text-white" sortable-column='febrero'>FEB</th>
-      <th *ngIf='mes >= "02"' class="bg-secondary text-white text-center"> % </th>
+      <th *ngIf='mes >= "02" && showPercents' class="bg-secondary text-white text-center"> % </th>
       <th *ngIf='mes >= "03"' class="bg-secondary text-white" sortable-column='marzo'>MAR</th>
-      <th *ngIf='mes >= "03"' class="bg-secondary text-white text-center"> % </th>
+      <th *ngIf='mes >= "03" && showPercents' class="bg-secondary text-white text-center"> % </th>
       <th *ngIf='mes >= "04"' class="bg-secondary text-white" sortable-column='abril'>ABR</th>
-      <th *ngIf='mes >= "04"' class="bg-secondary text-white text-center"> % </th>
+      <th *ngIf='mes >= "04" && showPercents' class="bg-secondary text-white text-center"> % </th>
       <th *ngIf='mes >= "05"' class="bg-secondary text-white" sortable-column='mayo'>MAY</th>
-      <th *ngIf='mes >= "05"' class="bg-secondary text-white text-center"> % </th>
+      <th *ngIf='mes >= "05" && showPercents' class="bg-secondary text-white text-center"> % </th>
       <th *ngIf='mes >= "06"' class="bg-secondary text-white" sortable-column='junio'>JUN</th>
-      <th *ngIf='mes >= "06"' class="bg-secondary text-white text-center"> % </th>
+      <th *ngIf='mes >= "06" && showPercents' class="bg-secondary text-white text-center"> % </th>
       <th *ngIf='mes >= "07"' class="bg-secondary text-white" sortable-column='julio'>JUL</th>
-      <th *ngIf='mes >= "07"' class="bg-secondary text-white text-center"> % </th>
+      <th *ngIf='mes >= "07" && showPercents' class="bg-secondary text-white text-center"> % </th>
       <th *ngIf='mes >= "08"' class="bg-secondary text-white" sortable-column='agosto'>AGO</th>
-      <th *ngIf='mes >= "08"' class="bg-secondary text-white text-center"> % </th>
+      <th *ngIf='mes >= "08" && showPercents' class="bg-secondary text-white text-center"> % </th>
       <th *ngIf='mes >= "09"' class="bg-secondary text-white" sortable-column='septiembre'>SEP</th>
-      <th *ngIf='mes >= "09"' class="bg-secondary text-white text-center"> % </th>
+      <th *ngIf='mes >= "09" && showPercents' class="bg-secondary text-white text-center"> % </th>
       <th *ngIf='mes >= "10"' class="bg-secondary text-white" sortable-column='octubre'>OCT</th>
-      <th *ngIf='mes >= "10"' class="bg-secondary text-white text-center"> % </th>
+      <th *ngIf='mes >= "10" && showPercents' class="bg-secondary text-white text-center"> % </th>
       <th *ngIf='mes >= "11"' class="bg-secondary text-white" sortable-column='noviembre'>NOV</th>
-      <th *ngIf='mes >= "11"' class="bg-secondary text-white text-center"> % </th>
+      <th *ngIf='mes >= "11" && showPercents' class="bg-secondary text-white text-center"> % </th>
       <th *ngIf='mes >= "12"' class="bg-secondary text-white" sortable-column='diciembre'>DIC</th>
-      <th *ngIf='mes >= "12"' class="bg-secondary text-white text-center"> % </th>
+      <th *ngIf='mes >= "12" && showPercents' class="bg-secondary text-white text-center"> % </th>
       <th class="bg-secondary text-white" sortable-column='totalAnual'>TOTAL</th>
-      <th class="bg-secondary text-white text-center"> % </th>
+      <th *ngIf='showPercents' class="bg-secondary text-white text-center"> % </th>
     </tr>
   </thead>
   <tbody>
@@ -61,31 +61,31 @@
       <td *ngIf='idOrigen === 3'>{{ dua.departamento }}</td>
       <td>{{ dua.autoLinea }}</td>
       <td class="text-center" (dblclick)='onClickDetalleUnidadesMensual(dua.idAutoLinea ,dua.autoLinea, 1, dua.departamentoOri)' [suma-columnas]='dua.enero'>{{ dua.enero }}</td>
-      <td class="text-right" [suma-columnas]='dua.eneroPerc'>{{ dua.eneroPerc | number:'1.2-2' }}</td>
+      <td *ngIf='showPercents' class="text-right"  [suma-columnas]='dua.eneroPerc'>{{ dua.eneroPerc | number:'1.2-2' }}</td>
       <td *ngIf='mes >= "02"'  class="text-center" (dblclick)='onClickDetalleUnidadesMensual(dua.idAutoLinea ,dua.autoLinea, 2, dua.departamentoOri)' [suma-columnas]='dua.febrero'>{{ dua.febrero }}</td>
-      <td *ngIf='mes >= "02"' [suma-columnas]='dua.febreroPerc' class="text-right">{{ dua.febreroPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "02" && showPercents' [suma-columnas]='dua.febreroPerc' class="text-right">{{ dua.febreroPerc | number:'1.2-2' }}</td>
       <td *ngIf='mes >= "03"' class="text-center" (dblclick)='onClickDetalleUnidadesMensual(dua.idAutoLinea ,dua.autoLinea, 3, dua.departamentoOri)' [suma-columnas]='dua.marzo'>{{ dua.marzo }}</td>
-      <td *ngIf='mes >= "03"' [suma-columnas]='dua.marzoPerc' class="text-right">{{ dua.marzoPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "03" && showPercents' [suma-columnas]='dua.marzoPerc' class="text-right">{{ dua.marzoPerc | number:'1.2-2' }}</td>
       <td *ngIf='mes >= "04"' class="text-center" (dblclick)='onClickDetalleUnidadesMensual(dua.idAutoLinea ,dua.autoLinea, 4, dua.departamentoOri)' [suma-columnas]='dua.abril'>{{ dua.abril }}</td>
-      <td *ngIf='mes >= "04"' [suma-columnas]='dua.abrilPerc' class="text-right">{{ dua.abrilPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "04" && showPercents' [suma-columnas]='dua.abrilPerc' class="text-right">{{ dua.abrilPerc | number:'1.2-2' }}</td>
       <td *ngIf='mes >= "05"' class="text-center" (dblclick)='onClickDetalleUnidadesMensual(dua.idAutoLinea ,dua.autoLinea, 5, dua.departamentoOri)' [suma-columnas]='dua.mayo'>{{ dua.mayo }}</td>
-      <td *ngIf='mes >= "05"' [suma-columnas]='dua.mayoPerc' class="text-right">{{ dua.mayoPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "05" && showPercents' [suma-columnas]='dua.mayoPerc' class="text-right">{{ dua.mayoPerc | number:'1.2-2' }}</td>
       <td *ngIf='mes >= "06"' class="text-center" (dblclick)='onClickDetalleUnidadesMensual(dua.idAutoLinea ,dua.autoLinea, 6, dua.departamentoOri)' [suma-columnas]='dua.junio'>{{ dua.junio }}</td>
-      <td *ngIf='mes >= "06"' [suma-columnas]='dua.junioPerc' class="text-right">{{ dua.junioPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "06" && showPercents' [suma-columnas]='dua.junioPerc' class="text-right">{{ dua.junioPerc | number:'1.2-2' }}</td>
       <td *ngIf='mes >= "07"' class="text-center" (dblclick)='onClickDetalleUnidadesMensual(dua.idAutoLinea ,dua.autoLinea, 7, dua.departamentoOri)' [suma-columnas]='dua.julio'>{{ dua.julio }}</td>
-      <td *ngIf='mes >= "07"' [suma-columnas]='dua.julioPerc' class="text-right">{{ dua.julioPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "07" && showPercents' [suma-columnas]='dua.julioPerc' class="text-right">{{ dua.julioPerc | number:'1.2-2' }}</td>
       <td *ngIf='mes >= "08"' class="text-center" (dblclick)='onClickDetalleUnidadesMensual(dua.idAutoLinea ,dua.autoLinea, 8, dua.departamentoOri)' [suma-columnas]='dua.agosto'>{{ dua.agosto }}</td>
-      <td *ngIf='mes >= "08"' [suma-columnas]='dua.agostoPerc' class="text-right">{{ dua.agostoPerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "08" && showPercents' [suma-columnas]='dua.agostoPerc' class="text-right">{{ dua.agostoPerc | number:'1.2-2' }}</td>
       <td *ngIf='mes >= "09"' class="text-center" (dblclick)='onClickDetalleUnidadesMensual(dua.idAutoLinea ,dua.autoLinea, 9, dua.departamentoOri)' [suma-columnas]='dua.septiembre'>{{ dua.septiembre }}</td>
-      <td *ngIf='mes >= "09"' [suma-columnas]='dua.septiembrePerc' class="text-right">{{ dua.septiembrePerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "09" && showPercents' [suma-columnas]='dua.septiembrePerc' class="text-right">{{ dua.septiembrePerc | number:'1.2-2' }}</td>
       <td *ngIf='mes >= "10"' class="text-center" (dblclick)='onClickDetalleUnidadesMensual(dua.idAutoLinea ,dua.autoLinea, 10, dua.departamentoOri)' [suma-columnas]='dua.octubre'>{{ dua.octubre }}</td>
-      <td *ngIf='mes >= "10"' [suma-columnas]='dua.octubrePerc' class="text-right">{{ dua.octubrePerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "10" && showPercents' [suma-columnas]='dua.octubrePerc' class="text-right">{{ dua.octubrePerc | number:'1.2-2' }}</td>
       <td *ngIf='mes >= "11"' class="text-center" (dblclick)='onClickDetalleUnidadesMensual(dua.idAutoLinea ,dua.autoLinea, 11, dua.departamentoOri)' [suma-columnas]='dua.noviembre'>{{ dua.noviembre }}</td>
-      <td *ngIf='mes >= "11"' [suma-columnas]='dua.noviembrePerc' class="text-right">{{ dua.noviembrePerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "11" && showPercents' [suma-columnas]='dua.noviembrePerc' class="text-right">{{ dua.noviembrePerc | number:'1.2-2' }}</td>
       <td *ngIf='mes >= "12"' class="text-center" (dblclick)='onClickDetalleUnidadesMensual(dua.idAutoLinea ,dua.autoLinea, 12, dua.departamentoOri)' [suma-columnas]='dua.diciembre'>{{ dua.diciembre }}</td>
-      <td *ngIf='mes >= "12"' [suma-columnas]='dua.diciembrePerc' class="text-right">{{ dua.diciembrePerc | number:'1.2-2' }}</td>
+      <td *ngIf='mes >= "12" && showPercents' [suma-columnas]='dua.diciembrePerc' class="text-right">{{ dua.diciembrePerc | number:'1.2-2' }}</td>
       <td class="text-center" [suma-columnas]='dua.totalAnual'>{{ dua.totalAnual }}</td>
-      <td class="text-right" [suma-columnas]='dua.totalAnualPerc'>{{ dua.totalAnualPerc | number:'1.2-2' }}</td>
+      <td *ngIf='showPercents' class="text-right" [suma-columnas]='dua.totalAnualPerc'>{{ dua.totalAnualPerc | number:'1.2-2' }}</td>
       <!-- <td *ngIf='idEstadoResultado === 3' class="text-right">{{ dua.Pct | number:'1.2-2' }}</td> -->
     </tr>
   </tbody>

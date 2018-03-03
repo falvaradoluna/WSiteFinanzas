@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange } from '@angular/core';
 import { InternosService } from './internos.service';
 import { ITipoUnidad } from './tipo-unidad';
 import { Observable } from 'rxjs/Observable';
@@ -10,7 +10,7 @@ import { ColumnSortedEvent } from '../../shared/index';
   templateUrl: './unidades-nv3.component.html',
   styleUrls: ['./internos.component.scss']
 })
-export class UnidadesNv3Component implements OnInit {
+export class UnidadesNv3Component implements OnInit, OnChanges {
 
   @Input() idDetalleUnidades: number;
   @Input() idAutoLinea: number;
@@ -24,6 +24,7 @@ export class UnidadesNv3Component implements OnInit {
   @Input() carLine: string;
   @Input() idDepartamento: string;
   @Input() detalleName: string;
+  @Input() showPercents: boolean;
 
   @Output() deptoFlotillas = new EventEmitter<string>();
   @Output() showUnidades = new EventEmitter<boolean>();
@@ -57,6 +58,11 @@ export class UnidadesNv3Component implements OnInit {
       this.getDetalleUnidadesTipoAcumulado(this.carLine, this.idDepartamento, this.mes);
       }
     }
+  }
+
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    const changeProp = changes['showPercents'];
+    this.showPercents = <boolean>changeProp.currentValue;
   }
 
   getDetalleUnidadesTipo(carLine: string, idDepartamento: string = '', mes: string): void {

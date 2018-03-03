@@ -84,6 +84,7 @@ export class InternosComponent implements OnInit {
   showDetallePrimerNivel = false;
   showDetalleSegundoNivel = false;
   showSumaDepartamentos = false;
+  showPercents = true;
   resultadosSeriesArNv4: ISeries[] = [];
   isCollapsed = true;
 
@@ -213,6 +214,10 @@ export class InternosComponent implements OnInit {
 
   toggleUnidadesDepartamentoReal(): void {
     this.showUnidadesDepartamentoReal = !this.showUnidadesDepartamentoReal;
+  }
+
+  togglePercents() {
+    this.showPercents = !this.showPercents;
   }
 
   disabledSucursalDepartamento(): boolean {

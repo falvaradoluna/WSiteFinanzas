@@ -63,13 +63,20 @@
                 </select>
               </div>
               <div class="form-group col-md-3">
-                <label class="invisible">invisible</label> <!-- Para bajar los botones -->
-                <div class="row">
-                  <div class="col-sm-6">
+                <label class="invisible">invisible</label>
+                <!-- Para bajar los botones -->
+                <div class="form-row">
+                  <div class="col-sm-5">
                     <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='procesar()'>Procesar</button>
                   </div>
-                  <div class="col-sm-6">
+                  <div class="col-sm-5">
                     <button type="button" class="btn btn-secondary btn-sm btn-block" (click)='showSuma()'>Suma</button>
+                  </div>
+                  <div class="col-sm-2">
+                    <button type="button" class="btn btn-sm btn-block"
+                      (click)='togglePercents()'
+                      [ngClass]="showPercents ? 'btn-secondary' : 'btn-outline-secondary'"
+                    >%</button>
                   </div>
                 </div>
               </div>
@@ -154,6 +161,7 @@
                             [selectedCompania]='selectedCompania'
                             [selectedIdSucursal]='selectedIdSucursal'
                             [idOrigen]='idOrigen'
+                            [showPercents]='showPercents'
                             (showUnidades)='showUnidades=$event'
                             (showDetalleUnidadesPrimerNivel)='showDetalleUnidadesPrimerNivel=$event'
                             (showDetalleUnidadesSegundoNivel)='showDetalleUnidadesSegundoNivel=$event'
@@ -197,6 +205,7 @@
                             [carLine]='carLine'
                             [idDepartamento]='idDepartamento'
                             [detalleName]='detalleName'
+                            [showPercents]='showPercents'
                             (deptoFlotillas)='deptoFlotillas=$event'
                             (showUnidades)='showUnidades=$event'
                             (showDetalleUnidadesPrimerNivel)='showDetalleUnidadesPrimerNivel=$event'

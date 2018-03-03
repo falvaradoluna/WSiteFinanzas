@@ -45,6 +45,12 @@
   box-shadow: none;
 }
 
+.btn-outline-secondary:hover {
+  color: #868e96;
+  background-color: #fff;
+  border-color: #868e96;
+}
+
 //Boton cerrar
 .close {
   position:absolute;
