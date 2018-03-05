@@ -426,7 +426,7 @@ export class InternosService {
     Params = Params.append('idreporte', parameters.idTipoReporte);
     Params = Params.append('idcia', parameters.idAgencia);
     Params = Params.append('anio', parameters.anio);
-    console.log('ServiceParams', Params);
+    
     return this._http.get<IEstadoSituacion[]>(this._urlEstadoSituacion, { params: Params })
       .catch(this.handleError);
   }
@@ -560,9 +560,25 @@ export class InternosService {
     Params = Params.append('periodoYear',       parameters.periodoYear);
     Params = Params.append('periodoMes',        parameters.periodoMes);
     Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
-    console.log("ParamsServiceArNv4", Params);
+    
     return this._http.get<ISeries[]>(this._urlDetalleUnidadesSeriesAr, { params: Params })
       .catch(this.handleError);
+  }
+
+  getEstadoResultadosVariacion(parameters)/*: Observable<ISeries[]>*/ {
+    // Initialize Params Object
+    let Params = new HttpParams();
+
+    // Begin assigning parameters
+    Params = Params.append('idCompania',        parameters.idCompania);
+    Params = Params.append('idSucursal',        parameters.idSucursal);
+    Params = Params.append('idOrigen',          parameters.idOrigen);
+    Params = Params.append('periodoYear',       parameters.periodoYear);
+    Params = Params.append('periodoMes',        parameters.periodoMes);
+    Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
+    console.log("ParamsServiceVariacion", Params);
+    // return this._http.get<ISeries[]>(this._urlDetalleUnidadesSeriesAr, { params: Params })
+    //   .catch(this.handleError);
   }
 
 }

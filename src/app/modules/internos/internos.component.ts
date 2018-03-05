@@ -1283,10 +1283,42 @@ export class InternosComponent implements OnInit {
     this.idEstadoResultado = this.estadoResultados[i].idEstadoResultadosI;
     if (name === 'Real' || name === 'AcReal') {
       this.getDetalleResultadosMensual(idOrden, idDetalleResultados);
-    } else {
+    }else if( name === "AcVariacion" ){
+      this.getDetalleResultadosVariacion();
+    }else {
       this.getDetalleResultadosMensualPresupuesto(idOrden);
     }
   }
+
+  getDetalleResultadosVariacion(): void {
+    // Este servicio requiere el Id de la sucursal con un cero a la izquierda
+    this._service.getEstadoResultadosVariacion({
+      idCompania: this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      periodoYear: this.anio,
+      periodoMes: this.mes,
+      idDepartamento: this.selectedIdDepartamentoEr,
+      idSucursalSecuencia: this.selectedIdSucursalSecuencia,
+      idEstadoResultadosI: this.idEstadoResultado || 0
+      // idOrden: idOrden,
+      // esAnual: esAnual
+    });
+      // .subscribe(detalleResultadosMensual => {
+      //   this.detalleResultadosMensual = detalleResultadosMensual;
+      // },
+      // error => {
+      //   this.errorMessage = <any>error;
+      //   this.detalleResultadosMensual = [];
+      // },
+      // // Si la lista tiene más de 10 resultados se necesita ajustar
+      // // el ancho de tabla para que quepa el scroll (solo mensual)
+      // () => {
+      //   this.detalleResultadosMensualScroll = this.detalleResultadosMensual.length <= 10 ? true : false;
+      //   this.fixedHeader('detalleResultadosAcumulado');
+      // }
+    //);
+  }
+
 
   // Usa CSS transforms para dejar los titulos fijos en la tabla
   fixedHeader(idTabla): void {
