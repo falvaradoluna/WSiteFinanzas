@@ -453,7 +453,7 @@
                   [ngClass]="{'table-without-scroll': detalleResultadosMensualScroll}">
             <thead>
               <tr>
-                <th class="bg-secondary text-white col-md-3">Concepto</th>
+                <th class="bg-secondary text-white col-md-3">Concepto12</th>
                 <th class="bg-secondary text-white"
                     [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">No. Cuenta</th>
                 <th class="bg-secondary text-white col-md-3">Descripción</th>
@@ -471,12 +471,12 @@
                 <td [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">{{ drm.numeroCuenta || drm.Numcta }}</td>
                 <td class="col-md-3">{{ drm.descripcion || "descripcion" }}</td>
                 <td *ngIf='idEstadoResultado !== 3' class="col-md-3 text-right"
-                    (click)="onClickDetalleSegundoNivel(i, drm.SaldoMes, 'Saldomes')">{{ drm.saldoMonto | number:'1.2-2' }}</td>
+                    (dblclick)="onClickDetalleSegundoNivel(i, drm.SaldoMes, 'Saldomes')" [suma-columnas]='drm.saldoMonto'>{{ drm.saldoMonto | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"
-                    (click)="onClickDetalleSegundoNivel(i, drm.Real, 'Real')">{{ drm.Real | number:'1.2-2' }}</td>
-                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right">{{ drm.Pspsto | number:'1.2-2' }}</td>
-                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right">{{ drm.Variacion | number:'1.2-2' }}</td>
-                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right">{{ drm.Pct | number:'1.2-2' }}</td>
+                    (dblclick)="onClickDetalleSegundoNivel(i, drm.Real, 'Real')"  [suma-columnas]='drm.Real'>{{ drm.Real | number:'1.2-2' }}</td>
+                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pspsto'>{{ drm.Pspsto | number:'1.2-2' }}</td>
+                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Variacion'>{{ drm.Variacion | number:'1.2-2' }}</td>
+                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pct'>{{ drm.Pct | number:'1.2-2' }}</td>
               </tr>
             </tbody>
           </table>
@@ -571,12 +571,13 @@
                   <td class="col-md-1 text-center">{{ drc.MOV_CONSPOL }}</td>
                   <td class="col-md-2">{{ drc.MOV_NUMCTA }}</td>
                   <td class="col-md-6">{{ drc.MOV_CONCEPTO }}</td>
-                  <td class="col-md-1 text-right">{{ drc.MOV_DEBE | number:'1.2-2' }}</td>
-                  <td class="col-md-1 text-right">{{ drc.MOV_HABER | number:'1.2-2' }}</td>
+                  <td class="col-md-1 text-right" [suma-columnas]='drc.MOV_DEBE'>{{ drc.MOV_DEBE | number:'1.2-2' }}</td>
+                  <td class="col-md-1 text-right" [suma-columnas]='drc.MOV_HABER'>{{ drc.MOV_HABER | number:'1.2-2' }}</td>
                 </tr>
               </tbody>
             </table>
         </div>
+        <wsf-suma-columnas></wsf-suma-columnas> <!-- Se comunica con los componentes por medio de un servicio -->
         <!-- END Detalle Segundo Nivel -->
       </div>
     </div>
@@ -701,7 +702,7 @@
         <table *ngIf='showUnidadesAcumuladoReal === 1' class="table table-sm table-bordered table-hover-td table-responsive">
           <thead>
             <tr>
-              <th class="bg-secondary text-white">Departamento1</th>
+              <th class="bg-secondary text-white">Departamento</th>
               <th class="bg-primary text-white">Enero</th>
               <th class="bg-primary text-white">%</th>
               <th class="bg-primary text-white">Febrero</th>
@@ -734,31 +735,31 @@
             <ng-container *ngFor='let ar of acumuladoReal; let i = index;'>
               <tr [ngClass]="{'table-info': ar.descripcion.trim() === 'Total Unidades'}">
                 <td>{{ ar.descripcion }}</td>
-                <td class="text-center" (click)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)">{{ ar.enero }}</td>
+                <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)" [suma-columnas]="ar.enero" >{{ ar.enero }}</td>
                 <td class="text-center">{{ ar.eneroPerc | number:'1.2-2' }}</td>
-                <td class="text-center">{{ ar.febrero }}</td>
+                <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)" [suma-columnas]="ar.febrero">{{ ar.febrero }}</td>
                 <td class="text-center">{{ ar.febreroPerc | number:'1.2-2' }}</td>
-                <td class="text-center">{{ ar.marzo }}</td>
+                <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)" [suma-columnas]="ar.marzo">{{ ar.marzo }}</td>
                 <td class="text-center">{{ ar.marzoPerc | number:'1.2-2' }}</td>
-                <td class="text-center">{{ ar.abril }}</td>
+                <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)" [suma-columnas]="ar.abril">{{ ar.abril }}</td>
                 <td class="text-center">{{ ar.abrilPerc | number:'1.2-2' }}</td>
-                <td class="text-center">{{ ar.mayo }}</td>
+                <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)" [suma-columnas]="ar.mayo">{{ ar.mayo }}</td>
                 <td class="text-center">{{ ar.mayoPerc | number:'1.2-2' }}</td>
-                <td class="text-center">{{ ar.junio }}</td>
+                <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)" [suma-columnas]="ar.junio">{{ ar.junio }}</td>
                 <td class="text-center">{{ ar.junioPerc | number:'1.2-2' }}</td>
-                <td class="text-center">{{ ar.julio }}</td>
+                <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)" [suma-columnas]="ar.julio">{{ ar.julio }}</td>
                 <td class="text-center">{{ ar.julioPerc | number:'1.2-2' }}</td>
-                <td class="text-center">{{ ar.agosto }}</td>
+                <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)" [suma-columnas]="ar.agosto">{{ ar.agosto }}</td>
                 <td class="text-center">{{ ar.agostoPerc | number:'1.2-2' }}</td>
-                <td class="text-center">{{ ar.septiembre }}</td>
+                <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)" [suma-columnas]="ar.septiembre">{{ ar.septiembre }}</td>
                 <td class="text-center">{{ ar.septiembrePerc | number:'1.2-2' }}</td>
-                <td class="text-center">{{ ar.octubre }}</td>
+                <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)" [suma-columnas]="ar.octubre">{{ ar.octubre }}</td>
                 <td class="text-center">{{ ar.octubrePerc | number:'1.2-2' }}</td>
-                <td class="text-center">{{ ar.noviembre }}</td>
+                <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)" [suma-columnas]="ar.noviembre">{{ ar.noviembre }}</td>
                 <td class="text-center">{{ ar.noviembrePerc | number:'1.2-2' }}</td>
-                <td class="text-center">{{ ar.diciembre }}</td>
+                <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)" [suma-columnas]="ar.diciembre">{{ ar.diciembre }}</td>
                 <td class="text-center">{{ ar.diciembrePerc | number:'1.2-2' }}</td>
-                <td class="text-center">{{ ar.totalAnual }}</td>
+                <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)" [suma-columnas]="ar.totalAnual">{{ ar.totalAnual }}</td>
                 <td class="text-center">{{ ar.totalAnualPerc | number:'1.2-2' }}</td>
               </tr>
             </ng-container>
@@ -780,7 +781,7 @@
           <table *ngIf='showUnidadesAcumuladoReal === 2' class="table table-sm table-bordered table-hover-td table-responsive">
             <thead>
               <tr>
-                <th class="bg-secondary text-white">Departamento2</th>
+                <th class="bg-secondary text-white">Departamento</th>
                 <th class="bg-primary text-white">Enero</th>
                 <th class="bg-primary text-white">%</th>
                 <th class="bg-primary text-white">Febrero</th>
@@ -813,31 +814,31 @@
               <ng-container *ngFor='let al of autoLineaAcumulado; let i = index;'>
                 <tr>
                   <td>{{ al.autoLinea }}</td>
-                  <td class="text-center" (click)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)">{{ al.enero }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.enero">{{ al.enero }}</td>
                   <td class="text-center">{{ al.eneroPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.febrero }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.febrero">{{ al.febrero }}</td>
                   <td class="text-center">{{ al.febreroPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.marzo }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.marzo">{{ al.marzo }}</td>
                   <td class="text-center">{{ al.marzoPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.abril }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.abril">{{ al.abril }}</td>
                   <td class="text-center">{{ al.abrilPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.mayo }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.mayo">{{ al.mayo }}</td>
                   <td class="text-center">{{ al.mayoPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.junio }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.junio">{{ al.junio }}</td>
                   <td class="text-center">{{ al.junioPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.julio }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.julio">{{ al.julio }}</td>
                   <td class="text-center">{{ al.julioPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.agosto }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.agosto">{{ al.agosto }}</td>
                   <td class="text-center">{{ al.agostoPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.septiembre }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.septiembre">{{ al.septiembre }}</td>
                   <td class="text-center">{{ al.septiembrePerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.octubre }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.octubre">{{ al.octubre }}</td>
                   <td class="text-center">{{ al.octubrePerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.noviembre }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.noviembre">{{ al.noviembre }}</td>
                   <td class="text-center">{{ al.noviembrePerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.diciembre }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.diciembre">{{ al.diciembre }}</td>
                   <td class="text-center">{{ al.diciembrePerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.totalAnual }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.totalAnual">{{ al.totalAnual }}</td>
                   <td class="text-center">{{ al.totalAnualPerc | number:'1.2-2' }}</td>
                 </tr>
               </ng-container>
@@ -863,7 +864,7 @@
           <table *ngIf='showUnidadesAcumuladoReal === 3' class="table table-sm table-bordered table-hover-td table-responsive">
             <thead>
               <tr>
-                <th class="bg-secondary text-white">Departamento3</th>
+                <th class="bg-secondary text-white">Departamento</th>
                 <th class="bg-primary text-white">Enero</th>
                 <th class="bg-primary text-white">%</th>
                 <th class="bg-primary text-white">Febrero</th>
@@ -896,31 +897,31 @@
               <ng-container *ngFor='let al of tipoUnidadAcumulado; let i = index;'>
                 <tr>
                   <td>{{ al.UnidadDescripcion }}</td>
-                  <td class="text-center" (click)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)">{{ al.enero }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.enero">{{ al.enero }}</td>
                   <td class="text-center">{{ al.eneroPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.febrero }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.febrero">{{ al.febrero }}</td>
                   <td class="text-center">{{ al.febreroPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.marzo }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.marzo">{{ al.marzo }}</td>
                   <td class="text-center">{{ al.marzoPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.abril }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.abril">{{ al.abril }}</td>
                   <td class="text-center">{{ al.abrilPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.mayo }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.mayo">{{ al.mayo }}</td>
                   <td class="text-center">{{ al.mayoPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.junio }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.junio">{{ al.junio }}</td>
                   <td class="text-center">{{ al.junioPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.julio }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.julio">{{ al.julio }}</td>
                   <td class="text-center">{{ al.julioPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.agosto }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.agosto">{{ al.agosto }}</td>
                   <td class="text-center">{{ al.agostoPerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.septiembre }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.septiembre">{{ al.septiembre }}</td>
                   <td class="text-center">{{ al.septiembrePerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.octubre }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.octubre">{{ al.octubre }}</td>
                   <td class="text-center">{{ al.octubrePerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.noviembre }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.noviembre">{{ al.noviembre }}</td>
                   <td class="text-center">{{ al.noviembrePerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.diciembre }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.diciembre">{{ al.diciembre }}</td>
                   <td class="text-center">{{ al.diciembrePerc | number:'1.2-2' }}</td>
-                  <td class="text-center">{{ al.totalAnual }}</td>
+                  <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.totalAnual">{{ al.totalAnual }}</td>
                   <td class="text-center">{{ al.totalAnualPerc | number:'1.2-2' }}</td>
                 </tr>
               </ng-container>
@@ -994,6 +995,7 @@
             </tbody>
           </table>
         </div>
+        <wsf-suma-columnas></wsf-suma-columnas> <!-- Se comunica con los componentes por medio de un servicio -->
         <!-- End Unidades Cuarto Nivel -->
       </div>
     </div>
@@ -1207,8 +1209,6 @@
           </table>
           <!-- END Esta resultados Segundo Nivel -->
         </div>
-
-
       </div>
     </div>
   </div>

@@ -30,7 +30,6 @@ export class UnidadesNv4Component implements OnInit {
 
   ngOnInit() {
     this.detalleUnidadesSeries = this.getDetalleUnidadesSeries();
-    console.log( "detalleUnidadesSeries", this.detalleUnidadesSeries );
   }
 
   getDetalleUnidadesSeries(): Observable<ISeries[]> {

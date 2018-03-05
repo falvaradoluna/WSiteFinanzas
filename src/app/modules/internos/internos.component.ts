@@ -282,12 +282,11 @@ export class InternosComponent implements OnInit {
   }
 
   showSuma(): void {
-    console.log( "Suma" );
+    //console.log( "Suma" );
     this._service.getDepartamentos({
     })
     .subscribe( departamentos => {
       this.departamentos = departamentos;
-      console.log( "DepartamentosShowSuma", this.departamentos );
     },
     error => this.errorMessage = <any>error
     );
@@ -461,7 +460,6 @@ export class InternosComponent implements OnInit {
     })
       .subscribe(estadoResultadosAcumuladoReal => {
         this.estadoResultadosAcumuladoReal = estadoResultadosAcumuladoReal;
-        // console.log( "estadoResultadosAcumulado", this.estadoResultadosAcumuladoReal );
       },
       error => { this.errorMessage = <any>error; },
       () => {
@@ -506,23 +504,12 @@ export class InternosComponent implements OnInit {
   }
 
   onClickUnidadesAcumuladoRealNv3(UnidadDescripcion: string) {
-    // if (carLine.trim() !== 'Total') {
-    //   this.showUnidadesAcumuladoReal = 3;
-    //   this.detalleUnidadesNameSegundoNivel = '';
-    //   this.detalleUnidadesValueSegundoNivel = carLine; // Revisar ya que son 3 que usan el mismo valor
-    //   this.detalleUnidadesConceptoSegundoNivel = carLine;
-    //   this.carLine = carLine;
-    //   this.idAutoLinea = idAutoLinea;
-    //   this.getDetalleUnidadesAcumuladoRealNv3();
-    // }
     this.detalleUnidadesAcumuladoRealCuartoNivel = UnidadDescripcion
     this.showUnidadesAcumuladoReal = 4;
-    this.getDetalleUnidadesSeriesArNv4(UnidadDescripcion)
-    console.log( "UnidadDescripcion", UnidadDescripcion );
+    this.getDetalleUnidadesSeriesArNv4(UnidadDescripcion);
   }
 
   getDetalleUnidadesSeriesArNv4(UnidadDescripcion): void {
-    console.log("Hola Final ArNv4");
      this._service.getDetalleUnidadesSeriesAr({
       idCompania:         this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
       idSucursal:         this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
@@ -533,7 +520,6 @@ export class InternosComponent implements OnInit {
     })
     .subscribe(resultadosSeriesArNv4 => {
       this.resultadosSeriesArNv4 = resultadosSeriesArNv4;
-      console.log( "resultadosSeriesArNv4", this.resultadosSeriesArNv4 );
     },
     error => this.errorMessage = <any>error);
   }
@@ -818,8 +804,7 @@ export class InternosComponent implements OnInit {
           const nombreMes = this.toLongMonth(mes.toString());
           const ventas = this.acumuladoReal.find(x => x.descripcion === 'Ventas');
           const utilidadBrutaNeta = this.acumuladoReal.find(x => x.descripcion === 'Utilidad Bruta Neta');
-          // console.log( 'ventas', ventas );
-          // console.log( 'utilidadBrutaNeta', utilidadBrutaNeta );
+          
           // Se calculan porcentajes del mes correspondiente
           this.acumuladoReal.forEach(er => {
             switch (er.descripcion) {
@@ -1008,12 +993,17 @@ export class InternosComponent implements OnInit {
       arrIds.push( `${d}` )
     });
 
-    for( let i = 0; i <= (arrIds.length - 1); i++ ){
-      this.xmlDepartamento.push('<departamento><id>'+ arrIds[ i ] +'</id></departamento>');
-    }
+    this.xmlDepartamento = [];
+    if( arrIds.length == 0 ){
+      this.xmlSend = "";
+    }else{  
+      for( let i = 0; i <= (arrIds.length - 1); i++ ){
+        this.xmlDepartamento.push('<departamento><id>'+ arrIds[ i ] +'</id></departamento>');
+      }
 
-    this.xmlSend = "<departamentos>" + this.xmlDepartamento.join("") + "</departamentos>"
-    console.log( "xmlSend", this.xmlSend );
+      this.xmlSend = "<departamentos>" + this.xmlDepartamento.join("") + "</departamentos>"
+      console.log( "xmlSend", this.xmlSend );
+    }
   }
 
   onChangeTipoReporte(newValue: number): void {
@@ -1055,7 +1045,7 @@ export class InternosComponent implements OnInit {
   }
 
   onClickUnidadesAcumuladoReal(i: number, value: number, name: string, idDetalleUnidades: number) {
-    // console.log( "Aqui" );
+    
     const concepto = this.resultadoUnidades[i].descripcion;
     const idOrigen = this.resultadoUnidades[i].idOrigen;
 
@@ -1086,9 +1076,7 @@ export class InternosComponent implements OnInit {
   }
 
   getResultadosAcumuladoXIdER(idOrden: number, idEstado:number): void {
-    console.log( "getResultadosAcumuladoXIdER" );
-    console.log("idOrden",  idOrden);
-    console.log("idEstado", idEstado);
+    
     this._service.get_ResultadosAcumuladoXIdER({
       idCompania:           this.selectedCompania,
       IdSucursal:           this.selectedIdSucursal,
@@ -1109,15 +1097,13 @@ export class InternosComponent implements OnInit {
       if( idEstado == null ){
         idEstado = 0;
       }
-      console.log( "onClickEstadoResultadosAcumuladoReal" );
-      console.log( "idOrden", idOrden );
-      console.log( "idEstado", idEstado );
+      
       this.showEstadoResultadoAcumuladoReal = 2;
       this.getResultadosAcumuladoXIdER(idOrden, idEstado);
   }
 
   getDetalleUnidadesAcumuladoReal(): void {
-    //console.log( "Hola" );
+    
     this._service.get_AutoLineaAcumulado({
       IdCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
       IdSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
@@ -1175,7 +1161,7 @@ export class InternosComponent implements OnInit {
             dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
                              dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
             dua.totalAnualPerc = 0;
-            // console.log("TotalAnual", dua.totalAnual);
+            
           });
         }
 
@@ -1265,8 +1251,7 @@ export class InternosComponent implements OnInit {
 
           // // Se agregan totales al objeto
           this.tipoUnidadAcumulado.push(totales);
-          console.log( 'TotalesNv3', totales );
-
+          
       }
     );
   }
