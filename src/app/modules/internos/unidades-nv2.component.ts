@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChange, OnChanges } from '@angular/core';
 import { IDetalleUnidadesMensual } from './detalle-unidades-mensual';
 import { IDetalleUnidadesAcumulado } from './detalle-unidades-acumulado';
 import { ColumnSortedEvent } from '../../shared/index';
@@ -14,13 +14,14 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './unidades-nv2.component.html',
   styleUrls: ['./internos.component.scss']
 })
-export class UnidadesNv2Component implements OnInit, OnDestroy {
+export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
   @Input() idDetalleUnidades: number; // 1 = mensual, 2 = acumulado
   @Input() mes: string;
   @Input() anio: string;
   @Input() selectedCompania: number;
   @Input() selectedIdSucursal: number;
   @Input() idOrigen: number;
+  @Input() showPercents: boolean;
 
   @Output() showUnidades = new EventEmitter<boolean>();
   @Output() showDetalleUnidadesPrimerNivel = new EventEmitter<boolean>();
@@ -58,6 +59,11 @@ export class UnidadesNv2Component implements OnInit, OnDestroy {
         this.getDetalleUnidadesAcumulado();
       }
     }
+  }
+
+  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    const changeProp = changes['showPercents'];
+    this.showPercents = <boolean>changeProp.currentValue;
   }
 
   ngOnDestroy() {

@@ -31,6 +31,7 @@ import { IDetalleUnidadesAcumulado } from './detalle-unidades-acumulado';
 import { ISeries } from './series';
 import { ColumnSortedEvent } from '../../shared/services/sort.service';
 import { IAutoLineaAcumulado } from './auto-linea-acumulado';
+import { FechaActualizacionService } from '../../shared';
 
 
 @Component({
@@ -62,7 +63,7 @@ import { IAutoLineaAcumulado } from './auto-linea-acumulado';
 export class InternosComponent implements OnInit {
   errorMessage: any;
 
-  constructor(private _service: InternosService) { }
+  constructor(private _service: InternosService, private _fechaActualizacionService: FechaActualizacionService) { }
 
   showFilters = true;
   showUnidades = true;
@@ -83,6 +84,7 @@ export class InternosComponent implements OnInit {
   showDetallePrimerNivel = false;
   showDetalleSegundoNivel = false;
   showSumaDepartamentos = false;
+  showPercents = true;
   resultadosSeriesArNv4: ISeries[] = [];
   isCollapsed = true;
 
@@ -116,7 +118,6 @@ export class InternosComponent implements OnInit {
   xmlSend: any;
 
   selectedCompania = 0;
-  fechaActualizacion = null;
   selectedNombreCompania: string;
   selectedTipoReporte = 1;
   selectedIdSucursal = -2;
@@ -213,6 +214,10 @@ export class InternosComponent implements OnInit {
 
   toggleUnidadesDepartamentoReal(): void {
     this.showUnidadesDepartamentoReal = !this.showUnidadesDepartamentoReal;
+  }
+
+  togglePercents() {
+    this.showPercents = !this.showPercents;
   }
 
   disabledSucursalDepartamento(): boolean {
@@ -398,6 +403,16 @@ export class InternosComponent implements OnInit {
               er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
               er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
               er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+              break;
+            }
+            case 42: { // Otros ingresos viene negativo
+              er.cantidad = -er.cantidad;
+              er.cantidadAcumulado = -er.cantidadAcumulado;
+
+              er.porcentaje = er.cantidad / utilidadBrutaNeta.cantidad * 100;
+              er.porcentajeAcumulado = er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100;
+              er.presupuestoPorcentaje = er.cantidadPresupuesto / utilidadBrutaNeta.cantidadPresupuesto * 100;
+              er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / utilidadBrutaNeta.cantidadPresupuestoAcumulado * 100;
               break;
             }
             default: { // todos los demás van por utilidad bruta neta
@@ -954,7 +969,8 @@ export class InternosComponent implements OnInit {
   onChangeCompania(newValue: number): void {
     this.selectedCompania = newValue;
     if (this.companias.find(x => x.id === +newValue)) {
-      this.fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;
+      const fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;
+      this._fechaActualizacionService.onChangeFecha(fechaActualizacion);
     }
 
     if (this.selectedCompania !== 0 && this.selectedTipoReporte) {
@@ -1262,7 +1278,7 @@ export class InternosComponent implements OnInit {
     this.showDetallePrimerNivel = true;
     this.detalleName = name;
     this.detalleValue = value;
-    this.detalleConcepto = this.estadoResultados[i].Concepto;
+    this.detalleConcepto = this.estadoResultados[i].descripcion;
     this.idDetalleResultados = idDetalleResultados;
     this.idEstadoResultado = this.estadoResultados[i].idEstadoResultadosI;
     if (name === 'Real' || name === 'AcReal') {
@@ -1332,7 +1348,7 @@ export class InternosComponent implements OnInit {
       this.showDetallePrimerNivel = false;
       this.showDetalleSegundoNivel = true;
       this.detalleValueSegundoNivel = value;
-      this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].Descr;
+      this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].descripcion;
       this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].numeroCuenta, mes);
     }
   }

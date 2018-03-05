@@ -1,18 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
+
 import { TranslateService } from '@ngx-translate/core';
 import { IAuth } from '../../../login/auth';
+import { FechaActualizacionService } from '../../../shared';
+
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   pushRightClass = 'push-right';
   userLogged: IAuth;
+  fechaActualizacion: Date;
+  fechaSubscription: Subscription;
 
-  constructor(private translate: TranslateService, public router: Router) {
+  constructor(private translate: TranslateService, public router: Router, private _fechaActualizacionService: FechaActualizacionService) {
     this.router.events.subscribe(val => {
       if (
         val instanceof NavigationEnd &&
@@ -26,6 +32,11 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.userLogged = JSON.parse(localStorage.getItem('userLogged'));
+    this.fechaSubscription =  this._fechaActualizacionService.columnSorted$.subscribe(fecha => this.fechaActualizacion = fecha);
+  }
+
+  ngOnDestroy() {
+    this.fechaSubscription.unsubscribe();
   }
 
   isToggled(): boolean {
