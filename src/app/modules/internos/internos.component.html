@@ -786,31 +786,31 @@
               <tr>
                 <th class="bg-secondary text-white">Departamento</th>
                 <th class="bg-primary text-white">Enero</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Febrero</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Marzo</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Abril</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Mayo</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Junio</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Julio</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Agosto</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Septiembre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Octubre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Noviembre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Diciembre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Suma</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
               </tr>
             </thead>
             <tbody>
@@ -818,31 +818,31 @@
                 <tr>
                   <td>{{ al.autoLinea }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.enero">{{ al.enero }}</td>
-                  <td class="text-center">{{ al.eneroPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.eneroPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.febrero">{{ al.febrero }}</td>
-                  <td class="text-center">{{ al.febreroPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.febreroPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.marzo">{{ al.marzo }}</td>
-                  <td class="text-center">{{ al.marzoPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.marzoPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.abril">{{ al.abril }}</td>
-                  <td class="text-center">{{ al.abrilPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.abrilPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.mayo">{{ al.mayo }}</td>
-                  <td class="text-center">{{ al.mayoPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.mayoPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.junio">{{ al.junio }}</td>
-                  <td class="text-center">{{ al.junioPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.junioPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.julio">{{ al.julio }}</td>
-                  <td class="text-center">{{ al.julioPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.julioPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.agosto">{{ al.agosto }}</td>
-                  <td class="text-center">{{ al.agostoPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.agostoPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.septiembre">{{ al.septiembre }}</td>
-                  <td class="text-center">{{ al.septiembrePerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.septiembrePerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.octubre">{{ al.octubre }}</td>
-                  <td class="text-center">{{ al.octubrePerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.octubrePerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.noviembre">{{ al.noviembre }}</td>
-                  <td class="text-center">{{ al.noviembrePerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.noviembrePerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.diciembre">{{ al.diciembre }}</td>
-                  <td class="text-center">{{ al.diciembrePerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.diciembrePerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv2(al.idAutoLinea, al.autoLinea)" [suma-columnas]="al.totalAnual">{{ al.totalAnual }}</td>
-                  <td class="text-center">{{ al.totalAnualPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.totalAnualPerc | number:'1.2-2' }}</td>
                 </tr>
               </ng-container>
             </tbody>
@@ -869,31 +869,31 @@
               <tr>
                 <th class="bg-secondary text-white">Departamento</th>
                 <th class="bg-primary text-white">Enero</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Febrero</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Marzo</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Abril</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Mayo</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Junio</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Julio</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Agosto</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Septiembre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Octubre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Noviembre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Diciembre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Suma</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
               </tr>
             </thead>
             <tbody>
@@ -901,31 +901,31 @@
                 <tr>
                   <td>{{ al.UnidadDescripcion }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.enero">{{ al.enero }}</td>
-                  <td class="text-center">{{ al.eneroPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.eneroPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.febrero">{{ al.febrero }}</td>
-                  <td class="text-center">{{ al.febreroPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.febreroPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.marzo">{{ al.marzo }}</td>
-                  <td class="text-center">{{ al.marzoPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.marzoPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.abril">{{ al.abril }}</td>
-                  <td class="text-center">{{ al.abrilPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.abrilPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.mayo">{{ al.mayo }}</td>
-                  <td class="text-center">{{ al.mayoPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.mayoPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.junio">{{ al.junio }}</td>
-                  <td class="text-center">{{ al.junioPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.junioPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.julio">{{ al.julio }}</td>
-                  <td class="text-center">{{ al.julioPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.julioPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.agosto">{{ al.agosto }}</td>
-                  <td class="text-center">{{ al.agostoPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.agostoPerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.septiembre">{{ al.septiembre }}</td>
-                  <td class="text-center">{{ al.septiembrePerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.septiembrePerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.octubre">{{ al.octubre }}</td>
-                  <td class="text-center">{{ al.octubrePerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.octubrePerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.noviembre">{{ al.noviembre }}</td>
-                  <td class="text-center">{{ al.noviembrePerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.noviembrePerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.diciembre">{{ al.diciembre }}</td>
-                  <td class="text-center">{{ al.diciembrePerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.diciembrePerc | number:'1.2-2' }}</td>
                   <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.totalAnual">{{ al.totalAnual }}</td>
-                  <td class="text-center">{{ al.totalAnualPerc | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf='showPercents'>{{ al.totalAnualPerc | number:'1.2-2' }}</td>
                 </tr>
               </ng-container>
             </tbody>
