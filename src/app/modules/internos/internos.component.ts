@@ -406,6 +406,16 @@ export class InternosComponent implements OnInit {
               er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
               break;
             }
+            case 42: { // Otros ingresos viene negativo
+              er.cantidad = -er.cantidad;
+              er.cantidadAcumulado = -er.cantidadAcumulado;
+
+              er.porcentaje = er.cantidad / utilidadBrutaNeta.cantidad * 100;
+              er.porcentajeAcumulado = er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100;
+              er.presupuestoPorcentaje = er.cantidadPresupuesto / utilidadBrutaNeta.cantidadPresupuesto * 100;
+              er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / utilidadBrutaNeta.cantidadPresupuestoAcumulado * 100;
+              break;
+            }
             default: { // todos los demás van por utilidad bruta neta
               er.porcentaje = er.cantidad / utilidadBrutaNeta.cantidad * 100;
               er.porcentajeAcumulado = er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100;
@@ -1283,7 +1293,7 @@ export class InternosComponent implements OnInit {
     this.showDetallePrimerNivel = true;
     this.detalleName = name;
     this.detalleValue = value;
-    this.detalleConcepto = this.estadoResultados[i].Concepto;
+    this.detalleConcepto = this.estadoResultados[i].descripcion;
     this.idDetalleResultados = idDetalleResultados;
     this.idEstadoResultado = this.estadoResultados[i].idEstadoResultadosI;
     if (name === 'Real' || name === 'AcReal') {
@@ -1353,7 +1363,7 @@ export class InternosComponent implements OnInit {
       this.showDetallePrimerNivel = false;
       this.showDetalleSegundoNivel = true;
       this.detalleValueSegundoNivel = value;
-      this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].Descr;
+      this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].descripcion;
       this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].numeroCuenta, mes);
     }
   }
