@@ -89,7 +89,7 @@
   <!-- BEGIN Reporte UNIDADES -->
   <div *ngIf='showReporteUnidades' class="row">
     <div class="col-md-12 mt-2">
-      <div class="card">
+      <div class="card" wsf-suma-columnas>
         <div class="card-header bg-primary text-white text-center">
           UNIDADES
           <button type="button" class="btn btn-primary text-white btn-sm btn-vm" (click)='toggleUnidades()'>
@@ -252,9 +252,6 @@
           </int-unidades-nv4>
         </div>
         <!-- END Unidades Cuarto Nivel -->
-
-        <wsf-suma-columnas></wsf-suma-columnas> <!-- Se comunica con los componentes por medio de un servicio -->
-
       </div>
       <!-- END Card -->
     </div>
@@ -318,7 +315,7 @@
   </div>
   <div *ngIf='showReporteUnidades' class="row">
     <div class="col-md-12 mt-2">
-      <div class="card">
+      <div class="card" wsf-suma-columnas>
         <div class="card-header bg-primary text-white text-center">
           ESTADO DE RESULTADOS
           <button type="button" class="btn btn-primary text-white btn-sm btn-vm" (click)='toggleResultados()'>
@@ -580,7 +577,7 @@
               </tbody>
             </table>
         </div>
-        <wsf-suma-columnas></wsf-suma-columnas> <!-- Se comunica con los componentes por medio de un servicio -->
+        <!-- <wsf-suma-columnas></wsf-suma-columnas> Se comunica con los componentes por medio de un servicio -->
         <!-- END Detalle Segundo Nivel -->
       </div>
     </div>
@@ -693,7 +690,7 @@
 <div *ngIf='showAcumuladoReal'>
   <div class="row">
     <div class="col-md-12 mt-2">
-      <div class="card">
+      <div class="card" wsf-suma-columnas>
         <div class="card-header bg-primary text-white text-center">
           UNIDADES ACUMULADO REAL
           <button type="button" class="btn btn-primary text-white btn-sm btn-vm" (click)='toggleUnidadesAcumuladoReal()'>
@@ -998,7 +995,7 @@
             </tbody>
           </table>
         </div>
-        <wsf-suma-columnas></wsf-suma-columnas> <!-- Se comunica con los componentes por medio de un servicio -->
+        <!-- <wsf-suma-columnas></wsf-suma-columnas> Se comunica con los componentes por medio de un servicio -->
         <!-- End Unidades Cuarto Nivel -->
       </div>
     </div>
@@ -1008,7 +1005,7 @@
     <!-- BEGIN Unidades Por Departamento -->
     <div class="row">
       <div class="col-md-12 mt-2">
-        <div class="card">
+        <div class="card" wsf-suma-columnas>
           <div class="card-header bg-primary text-white text-center">
             UNIDADES ACUMULADO REAL
             <button type="button" class="btn btn-primary text-white btn-sm btn-vm" (click)='toggleUnidadesDepartamentoReal()'>
@@ -1087,7 +1084,7 @@
   <!-- BEGIN Estado de resultados -->
   <div class="row">
     <div class="col-md-12 mt-2">
-      <div class="card">
+      <div class="card" wsf-suma-columnas>
         <div class="card-header bg-primary text-white text-center">
           ESTADO DE RESULTADOS
           <button type="button" class="btn btn-primary text-white btn-sm btn-vm" (click)='toggleResultados()'>
@@ -1212,7 +1209,7 @@
           </table>
           <!-- END Esta resultados Segundo Nivel -->
         </div>
-        <wsf-suma-columnas></wsf-suma-columnas> <!-- Se comunica con los componentes por medio de un servicio -->
+        <!-- <wsf-suma-columnas></wsf-suma-columnas> Se comunica con los componentes por medio de un servicio -->
       </div>
     </div>
   </div>

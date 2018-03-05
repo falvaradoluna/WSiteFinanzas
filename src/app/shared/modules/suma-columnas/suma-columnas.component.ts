@@ -4,12 +4,14 @@ import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   // tslint:disable-next-line:component-selector
-  selector: 'wsf-suma-columnas',
-  template: `<div *ngIf='suma !== 0' class="card-footer">
+  selector: '[wsf-suma-columnas]',
+  template: `<ng-content></ng-content>
+             <div *ngIf='suma !== 0' class="card-footer">
                <span>Suma: {{ suma | number:'1.0-2' }}</span>
              </div>`,
   // templateUrl: './suma-columnas.component.html',
-  styleUrls: ['./suma-columnas.component.scss']
+  styleUrls: ['./suma-columnas.component.scss'],
+  providers: [SumaColumnasService]
 })
 export class SumaColumnasComponent implements OnInit, OnDestroy {
 

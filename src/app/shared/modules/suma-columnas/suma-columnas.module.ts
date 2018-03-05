@@ -9,7 +9,6 @@ import { SumaColumnasComponent } from './suma-columnas.component';
     CommonModule
   ],
   declarations: [SumaColumnasDirective, SumaColumnasComponent],
-  exports: [SumaColumnasDirective, SumaColumnasComponent],
-  providers: [SumaColumnasService]
+  exports: [SumaColumnasDirective, SumaColumnasComponent]
 })
 export class SumaColumnasModule { }
