@@ -316,7 +316,7 @@ export class InternosComponent implements OnInit {
       },
       error => this.errorMessage = <any>error,
       () => {
-        const total = this.resultadoUnidades.find(x => x.descripcion.trim() === 'Total Unidades');
+        const total = this.resultadoUnidades.find(x => x.idOrigen === 0);
         const totalCantidad = total.cantidad;
         const totalPresupuesto = total.cantidadPresupuesto;
         const totalCantidadAcumulado = total.cantidadAcumulado;
@@ -819,7 +819,7 @@ export class InternosComponent implements OnInit {
           const nombreMes = this.toLongMonth(mes.toString());
           const ventas = this.acumuladoReal.find(x => x.descripcion === 'Ventas');
           const utilidadBrutaNeta = this.acumuladoReal.find(x => x.descripcion === 'Utilidad Bruta Neta');
-          
+
           // Se calculan porcentajes del mes correspondiente
           this.acumuladoReal.forEach(er => {
             switch (er.descripcion) {
@@ -1012,7 +1012,7 @@ export class InternosComponent implements OnInit {
     this.xmlDepartamento = [];
     if( arrIds.length == 0 ){
       this.xmlSend = "";
-    }else{  
+    }else{
       for( let i = 0; i <= (arrIds.length - 1); i++ ){
         this.xmlDepartamento.push('<departamento><id>'+ arrIds[ i ] +'</id></departamento>');
       }
@@ -1047,7 +1047,7 @@ export class InternosComponent implements OnInit {
     const concepto = this.resultadoUnidades[i].descripcion;
     const idOrigen = this.resultadoUnidades[i].idOrigen;
 
-    if (concepto !== 'Total Unidades') {
+    if (idOrigen !== 0) {
       this.showDetalleUnidadesPrimerNivel = true;
       this.detalleUnidadesName = name;
       this.detalleUnidadesValue = value;
@@ -1061,7 +1061,7 @@ export class InternosComponent implements OnInit {
   }
 
   onClickUnidadesAcumuladoReal(i: number, value: number, name: string, idDetalleUnidades: number) {
-    
+
     const concepto = this.resultadoUnidades[i].descripcion;
     const idOrigen = this.resultadoUnidades[i].idOrigen;
 
@@ -1092,7 +1092,7 @@ export class InternosComponent implements OnInit {
   }
 
   getResultadosAcumuladoXIdER(idOrden: number, idEstado:number): void {
-    
+
     this._service.get_ResultadosAcumuladoXIdER({
       idCompania:           this.selectedCompania,
       IdSucursal:           this.selectedIdSucursal,
@@ -1113,13 +1113,13 @@ export class InternosComponent implements OnInit {
       if( idEstado == null ){
         idEstado = 0;
       }
-      
+
       this.showEstadoResultadoAcumuladoReal = 2;
       this.getResultadosAcumuladoXIdER(idOrden, idEstado);
   }
 
   getDetalleUnidadesAcumuladoReal(): void {
-    
+
     this._service.get_AutoLineaAcumulado({
       IdCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
       IdSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
@@ -1177,7 +1177,7 @@ export class InternosComponent implements OnInit {
             dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
                              dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
             dua.totalAnualPerc = 0;
-            
+
           });
         }
 
@@ -1267,7 +1267,7 @@ export class InternosComponent implements OnInit {
 
           // // Se agregan totales al objeto
           this.tipoUnidadAcumulado.push(totales);
-          
+
       }
     );
   }
@@ -1326,6 +1326,19 @@ export class InternosComponent implements OnInit {
         case 7: v = ud.cantidadAcumulado;
           break;
         case 9: v = ud.cantidadPresupuestoAcumulado;
+          break;
+      }
+      return value / v;
+    } else if (this.resultadoUnidades && this.selectedIdDepartamento === 0) {
+      const u = this.resultadoUnidades.find(x => x.idOrigen === 0);
+      switch (col) {
+        case 1: v = u.cantidad;
+          break;
+        case 3: v = u.cantidadPresupuesto;
+          break;
+        case 7: v = u.cantidadAcumulado;
+          break;
+        case 9: v = u.cantidadPresupuestoAcumulado;
           break;
       }
       return value / v;
