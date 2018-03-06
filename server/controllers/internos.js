@@ -940,10 +940,44 @@ internos.prototype.get_detalleunidadesseriesar = function (req, res, next) {
     { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
     { name: 'unidadDescripcion', value: unidadDescripcion, type: self.model.types.STRING }
   ];
-  console.log("=============================================");
-  console.log(params);
+  
   this.model.query('Unidad.ObtenerDetalleUnidades', params, function (error, result) {
-    console.log( "===============2===============" );
+    
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/estadoderesultadosvariacionsegundonivel
+// Funcionalidad para el segundo nivel de mensual VariacionAcumulado
+internos.prototype.get_estadoderesultadosvariacionsegundonivel = function (req, res, next) {
+  console.log( "get_estadoderesultadosvariacionsegundonivel" );
+  var self = this;
+  var idCompania          = req.query.idCompania;
+  var periodoMes          = req.query.periodoMes;
+  var periodoYear         = req.query.periodoYear;
+  var idEstadoResultadosI = req.query.idEstadoResultadosI;
+  var idDepartamento      = req.query.idDepartamento;
+  var idSucursal          = req.query.idSucursal;
+  var idSucursalSecuencia = req.query.idSucursalSecuencia;
+  var EsAnul              = req.query.EsAnul;
+
+  console.log('QueryString Unidades AR Nv4 = ' + JSON.stringify(req.query));
+
+  var params = [
+    { name: 'IdCompania',           value: idCompania, type: self.model.types.INT },
+    { name: 'periodoMes',           value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear',          value: periodoYear, type: self.model.types.INT },
+    { name: 'idEstadoResultadosI',  value: idEstadoResultadosI, type: self.model.types.INT },
+    { name: 'idDepartamento',       value: idDepartamento, type: self.model.types.INT },
+    { name: 'IdSucursal',           value: idSucursal, type: self.model.types.INT },
+    { name: 'idSucursalSecuencia',  value: idSucursalSecuencia, type: self.model.types.INT },
+    { name: 'EsAnul',               value: EsAnul, type: self.model.types.INT }
+  ];
+  
+  this.model.query('Unidad.ObtenerDetalleUnidades', params, function (error, result) {
     console.log( "error", error );
     console.log( "result", result );
     self.view.expositor(res, {

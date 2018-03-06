@@ -20,8 +20,6 @@ import { ISucursal } from './sucursal';
 import { ICompania } from './compania';
 import { IDepartamento } from './departamento';
 import { ITipoReporte } from './tipo-reporte';
-import { IEfectivoSituacion } from './efectivo-y-situacion-financiera';
-import { IEstadoSituacion } from './estado-Situacion-Financiera';
 import { IAcumuladoReal } from './acumuladoreal';
 import { IDetalleUnidadesMensual } from './detalle-unidades-mensual';
 import { IDetalleResultadosMensual } from './detalle-resultados-mensual';
@@ -32,6 +30,7 @@ import { ISeries } from './series';
 import { ColumnSortedEvent } from '../../shared/services/sort.service';
 import { IAutoLineaAcumulado } from './auto-linea-acumulado';
 import { FechaActualizacionService } from '../../shared';
+import { FlujoeSituacionfComponent } from './flujoe-situacionf/flujoe-situacionf.component'
 
 
 @Component({
@@ -95,8 +94,6 @@ export class InternosComponent implements OnInit {
   unidadesDepartamento: IResultadoInternos[] = [];
   unidadesAcumuladoPresupuesto: IDetalleUnidadesAcumulado[] = [];
   unidadesAcumuladoPresupuestoDepartamento: IDetalleUnidadesAcumulado[] = [];
-  efectivoSituacion: IEfectivoSituacion[];
-  estadoSituacion: IEstadoSituacion[] = [];
   acumuladoReal: IAcumuladoReal[] = [];
   acumuladoRealNv2: IAcumuladoReal[] = []
   acumuladoRealDepartamento: IAcumuladoReal[] = [];
@@ -113,6 +110,7 @@ export class InternosComponent implements OnInit {
   detalleResultadosMensual: IDetalleResultadosMensual[];
   detalleResultadosCuentas: IDetalleResultadosCuentas[];
   resultadoUnidades: IResultadoInternos[] = [];
+  FlujoeSituacionfComponent: FlujoeSituacionfComponent;
 
   xmlDepartamento:any = [];
   xmlSend: any;
@@ -239,7 +237,7 @@ export class InternosComponent implements OnInit {
       this.showAcumuladoReal = false;
       this.showAcumuladoPresupuesto = false;
       this.showAcumuladoReal = false;
-      this.getEfectivoSituacion();
+      //this.FlujoeSituacionfComponent.getEfectivoSituacion();
     } else if (sTipoReporte === '2' && sCompania !== '0') { // Acumulado real
       this.showReporteUnidades = false;
       this.showEfectivoSituacion = false;
@@ -721,33 +719,6 @@ export class InternosComponent implements OnInit {
         // Si la lista tiene más de 10 resultados se necesita ajustar el ancho de tabla para que quepa el scroll
         () => {this.detalleResultadosCuentasScroll = this.detalleResultadosCuentas.length <= 10 ? true : false; }
       );
-  }
-
-  getEfectivoSituacion(): void {
-    if (this.selectedTipoReporte.toString() === '4') {
-      this._service.get_EfectivoSituacion({
-        idTipoReporte: this.selectedTipoReporte,
-        idAgencia: this.selectedCompania,
-        anio: this.anio
-      })
-        .subscribe(efectivoSituacion => {
-          this.efectivoSituacion = efectivoSituacion;
-          this.fixedHeader('tableEfectivo');
-        },
-        error => this.errorMessage = <any>error);
-    }else if (this.selectedTipoReporte.toString() === '5') {
-      this._service.get_EstadoSituacion({
-        idTipoReporte: this.selectedTipoReporte,
-        idAgencia: this.selectedCompania,
-        anio: this.anio
-      })
-        .subscribe(estadoSituacion => {
-          this.estadoSituacion = estadoSituacion;
-          this.fixedHeader('tableEstado');
-        },
-        error => this.errorMessage = <any>error);
-    }
-
   }
 
   getAcumuladoReal(): void {

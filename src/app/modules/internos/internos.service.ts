@@ -412,7 +412,7 @@ export class InternosService {
     Params = Params.append('idreporte', parameters.idTipoReporte);
     Params = Params.append('idcia', parameters.idAgencia);
     Params = Params.append('anio', parameters.anio);
-
+    
     return this._http.get<IEfectivoSituacion[]>(this._urlEfectivoSituacion, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
