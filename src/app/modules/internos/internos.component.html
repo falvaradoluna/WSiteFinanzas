@@ -16,7 +16,7 @@
                 <select name="inputCompania" class="form-control form-control-sm" [(ngModel)]="selectedCompania" (ngModelChange)="onChangeCompania($event)">
                   <option value="0">Seleccione Compañía</option>
                   <option *ngFor="let compania of companias" [value]="compania.id">
-                    {{ compania.nombreComercial }}
+                    {{ compania.razonSocial }}
                   </option>
                 </select>
               </div>

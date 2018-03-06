@@ -98,7 +98,7 @@ export class InternosComponent implements OnInit {
   efectivoSituacion: IEfectivoSituacion[];
   estadoSituacion: IEstadoSituacion[] = [];
   acumuladoReal: IAcumuladoReal[] = [];
-  acumuladoRealNv2: IAcumuladoReal[] = []
+  acumuladoRealNv2: IAcumuladoReal[] = [];
   acumuladoRealDepartamento: IAcumuladoReal[] = [];
   autoLineaAcumulado: IAutoLineaAcumulado[] = [];
   tipoUnidadAcumulado: IAutoLineaAcumulado[] = [];
@@ -114,7 +114,7 @@ export class InternosComponent implements OnInit {
   detalleResultadosCuentas: IDetalleResultadosCuentas[];
   resultadoUnidades: IResultadoInternos[] = [];
 
-  xmlDepartamento:any = [];
+  xmlDepartamento: any = [];
   xmlSend: any;
 
   selectedCompania = 0;
@@ -287,7 +287,7 @@ export class InternosComponent implements OnInit {
   }
 
   showSuma(): void {
-    //console.log( "Suma" );
+    // console.log( "Suma" );
     this._service.getDepartamentos({
     })
     .subscribe( departamentos => {
@@ -405,16 +405,6 @@ export class InternosComponent implements OnInit {
               er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
               break;
             }
-            case 42: { // Otros ingresos viene negativo
-              er.cantidad = -er.cantidad;
-              er.cantidadAcumulado = -er.cantidadAcumulado;
-
-              er.porcentaje = er.cantidad / utilidadBrutaNeta.cantidad * 100;
-              er.porcentajeAcumulado = er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100;
-              er.presupuestoPorcentaje = er.cantidadPresupuesto / utilidadBrutaNeta.cantidadPresupuesto * 100;
-              er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / utilidadBrutaNeta.cantidadPresupuestoAcumulado * 100;
-              break;
-            }
             default: { // todos los demás van por utilidad bruta neta
               er.porcentaje = er.cantidad / utilidadBrutaNeta.cantidad * 100;
               er.porcentajeAcumulado = er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100;
@@ -519,7 +509,7 @@ export class InternosComponent implements OnInit {
   }
 
   onClickUnidadesAcumuladoRealNv3(UnidadDescripcion: string) {
-    this.detalleUnidadesAcumuladoRealCuartoNivel = UnidadDescripcion
+    this.detalleUnidadesAcumuladoRealCuartoNivel = UnidadDescripcion;
     this.showUnidadesAcumuladoReal = 4;
     this.getDetalleUnidadesSeriesArNv4(UnidadDescripcion);
   }
@@ -1002,23 +992,23 @@ export class InternosComponent implements OnInit {
   }
 
   onChangeSumaDepartamentos(): void {
-    let arrIds = [];
+    const arrIds = [];
     this.selectedDepartamentosStr = '\'';
     this.selectedDepartamentos.forEach(d => {
       this.selectedDepartamentosStr += `${d},`;
-      arrIds.push( `${d}` )
+      arrIds.push( `${d}` );
     });
 
     this.xmlDepartamento = [];
-    if( arrIds.length == 0 ){
-      this.xmlSend = "";
-    }else{
-      for( let i = 0; i <= (arrIds.length - 1); i++ ){
-        this.xmlDepartamento.push('<departamento><id>'+ arrIds[ i ] +'</id></departamento>');
+    if ( arrIds.length === 0 ) {
+      this.xmlSend = '';
+    } else {
+      for ( let i = 0; i <= (arrIds.length - 1); i++ ) {
+        this.xmlDepartamento.push('<departamento><id>' + arrIds[ i ] + '</id></departamento>');
       }
 
-      this.xmlSend = "<departamentos>" + this.xmlDepartamento.join("") + "</departamentos>"
-      console.log( "xmlSend", this.xmlSend );
+      this.xmlSend = '<departamentos>' + this.xmlDepartamento.join('') + '</departamentos>';
+      console.log( 'xmlSend', this.xmlSend );
     }
   }
 
@@ -1091,7 +1081,7 @@ export class InternosComponent implements OnInit {
     }
   }
 
-  getResultadosAcumuladoXIdER(idOrden: number, idEstado:number): void {
+  getResultadosAcumuladoXIdER(idOrden: number, idEstado: number): void {
 
     this._service.get_ResultadosAcumuladoXIdER({
       idCompania:           this.selectedCompania,
@@ -1109,8 +1099,8 @@ export class InternosComponent implements OnInit {
       error => this.errorMessage = <any>error);
   }
 
-  onClickEstadoResultadosAcumuladoReal(idOrden: number, idEstado:number) {
-      if( idEstado == null ){
+  onClickEstadoResultadosAcumuladoReal(idOrden: number, idEstado: number) {
+      if ( idEstado == null ) {
         idEstado = 0;
       }
 
