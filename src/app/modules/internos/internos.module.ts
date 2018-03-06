@@ -9,6 +9,7 @@ import { SharedPipesModule, SortableTableModule, SumaColumnasModule, CloseButton
 import { UnidadesNv2Component } from './unidades-nv2.component';
 import { UnidadesNv3Component } from './unidades-nv3.component';
 import { UnidadesNv4Component } from './unidades-nv4.component';
+import { FlujoeSituacionfComponent } from './flujoe-situacionf/flujoe-situacionf.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,7 @@ import { UnidadesNv4Component } from './unidades-nv4.component';
     CloseButtonModule,
     NgbModule.forRoot()
   ],
-  declarations: [InternosComponent, UnidadesNv2Component, UnidadesNv3Component, UnidadesNv4Component],
+  declarations: [InternosComponent, UnidadesNv2Component, UnidadesNv3Component, UnidadesNv4Component, FlujoeSituacionfComponent],
   providers: [
     InternosService
   ]
