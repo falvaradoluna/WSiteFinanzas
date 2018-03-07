@@ -68,6 +68,7 @@ export class InternosComponent implements OnInit {
   showUnidades = true;
   showUnidadesAcumuladoPresupuesto = true;
   showUnidadesAcumuladoReal = 1;
+  showUnidadesDeptoNivel = 1;
   showEstadoResultadoAcumuladoReal = 1;
   showResultados = true;
   showUnidadesDepartamento = true;
@@ -95,7 +96,7 @@ export class InternosComponent implements OnInit {
   unidadesAcumuladoPresupuesto: IDetalleUnidadesAcumulado[] = [];
   unidadesAcumuladoPresupuestoDepartamento: IDetalleUnidadesAcumulado[] = [];
   acumuladoReal: IAcumuladoReal[] = [];
-  acumuladoRealNv2: IAcumuladoReal[] = []
+  acumuladoRealNv2: IAcumuladoReal[] = [];
   acumuladoRealDepartamento: IAcumuladoReal[] = [];
   acumuladoVariacion: IAcumuladoReal[] = [];
   autoLineaAcumulado: IAutoLineaAcumulado[] = [];
@@ -112,8 +113,12 @@ export class InternosComponent implements OnInit {
   detalleResultadosCuentas: IDetalleResultadosCuentas[];
   resultadoUnidades: IResultadoInternos[] = [];
   FlujoeSituacionfComponent: FlujoeSituacionfComponent;
+  detalleUnidadesDepartamentoName = '';
+  detalleUnidadesDepartamentoValue: number;
+  idDetalleUnidadesDepartamento: number;
+  detalleUnidadesDepartamentoConcepto = '';
 
-  xmlDepartamento:any = [];
+  xmlDepartamento: any = [];
   xmlSend: any;
 
   selectedCompania = 0;
@@ -161,6 +166,10 @@ export class InternosComponent implements OnInit {
   detalleNameSegundoNivel: string;
   detalleValueSegundoNivel: number;
   detalleConceptoSegundoNivel: string;
+
+  detalleUnidadesDepartamentoConceptoSegundoNivel: string;
+  detalleUnidadesDepartamentoNameSegundoNivel: string;
+  detalleUnidadesDepartamentoValueSegundoNivel: string;
 
   valuesNegritas = [
     'Utilidad bruta',
@@ -286,7 +295,7 @@ export class InternosComponent implements OnInit {
   }
 
   showSuma(): void {
-    //console.log( "Suma" );
+    // console.log( "Suma" );
     this._service.getDepartamentos({
     })
     .subscribe( departamentos => {
@@ -315,7 +324,7 @@ export class InternosComponent implements OnInit {
       },
       error => this.errorMessage = <any>error,
       () => {
-        const total = this.resultadoUnidades.find(x => x.descripcion.trim() === 'Total Unidades');
+        const total = this.resultadoUnidades.find(x => x.idOrigen === 0);
         const totalCantidad = total.cantidad;
         const totalPresupuesto = total.cantidadPresupuesto;
         const totalCantidadAcumulado = total.cantidadAcumulado;
@@ -402,16 +411,6 @@ export class InternosComponent implements OnInit {
               er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
               er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
               er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
-              break;
-            }
-            case 42: { // Otros ingresos viene negativo
-              er.cantidad = -er.cantidad;
-              er.cantidadAcumulado = -er.cantidadAcumulado;
-
-              er.porcentaje = er.cantidad / utilidadBrutaNeta.cantidad * 100;
-              er.porcentajeAcumulado = er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100;
-              er.presupuestoPorcentaje = er.cantidadPresupuesto / utilidadBrutaNeta.cantidadPresupuesto * 100;
-              er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / utilidadBrutaNeta.cantidadPresupuestoAcumulado * 100;
               break;
             }
             default: { // todos los demás van por utilidad bruta neta
@@ -518,7 +517,7 @@ export class InternosComponent implements OnInit {
   }
 
   onClickUnidadesAcumuladoRealNv3(UnidadDescripcion: string) {
-    this.detalleUnidadesAcumuladoRealCuartoNivel = UnidadDescripcion
+    this.detalleUnidadesAcumuladoRealCuartoNivel = UnidadDescripcion;
     this.showUnidadesAcumuladoReal = 4;
     this.getDetalleUnidadesSeriesArNv4(UnidadDescripcion);
   }
@@ -791,7 +790,7 @@ export class InternosComponent implements OnInit {
           const nombreMes = this.toLongMonth(mes.toString());
           const ventas = this.acumuladoReal.find(x => x.descripcion === 'Ventas');
           const utilidadBrutaNeta = this.acumuladoReal.find(x => x.descripcion === 'Utilidad Bruta Neta');
-          
+
           // Se calculan porcentajes del mes correspondiente
           this.acumuladoReal.forEach(er => {
             switch (er.descripcion) {
@@ -976,23 +975,23 @@ export class InternosComponent implements OnInit {
   }
 
   onChangeSumaDepartamentos(): void {
-    let arrIds = [];
+    const arrIds = [];
     this.selectedDepartamentosStr = '\'';
     this.selectedDepartamentos.forEach(d => {
       this.selectedDepartamentosStr += `${d},`;
-      arrIds.push( `${d}` )
+      arrIds.push( `${d}` );
     });
 
     this.xmlDepartamento = [];
-    if( arrIds.length == 0 ){
-      this.xmlSend = "";
-    }else{  
-      for( let i = 0; i <= (arrIds.length - 1); i++ ){
-        this.xmlDepartamento.push('<departamento><id>'+ arrIds[ i ] +'</id></departamento>');
+    if ( arrIds.length === 0 ) {
+      this.xmlSend = '';
+    } else {
+      for ( let i = 0; i <= (arrIds.length - 1); i++ ) {
+        this.xmlDepartamento.push('<departamento><id>' + arrIds[ i ] + '</id></departamento>');
       }
 
-      this.xmlSend = "<departamentos>" + this.xmlDepartamento.join("") + "</departamentos>"
-      console.log( "xmlSend", this.xmlSend );
+      this.xmlSend = '<departamentos>' + this.xmlDepartamento.join('') + '</departamentos>';
+      console.log( 'xmlSend', this.xmlSend );
     }
   }
 
@@ -1021,7 +1020,7 @@ export class InternosComponent implements OnInit {
     const concepto = this.resultadoUnidades[i].descripcion;
     const idOrigen = this.resultadoUnidades[i].idOrigen;
 
-    if (concepto !== 'Total Unidades') {
+    if (idOrigen !== 0) {
       this.showDetalleUnidadesPrimerNivel = true;
       this.detalleUnidadesName = name;
       this.detalleUnidadesValue = value;
@@ -1034,8 +1033,16 @@ export class InternosComponent implements OnInit {
     }
   }
 
+  onClickUnidadesDepartamento(concepto: string, value: number, name: string, idDetalleUnidades: number) {
+    this.showUnidadesDeptoByLevel(2);
+    this.detalleUnidadesDepartamentoName = name;
+    this.detalleUnidadesDepartamentoValue = value;
+    this.idDetalleUnidadesDepartamento = idDetalleUnidades;
+    this.detalleUnidadesDepartamentoConcepto = concepto;
+  }
+
   onClickUnidadesAcumuladoReal(i: number, value: number, name: string, idDetalleUnidades: number) {
-    
+
     const concepto = this.resultadoUnidades[i].descripcion;
     const idOrigen = this.resultadoUnidades[i].idOrigen;
 
@@ -1065,8 +1072,8 @@ export class InternosComponent implements OnInit {
     }
   }
 
-  getResultadosAcumuladoXIdER(idOrden: number, idEstado:number): void {
-    
+  getResultadosAcumuladoXIdER(idOrden: number, idEstado: number): void {
+
     this._service.get_ResultadosAcumuladoXIdER({
       idCompania:           this.selectedCompania,
       IdSucursal:           this.selectedIdSucursal,
@@ -1083,17 +1090,17 @@ export class InternosComponent implements OnInit {
       error => this.errorMessage = <any>error);
   }
 
-  onClickEstadoResultadosAcumuladoReal(idOrden: number, idEstado:number) {
-      if( idEstado == null ){
+  onClickEstadoResultadosAcumuladoReal(idOrden: number, idEstado: number) {
+      if ( idEstado == null ) {
         idEstado = 0;
       }
-      
+
       this.showEstadoResultadoAcumuladoReal = 2;
       this.getResultadosAcumuladoXIdER(idOrden, idEstado);
   }
 
   getDetalleUnidadesAcumuladoReal(): void {
-    
+
     this._service.get_AutoLineaAcumulado({
       IdCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
       IdSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
@@ -1151,7 +1158,7 @@ export class InternosComponent implements OnInit {
             dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
                              dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
             dua.totalAnualPerc = 0;
-            
+
           });
         }
 
@@ -1241,7 +1248,7 @@ export class InternosComponent implements OnInit {
 
           // // Se agregan totales al objeto
           this.tipoUnidadAcumulado.push(totales);
-          
+
       }
     );
   }
@@ -1363,6 +1370,19 @@ export class InternosComponent implements OnInit {
           break;
       }
       return value / v;
+    } else if (this.resultadoUnidades && this.selectedIdDepartamento === 0) {
+      const u = this.resultadoUnidades.find(x => x.idOrigen === 0);
+      switch (col) {
+        case 1: v = u.cantidad;
+          break;
+        case 3: v = u.cantidadPresupuesto;
+          break;
+        case 7: v = u.cantidadAcumulado;
+          break;
+        case 9: v = u.cantidadPresupuestoAcumulado;
+          break;
+      }
+      return value / v;
     } else {
       return 0;
     }
@@ -1433,6 +1453,10 @@ export class InternosComponent implements OnInit {
 
   showUnidadesAcumuladoByLevel(level: number) {
     this.showUnidadesAcumuladoReal = level;
+  }
+
+  showUnidadesDeptoByLevel(level: number) {
+    this.showUnidadesDeptoNivel = level;
   }
 
   showEstadoResultadoAcumuladoByLevel(level: number) {

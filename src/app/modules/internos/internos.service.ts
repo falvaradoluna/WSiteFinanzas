@@ -52,8 +52,8 @@ export class InternosService {
   private _urlAcumuladoReal = 'api/internos/acumuladoreal';
   private _urlAutoLineaAcumulado = 'api/internos/autolineaacumulado';
   private _urlTipoUnidadAcumulado = 'api/internos/tipounidadacumulado';
-  private _urlEstadoResultadosPresupuesto = "api/internos/estadoresultadospresupuesto";
-  private _urlEstadoResultadosAcumuladoByIdER = "api/internos/estadoresultadosacumuladobyider";
+  private _urlEstadoResultadosPresupuesto = 'api/internos/estadoresultadospresupuesto';
+  private _urlEstadoResultadosAcumuladoByIdER = 'api/internos/estadoresultadosacumuladobyider';
   private _urlDetalleUnidadesSeriesAr = 'api/internos/detalleunidadesseriesar';
   private _urlEstadoDeResultadosVariacionSegundoNivel = "api/internos/estadoderesultadosvariacionsegundonivel";
 
@@ -222,6 +222,7 @@ export class InternosService {
   getDetalleUnidadesMensual(parameters): Observable<IDetalleUnidadesMensual[]> {
     // Initialize Params Object
     let Params = new HttpParams();
+    let url = this._urlDetalleUnidadesMensual;
 
     // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
@@ -230,7 +231,11 @@ export class InternosService {
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('idOrigen', parameters.idOrigen);
 
-    return this._http.get<IDetalleUnidadesMensual[]>(this._urlDetalleUnidadesMensual, { params: Params })
+    if (parameters.isUnidadesDepto) {
+      url = 'api/internos/unidadesdepartamentonv2';
+    }
+
+    return this._http.get<IDetalleUnidadesMensual[]>(url, { params: Params })
       .catch(this.handleError);
   }
 
@@ -253,6 +258,8 @@ export class InternosService {
     // Initialize Params Object
     let Params = new HttpParams();
 
+    let url = 'api/internos/detalleunidadestipo';
+
     // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
@@ -260,8 +267,13 @@ export class InternosService {
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('idAutoLinea', parameters.idAutoLinea);
+    Params = Params.append('idPestania', parameters.idPestania);
 
-    return this._http.get<ITipoUnidad[]>(this._urlDetalleUnidadesTipo, { params: Params })
+    if (parameters.isUnidadesDepto) {
+      url = 'api/internos/detalleunidadesdepartamentotipo';
+    }
+
+    return this._http.get<ITipoUnidad[]>(url, { params: Params })
       .catch(this.handleError);
   }
 
@@ -285,8 +297,8 @@ export class InternosService {
   getDetalleUnidadesTipoAcumulado(parameters): Observable<ITipoUnidad[]> {
     // Initialize Params Object
     let Params = new HttpParams();
+    let url = 'api/internos/detalleunidadestipoacumulado';
 
-    // Begin assigning parameters
     // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
@@ -294,8 +306,13 @@ export class InternosService {
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('idAutoLinea', parameters.idAutoLinea);
+    Params = Params.append('idPestania', parameters.idPestania);
 
-    return this._http.get<any>(this._urlDetalleUnidadesTipoAcumulado, { params: Params })
+    if (parameters.isUnidadesDepto) {
+      url = 'api/internos/detalleunidadesdepartamentotipoacumulado';
+    }
+
+    return this._http.get<any>(url, { params: Params })
     .catch((err: Response) => {
       const details = err.json();
       return Observable.throw(details);
@@ -341,6 +358,7 @@ export class InternosService {
   getDetalleUnidadesAcumulado(parameters): Observable<IDetalleUnidadesAcumulado[]> {
     // Initialize Params Object
     let Params = new HttpParams();
+    let url = this._urlDetalleUnidadesAcumulado;
 
     // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
@@ -349,7 +367,11 @@ export class InternosService {
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('idOrigen', parameters.idOrigen);
 
-    return this._http.get<IDetalleUnidadesAcumulado[]>(this._urlDetalleUnidadesAcumulado, { params: Params })
+    if (parameters.isUnidadesDepto) {
+      url = 'api/internos/unidadesdepartamentoacumuladonv2';
+    }
+
+    return this._http.get<IDetalleUnidadesAcumulado[]>(url, { params: Params })
       .catch(this.handleError);
   }
 
@@ -561,7 +583,11 @@ export class InternosService {
     Params = Params.append('periodoYear',       parameters.periodoYear);
     Params = Params.append('periodoMes',        parameters.periodoMes);
     Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
+<<<<<<< HEAD
     
+=======
+    console.log('ParamsServiceArNv4', Params);
+>>>>>>> refs/remotes/origin/presentacion
     return this._http.get<ISeries[]>(this._urlDetalleUnidadesSeriesAr, { params: Params })
       .catch(this.handleError);
   }
