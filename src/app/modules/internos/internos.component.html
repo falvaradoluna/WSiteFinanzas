@@ -257,16 +257,18 @@
     </div>
   </div>
   <!-- END Reporte UNIDADES -->
+
+  <!-- BEGIN UNIDADES POR DEPARTAMENTO -->
   <div *ngIf='showReporteUnidades' class="row">
     <div class="col-md-12 mt-2">
-      <div class="card">
+      <div class="card" wsf-suma-columnas>
         <div class="card-header bg-primary text-white text-center">
           UNIDADES
           <button type="button" class="btn btn-primary text-white btn-sm btn-vm" (click)='toggleUnidadesDepartamento()'>
             <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
           </button>
         </div>
-        <table *ngIf='showUnidadesDepartamento' class="table table-sm table-bordered">
+        <table *ngIf='showUnidadesDepartamento && showUnidadesDeptoNivel === 1' class="table table-sm table-bordered">
           <thead>
             <tr>
               <th class="bg-secondary text-white col-width-concepto">Concepto</th>
@@ -289,7 +291,7 @@
               <td>
                 {{ r.descripcion }}
               </td>
-              <td class="text-center" (click)="onClickUnidades(i, r.Cantidad, 'Real', 1)">
+              <td class="text-center" (click)="onClickUnidadesDepartamento(r.descripcion, r.Cantidad, 'Real', 1)">
                 <!-- 1 = Mensual -->
                 {{ r.cantidad }}
               </td>
@@ -298,7 +300,7 @@
               <td class="text-right">{{ 100 | number:'1.2-2' }}</td>
               <td class="text-center">{{ r.variacion }}</td>
               <td class="text-right">{{ r.porcentajeVariacion | number:'1.2-2' }}</td>
-              <td class="text-center" (click)="onClickUnidades(i, r.AcReal, 'AcReal', 2)">
+              <td class="text-center" (click)="onClickUnidadesDepartamento(r.descripcion, r.AcReal, 'AcReal', 2)">
                 <!-- 2 = Acumulado -->
                 {{ r.cantidadAcumulado }}
               </td>
@@ -310,9 +312,93 @@
             </tr>
           </tbody>
         </table>
+        <div *ngIf='showUnidadesDepartamento && showUnidadesDeptoNivel > 1' class="card-body">
+          <!-- BEGIN Unidades Segundo Nivel -->
+          <div *ngIf='showUnidadesDeptoNivel === 2' class="card-body" wsf-close-button (onClose)='showUnidadesDeptoByLevel(1)'>
+            <nav role="navigation">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="javascript:void(0)" (click)='showUnidadesDeptoByLevel(1)'>{{ selectedNombreCompania }}</a>
+                </li>
+                <li class="breadcrumb-item active">{{ detalleUnidadesDepartamentoConcepto }}</li>
+              </ol>
+            </nav>
+
+            <int-unidades-nv2
+              [idDetalleUnidades]='idDetalleUnidadesDepartamento'
+              [mes]='mes'
+              [anio]='anio'
+              [selectedCompania]='selectedCompania'
+              [selectedIdSucursal]='selectedIdSucursal'
+              [idOrigen]='0'
+              [selectedIdDepartamento]='selectedIdDepartamento'
+              [isUnidadesDepto]='true'
+              [showPercents]='showPercents'
+              (showUnidadesDepartamentoByLevel)='showUnidadesDeptoByLevel($event)'
+              (detalleUnidadesNameSegundoNivel)='detalleUnidadesDepartamentoNameSegundoNivel=$event'
+              (detalleUnidadesValueSegundoNivel)='detalleUnidadesDepartamentoValueSegundoNivel=$event'
+              (detalleUnidadesConceptoSegundoNivel)='detalleUnidadesDepartamentoConceptoSegundoNivel=$event'
+              (departamentoAcumulado)='departamentoAcumulado=$event'
+              (mesAcumulado)='mesAcumulado=$event'
+              (idDepartamento)='idDepartamento=$event'
+              (carLine)='carLine=$event'
+              (errorMessage)='errorMessage=$event'
+              (idAutoLinea)='idAutoLinea=$event'
+              (fixedHeaderId)='fixedHeader($event)'>
+            </int-unidades-nv2>
+          </div>
+          <!-- END Unidades Segundo Nivel -->
+
+          <!-- BEGIN Unidades Tercer Nivel -->
+        <div *ngIf='showUnidadesDeptoNivel === 3' class="card-body" wsf-close-button (onClose)='showUnidadesDeptoByLevel(2)'>
+          <nav role="navigation">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)" (click)='showUnidadesDeptoByLevel(1)'>{{ selectedNombreCompania }}</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)" (click)='showUnidadesDeptoByLevel(2)'>{{ detalleUnidadesDepartamentoConcepto }}</a>
+              </li>
+              <li class="breadcrumb-item active">{{ detalleUnidadesDepartamentoConceptoSegundoNivel }} {{ toLongMonth(mesAcumulado) }}</li>
+            </ol>
+          </nav>
+
+          <int-unidades-nv3 [idDetalleUnidades]='idDetalleUnidadesDepartamento'
+                            [idAutoLinea]='idAutoLinea'
+                            [idOrigen]='idOrigen'
+                            [detalleUnidadesConcepto]='detalleUnidadesConcepto'
+                            [mes]='mes'
+                            [mesAcumulado]='mesAcumulado'
+                            [anio]='anio'
+                            [selectedCompania]='selectedCompania'
+                            [selectedIdSucursal]='selectedIdSucursal'
+                            [carLine]='carLine'
+                            [idDepartamento]='idDepartamento'
+                            [selectedIdDepartamento]='selectedIdDepartamento'
+                            [detalleName]='detalleName'
+                            [isUnidadesDepto]='true'
+                            [showPercents]='showPercents'
+                            (deptoFlotillas)='deptoFlotillas=$event'
+                            (showUnidades)='showUnidades=$event'
+                            (showUnidadesDepartamentoByLevel)='showUnidadesDeptoByLevel($event)'
+                            (showDetalleUnidadesPrimerNivel)='showDetalleUnidadesPrimerNivel=$event'
+                            (showDetalleUnidadesSegundoNivel)='showDetalleUnidadesSegundoNivel=$event'
+                            (showDetalleUnidadesTercerNivel)='showDetalleUnidadesTercerNivel=$event'
+                            (detalleUnidadesNameTercerNivel)='detalleUnidadesNameTercerNivel=$event'
+                            (detalleUnidadesValueTercerNivel)='detalleUnidadesValueTercerNivel=$event'
+                            (detalleUnidadesConceptoTercerNivel)='detalleUnidadesConceptoTercerNivel=$event'
+                            (idReporte)='idReporte=$event'
+                            (fixedHeaderId)='fixedHeader($event)'
+                            (mesAcumuladoNv3)='mesAcumuladoNv3=$event'>
+          </int-unidades-nv3>
+        </div>
+        <!-- END Unidades Tercer Nivel -->
+        </div>
+
       </div>
     </div>
   </div>
+  <!-- END UNIDADES POR DEPARTAMENTO -->
   <div *ngIf='showReporteUnidades' class="row">
     <div class="col-md-12 mt-2">
       <div class="card" wsf-suma-columnas>
@@ -454,7 +540,7 @@
                   [ngClass]="{'table-without-scroll': detalleResultadosMensualScroll}">
             <thead>
               <tr>
-                <th class="bg-secondary text-white col-md-3">Concepto12</th>
+                <th class="bg-secondary text-white col-md-3">Concepto</th>
                 <th class="bg-secondary text-white"
                     [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">No. Cuenta</th>
                 <th class="bg-secondary text-white col-md-3">Descripción</th>

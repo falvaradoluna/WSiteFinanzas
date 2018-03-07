@@ -26,6 +26,9 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
   @Input() detalleName: string;
   @Input() showPercents: boolean;
 
+  @Input() isUnidadesDepto: boolean;
+  @Input() selectedIdDepartamento: number;
+
   @Output() deptoFlotillas = new EventEmitter<string>();
   @Output() showUnidades = new EventEmitter<boolean>();
   @Output() showDetalleUnidadesPrimerNivel = new EventEmitter<boolean>();
@@ -38,31 +41,42 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
   @Output() idReporte = new EventEmitter<string>();
   @Output() fixedHeaderId = new EventEmitter<string>();
 
+  @Output() showUnidadesDepartamentoByLevel = new EventEmitter<number>();
+
   detalleUnidadesTipo: ITipoUnidad[];
 
   constructor(private _service: InternosService) { }
 
   ngOnInit() {
     this.fixedHeaderId.emit('idDetalleUnidadesTipo');
-    if (this.idDetalleUnidades === 1) { // Mensual
-      if (this.idOrigen === 3) { // Flotillas
-        this.getDetalleUnidadesTipoFlotillas(this.carLine, this.idDepartamento, this.mes);
-      } else {
+    if (this.isUnidadesDepto) {
+      if (this.idDetalleUnidades === 1) { // Mensual
         this.getDetalleUnidadesTipo(this.carLine, this.idDepartamento, this.mes);
-      }
-    } else if (this.idDetalleUnidades === 2) { // Acumulado
-      if (this.idOrigen === 3) {
-        this.getDetalleUnidadesTipoAcumuladoFlotillas(this.carLine, this.idDepartamento, this.mes);
-      } else {
-        // En la version prod, siempre muestra los mismos meses que se escogieron desde un inicio
-      this.getDetalleUnidadesTipoAcumulado(this.carLine, this.idDepartamento, this.mes);
+      } else if (this.idDetalleUnidades === 2) { // Acumulado
+        this.getDetalleUnidadesTipoAcumulado(this.carLine, this.idDepartamento, this.mes);      }
+    } else {
+      if (this.idDetalleUnidades === 1) { // Mensual
+        if (this.idOrigen === 3) { // Flotillas
+          this.getDetalleUnidadesTipoFlotillas(this.carLine, this.idDepartamento, this.mes);
+        } else {
+          this.getDetalleUnidadesTipo(this.carLine, this.idDepartamento, this.mes);
+        }
+      } else if (this.idDetalleUnidades === 2) { // Acumulado
+        if (this.idOrigen === 3) {
+          this.getDetalleUnidadesTipoAcumuladoFlotillas(this.carLine, this.idDepartamento, this.mes);
+        } else {
+          // En la version prod, siempre muestra los mismos meses que se escogieron desde un inicio
+          this.getDetalleUnidadesTipoAcumulado(this.carLine, this.idDepartamento, this.mes);
+        }
       }
     }
   }
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     const changeProp = changes['showPercents'];
-    this.showPercents = <boolean>changeProp.currentValue;
+    if (changeProp) {
+      this.showPercents = <boolean>changeProp.currentValue;
+    }
   }
 
   getDetalleUnidadesTipo(carLine: string, idDepartamento: string = '', mes: string): void {
@@ -78,49 +92,15 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       idOrigen: this.idOrigen,
       periodoYear: +this.anio,
       periodoMes: +this.mes,
-      idAutoLinea: this.idAutoLinea
+      idAutoLinea: this.idAutoLinea,
+      idPestania: this.selectedIdDepartamento,
+      isUnidadesDepto: this.isUnidadesDepto
     })
       .subscribe(
       dut => { this.detalleUnidadesTipo = dut; },
       error => { console.log(JSON.stringify(error)); },
       () => {
-        // Se calcula el total y se inserta en el objeto
-        const total: number = this.calculaTotalMensual(this.detalleUnidadesTipo, 'Cantidad');
-        const t: ITipoUnidad = {
-          'UnidadDescripcion': 'Total',
-          'Cantidad': total,
-          'Perc': 100,
-          'enero': 0,
-          'eneroPerc': 100,
-          'febrero': 0,
-          'febreroPerc': 100,
-          'marzo': 0,
-          'marzoPerc': 100,
-          'abril': 0,
-          'abrilPerc': 100,
-          'mayo': 0,
-          'mayoPerc': 100,
-          'junio': 0,
-          'junioPerc': 100,
-          'julio': 0,
-          'julioPerc': 100,
-          'agosto': 0,
-          'agostoPerc': 100,
-          'septiembre': 0,
-          'septiembrePerc': 100,
-          'octubre': 0,
-          'octubrePerc': 100,
-          'noviembre': 0,
-          'noviembrePerc': 100,
-          'diciembre': 0,
-          'diciembrePerc': 100,
-          'totalAnual': 0,
-          'totalAnualPerc': 100
-        };
-        this.detalleUnidadesTipo.push(t);
-
-        // Se calculan porcentajes
-        this.detalleUnidadesTipo.forEach(dut => dut.Perc = dut.Cantidad / total * 100);
+        this.calculaTotalesMensual();
       }
       );
   }
@@ -206,7 +186,9 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       idOrigen: this.idOrigen,
       periodoYear: +this.anio,
       periodoMes: mes,
-      idAutoLinea: this.idAutoLinea
+      idAutoLinea: this.idAutoLinea,
+      idPestania: this.selectedIdDepartamento,
+      isUnidadesDepto: this.isUnidadesDepto
     }).subscribe(
       dut => { this.detalleUnidadesTipo = dut; },
       error => { console.log(JSON.stringify(error)); },
@@ -378,10 +360,15 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
     if (tipoUnidad.trim() !== 'Total') {
       const idReporte = this.detalleName === 'Real' ? 'MRQ' : 'ARQ'; // Real = mensual y AcReal = Acumulado
 
-      this.showUnidades.emit(false);
-      this.showDetalleUnidadesPrimerNivel.emit(false);
-      this.showDetalleUnidadesSegundoNivel.emit(false);
-      this.showDetalleUnidadesTercerNivel.emit(true);
+      if (this.isUnidadesDepto) {
+        this.showUnidadesDepartamentoByLevel.emit(4);
+      } else {
+        this.showUnidades.emit(false);
+        this.showDetalleUnidadesPrimerNivel.emit(false);
+        this.showDetalleUnidadesSegundoNivel.emit(false);
+        this.showDetalleUnidadesTercerNivel.emit(true);
+      }
+
       this.detalleUnidadesNameTercerNivel.emit(mes);
       this.detalleUnidadesValueTercerNivel.emit(tipoUnidad);
       this.detalleUnidadesConceptoTercerNivel.emit(tipoUnidad);
@@ -389,6 +376,46 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       this.mesAcumuladoNv3.emit(mes);
       // this.fixedHeader('detalleUnidadesSeries');
     }
+  }
+
+  private calculaTotalesMensual() {
+    // Se calcula el total y se inserta en el objeto
+    const total: number = this.calculaTotalMensual(this.detalleUnidadesTipo, 'Cantidad');
+    const t: ITipoUnidad = {
+      'UnidadDescripcion': 'Total',
+      'Cantidad': total,
+      'Perc': 100,
+      'enero': 0,
+      'eneroPerc': 100,
+      'febrero': 0,
+      'febreroPerc': 100,
+      'marzo': 0,
+      'marzoPerc': 100,
+      'abril': 0,
+      'abrilPerc': 100,
+      'mayo': 0,
+      'mayoPerc': 100,
+      'junio': 0,
+      'junioPerc': 100,
+      'julio': 0,
+      'julioPerc': 100,
+      'agosto': 0,
+      'agostoPerc': 100,
+      'septiembre': 0,
+      'septiembrePerc': 100,
+      'octubre': 0,
+      'octubrePerc': 100,
+      'noviembre': 0,
+      'noviembrePerc': 100,
+      'diciembre': 0,
+      'diciembrePerc': 100,
+      'totalAnual': 0,
+      'totalAnualPerc': 100
+    };
+    this.detalleUnidadesTipo.push(t);
+
+    // Se calculan porcentajes
+    this.detalleUnidadesTipo.forEach(dut => dut.Perc = dut.Cantidad / total * 100);
   }
 
   // Ordenamiento de tabla

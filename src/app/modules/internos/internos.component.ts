@@ -69,6 +69,7 @@ export class InternosComponent implements OnInit {
   showUnidades = true;
   showUnidadesAcumuladoPresupuesto = true;
   showUnidadesAcumuladoReal = 1;
+  showUnidadesDeptoNivel = 1;
   showEstadoResultadoAcumuladoReal = 1;
   showResultados = true;
   showUnidadesDepartamento = true;
@@ -113,6 +114,10 @@ export class InternosComponent implements OnInit {
   detalleResultadosMensual: IDetalleResultadosMensual[];
   detalleResultadosCuentas: IDetalleResultadosCuentas[];
   resultadoUnidades: IResultadoInternos[] = [];
+  detalleUnidadesDepartamentoName = '';
+  detalleUnidadesDepartamentoValue: number;
+  idDetalleUnidadesDepartamento: number;
+  detalleUnidadesDepartamentoConcepto = '';
 
   xmlDepartamento: any = [];
   xmlSend: any;
@@ -162,6 +167,10 @@ export class InternosComponent implements OnInit {
   detalleNameSegundoNivel: string;
   detalleValueSegundoNivel: number;
   detalleConceptoSegundoNivel: string;
+
+  detalleUnidadesDepartamentoConceptoSegundoNivel: string;
+  detalleUnidadesDepartamentoNameSegundoNivel: string;
+  detalleUnidadesDepartamentoValueSegundoNivel: string;
 
   valuesNegritas = [
     'Utilidad bruta',
@@ -1050,6 +1059,14 @@ export class InternosComponent implements OnInit {
     }
   }
 
+  onClickUnidadesDepartamento(concepto: string, value: number, name: string, idDetalleUnidades: number) {
+    this.showUnidadesDeptoByLevel(2);
+    this.detalleUnidadesDepartamentoName = name;
+    this.detalleUnidadesDepartamentoValue = value;
+    this.idDetalleUnidadesDepartamento = idDetalleUnidades;
+    this.detalleUnidadesDepartamentoConcepto = concepto;
+  }
+
   onClickUnidadesAcumuladoReal(i: number, value: number, name: string, idDetalleUnidades: number) {
 
     const concepto = this.resultadoUnidades[i].descripcion;
@@ -1402,6 +1419,10 @@ export class InternosComponent implements OnInit {
 
   showUnidadesAcumuladoByLevel(level: number) {
     this.showUnidadesAcumuladoReal = level;
+  }
+
+  showUnidadesDeptoByLevel(level: number) {
+    this.showUnidadesDeptoNivel = level;
   }
 
   showEstadoResultadoAcumuladoByLevel(level: number) {
