@@ -1284,11 +1284,33 @@ export class InternosComponent implements OnInit {
       EsAnul: esAnual
     }).subscribe(acumuladoVariacion => {
         this.acumuladoVariacion = acumuladoVariacion;
+        if( esAnual == 0 ){
+          
+          this.acumuladoVariacion.forEach(ac => {
+            // Calcula La variacion
+            ac.variacion = ac.cantidad - ac.cantidadPrespuesto;
+            // Calcula el porcentaje de la variacion si variacion es 0 el resultado es del % es 0
+            ac.percentVariacion = ((ac.variacion / ac.cantidadPrespuesto) * 100);
+
+            if( ac.percentVariacion == Infinity || ac.percentVariacion == -Infinity ){
+              ac.percentVariacion = 0;
+            }else if ( ac.cantidad == 0 && ac.cantidadPrespuesto == 0 ){
+              ac.percentVariacion = 0;
+            }
+              
+          });
+        }else if( esAnual == 1 ){
+          this.acumuladoVariacion.forEach(ac => {
+            // Calcula la cantidad Real
+            ac.cantidad = ( ac.enero + ac.febrero + ac.marzo + ac.abril + ac.mayo + ac.junio + 
+                            ac.julio + ac.agosto + ac.septiembre + ac.octubre + ac.noviembre + ac.diciembre );
+          });
+        }
         console.log( "acumuladoVariacion", acumuladoVariacion );
       },
       error => {
         this.errorMessage = <any>error;
-        this.detalleResultadosMensual = [];
+        this.acumuladoVariacion = [];
       },
       // Si la lista tiene más de 10 resultados se necesita ajustar
       // el ancho de tabla para que quepa el scroll (solo mensual)

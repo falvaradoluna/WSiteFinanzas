@@ -33,4 +33,7 @@ export interface IAcumuladoReal {
   numeroCuenta:         string;
   titulo:               string;
   cantidadPrespuesto:   number;
+  variacion:            number;
+  cantidad:             number;
+  percentVariacion:     number;
 }

@@ -534,66 +534,78 @@
             </tbody>
           </table>
 
-          <table id="detalleResultadosAcumulado" *ngIf='idDetalleResultados === 2' class="table table-sm table-bordered table-fixed table-hover-td"
+          <table id="detalleResultadosAcumulado" *ngIf='idDetalleResultados === 2' class="table table-lg table-bordered table-fixed table-hover-td table-responsive table-double-scroller"
                   [ngClass]="{'table-without-scroll': detalleResultadosMensualScroll}">
             <thead>
               <tr>
-                <th class="bg-secondary text-white col-md-3">Variacion</th>
-                <th class="bg-secondary text-white"
-                    [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">No. Cuenta</th>
-                <th class="bg-secondary text-white col-md-3">Descripción</th>
-                <th *ngIf='idEstadoResultado !== 3' class="col-md-3 bg-secondary text-white">Saldo Mensual</th>
-                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Real</th>
-                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Presupuesto</th>
-                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Variacion</th>
-                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white"> Pct </th>
+                <th width = "14%" class="bg-secondary text-white ">Concepto</th>
+                <th width = "14%" class="bg-secondary text-white ">No. Cuenta</th>
+                <th width = "14%" class="bg-secondary text-white ">Descripción</th>
+                <th width = "14%" class="bg-secondary text-white">Real</th>
+                <th width = "14%" class="bg-secondary text-white">Presupuesto</th>
+                <th width = "14%" class="bg-secondary text-white">Variacion</th>
+                <th width = "14%" class="bg-secondary text-white"> % </th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor='let drm of detalleResultadosMensual; let i = index;'
-                  [ngClass]="{'font-weight-bold': shouldBeBold(drm.titulo)}">
-                <td class="col-md-3">{{ drm.titulo }}</td>
-                <td [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">{{ drm.numeroCuenta || drm.Numcta }}</td>
-                <td class="col-md-3">{{ drm.descripcion || "descripcion" }}</td>
-                <td *ngIf='idEstadoResultado !== 3' class="col-md-3 text-right"
-                    (dblclick)="onClickDetalleSegundoNivel(i, drm.saldoMonto, 'Saldomes')" [suma-columnas]='drm.saldoMonto'>{{ drm.saldoMonto | number:'1.2-2' }}</td>
-                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"
-                    (dblclick)="onClickDetalleSegundoNivel(i, drm.Real, 'Real')"  [suma-columnas]='drm.Real'>{{ drm.Real | number:'1.2-2' }}</td>
-                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pspsto'>{{ drm.Pspsto | number:'1.2-2' }}</td>
-                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Variacion'>{{ drm.Variacion | number:'1.2-2' }}</td>
-                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pct'>{{ drm.Pct | number:'1.2-2' }}</td>
+              <tr *ngFor='let acm of acumuladoVariacion; let i = index;' [ngClass]="{'font-weight-bold': shouldBeBold(acm.titulo)}">
+                <td width = "14%" class = ''>{{ acm.titulo || "Concepto" }}</td>
+                <td width = "14%" class = ''>{{ acm.numeroCuenta || acm.Numcta }}</td>
+                <td width = "14%" class = ''>{{ acm.descripcion || "descripcion" }}</td>
+                <td width = "14%" class = 'text-right' [suma-columnas]='acm.cantidad'>{{ acm.cantidad | number:'1.2-2' }}</td>
+                <td width = "14%" class = 'text-right' [suma-columnas]='acm.cantidadPrespuesto'>{{ acm.cantidadPrespuesto | number:'1.2-2' }}</td>
+                <td width = "14%" class = 'text-right' [suma-columnas]='acm.variacion'>{{ acm.variacion | number:'1.2-2' }}</td>
+                <td width = "14%" class = 'text-right' [suma-columnas]='acm.percentVariacion'>{{ acm.percentVariacion | number:'1.2-2' }}</td>
               </tr>
             </tbody>
           </table>
 
-          <table id="detalleResultadosAcumulado" *ngIf='idDetalleResultados === 3' class="table table-sm table-bordered table-fixed table-hover-td"
-                  [ngClass]="{'table-without-scroll': detalleResultadosMensualScroll}">
+          <table id="detalleResultadosAcumulado" *ngIf='idDetalleResultados === 3' class="table table-lg table-bordered table-fixed table-hover-td table-responsive table-double-scroller"
+            [ngClass]="{'table-without-scroll': detalleResultadosMensualScroll}">
             <thead>
               <tr>
-                <th class="bg-secondary text-white col-md-3">VariacionAc</th>
-                <th class="bg-secondary text-white"
-                    [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">No. Cuenta</th>
-                <th class="bg-secondary text-white col-md-3">Descripción</th>
-                <th *ngIf='idEstadoResultado !== 3' class="col-md-3 bg-secondary text-white">Saldo Mensual</th>
-                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Real</th>
-                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Presupuesto</th>
-                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Variacion</th>
-                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white"> Pct </th>
+                <th width="10%" class="bg-secondary text-white ">Concepto</th>
+                <th width="10%" class="bg-secondary text-white ">No. Cuenta</th>
+                <th width="10%" class="bg-secondary text-white ">Descripción</th>
+                <th width="10%" class="bg-secondary text-white ">Enero</th>
+                <th width="10%" class="bg-secondary text-white ">Febrero</th>
+                <th width="10%" class="bg-secondary text-white ">Marzo</th>
+                <th width="10%" class="bg-secondary text-white ">Abril</th>
+                <th width="10%" class="bg-secondary text-white ">Mayo</th>
+                <th width="10%" class="bg-secondary text-white ">Junio</th>
+                <th width="10%" class="bg-secondary text-white ">Julio</th>
+                <th width="10%" class="bg-secondary text-white ">Agosto</th>
+                <th width="10%" class="bg-secondary text-white ">Septiembre</th>
+                <th width="10%" class="bg-secondary text-white ">Octubre</th>
+                <th width="10%" class="bg-secondary text-white ">Noviembre</th>
+                <th width="10%" class="bg-secondary text-white ">Diciembre</th>
+                <th width="10%" class="bg-secondary text-white">Real</th>
+                <th width="10%" class="bg-secondary text-white">Presupuesto</th>
+                <th width="14%" class="bg-secondary text-white">Variacion</th>
+                <th width="10%" class="bg-secondary text-white"> % </th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor='let drm of detalleResultadosMensual; let i = index;'
-                  [ngClass]="{'font-weight-bold': shouldBeBold(drm.titulo)}">
-                <td class="col-md-3">{{ drm.titulo }}</td>
-                <td [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">{{ drm.numeroCuenta || drm.Numcta }}</td>
-                <td class="col-md-3">{{ drm.descripcion || "descripcion" }}</td>
-                <td *ngIf='idEstadoResultado !== 3' class="col-md-3 text-right"
-                    (dblclick)="onClickDetalleSegundoNivel(i, drm.saldoMonto, 'Saldomes')" [suma-columnas]='drm.saldoMonto'>{{ drm.saldoMonto | number:'1.2-2' }}</td>
-                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"
-                    (dblclick)="onClickDetalleSegundoNivel(i, drm.Real, 'Real')"  [suma-columnas]='drm.Real'>{{ drm.Real | number:'1.2-2' }}</td>
-                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pspsto'>{{ drm.Pspsto | number:'1.2-2' }}</td>
-                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Variacion'>{{ drm.Variacion | number:'1.2-2' }}</td>
-                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pct'>{{ drm.Pct | number:'1.2-2' }}</td>
+              <tr *ngFor='let acm of acumuladoVariacion; let i = index;' [ngClass]="{'font-weight-bold': shouldBeBold(acm.titulo)}">
+                <td width="10%" class=''>{{ acm.titulo || "Concepto" }}</td>
+                <td width="10%" class=''>{{ acm.numeroCuenta || acm.Numcta }}</td>
+                <td width="10%" class=''>{{ acm.descripcion || "descripcion" }}</td>
+                <td width="10%" class=''>{{ acm.enero }}</td>
+                <td width="10%" class=''>{{ acm.febrero }}</td>
+                <td width="10%" class=''>{{ acm.marzo }}</td>
+                <td width="10%" class=''>{{ acm.abril }}</td>
+                <td width="10%" class=''>{{ acm.mayo }}</td>
+                <td width="10%" class=''>{{ acm.junio }}</td>
+                <td width="10%" class=''>{{ acm.julio }}</td>
+                <td width="10%" class=''>{{ acm.agosto }}</td>
+                <td width="10%" class=''>{{ acm.septiembre }}</td>
+                <td width="10%" class=''>{{ acm.octubre }}</td>
+                <td width="10%" class=''>{{ acm.noviembre }}</td>
+                <td width="10%" class=''>{{ acm.diciembre }}</td>
+                <td width="10%" class='text-right' [suma-columnas]='acm.cantidad'>{{ acm.cantidad | number:'1.2-2' }}</td>
+                <td width="10%" class='text-right' [suma-columnas]='acm.cantidadPrespuesto'>{{ acm.cantidadPrespuesto | number:'1.2-2' }}</td>
+                <td width="10%" class='text-right' [suma-columnas]='acm.variacion'>{{ acm.variacion | number:'1.2-2' }}</td>
+                <td width="10%" class='text-right' [suma-columnas]='acm.percentVariacion'>{{ acm.percentVariacion | number:'1.2-2' }}</td>
               </tr>
             </tbody>
           </table>
