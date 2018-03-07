@@ -51,7 +51,7 @@
                 </select>
               </div>
               <div class="form-group col-md-4">
-                <label for="inputDepartamento">Departamento</label>
+                <label for="inputDepartamento">Departamento1</label>
                 <select name="inputDepartamento" class="form-control form-control-sm"
                   [disabled]="disabledSucursalDepartamento()"
                   [(ngModel)]='selectedIdDepartamento'
@@ -280,7 +280,7 @@
               <th class="bg-success text-white col-width-perc">%</th>
               <th class="bg-success text-white col-width-perc">PPto</th>
               <th class="bg-success text-white col-width-perc">%</th>
-              <th class="bg-success text-white col-width-cantidad">Variación1</th>
+              <th class="bg-success text-white col-width-cantidad">Variación</th>
               <th class="bg-success text-white col-width-perc">%</th>
             </tr>
           </thead>
@@ -350,10 +350,10 @@
               <ng-template #tipErAcPpto>Por Unidad: {{ calculaTooltip(r.cantidadPresupuestoAcumulado, 9) | number:'1.2-2' }}</ng-template>
 
               <ng-template #conTooltipReal>
-                  <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidad, 'Real', 1, 0)" [ngbTooltip]="tipErReal" container="body">
-                    {{ r.descripcion === 'ROS' ? (r.cantidad | percent:'1.2-2') : (r.cantidad | number:'1.2-2') }}
-                  </td>
-                </ng-template>
+                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidad, 'Real', 1, 0)" [ngbTooltip]="tipErReal" container="body">
+                  {{ r.descripcion === 'ROS' ? (r.cantidad | percent:'1.2-2') : (r.cantidad | number:'1.2-2') }}
+                </td>
+              </ng-template>
               <ng-template #sinTooltipReal>
                 <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidad, 'Real', 1, 0)">
                   {{ r.descripcion === 'ROS' ? (r.cantidad | percent:'1.2-2') : (r.cantidad | number:'1.2-2') }}
@@ -405,7 +405,7 @@
                 <td class="text-right col-width-perc">
                   {{ r.descripcion === 'ROS' ? (r.presupuestoPorcentaje | percent:'1.2-2') : (r.presupuestoPorcentaje | number:'1.2-2') }}
                 </td>
-                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.variacion, 'Variacion', 3, 1)">
+                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.variacion, 'Variacion', 3, 2)">
                   {{ r.descripcion === 'ROS' ? (r.variacion | percent:'1.2-2') : (r.variacion | number:'1.2-2') }}
                 </td>
                 <td class="text-right col-width-perc">
@@ -423,7 +423,7 @@
                 <td class="text-right col-width-perc">
                   {{ r.descripcion === 'ROS' ? (r.presupuestoPorcentajeAcumulado | percent:'1.2-2') : (r.presupuestoPorcentajeAcumulado | number:'1.2-2') }}
                 </td>
-                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.variacionAcumulado, 'AcVariacion', 3, 2)">
+                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.variacionAcumulado, 'AcVariacion', 3, 3)">
                   {{ r.descripcion === 'ROS' ? (r.variacionAcumulado | percent:'1.2-2') : (r.variacionAcumulado | number:'1.2-2') }}
                 </td>
                 <td class="text-right col-width-perc">
@@ -454,7 +454,7 @@
                   [ngClass]="{'table-without-scroll': detalleResultadosMensualScroll}">
             <thead>
               <tr>
-                <th class="bg-secondary text-white col-md-3">Concepto12</th>
+                <th class="bg-secondary text-white col-md-3">Concepto</th>
                 <th class="bg-secondary text-white"
                     [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">No. Cuenta</th>
                 <th class="bg-secondary text-white col-md-3">Descripción</th>
@@ -530,6 +530,70 @@
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Pspsto | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Variacion | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Pct | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table id="detalleResultadosAcumulado" *ngIf='idDetalleResultados === 2' class="table table-sm table-bordered table-fixed table-hover-td"
+                  [ngClass]="{'table-without-scroll': detalleResultadosMensualScroll}">
+            <thead>
+              <tr>
+                <th class="bg-secondary text-white col-md-3">Variacion</th>
+                <th class="bg-secondary text-white"
+                    [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">No. Cuenta</th>
+                <th class="bg-secondary text-white col-md-3">Descripción</th>
+                <th *ngIf='idEstadoResultado !== 3' class="col-md-3 bg-secondary text-white">Saldo Mensual</th>
+                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Real</th>
+                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Presupuesto</th>
+                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Variacion</th>
+                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white"> Pct </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor='let drm of detalleResultadosMensual; let i = index;'
+                  [ngClass]="{'font-weight-bold': shouldBeBold(drm.titulo)}">
+                <td class="col-md-3">{{ drm.titulo }}</td>
+                <td [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">{{ drm.numeroCuenta || drm.Numcta }}</td>
+                <td class="col-md-3">{{ drm.descripcion || "descripcion" }}</td>
+                <td *ngIf='idEstadoResultado !== 3' class="col-md-3 text-right"
+                    (dblclick)="onClickDetalleSegundoNivel(i, drm.saldoMonto, 'Saldomes')" [suma-columnas]='drm.saldoMonto'>{{ drm.saldoMonto | number:'1.2-2' }}</td>
+                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"
+                    (dblclick)="onClickDetalleSegundoNivel(i, drm.Real, 'Real')"  [suma-columnas]='drm.Real'>{{ drm.Real | number:'1.2-2' }}</td>
+                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pspsto'>{{ drm.Pspsto | number:'1.2-2' }}</td>
+                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Variacion'>{{ drm.Variacion | number:'1.2-2' }}</td>
+                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pct'>{{ drm.Pct | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table id="detalleResultadosAcumulado" *ngIf='idDetalleResultados === 3' class="table table-sm table-bordered table-fixed table-hover-td"
+                  [ngClass]="{'table-without-scroll': detalleResultadosMensualScroll}">
+            <thead>
+              <tr>
+                <th class="bg-secondary text-white col-md-3">VariacionAc</th>
+                <th class="bg-secondary text-white"
+                    [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">No. Cuenta</th>
+                <th class="bg-secondary text-white col-md-3">Descripción</th>
+                <th *ngIf='idEstadoResultado !== 3' class="col-md-3 bg-secondary text-white">Saldo Mensual</th>
+                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Real</th>
+                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Presupuesto</th>
+                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Variacion</th>
+                <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white"> Pct </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor='let drm of detalleResultadosMensual; let i = index;'
+                  [ngClass]="{'font-weight-bold': shouldBeBold(drm.titulo)}">
+                <td class="col-md-3">{{ drm.titulo }}</td>
+                <td [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">{{ drm.numeroCuenta || drm.Numcta }}</td>
+                <td class="col-md-3">{{ drm.descripcion || "descripcion" }}</td>
+                <td *ngIf='idEstadoResultado !== 3' class="col-md-3 text-right"
+                    (dblclick)="onClickDetalleSegundoNivel(i, drm.saldoMonto, 'Saldomes')" [suma-columnas]='drm.saldoMonto'>{{ drm.saldoMonto | number:'1.2-2' }}</td>
+                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"
+                    (dblclick)="onClickDetalleSegundoNivel(i, drm.Real, 'Real')"  [suma-columnas]='drm.Real'>{{ drm.Real | number:'1.2-2' }}</td>
+                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pspsto'>{{ drm.Pspsto | number:'1.2-2' }}</td>
+                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Variacion'>{{ drm.Variacion | number:'1.2-2' }}</td>
+                <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pct'>{{ drm.Pct | number:'1.2-2' }}</td>
               </tr>
             </tbody>
           </table>

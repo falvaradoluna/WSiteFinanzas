@@ -55,6 +55,7 @@ export class InternosService {
   private _urlEstadoResultadosPresupuesto = "api/internos/estadoresultadospresupuesto";
   private _urlEstadoResultadosAcumuladoByIdER = "api/internos/estadoresultadosacumuladobyider";
   private _urlDetalleUnidadesSeriesAr = 'api/internos/detalleunidadesseriesar';
+  private _urlEstadoDeResultadosVariacionSegundoNivel = "api/internos/estadoderesultadosvariacionsegundonivel";
 
   constructor(private _http: HttpClient) { }
 
@@ -565,20 +566,21 @@ export class InternosService {
       .catch(this.handleError);
   }
 
-  getEstadoResultadosVariacion(parameters)/*: Observable<ISeries[]>*/ {
+  getEstadoResultadosVariacion(parameters): Observable<IAcumuladoReal[]> {
     // Initialize Params Object
     let Params = new HttpParams();
-
     // Begin assigning parameters
-    Params = Params.append('idCompania',        parameters.idCompania);
-    Params = Params.append('idSucursal',        parameters.idSucursal);
-    Params = Params.append('idOrigen',          parameters.idOrigen);
-    Params = Params.append('periodoYear',       parameters.periodoYear);
-    Params = Params.append('periodoMes',        parameters.periodoMes);
-    Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
-    console.log("ParamsServiceVariacion", Params);
-    // return this._http.get<ISeries[]>(this._urlDetalleUnidadesSeriesAr, { params: Params })
-    //   .catch(this.handleError);
+    Params = Params.append('idCompania',          parameters.idCompania);
+    Params = Params.append('PeriodoMes',          parameters.PeriodoMes);
+    Params = Params.append('PeriodoYear',         parameters.PeriodoYear);
+    Params = Params.append('idEstadoResultadosI', parameters.idEstadoResultadosI);
+    Params = Params.append('IdDepartamento',      parameters.IdDepartamento);
+    Params = Params.append('IdSucursal',          parameters.IdSucursal);
+    Params = Params.append('idSucursalSecuencia', parameters.idSucursalSecuencia);
+    Params = Params.append('EsAnul',              parameters.EsAnul);
+    
+    return this._http.get<IAcumuladoReal[]>(this._urlEstadoDeResultadosVariacionSegundoNivel, { params: Params })
+      .catch(this.handleError);
   }
 
 }

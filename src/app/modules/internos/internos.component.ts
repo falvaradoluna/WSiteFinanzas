@@ -97,6 +97,7 @@ export class InternosComponent implements OnInit {
   acumuladoReal: IAcumuladoReal[] = [];
   acumuladoRealNv2: IAcumuladoReal[] = []
   acumuladoRealDepartamento: IAcumuladoReal[] = [];
+  acumuladoVariacion: IAcumuladoReal[] = [];
   autoLineaAcumulado: IAutoLineaAcumulado[] = [];
   tipoUnidadAcumulado: IAutoLineaAcumulado[] = [];
   companias: ICompania[];
@@ -367,7 +368,7 @@ export class InternosComponent implements OnInit {
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       periodoYear: this.anio,
       periodoMes: this.mes,
-      idDepartamento: this.selectedIdDepartamentoEr,
+      idDepartamento: this.selectedIdDepartamento,
       idSucursalSecuencia: this.selectedIdSucursalSecuencia
     })
       .subscribe(estadoResultados => {
@@ -964,7 +965,9 @@ export class InternosComponent implements OnInit {
   }
 
   onChangeDepartamento(newValue): void {
+    console.log("NewValue", newValue);
     this.selectedIdDepartamento = newValue;
+    console.log( "selectedIdDepartamento", this.selectedIdDepartamento );
     if (this.departamentos.find(x => x.idPestana === +newValue)) {
       this.selectedIdDepartamentoEr = this.departamentos.find(x => x.idPestana === +newValue).idER || 0;
     } else {
@@ -1245,6 +1248,7 @@ export class InternosComponent implements OnInit {
 
 
   onClickResultado(i: number, value: number, name: string, idEstadoResultado: number, idDetalleResultados: number) {
+    
     const idOrden = this.estadoResultados[i].idOrden;
     this.showDetallePrimerNivel = true;
     this.detalleName = name;
@@ -1254,40 +1258,45 @@ export class InternosComponent implements OnInit {
     this.idEstadoResultado = this.estadoResultados[i].idEstadoResultadosI;
     if (name === 'Real' || name === 'AcReal') {
       this.getDetalleResultadosMensual(idOrden, idDetalleResultados);
-    }else if( name === "AcVariacion" ){
-      this.getDetalleResultadosVariacion();
+    }else if( name === "AcVariacion" || name === "Variacion" ){
+      if( idDetalleResultados === 2 ){
+        this.getDetalleResultadosVariacion(0);
+      }else if( idDetalleResultados === 3 ){
+        this.getDetalleResultadosVariacion(1);
+      }
     }else {
       this.getDetalleResultadosMensualPresupuesto(idOrden);
     }
   }
 
-  getDetalleResultadosVariacion(): void {
+  getDetalleResultadosVariacion(esAnual): void {
     // Este servicio requiere el Id de la sucursal con un cero a la izquierda
+    console.log( "getDetalleResultadosVariacion" );
+    console.log( "Es anual en metodo", esAnual );
     this._service.getEstadoResultadosVariacion({
       idCompania: this.selectedCompania,
-      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
-      periodoYear: this.anio,
-      periodoMes: this.mes,
-      idDepartamento: this.selectedIdDepartamentoEr,
+      PeriodoMes: this.mes,
+      PeriodoYear: this.anio,
+      idEstadoResultadosI: this.idEstadoResultado || 0,
+      IdDepartamento: this.selectedIdDepartamento > 0 ? this.selectedIdDepartamento : 0,
+      IdSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       idSucursalSecuencia: this.selectedIdSucursalSecuencia,
-      idEstadoResultadosI: this.idEstadoResultado || 0
-      // idOrden: idOrden,
-      // esAnual: esAnual
-    });
-      // .subscribe(detalleResultadosMensual => {
-      //   this.detalleResultadosMensual = detalleResultadosMensual;
-      // },
-      // error => {
-      //   this.errorMessage = <any>error;
-      //   this.detalleResultadosMensual = [];
-      // },
-      // // Si la lista tiene más de 10 resultados se necesita ajustar
-      // // el ancho de tabla para que quepa el scroll (solo mensual)
-      // () => {
-      //   this.detalleResultadosMensualScroll = this.detalleResultadosMensual.length <= 10 ? true : false;
-      //   this.fixedHeader('detalleResultadosAcumulado');
-      // }
-    //);
+      EsAnul: esAnual
+    }).subscribe(acumuladoVariacion => {
+        this.acumuladoVariacion = acumuladoVariacion;
+        console.log( "acumuladoVariacion", acumuladoVariacion );
+      },
+      error => {
+        this.errorMessage = <any>error;
+        this.detalleResultadosMensual = [];
+      },
+      // Si la lista tiene más de 10 resultados se necesita ajustar
+      // el ancho de tabla para que quepa el scroll (solo mensual)
+      () => {
+        // this.detalleResultadosMensualScroll = this.detalleResultadosMensual.length <= 10 ? true : false;
+        // this.fixedHeader('detalleResultadosAcumulado');
+      }
+    );
   }
 
 

@@ -956,11 +956,11 @@ internos.prototype.get_estadoderesultadosvariacionsegundonivel = function (req, 
   console.log( "get_estadoderesultadosvariacionsegundonivel" );
   var self = this;
   var idCompania          = req.query.idCompania;
-  var periodoMes          = req.query.periodoMes;
-  var periodoYear         = req.query.periodoYear;
+  var PeriodoMes          = req.query.PeriodoMes;
+  var PeriodoYear         = req.query.PeriodoYear;
   var idEstadoResultadosI = req.query.idEstadoResultadosI;
-  var idDepartamento      = req.query.idDepartamento;
-  var idSucursal          = req.query.idSucursal;
+  var IdDepartamento      = req.query.IdDepartamento;
+  var IdSucursal          = req.query.IdSucursal;
   var idSucursalSecuencia = req.query.idSucursalSecuencia;
   var EsAnul              = req.query.EsAnul;
 
@@ -968,16 +968,17 @@ internos.prototype.get_estadoderesultadosvariacionsegundonivel = function (req, 
 
   var params = [
     { name: 'IdCompania',           value: idCompania, type: self.model.types.INT },
-    { name: 'periodoMes',           value: periodoMes, type: self.model.types.INT },
-    { name: 'periodoYear',          value: periodoYear, type: self.model.types.INT },
+    { name: 'PeriodoMes',           value: PeriodoMes, type: self.model.types.INT },
+    { name: 'PeriodoYear',          value: PeriodoYear, type: self.model.types.INT },
     { name: 'idEstadoResultadosI',  value: idEstadoResultadosI, type: self.model.types.INT },
-    { name: 'idDepartamento',       value: idDepartamento, type: self.model.types.INT },
-    { name: 'IdSucursal',           value: idSucursal, type: self.model.types.INT },
+    { name: 'IdDepartamento',       value: IdDepartamento, type: self.model.types.INT },
+    { name: 'IdSucursal',           value: IdSucursal, type: self.model.types.INT },
     { name: 'idSucursalSecuencia',  value: idSucursalSecuencia, type: self.model.types.INT },
     { name: 'EsAnul',               value: EsAnul, type: self.model.types.INT }
   ];
   
-  this.model.query('Unidad.ObtenerDetalleUnidades', params, function (error, result) {
+  this.model.query('[Contabilidad].[ObtieneDetalleEstadoDeResultadosVariacionSegundoNivel]', params, function (error, result) {
+    console.log( "=================================================" );
     console.log( "error", error );
     console.log( "result", result );
     self.view.expositor(res, {
