@@ -1,0 +1,90 @@
+<div class="row">
+  <div class="col-md-12 mt-2">
+    <div class="card">
+      <div  *ngIf="selectedTipoReporte === '4'" class="card-header bg-primary text-white text-center">
+        FLUJO DE EFECTIVO REAL
+      </div>
+      <div  *ngIf="selectedTipoReporte === '5'" class="card-header bg-primary text-white text-center">
+        ESTADO DE SITUACION FINANCIERA
+      </div>
+      <table id="tableEfectivo" class="table table-lg table-bordered table-responsive table-double-scroller" *ngIf="selectedTipoReporte === '4'">
+        <thead>
+          <tr>
+            <th class="bg-success text-white">Concepto</th>
+            <th width = "6%" class="bg-success text-white">Ene</th>
+            <th width = "6%" class="bg-success text-white">Feb</th>
+            <th width = "6%" class="bg-success text-white">Mar</th>
+            <th width = "6%" class="bg-success text-white">Abr</th>
+            <th width = "6%" class="bg-success text-white">May</th>
+            <th width = "6%" class="bg-success text-white">Jun</th>
+            <th width = "6%" class="bg-success text-white">Jul</th>
+            <th width = "6%" class="bg-success text-white">Ago</th>
+            <th width = "6%" class="bg-success text-white">Sep</th>
+            <th width = "6%" class="bg-success text-white">Oct</th>
+            <th width = "6%" class="bg-success text-white">Nov</th>
+            <th width = "6%" class="bg-success text-white">Dic</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor='let es of efectivoSituacion; let i = index;'>
+            <tr>
+              <td class="">{{ es.concepto }}</td>
+              <td class="text-right">{{ es.Ene | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Feb | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Mar | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Abr | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.May | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Jun | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Jul | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Ago | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Sep | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Oct | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Nov | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Dic | number:'1.2-2' }}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <table id="tableEstado" class="table table-lg table-bordered table-responsive table-double-scroller" *ngIf="selectedTipoReporte === '5'">
+        <thead>
+          <tr>
+            <th class="bg-success text-white">Concepto</th>
+            <th class="bg-success text-white">Ene</th>
+            <th class="bg-success text-white">Feb</th>
+            <th class="bg-success text-white">Mar</th>
+            <th class="bg-success text-white">Abr</th>
+            <th class="bg-success text-white">May</th>
+            <th class="bg-success text-white">Jun</th>
+            <th class="bg-success text-white">Jul</th>
+            <th class="bg-success text-white">Ago</th>
+            <th class="bg-success text-white">Sep</th>
+            <th class="bg-success text-white">Oct</th>
+            <th class="bg-success text-white">Nov</th>
+            <th class="bg-success text-white">Dic</th>
+            <th class="bg-success text-white">DicAñoAnt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor='let es of estadoSituacion; let i = index;'>
+            <tr>
+              <td class="">{{ es.concepto }}</td>
+              <td class="text-right">{{ es.Ene | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Feb | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Mar | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Abr | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.May | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Jun | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Jul | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Ago | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Sep | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Oct | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Nov | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.Dic | number:'1.2-2' }}</td>
+              <td class="text-right">{{ es.dicAnioAnt | number:'1.2-2' }}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

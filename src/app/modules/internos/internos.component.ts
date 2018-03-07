@@ -20,8 +20,6 @@ import { ISucursal } from './sucursal';
 import { ICompania } from './compania';
 import { IDepartamento } from './departamento';
 import { ITipoReporte } from './tipo-reporte';
-import { IEfectivoSituacion } from './efectivo-y-situacion-financiera';
-import { IEstadoSituacion } from './estado-Situacion-Financiera';
 import { IAcumuladoReal } from './acumuladoreal';
 import { IDetalleUnidadesMensual } from './detalle-unidades-mensual';
 import { IDetalleResultadosMensual } from './detalle-resultados-mensual';
@@ -32,6 +30,7 @@ import { ISeries } from './series';
 import { ColumnSortedEvent } from '../../shared/services/sort.service';
 import { IAutoLineaAcumulado } from './auto-linea-acumulado';
 import { FechaActualizacionService } from '../../shared';
+import { FlujoeSituacionfComponent } from './flujoe-situacionf/flujoe-situacionf.component'
 
 
 @Component({
@@ -96,11 +95,10 @@ export class InternosComponent implements OnInit {
   unidadesDepartamento: IResultadoInternos[] = [];
   unidadesAcumuladoPresupuesto: IDetalleUnidadesAcumulado[] = [];
   unidadesAcumuladoPresupuestoDepartamento: IDetalleUnidadesAcumulado[] = [];
-  efectivoSituacion: IEfectivoSituacion[];
-  estadoSituacion: IEstadoSituacion[] = [];
   acumuladoReal: IAcumuladoReal[] = [];
   acumuladoRealNv2: IAcumuladoReal[] = [];
   acumuladoRealDepartamento: IAcumuladoReal[] = [];
+  acumuladoVariacion: IAcumuladoReal[] = [];
   autoLineaAcumulado: IAutoLineaAcumulado[] = [];
   tipoUnidadAcumulado: IAutoLineaAcumulado[] = [];
   companias: ICompania[];
@@ -114,6 +112,7 @@ export class InternosComponent implements OnInit {
   detalleResultadosMensual: IDetalleResultadosMensual[];
   detalleResultadosCuentas: IDetalleResultadosCuentas[];
   resultadoUnidades: IResultadoInternos[] = [];
+  FlujoeSituacionfComponent: FlujoeSituacionfComponent;
   detalleUnidadesDepartamentoName = '';
   detalleUnidadesDepartamentoValue: number;
   idDetalleUnidadesDepartamento: number;
@@ -248,7 +247,7 @@ export class InternosComponent implements OnInit {
       this.showAcumuladoReal = false;
       this.showAcumuladoPresupuesto = false;
       this.showAcumuladoReal = false;
-      this.getEfectivoSituacion();
+      //this.FlujoeSituacionfComponent.getEfectivoSituacion();
     } else if (sTipoReporte === '2' && sCompania !== '0') { // Acumulado real
       this.showReporteUnidades = false;
       this.showEfectivoSituacion = false;
@@ -378,7 +377,7 @@ export class InternosComponent implements OnInit {
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       periodoYear: this.anio,
       periodoMes: this.mes,
-      idDepartamento: this.selectedIdDepartamentoEr,
+      idDepartamento: this.selectedIdDepartamento,
       idSucursalSecuencia: this.selectedIdSucursalSecuencia
     })
       .subscribe(estadoResultados => {
@@ -722,33 +721,6 @@ export class InternosComponent implements OnInit {
       );
   }
 
-  getEfectivoSituacion(): void {
-    if (this.selectedTipoReporte.toString() === '4') {
-      this._service.get_EfectivoSituacion({
-        idTipoReporte: this.selectedTipoReporte,
-        idAgencia: this.selectedCompania,
-        anio: this.anio
-      })
-        .subscribe(efectivoSituacion => {
-          this.efectivoSituacion = efectivoSituacion;
-          this.fixedHeader('tableEfectivo');
-        },
-        error => this.errorMessage = <any>error);
-    }else if (this.selectedTipoReporte.toString() === '5') {
-      this._service.get_EstadoSituacion({
-        idTipoReporte: this.selectedTipoReporte,
-        idAgencia: this.selectedCompania,
-        anio: this.anio
-      })
-        .subscribe(estadoSituacion => {
-          this.estadoSituacion = estadoSituacion;
-          this.fixedHeader('tableEstado');
-        },
-        error => this.errorMessage = <any>error);
-    }
-
-  }
-
   getAcumuladoReal(): void {
     this._service.get_AcumuladoReal({
       IdSucursal: this.selectedIdSucursal,
@@ -992,7 +964,9 @@ export class InternosComponent implements OnInit {
   }
 
   onChangeDepartamento(newValue): void {
+    console.log("NewValue", newValue);
     this.selectedIdDepartamento = newValue;
+    console.log( "selectedIdDepartamento", this.selectedIdDepartamento );
     if (this.departamentos.find(x => x.idPestana === +newValue)) {
       this.selectedIdDepartamentoEr = this.departamentos.find(x => x.idPestana === +newValue).idER || 0;
     } else {
@@ -1281,6 +1255,7 @@ export class InternosComponent implements OnInit {
 
 
   onClickResultado(i: number, value: number, name: string, idEstadoResultado: number, idDetalleResultados: number) {
+    
     const idOrden = this.estadoResultados[i].idOrden;
     this.showDetallePrimerNivel = true;
     this.detalleName = name;
@@ -1290,10 +1265,69 @@ export class InternosComponent implements OnInit {
     this.idEstadoResultado = this.estadoResultados[i].idEstadoResultadosI;
     if (name === 'Real' || name === 'AcReal') {
       this.getDetalleResultadosMensual(idOrden, idDetalleResultados);
-    } else {
+    }else if( name === "AcVariacion" || name === "Variacion" ){
+      if( idDetalleResultados === 2 ){
+        this.getDetalleResultadosVariacion(0);
+      }else if( idDetalleResultados === 3 ){
+        this.getDetalleResultadosVariacion(1);
+      }
+    }else {
       this.getDetalleResultadosMensualPresupuesto(idOrden);
     }
   }
+
+  getDetalleResultadosVariacion(esAnual): void {
+    // Este servicio requiere el Id de la sucursal con un cero a la izquierda
+    console.log( "getDetalleResultadosVariacion" );
+    console.log( "Es anual en metodo", esAnual );
+    this._service.getEstadoResultadosVariacion({
+      idCompania: this.selectedCompania,
+      PeriodoMes: this.mes,
+      PeriodoYear: this.anio,
+      idEstadoResultadosI: this.idEstadoResultado || 0,
+      IdDepartamento: this.selectedIdDepartamento > 0 ? this.selectedIdDepartamento : 0,
+      IdSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      idSucursalSecuencia: this.selectedIdSucursalSecuencia,
+      EsAnul: esAnual
+    }).subscribe(acumuladoVariacion => {
+        this.acumuladoVariacion = acumuladoVariacion;
+        if( esAnual == 0 ){
+          
+          this.acumuladoVariacion.forEach(ac => {
+            // Calcula La variacion
+            ac.variacion = ac.cantidad - ac.cantidadPrespuesto;
+            // Calcula el porcentaje de la variacion si variacion es 0 el resultado es del % es 0
+            ac.percentVariacion = ((ac.variacion / ac.cantidadPrespuesto) * 100);
+
+            if( ac.percentVariacion == Infinity || ac.percentVariacion == -Infinity ){
+              ac.percentVariacion = 0;
+            }else if ( ac.cantidad == 0 && ac.cantidadPrespuesto == 0 ){
+              ac.percentVariacion = 0;
+            }
+              
+          });
+        }else if( esAnual == 1 ){
+          this.acumuladoVariacion.forEach(ac => {
+            // Calcula la cantidad Real
+            ac.cantidad = ( ac.enero + ac.febrero + ac.marzo + ac.abril + ac.mayo + ac.junio + 
+                            ac.julio + ac.agosto + ac.septiembre + ac.octubre + ac.noviembre + ac.diciembre );
+          });
+        }
+        console.log( "acumuladoVariacion", acumuladoVariacion );
+      },
+      error => {
+        this.errorMessage = <any>error;
+        this.acumuladoVariacion = [];
+      },
+      // Si la lista tiene más de 10 resultados se necesita ajustar
+      // el ancho de tabla para que quepa el scroll (solo mensual)
+      () => {
+        // this.detalleResultadosMensualScroll = this.detalleResultadosMensual.length <= 10 ? true : false;
+        // this.fixedHeader('detalleResultadosAcumulado');
+      }
+    );
+  }
+
 
   // Usa CSS transforms para dejar los titulos fijos en la tabla
   fixedHeader(idTabla): void {

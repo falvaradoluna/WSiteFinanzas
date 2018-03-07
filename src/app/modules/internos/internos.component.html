@@ -51,7 +51,7 @@
                 </select>
               </div>
               <div class="form-group col-md-4">
-                <label for="inputDepartamento">Departamento</label>
+                <label for="inputDepartamento">Departamento1</label>
                 <select name="inputDepartamento" class="form-control form-control-sm"
                   [disabled]="disabledSucursalDepartamento()"
                   [(ngModel)]='selectedIdDepartamento'
@@ -423,7 +423,7 @@
               <th class="bg-success text-white col-width-perc">%</th>
               <th class="bg-success text-white col-width-cantidad">PPto</th>
               <th class="bg-success text-white col-width-perc">%</th>
-              <th class="bg-success text-white col-width-cantidad">Variación</th>
+              <th class="bg-success text-white col-width-cantidad">Variacións</th>
               <th class="bg-success text-white col-width-perc">%</th>
             </tr>
           </thead>
@@ -436,10 +436,10 @@
               <ng-template #tipErAcPpto>Por Unidad: {{ calculaTooltip(r.cantidadPresupuestoAcumulado, 9) | number:'1.2-2' }}</ng-template>
 
               <ng-template #conTooltipReal>
-                  <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidad, 'Real', 1, 0)" [ngbTooltip]="tipErReal" container="body">
-                    {{ r.descripcion === 'ROS' ? (r.cantidad | percent:'1.2-2') : (r.cantidad | number:'1.2-2') }}
-                  </td>
-                </ng-template>
+                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidad, 'Real', 1, 0)" [ngbTooltip]="tipErReal" container="body">
+                  {{ r.descripcion === 'ROS' ? (r.cantidad | percent:'1.2-2') : (r.cantidad | number:'1.2-2') }}
+                </td>
+              </ng-template>
               <ng-template #sinTooltipReal>
                 <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidad, 'Real', 1, 0)">
                   {{ r.descripcion === 'ROS' ? (r.cantidad | percent:'1.2-2') : (r.cantidad | number:'1.2-2') }}
@@ -491,7 +491,7 @@
                 <td class="text-right col-width-perc">
                   {{ r.descripcion === 'ROS' ? (r.presupuestoPorcentaje | percent:'1.2-2') : (r.presupuestoPorcentaje | number:'1.2-2') }}
                 </td>
-                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.variacion, 'Variacion', 3, 1)">
+                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.variacion, 'Variacion', 3, 2)">
                   {{ r.descripcion === 'ROS' ? (r.variacion | percent:'1.2-2') : (r.variacion | number:'1.2-2') }}
                 </td>
                 <td class="text-right col-width-perc">
@@ -509,7 +509,7 @@
                 <td class="text-right col-width-perc">
                   {{ r.descripcion === 'ROS' ? (r.presupuestoPorcentajeAcumulado | percent:'1.2-2') : (r.presupuestoPorcentajeAcumulado | number:'1.2-2') }}
                 </td>
-                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.variacionAcumulado, 'AcVariacion', 3, 2)">
+                <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.variacionAcumulado, 'AcVariacion', 3, 3)">
                   {{ r.descripcion === 'ROS' ? (r.variacionAcumulado | percent:'1.2-2') : (r.variacionAcumulado | number:'1.2-2') }}
                 </td>
                 <td class="text-right col-width-perc">
@@ -616,6 +616,82 @@
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Pspsto | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Variacion | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Pct | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table id="detalleResultadosAcumulado" *ngIf='idDetalleResultados === 2' class="table table-lg table-bordered table-fixed table-hover-td table-responsive table-double-scroller"
+                  [ngClass]="{'table-without-scroll': detalleResultadosMensualScroll}">
+            <thead>
+              <tr>
+                <th width = "14%" class="bg-secondary text-white ">Concepto</th>
+                <th width = "14%" class="bg-secondary text-white ">No. Cuenta</th>
+                <th width = "14%" class="bg-secondary text-white ">Descripción</th>
+                <th width = "14%" class="bg-secondary text-white">Real</th>
+                <th width = "14%" class="bg-secondary text-white">Presupuesto</th>
+                <th width = "14%" class="bg-secondary text-white">Variacion</th>
+                <th width = "14%" class="bg-secondary text-white"> % </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor='let acm of acumuladoVariacion; let i = index;' [ngClass]="{'font-weight-bold': shouldBeBold(acm.titulo)}">
+                <td width = "14%" class = ''>{{ acm.titulo || "Concepto" }}</td>
+                <td width = "14%" class = ''>{{ acm.numeroCuenta || acm.Numcta }}</td>
+                <td width = "14%" class = ''>{{ acm.descripcion || "descripcion" }}</td>
+                <td width = "14%" class = 'text-right' [suma-columnas]='acm.cantidad'>{{ acm.cantidad | number:'1.2-2' }}</td>
+                <td width = "14%" class = 'text-right' [suma-columnas]='acm.cantidadPrespuesto'>{{ acm.cantidadPrespuesto | number:'1.2-2' }}</td>
+                <td width = "14%" class = 'text-right' [suma-columnas]='acm.variacion'>{{ acm.variacion | number:'1.2-2' }}</td>
+                <td width = "14%" class = 'text-right' [suma-columnas]='acm.percentVariacion'>{{ acm.percentVariacion | number:'1.2-2' }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table id="detalleResultadosAcumulado" *ngIf='idDetalleResultados === 3' class="table table-lg table-bordered table-fixed table-hover-td table-responsive table-double-scroller"
+            [ngClass]="{'table-without-scroll': detalleResultadosMensualScroll}">
+            <thead>
+              <tr>
+                <th width="10%" class="bg-secondary text-white ">Concepto</th>
+                <th width="10%" class="bg-secondary text-white ">No. Cuenta</th>
+                <th width="10%" class="bg-secondary text-white ">Descripción</th>
+                <th width="10%" class="bg-secondary text-white ">Enero</th>
+                <th width="10%" class="bg-secondary text-white ">Febrero</th>
+                <th width="10%" class="bg-secondary text-white ">Marzo</th>
+                <th width="10%" class="bg-secondary text-white ">Abril</th>
+                <th width="10%" class="bg-secondary text-white ">Mayo</th>
+                <th width="10%" class="bg-secondary text-white ">Junio</th>
+                <th width="10%" class="bg-secondary text-white ">Julio</th>
+                <th width="10%" class="bg-secondary text-white ">Agosto</th>
+                <th width="10%" class="bg-secondary text-white ">Septiembre</th>
+                <th width="10%" class="bg-secondary text-white ">Octubre</th>
+                <th width="10%" class="bg-secondary text-white ">Noviembre</th>
+                <th width="10%" class="bg-secondary text-white ">Diciembre</th>
+                <th width="10%" class="bg-secondary text-white">Real</th>
+                <th width="10%" class="bg-secondary text-white">Presupuesto</th>
+                <th width="14%" class="bg-secondary text-white">Variacion</th>
+                <th width="10%" class="bg-secondary text-white"> % </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor='let acm of acumuladoVariacion; let i = index;' [ngClass]="{'font-weight-bold': shouldBeBold(acm.titulo)}">
+                <td width="10%" class=''>{{ acm.titulo || "Concepto" }}</td>
+                <td width="10%" class=''>{{ acm.numeroCuenta || acm.Numcta }}</td>
+                <td width="10%" class=''>{{ acm.descripcion || "descripcion" }}</td>
+                <td width="10%" class=''>{{ acm.enero }}</td>
+                <td width="10%" class=''>{{ acm.febrero }}</td>
+                <td width="10%" class=''>{{ acm.marzo }}</td>
+                <td width="10%" class=''>{{ acm.abril }}</td>
+                <td width="10%" class=''>{{ acm.mayo }}</td>
+                <td width="10%" class=''>{{ acm.junio }}</td>
+                <td width="10%" class=''>{{ acm.julio }}</td>
+                <td width="10%" class=''>{{ acm.agosto }}</td>
+                <td width="10%" class=''>{{ acm.septiembre }}</td>
+                <td width="10%" class=''>{{ acm.octubre }}</td>
+                <td width="10%" class=''>{{ acm.noviembre }}</td>
+                <td width="10%" class=''>{{ acm.diciembre }}</td>
+                <td width="10%" class='text-right' [suma-columnas]='acm.cantidad'>{{ acm.cantidad | number:'1.2-2' }}</td>
+                <td width="10%" class='text-right' [suma-columnas]='acm.cantidadPrespuesto'>{{ acm.cantidadPrespuesto | number:'1.2-2' }}</td>
+                <td width="10%" class='text-right' [suma-columnas]='acm.variacion'>{{ acm.variacion | number:'1.2-2' }}</td>
+                <td width="10%" class='text-right' [suma-columnas]='acm.percentVariacion'>{{ acm.percentVariacion | number:'1.2-2' }}</td>
               </tr>
             </tbody>
           </table>
@@ -1252,7 +1328,7 @@
           <table id="tableAcumuladoRealNv2" class="table table-sm table-bordered table-hover-td table-responsive table-double-scroll">
             <thead>
               <tr>
-                <th class="bg-secondary text-white">Concepto2</th>
+                <th class="bg-secondary text-white">Concepto</th>
                 <th class="bg-secondary text-white">Numcta</th>
                 <th class="bg-secondary text-white">Descr</th>
                 <th class="bg-primary text-white">Enero</th>
@@ -1466,96 +1542,15 @@
   <!-- END Acumulado Presupuesto -->
 
   <!-- BEGIN Estado de situacion financiera -->
-  <div *ngIf='showEfectivoSituacion' class="row">
-    <div class="col-md-12 mt-2">
-      <div class="card">
-        <div  *ngIf="selectedTipoReporte === '4'" class="card-header bg-primary text-white text-center">
-          FLUJO DE EFECTIVO REAL
-        </div>
-        <div  *ngIf="selectedTipoReporte === '5'" class="card-header bg-primary text-white text-center">
-          ESTADO DE SITUACION FINANCIERA
-        </div>
-        <table id="tableEfectivo" class="table table-lg table-bordered table-responsive table-double-scroller" *ngIf="selectedTipoReporte === '4'">
-          <thead>
-            <tr>
-              <th class="bg-success text-white">Concepto</th>
-              <th width = "6%" class="bg-success text-white">Ene</th>
-              <th width = "6%" class="bg-success text-white">Feb</th>
-              <th width = "6%" class="bg-success text-white">Mar</th>
-              <th width = "6%" class="bg-success text-white">Abr</th>
-              <th width = "6%" class="bg-success text-white">May</th>
-              <th width = "6%" class="bg-success text-white">Jun</th>
-              <th width = "6%" class="bg-success text-white">Jul</th>
-              <th width = "6%" class="bg-success text-white">Ago</th>
-              <th width = "6%" class="bg-success text-white">Sep</th>
-              <th width = "6%" class="bg-success text-white">Oct</th>
-              <th width = "6%" class="bg-success text-white">Nov</th>
-              <th width = "6%" class="bg-success text-white">Dic</th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container *ngFor='let es of efectivoSituacion; let i = index;'>
-              <tr>
-                <td class="">{{ es.concepto }}</td>
-                <td class="text-right">{{ es.Ene | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Feb | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Mar | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Abr | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.May | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Jun | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Jul | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Ago | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Sep | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Oct | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Nov | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Dic | number:'1.2-2' }}</td>
-              </tr>
-            </ng-container>
-          </tbody>
-        </table>
-        <table id="tableEstado" class="table table-lg table-bordered table-responsive table-double-scroller" *ngIf="selectedTipoReporte === '5'">
-          <thead>
-            <tr>
-              <th class="bg-success text-white">Concepto</th>
-              <th class="bg-success text-white">Ene</th>
-              <th class="bg-success text-white">Feb</th>
-              <th class="bg-success text-white">Mar</th>
-              <th class="bg-success text-white">Abr</th>
-              <th class="bg-success text-white">May</th>
-              <th class="bg-success text-white">Jun</th>
-              <th class="bg-success text-white">Jul</th>
-              <th class="bg-success text-white">Ago</th>
-              <th class="bg-success text-white">Sep</th>
-              <th class="bg-success text-white">Oct</th>
-              <th class="bg-success text-white">Nov</th>
-              <th class="bg-success text-white">Dic</th>
-              <th class="bg-success text-white">DicAñoAnt</th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container *ngFor='let es of estadoSituacion; let i = index;'>
-              <tr>
-                <td class="">{{ es.concepto }}</td>
-                <td class="text-right">{{ es.Ene | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Feb | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Mar | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Abr | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.May | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Jun | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Jul | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Ago | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Sep | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Oct | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Nov | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.Dic | number:'1.2-2' }}</td>
-                <td class="text-right">{{ es.dicAnioAnt | number:'1.2-2' }}</td>
-              </tr>
-            </ng-container>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+  <int-flujoe-situacionf  *ngIf='showEfectivoSituacion'
+                          [mes]                   = "mes"
+                          [anio]                  = "anio"
+                          [selectedCompania]      = "selectedCompania"
+                          [selectedIdSucursal]    = "selectedIdSucursal"
+                          [showEfectivoSituacion] = "showEfectivoSituacion"
+                          [selectedTipoReporte]   = "selectedTipoReporte"
+                          (fixedHeaderId)         = 'fixedHeader($event)'>
+  </int-flujoe-situacionf>
   <!-- END Estado de situacion financiera -->
 
   <!-- BEGIN Estado de resultados -->
