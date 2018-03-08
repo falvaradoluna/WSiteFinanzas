@@ -619,6 +619,37 @@ internos.prototype.get_detalleunidadesseries = function (req, res, next) {
   });
 };
 
+// /api/internos/detalleunidadesdepartamentoseries
+// Funcionalidad para series de Unidades (cuarto nivel de unidades)
+internos.prototype.get_detalleunidadesdepartamentoseries = function (req, res, next) {
+  var self = this;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var idPestana = req.query.idPestana;
+  var periodoYear = req.query.periodoYear;
+  var periodoMes = req.query.periodoMes;
+  var unidadDescripcion = req.query.unidadDescripcion;
+
+  console.log('QueryString Unidades Series Nv4 = ' + JSON.stringify(req.query));
+
+  var params = [
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'idPestana', value: idPestana, type: self.model.types.INT },
+    { name: 'PeriodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'unidadDescripcion', value: unidadDescripcion, type: self.model.types.STRING }
+  ];
+
+  this.model.query('Unidad.ObtenerxPestaniaDetalleUnidades', params, function (error, result) {
+    console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
 // /api/internos/detalleunidadesacumulado
 // Funcionalidad para detalle de Unidades Acumulado(segundo nivel de unidades)
 internos.prototype.get_detalleunidadesacumulado = function (req, res, next) {
@@ -1057,9 +1088,9 @@ internos.prototype.get_detalleunidadesseriesar = function (req, res, next) {
     { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
     { name: 'unidadDescripcion', value: unidadDescripcion, type: self.model.types.STRING }
   ];
-  
+
   this.model.query('Unidad.ObtenerDetalleUnidades', params, function (error, result) {
-    
+
     self.view.expositor(res, {
       error: error,
       result: result,
@@ -1093,7 +1124,7 @@ internos.prototype.get_estadoderesultadosvariacionsegundonivel = function (req, 
     { name: 'idSucursalSecuencia',  value: idSucursalSecuencia, type: self.model.types.INT },
     { name: 'EsAnul',               value: EsAnul, type: self.model.types.INT }
   ];
-  
+
   this.model.query('[Contabilidad].[ObtieneDetalleEstadoDeResultadosVariacionSegundoNivel]', params, function (error, result) {
     console.log( "=================================================" );
     console.log( "error", error );

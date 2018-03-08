@@ -171,6 +171,8 @@ export class InternosComponent implements OnInit {
   detalleUnidadesDepartamentoNameSegundoNivel: string;
   detalleUnidadesDepartamentoValueSegundoNivel: string;
 
+  detalleUnidadesDepartamentoConceptoTercerNivel: string;
+
   valuesNegritas = [
     'Utilidad bruta',
     'Utilidad Bruta Neta',
@@ -665,6 +667,17 @@ export class InternosComponent implements OnInit {
       () => {
         this.detalleResultadosMensualScroll = this.detalleResultadosMensual.length <= 10 ? true : false;
         this.fixedHeader('detalleResultadosAcumulado');
+
+        // Ciclo de 12 meses
+        for (let mes = 1; mes <= 12; mes++) {
+          const nombreMes = this.toLongMonth(mes.toString());
+
+          // Se calculan porcentajes del mes correspondiente
+          this.detalleResultadosMensual.forEach(uad => {
+              uad.totalAnual = uad.enero + uad.febrero + uad.marzo + uad.abril + uad.mayo + uad.junio + uad.julio +
+                uad.agosto + uad.septiembre + uad.octubre + uad.noviembre + uad.diciembre;
+          });
+        }
       }
     );
   }
@@ -693,6 +706,15 @@ export class InternosComponent implements OnInit {
         this.detalleResultadosMensual.forEach(x => x.saldoMonto = x[this.toLongMonth(this.mes)]);
         this.detalleResultadosMensualScroll = this.detalleResultadosMensual.length <= 10 ? true : false;
         this.fixedHeader('detalleResultadosAcumulado');
+
+        // Se calculan porcentajes del mes correspondiente
+        this.detalleResultadosMensual.forEach(uad => {
+          uad.totalAnual = 0;
+            for (let mes = 1; mes <= +this.mes; mes++) {
+              const nombreMes = this.toLongMonth(mes.toString());
+              uad.totalAnual += uad[nombreMes];
+            }
+          });
       }
     );
   }
@@ -1370,7 +1392,7 @@ export class InternosComponent implements OnInit {
           break;
       }
       return value / v;
-    } else if (this.resultadoUnidades && this.selectedIdDepartamento === 0) {
+    } else if (this.resultadoUnidades && +this.selectedIdDepartamento === 0) {
       const u = this.resultadoUnidades.find(x => x.idOrigen === 0);
       switch (col) {
         case 1: v = u.cantidad;

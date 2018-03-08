@@ -386,7 +386,7 @@
                             (showDetalleUnidadesTercerNivel)='showDetalleUnidadesTercerNivel=$event'
                             (detalleUnidadesNameTercerNivel)='detalleUnidadesNameTercerNivel=$event'
                             (detalleUnidadesValueTercerNivel)='detalleUnidadesValueTercerNivel=$event'
-                            (detalleUnidadesConceptoTercerNivel)='detalleUnidadesConceptoTercerNivel=$event'
+                            (detalleUnidadesConceptoTercerNivel)='detalleUnidadesDepartamentoConceptoTercerNivel=$event'
                             (idReporte)='idReporte=$event'
                             (fixedHeaderId)='fixedHeader($event)'
                             (mesAcumuladoNv3)='mesAcumuladoNv3=$event'>
@@ -394,7 +394,39 @@
         </div>
         <!-- END Unidades Tercer Nivel -->
         </div>
+        <!-- BEGIN Unidades Cuarto Nivel -->
+        <div *ngIf='showUnidadesDeptoNivel === 4' class="card-body" wsf-close-button (onClose)='showUnidadesDeptoByLevel(3)'>
+          <nav role="navigation">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)" (click)='showUnidadesDeptoByLevel(1)'>{{ selectedNombreCompania }}</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)" (click)='showUnidadesDeptoByLevel(2)'>{{ detalleUnidadesDepartamentoConcepto }}</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)" (click)='showUnidadesDeptoByLevel(3)'>{{ detalleUnidadesDepartamentoConceptoSegundoNivel }} {{ toLongMonth(mesAcumulado) }}</a>
+              </li>
+              <li class="breadcrumb-item active">{{ detalleUnidadesDepartamentoConceptoTercerNivel }}</li>
+            </ol>
+          </nav>
 
+          <int-unidades-nv4 [detalleUnidadesConcepto]='detalleUnidadesConcepto'
+                            [detalleUnidadesConceptoSegundoNivel]='detalleUnidadesConceptoSegundoNivel'
+                            [idOrigen]='idOrigen'
+                            [mes]='mes'
+                            [mesAcumuladoNv3]='mesAcumuladoNv3'
+                            [anio]='anio'
+                            [selectedCompania]='selectedCompania'
+                            [selectedIdSucursal]='selectedIdSucursal'
+                            [selectedIdDepartamento]='selectedIdDepartamento'
+                            [tipoAuto]='detalleUnidadesValueTercerNivel'
+                            [idReporte]='idReporte'
+                            [deptoFlotillas]='deptoFlotillas'
+                            [isUnidadesDepto]='true'>
+          </int-unidades-nv4>
+        </div>
+        <!-- END Unidades Cuarto Nivel -->
       </div>
     </div>
   </div>
@@ -586,7 +618,7 @@
                 <th *ngIf='mes >= "10"' class="bg-secondary text-white">OCT</th>
                 <th *ngIf='mes >= "11"' class="bg-secondary text-white">NOV</th>
                 <th *ngIf='mes >= "12"' class="bg-secondary text-white">DIC</th>
-                <!-- <th *ngIf='mes >= "02"' class="bg-secondary text-white">SUMA</th> -->
+                <th *ngIf='mes >= "02"' class="bg-secondary text-white">SUMA</th>
                 <th *ngIf='idEstadoResultado === 3' class="bg-secondary text-white">Real</th>
                 <th *ngIf='idEstadoResultado === 3' class="bg-secondary text-white">Presupuesto</th>
                 <th *ngIf='idEstadoResultado === 3' class="bg-secondary text-white">Variacion</th>
@@ -611,7 +643,7 @@
                 <td *ngIf='mes >= "10"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.octubre, 'Octubre', '10')">{{ drm.octubre | number:'1.2-2' }}</td>
                 <td *ngIf='mes >= "11"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.noviembre, 'Noviembre', '11')">{{ drm.noviembre | number:'1.2-2' }}</td>
                 <td *ngIf='mes >= "12"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.diciembre, 'Diciembre', '12')">{{ drm.diciembre | number:'1.2-2' }}</td>
-                <!-- <td *ngIf='mes >= "02"' class="text-right">{{ drm.Suma | number:'1.2-2' }}</td> -->
+                <td *ngIf='mes >= "02"' class="text-right">{{ drm.totalAnual | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Real | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Pspsto | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Variacion | number:'1.2-2' }}</td>

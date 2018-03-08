@@ -342,16 +342,22 @@ export class InternosService {
   getDetalleUnidadesSeries(parameters): Observable<ISeries[]> {
     // Initialize Params Object
     let Params = new HttpParams();
+    let url = 'api/internos/detalleunidadesseries';
 
     // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('idOrigen', parameters.idOrigen);
+    Params = Params.append('idPestana', parameters.idPestana);
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
 
-    return this._http.get<ISeries[]>(this._urlDetalleUnidadesSeries, { params: Params })
+    if (parameters.isUnidadesDepto) {
+      url = 'api/internos/detalleunidadesdepartamentoseries';
+    }
+
+    return this._http.get<ISeries[]>(url, { params: Params })
       .catch(this.handleError);
   }
 
