@@ -1300,8 +1300,6 @@ export class InternosComponent implements OnInit {
 
   getDetalleResultadosVariacion(esAnual): void {
     // Este servicio requiere el Id de la sucursal con un cero a la izquierda
-    console.log( "getDetalleResultadosVariacion" );
-    console.log( "Es anual en metodo", esAnual );
     this._service.getEstadoResultadosVariacion({
       idCompania: this.selectedCompania,
       PeriodoMes: this.mes,
@@ -1313,7 +1311,7 @@ export class InternosComponent implements OnInit {
       EsAnul: esAnual
     }).subscribe(acumuladoVariacion => {
         this.acumuladoVariacion = acumuladoVariacion;
-        if (esAnual == 0 ){
+        if (esAnual === 0) {
 
           this.acumuladoVariacion.forEach(ac => {
             // Calcula La variacion
@@ -1321,21 +1319,32 @@ export class InternosComponent implements OnInit {
             // Calcula el porcentaje de la variacion si variacion es 0 el resultado es del % es 0
             ac.percentVariacion = ((ac.variacion / ac.cantidadPrespuesto) * 100);
 
-            if( ac.percentVariacion === Infinity || ac.percentVariacion === -Infinity ){
+            if (ac.percentVariacion === Infinity || ac.percentVariacion === -Infinity) {
               ac.percentVariacion = 0;
-            }else if ( ac.cantidad === 0 && ac.cantidadPrespuesto === 0 ){
+            }else if ( ac.cantidad === 0 && ac.cantidadPrespuesto === 0 ) {
               ac.percentVariacion = 0;
             }
 
           });
-        }else if( esAnual === 1 ){
+        }else if (esAnual === 1 ) {
           this.acumuladoVariacion.forEach(ac => {
             // Calcula la cantidad Real
             ac.cantidad = ( ac.enero + ac.febrero + ac.marzo + ac.abril + ac.mayo + ac.junio +
-                            ac.julio + ac.agosto + ac.septiembre + ac.octubre + ac.noviembre + ac.diciembre );
+              ac.julio + ac.agosto + ac.septiembre + ac.octubre + ac.noviembre + ac.diciembre);
+            // Calcula La variacion
+            ac.variacion = ac.cantidad - ac.cantidadPrespuesto;
+
+            // Calcula el porcentaje de la variacion si variacion es 0 el resultado es del % es 0
+            ac.percentVariacion = ((ac.variacion / ac.cantidadPrespuesto) * 100);
+
+            if (ac.percentVariacion === Infinity || ac.percentVariacion === -Infinity) {
+              ac.percentVariacion = 0;
+            }else if ( ac.cantidad === 0 && ac.cantidadPrespuesto === 0 ) {
+              ac.percentVariacion = 0;
+            }
           });
-        }
-        console.log( "acumuladoVariacion", acumuladoVariacion );
+      }
+      this.fixedHeader('detalleResultadosAcumulado');
       },
       error => {
         this.errorMessage = <any>error;
