@@ -51,7 +51,7 @@
                 </select>
               </div>
               <div class="form-group col-md-4">
-                <label for="inputDepartamento">Departamento1</label>
+                <label for="inputDepartamento">Departamento</label>
                 <select name="inputDepartamento" class="form-control form-control-sm"
                   [disabled]="disabledSucursalDepartamento()"
                   [(ngModel)]='selectedIdDepartamento'
@@ -386,7 +386,7 @@
                             (showDetalleUnidadesTercerNivel)='showDetalleUnidadesTercerNivel=$event'
                             (detalleUnidadesNameTercerNivel)='detalleUnidadesNameTercerNivel=$event'
                             (detalleUnidadesValueTercerNivel)='detalleUnidadesValueTercerNivel=$event'
-                            (detalleUnidadesConceptoTercerNivel)='detalleUnidadesConceptoTercerNivel=$event'
+                            (detalleUnidadesConceptoTercerNivel)='detalleUnidadesDepartamentoConceptoTercerNivel=$event'
                             (idReporte)='idReporte=$event'
                             (fixedHeaderId)='fixedHeader($event)'
                             (mesAcumuladoNv3)='mesAcumuladoNv3=$event'>
@@ -394,7 +394,39 @@
         </div>
         <!-- END Unidades Tercer Nivel -->
         </div>
+        <!-- BEGIN Unidades Cuarto Nivel -->
+        <div *ngIf='showUnidadesDeptoNivel === 4' class="card-body" wsf-close-button (onClose)='showUnidadesDeptoByLevel(3)'>
+          <nav role="navigation">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)" (click)='showUnidadesDeptoByLevel(1)'>{{ selectedNombreCompania }}</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)" (click)='showUnidadesDeptoByLevel(2)'>{{ detalleUnidadesDepartamentoConcepto }}</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="javascript:void(0)" (click)='showUnidadesDeptoByLevel(3)'>{{ detalleUnidadesDepartamentoConceptoSegundoNivel }} {{ toLongMonth(mesAcumulado) }}</a>
+              </li>
+              <li class="breadcrumb-item active">{{ detalleUnidadesDepartamentoConceptoTercerNivel }}</li>
+            </ol>
+          </nav>
 
+          <int-unidades-nv4 [detalleUnidadesConcepto]='detalleUnidadesConcepto'
+                            [detalleUnidadesConceptoSegundoNivel]='detalleUnidadesConceptoSegundoNivel'
+                            [idOrigen]='idOrigen'
+                            [mes]='mes'
+                            [mesAcumuladoNv3]='mesAcumuladoNv3'
+                            [anio]='anio'
+                            [selectedCompania]='selectedCompania'
+                            [selectedIdSucursal]='selectedIdSucursal'
+                            [selectedIdDepartamento]='selectedIdDepartamento'
+                            [tipoAuto]='detalleUnidadesValueTercerNivel'
+                            [idReporte]='idReporte'
+                            [deptoFlotillas]='deptoFlotillas'
+                            [isUnidadesDepto]='true'>
+          </int-unidades-nv4>
+        </div>
+        <!-- END Unidades Cuarto Nivel -->
       </div>
     </div>
   </div>
@@ -423,7 +455,7 @@
               <th class="bg-success text-white col-width-perc">%</th>
               <th class="bg-success text-white col-width-cantidad">PPto</th>
               <th class="bg-success text-white col-width-perc">%</th>
-              <th class="bg-success text-white col-width-cantidad">Variacións</th>
+              <th class="bg-success text-white col-width-cantidad">Variación</th>
               <th class="bg-success text-white col-width-perc">%</th>
             </tr>
           </thead>
@@ -586,7 +618,7 @@
                 <th *ngIf='mes >= "10"' class="bg-secondary text-white">OCT</th>
                 <th *ngIf='mes >= "11"' class="bg-secondary text-white">NOV</th>
                 <th *ngIf='mes >= "12"' class="bg-secondary text-white">DIC</th>
-                <!-- <th *ngIf='mes >= "02"' class="bg-secondary text-white">SUMA</th> -->
+                <th *ngIf='mes >= "02"' class="bg-secondary text-white">SUMA</th>
                 <th *ngIf='idEstadoResultado === 3' class="bg-secondary text-white">Real</th>
                 <th *ngIf='idEstadoResultado === 3' class="bg-secondary text-white">Presupuesto</th>
                 <th *ngIf='idEstadoResultado === 3' class="bg-secondary text-white">Variacion</th>
@@ -599,19 +631,19 @@
                 <td class="">{{ drm.titulo }}</td>
                 <td class="">{{ drm.numeroCuenta || drm.Numcta }}</td>
                 <td class="">{{ drm.descripcion }}</td>
-                <td class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.enero, 'Enero', '01')">{{ drm.enero | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "02"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.febrero, 'Febrero', '02')">{{ drm.febrero | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "03"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.marzo, 'Marzo', '03')">{{ drm.marzo | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "04"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.abril, 'Abril', '04')">{{ drm.abril | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "05"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.may, 'Mayo', '05')">{{ drm.may | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "06"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.junio, 'Junio', '06')">{{ drm.junio | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "07"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.julio, 'Julio', '07')">{{ drm.julio | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "08"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.agosto, 'Agosto', '08')">{{ drm.agosto | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "09"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.septiembre, 'Septiembre', '09')">{{ drm.septiembre | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "10"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.octubre, 'Octubre', '10')">{{ drm.octubre | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "11"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.noviembre, 'Noviembre', '11')">{{ drm.noviembre | number:'1.2-2' }}</td>
-                <td *ngIf='mes >= "12"' class="text-right" (click)="onClickDetalleSegundoNivel(i, drm.diciembre, 'Diciembre', '12')">{{ drm.diciembre | number:'1.2-2' }}</td>
-                <!-- <td *ngIf='mes >= "02"' class="text-right">{{ drm.Suma | number:'1.2-2' }}</td> -->
+                <td class="text-right" (dblclick)="onClickDetalleSegundoNivel(i, drm.enero, 'Enero', '01')" [suma-columnas]='drm.enero'>{{ drm.enero | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "02"' class="text-right" (dblclick)="onClickDetalleSegundoNivel(i, drm.febrero, 'Febrero', '02')" [suma-columnas]='drm.febrero'>{{ drm.febrero | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "03"' class="text-right" (dblclick)="onClickDetalleSegundoNivel(i, drm.marzo, 'Marzo', '03')" [suma-columnas]='drm.marzo'>{{ drm.marzo | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "04"' class="text-right" (dblclick)="onClickDetalleSegundoNivel(i, drm.abril, 'Abril', '04')" [suma-columnas]='drm.abril'>{{ drm.abril | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "05"' class="text-right" (dblclick)="onClickDetalleSegundoNivel(i, drm.may, 'Mayo', '05')" [suma-columnas]='drm.mayo'>{{ drm.mayo | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "06"' class="text-right" (dblclick)="onClickDetalleSegundoNivel(i, drm.junio, 'Junio', '06')" [suma-columnas]='drm.junio'>{{ drm.junio | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "07"' class="text-right" (dblclick)="onClickDetalleSegundoNivel(i, drm.julio, 'Julio', '07')" [suma-columnas]='drm.julio'>{{ drm.julio | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "08"' class="text-right" (dblclick)="onClickDetalleSegundoNivel(i, drm.agosto, 'Agosto', '08')" [suma-columnas]='drm.agosto'>{{ drm.agosto | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "09"' class="text-right" (dblclick)="onClickDetalleSegundoNivel(i, drm.septiembre, 'Septiembre', '09')" [suma-columnas]='drm.septiembre'>{{ drm.septiembre | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "10"' class="text-right" (dblclick)="onClickDetalleSegundoNivel(i, drm.octubre, 'Octubre', '10')" [suma-columnas]='drm.octubre'>{{ drm.octubre | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "11"' class="text-right" (dblclick)="onClickDetalleSegundoNivel(i, drm.noviembre, 'Noviembre', '11')" [suma-columnas]='drm.noviembre'>{{ drm.noviembre | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "12"' class="text-right" (dblclick)="onClickDetalleSegundoNivel(i, drm.diciembre, 'Diciembre', '12')" [suma-columnas]='drm.diciembre'>{{ drm.diciembre | number:'1.2-2' }}</td>
+                <td *ngIf='mes >= "02"' class="text-right" [suma-columnas]='drm.totalAnual'>{{ drm.totalAnual | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Real | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Pspsto | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="text-right">{{ drm.Variacion | number:'1.2-2' }}</td>
@@ -646,52 +678,51 @@
             </tbody>
           </table>
 
-          <table id="detalleResultadosAcumulado" *ngIf='idDetalleResultados === 3' class="table table-lg table-bordered table-fixed table-hover-td table-responsive table-double-scroller"
-            [ngClass]="{'table-without-scroll': detalleResultadosMensualScroll}">
+          <table id="detalleResultadosAcumulado" *ngIf='idDetalleResultados === 3' class="table table-lg table-bordered table-hover-td table-responsive table-double-scroll">
             <thead>
               <tr>
-                <th width="10%" class="bg-secondary text-white ">Concepto</th>
-                <th width="10%" class="bg-secondary text-white ">No. Cuenta</th>
-                <th width="10%" class="bg-secondary text-white ">Descripción</th>
-                <th width="10%" class="bg-secondary text-white ">Enero</th>
-                <th width="10%" class="bg-secondary text-white ">Febrero</th>
-                <th width="10%" class="bg-secondary text-white ">Marzo</th>
-                <th width="10%" class="bg-secondary text-white ">Abril</th>
-                <th width="10%" class="bg-secondary text-white ">Mayo</th>
-                <th width="10%" class="bg-secondary text-white ">Junio</th>
-                <th width="10%" class="bg-secondary text-white ">Julio</th>
-                <th width="10%" class="bg-secondary text-white ">Agosto</th>
-                <th width="10%" class="bg-secondary text-white ">Septiembre</th>
-                <th width="10%" class="bg-secondary text-white ">Octubre</th>
-                <th width="10%" class="bg-secondary text-white ">Noviembre</th>
-                <th width="10%" class="bg-secondary text-white ">Diciembre</th>
-                <th width="10%" class="bg-secondary text-white">Real</th>
-                <th width="10%" class="bg-secondary text-white">Presupuesto</th>
-                <th width="14%" class="bg-secondary text-white">Variacion</th>
-                <th width="10%" class="bg-secondary text-white"> % </th>
+                <th class="bg-secondary text-white ">Concepto</th>
+                <th class="bg-secondary text-white min-width-150">No. Cuenta</th>
+                <th class="bg-secondary text-white ">Descripción</th>
+                <th class="bg-secondary text-white ">Enero</th>
+                <th class="bg-secondary text-white ">Febrero</th>
+                <th class="bg-secondary text-white ">Marzo</th>
+                <th class="bg-secondary text-white ">Abril</th>
+                <th class="bg-secondary text-white ">Mayo</th>
+                <th class="bg-secondary text-white ">Junio</th>
+                <th class="bg-secondary text-white ">Julio</th>
+                <th class="bg-secondary text-white ">Agosto</th>
+                <th class="bg-secondary text-white ">Septiembre</th>
+                <th class="bg-secondary text-white ">Octubre</th>
+                <th class="bg-secondary text-white ">Noviembre</th>
+                <th class="bg-secondary text-white ">Diciembre</th>
+                <th class="bg-secondary text-white">Real</th>
+                <th class="bg-secondary text-white">Presupuesto</th>
+                <th class="bg-secondary text-white">Variacion</th>
+                <th class="bg-secondary text-white"> % </th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor='let acm of acumuladoVariacion; let i = index;' [ngClass]="{'font-weight-bold': shouldBeBold(acm.titulo)}">
-                <td width="10%" class=''>{{ acm.titulo || "Concepto" }}</td>
-                <td width="10%" class=''>{{ acm.numeroCuenta || acm.Numcta }}</td>
-                <td width="10%" class=''>{{ acm.descripcion || "descripcion" }}</td>
-                <td width="10%" class=''>{{ acm.enero }}</td>
-                <td width="10%" class=''>{{ acm.febrero }}</td>
-                <td width="10%" class=''>{{ acm.marzo }}</td>
-                <td width="10%" class=''>{{ acm.abril }}</td>
-                <td width="10%" class=''>{{ acm.mayo }}</td>
-                <td width="10%" class=''>{{ acm.junio }}</td>
-                <td width="10%" class=''>{{ acm.julio }}</td>
-                <td width="10%" class=''>{{ acm.agosto }}</td>
-                <td width="10%" class=''>{{ acm.septiembre }}</td>
-                <td width="10%" class=''>{{ acm.octubre }}</td>
-                <td width="10%" class=''>{{ acm.noviembre }}</td>
-                <td width="10%" class=''>{{ acm.diciembre }}</td>
-                <td width="10%" class='text-right' [suma-columnas]='acm.cantidad'>{{ acm.cantidad | number:'1.2-2' }}</td>
-                <td width="10%" class='text-right' [suma-columnas]='acm.cantidadPrespuesto'>{{ acm.cantidadPrespuesto | number:'1.2-2' }}</td>
-                <td width="10%" class='text-right' [suma-columnas]='acm.variacion'>{{ acm.variacion | number:'1.2-2' }}</td>
-                <td width="10%" class='text-right' [suma-columnas]='acm.percentVariacion'>{{ acm.percentVariacion | number:'1.2-2' }}</td>
+                <td class=''>{{ acm.titulo || "Concepto" }}</td>
+                <td class=''>{{ acm.numeroCuenta || acm.Numcta }}</td>
+                <td class=''>{{ acm.descripcion || "descripcion" }}</td>
+                <td class='' [suma-columnas]='acm.enero'>{{ acm.enero }}</td>
+                <td class='' [suma-columnas]='acm.febrero'>{{ acm.febrero }}</td>
+                <td class='' [suma-columnas]='acm.marzo'>{{ acm.marzo }}</td>
+                <td class='' [suma-columnas]='acm.abril'>{{ acm.abril }}</td>
+                <td class='' [suma-columnas]='acm.mayo'>{{ acm.mayo }}</td>
+                <td class='' [suma-columnas]='acm.junio'>{{ acm.junio }}</td>
+                <td class='' [suma-columnas]='acm.julio'>{{ acm.julio }}</td>
+                <td class='' [suma-columnas]='acm.agosto'>{{ acm.agosto }}</td>
+                <td class='' [suma-columnas]='acm.septiembre'>{{ acm.septiembre }}</td>
+                <td class='' [suma-columnas]='acm.octubre'>{{ acm.octubre }}</td>
+                <td class='' [suma-columnas]='acm.noviembre'>{{ acm.noviembre }}</td>
+                <td class='' [suma-columnas]='acm.diciembre'>{{ acm.diciembre }}</td>
+                <td class='text-right' [suma-columnas]='acm.cantidad'>{{ acm.cantidad | number:'1.2-2' }}</td>
+                <td class='text-right' [suma-columnas]='acm.cantidadPrespuesto'>{{ acm.cantidadPrespuesto | number:'1.2-2' }}</td>
+                <td class='text-right' [suma-columnas]='acm.variacion'>{{ acm.variacion | number:'1.2-2' }}</td>
+                <td class='text-right' [suma-columnas]='acm.percentVariacion'>{{ acm.percentVariacion | number:'1.2-2' }}</td>
               </tr>
             </tbody>
           </table>

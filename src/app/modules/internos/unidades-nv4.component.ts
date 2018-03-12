@@ -23,6 +23,9 @@ export class UnidadesNv4Component implements OnInit {
   @Input() idReporte: string;
   @Input() deptoFlotillas: string;
 
+  @Input() isUnidadesDepto: boolean;
+  @Input() selectedIdDepartamento: number;
+
 
   detalleUnidadesSeries: Observable<ISeries[]>;
 
@@ -37,9 +40,11 @@ export class UnidadesNv4Component implements OnInit {
       idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       idOrigen: this.idOrigen,
+      idPestana: this.selectedIdDepartamento,
       periodoYear: +this.anio,
       periodoMes: +this.mes,
-      unidadDescripcion: this.tipoAuto
+      unidadDescripcion: this.tipoAuto,
+      isUnidadesDepto: this.isUnidadesDepto
     });
   }
 }

@@ -55,7 +55,7 @@ export class InternosService {
   private _urlEstadoResultadosPresupuesto = 'api/internos/estadoresultadospresupuesto';
   private _urlEstadoResultadosAcumuladoByIdER = 'api/internos/estadoresultadosacumuladobyider';
   private _urlDetalleUnidadesSeriesAr = 'api/internos/detalleunidadesseriesar';
-  private _urlEstadoDeResultadosVariacionSegundoNivel = "api/internos/estadoderesultadosvariacionsegundonivel";
+  private _urlEstadoDeResultadosVariacionSegundoNivel = 'api/internos/estadoderesultadosvariacionsegundonivel';
 
   constructor(private _http: HttpClient) { }
 
@@ -342,16 +342,22 @@ export class InternosService {
   getDetalleUnidadesSeries(parameters): Observable<ISeries[]> {
     // Initialize Params Object
     let Params = new HttpParams();
+    let url = 'api/internos/detalleunidadesseries';
 
     // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('idOrigen', parameters.idOrigen);
+    Params = Params.append('idPestana', parameters.idPestana);
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
 
-    return this._http.get<ISeries[]>(this._urlDetalleUnidadesSeries, { params: Params })
+    if (parameters.isUnidadesDepto) {
+      url = 'api/internos/detalleunidadesdepartamentoseries';
+    }
+
+    return this._http.get<ISeries[]>(url, { params: Params })
       .catch(this.handleError);
   }
 
@@ -435,7 +441,7 @@ export class InternosService {
     Params = Params.append('idreporte', parameters.idTipoReporte);
     Params = Params.append('idcia', parameters.idAgencia);
     Params = Params.append('anio', parameters.anio);
-    
+
     return this._http.get<IEfectivoSituacion[]>(this._urlEfectivoSituacion, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
@@ -449,7 +455,7 @@ export class InternosService {
     Params = Params.append('idreporte', parameters.idTipoReporte);
     Params = Params.append('idcia', parameters.idAgencia);
     Params = Params.append('anio', parameters.anio);
-    
+
     return this._http.get<IEstadoSituacion[]>(this._urlEstadoSituacion, { params: Params })
       .catch(this.handleError);
   }
@@ -583,11 +589,7 @@ export class InternosService {
     Params = Params.append('periodoYear',       parameters.periodoYear);
     Params = Params.append('periodoMes',        parameters.periodoMes);
     Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
-<<<<<<< HEAD
-    
-=======
-    console.log('ParamsServiceArNv4', Params);
->>>>>>> refs/remotes/origin/presentacion
+
     return this._http.get<ISeries[]>(this._urlDetalleUnidadesSeriesAr, { params: Params })
       .catch(this.handleError);
   }
@@ -604,7 +606,7 @@ export class InternosService {
     Params = Params.append('IdSucursal',          parameters.IdSucursal);
     Params = Params.append('idSucursalSecuencia', parameters.idSucursalSecuencia);
     Params = Params.append('EsAnul',              parameters.EsAnul);
-    
+
     return this._http.get<IAcumuladoReal[]>(this._urlEstadoDeResultadosVariacionSegundoNivel, { params: Params })
       .catch(this.handleError);
   }

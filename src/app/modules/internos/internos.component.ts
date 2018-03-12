@@ -171,6 +171,8 @@ export class InternosComponent implements OnInit {
   detalleUnidadesDepartamentoNameSegundoNivel: string;
   detalleUnidadesDepartamentoValueSegundoNivel: string;
 
+  detalleUnidadesDepartamentoConceptoTercerNivel: string;
+
   valuesNegritas = [
     'Utilidad bruta',
     'Utilidad Bruta Neta',
@@ -374,7 +376,7 @@ export class InternosComponent implements OnInit {
   getEstadoResultados(): void {
     this._service.getEstadoResultados({
       idCompania: this.selectedCompania,
-      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      idSucursal: this.selectedIdSucursal,// > 0 ? this.selectedIdSucursal : 0, TMC se cambia ya que ahy valores menores a cero
       periodoYear: this.anio,
       periodoMes: this.mes,
       idDepartamento: this.selectedIdDepartamento,
@@ -595,7 +597,8 @@ export class InternosComponent implements OnInit {
       .subscribe(
         sucursales => { this.sucursales = sucursales; },
         error => { this.errorMessage = <any>error; },
-        () => { this.onChangeSucursal(-2); }
+        () => { this.onChangeSucursal(0); }
+        //() => { this.onChangeSucursal(-2); } TMC se cambia ya que el valor incial es cero
       );
   }
 
@@ -665,6 +668,17 @@ export class InternosComponent implements OnInit {
       () => {
         this.detalleResultadosMensualScroll = this.detalleResultadosMensual.length <= 10 ? true : false;
         this.fixedHeader('detalleResultadosAcumulado');
+
+        // Ciclo de 12 meses
+        for (let mes = 1; mes <= 12; mes++) {
+          const nombreMes = this.toLongMonth(mes.toString());
+
+          // Se calculan porcentajes del mes correspondiente
+          this.detalleResultadosMensual.forEach(uad => {
+              uad.totalAnual = uad.enero + uad.febrero + uad.marzo + uad.abril + uad.mayo + uad.junio + uad.julio +
+                uad.agosto + uad.septiembre + uad.octubre + uad.noviembre + uad.diciembre;
+          });
+        }
       }
     );
   }
@@ -693,6 +707,15 @@ export class InternosComponent implements OnInit {
         this.detalleResultadosMensual.forEach(x => x.saldoMonto = x[this.toLongMonth(this.mes)]);
         this.detalleResultadosMensualScroll = this.detalleResultadosMensual.length <= 10 ? true : false;
         this.fixedHeader('detalleResultadosAcumulado');
+
+        // Se calculan porcentajes del mes correspondiente
+        this.detalleResultadosMensual.forEach(uad => {
+          uad.totalAnual = 0;
+            for (let mes = 1; mes <= +this.mes; mes++) {
+              const nombreMes = this.toLongMonth(mes.toString());
+              uad.totalAnual += uad[nombreMes];
+            }
+          });
       }
     );
   }
@@ -1255,7 +1278,7 @@ export class InternosComponent implements OnInit {
 
 
   onClickResultado(i: number, value: number, name: string, idEstadoResultado: number, idDetalleResultados: number) {
-    
+
     const idOrden = this.estadoResultados[i].idOrden;
     this.showDetallePrimerNivel = true;
     this.detalleName = name;
@@ -1278,8 +1301,6 @@ export class InternosComponent implements OnInit {
 
   getDetalleResultadosVariacion(esAnual): void {
     // Este servicio requiere el Id de la sucursal con un cero a la izquierda
-    console.log( "getDetalleResultadosVariacion" );
-    console.log( "Es anual en metodo", esAnual );
     this._service.getEstadoResultadosVariacion({
       idCompania: this.selectedCompania,
       PeriodoMes: this.mes,
@@ -1291,29 +1312,40 @@ export class InternosComponent implements OnInit {
       EsAnul: esAnual
     }).subscribe(acumuladoVariacion => {
         this.acumuladoVariacion = acumuladoVariacion;
-        if( esAnual == 0 ){
-          
+        if (esAnual === 0) {
+
           this.acumuladoVariacion.forEach(ac => {
             // Calcula La variacion
             ac.variacion = ac.cantidad - ac.cantidadPrespuesto;
             // Calcula el porcentaje de la variacion si variacion es 0 el resultado es del % es 0
             ac.percentVariacion = ((ac.variacion / ac.cantidadPrespuesto) * 100);
 
-            if( ac.percentVariacion == Infinity || ac.percentVariacion == -Infinity ){
+            if (ac.percentVariacion === Infinity || ac.percentVariacion === -Infinity) {
               ac.percentVariacion = 0;
-            }else if ( ac.cantidad == 0 && ac.cantidadPrespuesto == 0 ){
+            }else if ( ac.cantidad === 0 && ac.cantidadPrespuesto === 0 ) {
               ac.percentVariacion = 0;
             }
-              
+
           });
-        }else if( esAnual == 1 ){
+        }else if (esAnual === 1 ) {
           this.acumuladoVariacion.forEach(ac => {
             // Calcula la cantidad Real
-            ac.cantidad = ( ac.enero + ac.febrero + ac.marzo + ac.abril + ac.mayo + ac.junio + 
-                            ac.julio + ac.agosto + ac.septiembre + ac.octubre + ac.noviembre + ac.diciembre );
+            ac.cantidad = ( ac.enero + ac.febrero + ac.marzo + ac.abril + ac.mayo + ac.junio +
+              ac.julio + ac.agosto + ac.septiembre + ac.octubre + ac.noviembre + ac.diciembre);
+            // Calcula La variacion
+            ac.variacion = ac.cantidad - ac.cantidadPrespuesto;
+
+            // Calcula el porcentaje de la variacion si variacion es 0 el resultado es del % es 0
+            ac.percentVariacion = ((ac.variacion / ac.cantidadPrespuesto) * 100);
+
+            if (ac.percentVariacion === Infinity || ac.percentVariacion === -Infinity) {
+              ac.percentVariacion = 0;
+            }else if ( ac.cantidad === 0 && ac.cantidadPrespuesto === 0 ) {
+              ac.percentVariacion = 0;
+            }
           });
-        }
-        console.log( "acumuladoVariacion", acumuladoVariacion );
+      }
+      this.fixedHeader('detalleResultadosAcumulado');
       },
       error => {
         this.errorMessage = <any>error;
@@ -1370,7 +1402,7 @@ export class InternosComponent implements OnInit {
           break;
       }
       return value / v;
-    } else if (this.resultadoUnidades && this.selectedIdDepartamento === 0) {
+    } else if (this.resultadoUnidades && +this.selectedIdDepartamento === 0) {
       const u = this.resultadoUnidades.find(x => x.idOrigen === 0);
       switch (col) {
         case 1: v = u.cantidad;
