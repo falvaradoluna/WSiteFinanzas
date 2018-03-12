@@ -376,7 +376,7 @@ export class InternosComponent implements OnInit {
   getEstadoResultados(): void {
     this._service.getEstadoResultados({
       idCompania: this.selectedCompania,
-      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      idSucursal: this.selectedIdSucursal,// > 0 ? this.selectedIdSucursal : 0, TMC se cambia ya que ahy valores menores a cero
       periodoYear: this.anio,
       periodoMes: this.mes,
       idDepartamento: this.selectedIdDepartamento,
@@ -597,7 +597,8 @@ export class InternosComponent implements OnInit {
       .subscribe(
         sucursales => { this.sucursales = sucursales; },
         error => { this.errorMessage = <any>error; },
-        () => { this.onChangeSucursal(-2); }
+        () => { this.onChangeSucursal(0); }
+        //() => { this.onChangeSucursal(-2); } TMC se cambia ya que el valor incial es cero
       );
   }
 
