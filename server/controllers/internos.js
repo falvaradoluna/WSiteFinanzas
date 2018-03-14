@@ -52,8 +52,8 @@ internos.prototype.get_estadoresultados = function (req, res, next) {
   var periodoYear = req.query.periodoYear;
   var idDepartamento = req.query.idDepartamento;
   var idSucursalSecuencia = req.query.idSucursalSecuencia;
-
-  // console.log('QueryString ER Nv1 = ' + JSON.stringify(req.query));
+  //console.log(idDepartamento);
+  console.log('QueryString ER Nv1 = ' + JSON.stringify(req.query));
 
   var params = [
     { name: 'idCompania', value: idCompania, type: self.model.types.INT },
@@ -65,7 +65,7 @@ internos.prototype.get_estadoresultados = function (req, res, next) {
   ];
 
   this.model.query('Contabilidad.ObtieneEstadoDeResultados', params, function (error, result) {
-    console.log('Parametros: ' + params);
+    console.log('Estado de Resultados Parametros: ' + params);
     if (result.length > 0) {
       // console.log("Estado de Resultados " + result[0]);
     }
@@ -184,26 +184,31 @@ internos.prototype.get_estadoresultadosacumuladoreal = function (req, res, next)
 // Funcionalidad de la tabla SUMA DE DEPARMATEMTOS
 internos.prototype.get_sumadepartamentos = function (req, res, next) {
   var self = this;
-  var idCia = req.query.idcia;
+  var idCompania = req.query.idCompania;
   var idSucursal = req.query.idsucursal;
-  var departamento = req.query.departamento
-  var mes = req.query.mes;
-  var anio = req.query.anio;
+  var PeriodoYear = req.query.periodoYear;
+  var PeriodoMes = req.query.periodoMes;
+  var departamento = req.query.departamento;
+  var IdSucursalSecuencia = req.query.idSucursalSecuencia;
+  
+   var params = [
 
-  var params = [
-    { name: 'IdAgencia', value: idCia, type: self.model.types.STRING },
-    { name: 'MSucursal', value: idSucursal, type: self.model.types.STRING },
-    { name: 'Departamento', value: departamento, type: self.model.types.STRING },
-    { name: 'Mes', value: mes, type: self.model.types.STRING },
-    { name: 'Anio', value: anio, type: self.model.types.STRING }
+    { name: 'idCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'PeriodoYear', value: PeriodoYear, type: self.model.types.INT },
+    { name: 'PeriodoMes', value: PeriodoMes, type: self.model.types.INT },
+    { name: 'IdDepartamento', value: departamento, type: self.model.types.STRING },
+    { name: 'IdSucursalSecuencia', value: IdSucursalSecuencia, type: self.model.types.INT }
   ];
 
-  this.model.query('SP_SUMA_DE_DEPARTAMENTOS', params, function (error, result) {
-    // console.log('Parametros: ' + params);
+ // this.model.query('SP_SUMA_DE_DEPARTAMENTOS', params, function (error, result) {
+    this.model.query('Contabilidad.ObtieneEstadoDeResultadosSumaDeDepartamentos', params, function (error, result) {
+     
+   //console.log('Parametros: ' + params);
     console.log(req.query);
     // if (result.length > 0) {
-    //   console.log("Suma de departamentos " + result[0]);
-    // }
+     //  console.log("Suma de departamentos " + result[0]);
+     //}
     self.view.expositor(res, {
       error: error,
       result: result,

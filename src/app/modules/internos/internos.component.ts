@@ -293,6 +293,10 @@ export class InternosComponent implements OnInit {
   sumaDepartamentos(): void {
     if (this.selectedDepartamentosStr && this.selectedDepartamentosStr !== '\'') {
       this.getSumaDepartamentos();
+
+
+
+
     }
   }
 
@@ -373,13 +377,13 @@ export class InternosComponent implements OnInit {
     }, 0);
   }
 
-  getEstadoResultados(): void {
+  getEstadoResultados(): void { 
     this._service.getEstadoResultados({
       idCompania: this.selectedCompania,
       idSucursal: this.selectedIdSucursal,// > 0 ? this.selectedIdSucursal : 0, TMC se cambia ya que ahy valores menores a cero
       periodoYear: this.anio,
       periodoMes: this.mes,
-      idDepartamento: this.selectedIdDepartamento,
+      idDepartamento: this.selectedIdDepartamentoEr,
       idSucursalSecuencia: this.selectedIdSucursalSecuencia
     })
       .subscribe(estadoResultados => {
