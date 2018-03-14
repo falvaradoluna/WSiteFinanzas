@@ -568,7 +568,6 @@
             </ol>
           </nav>
 
-          <table id="detalleResultadosAcumulado" *ngIf='idDetalleResultados === 0' class="table table-sm table-bordered table-fixed table-hover-td"
           <table id="detalleResultadosAcumulado" *ngIf='idDetalleResultados === 0'
            class="table table-sm table-bordered table-fixed table-hover-td" sortable-table (sorted)="onSorted($event, detalleResultadosMensual)" 
             [ngClass]="{'table-without-scroll': detalleResultadosMensualScroll}">
