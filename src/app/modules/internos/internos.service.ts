@@ -145,20 +145,25 @@ export class InternosService {
       .catch(this.handleError);
   }
 
-  getSumaDepartamentos(parameters): Observable<IDetalleUnidadesAcumulado[]> { // Se reutiliza la interfaz de unidades
+
+  getSumaDepartamentos(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
     // Initialize Params Object
     let Params = new HttpParams();
-
+    console.log( "Hola service Suma" );
     // Begin assigning parameters
-    Params = Params.append('idcia', parameters.idCia);
+    Params = Params.append('idcia', parameters.idCompania);
     Params = Params.append('idsucursal', parameters.idSucursal);
-    Params = Params.append('departamento', parameters.departamento);
-    Params = Params.append('anio', parameters.anio);
-    Params = Params.append('mes', parameters.mes);
+    Params = Params.append('anio', parameters.periodoYear);
+    Params = Params.append('mes', parameters.periodoMes);
+    Params = Params.append('IdDepartamento',parameters.xmlDepartamento);
+    Params = Params.append('IdSucursalSecuencia', parameters.idSucursalSecuencia); 
+    console.log("params", Params);
+
 
     return this._http.get<IResultadoInternos[]>(this._urlSumaDepartamentos, { params: Params })
       .catch(this.handleError);
   }
+
 
   getUnidadesDepartamento(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
     // Initialize Params Object

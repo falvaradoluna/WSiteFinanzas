@@ -289,17 +289,14 @@ export class InternosComponent implements OnInit {
     this.getEstadoResultados();
     this.getUnidadesDepartamento();
   }
-
+//////
   sumaDepartamentos(): void {
     if (this.selectedDepartamentosStr && this.selectedDepartamentosStr !== '\'') {
       this.getSumaDepartamentos();
 
-
-
-
     }
   }
-
+//////////
   showSuma(): void {
     // console.log( "Suma" );
     this._service.getDepartamentos({
@@ -542,20 +539,120 @@ export class InternosComponent implements OnInit {
     },
     error => this.errorMessage = <any>error);
   }
-
+/*
   getSumaDepartamentos(): void {
     this._service.getSumaDepartamentos({
       idCia: this.selectedCompania,
       idSucursal: this.selectedIdSucursal,
-      departamento: this.selectedDepartamentosStr,
+     // departamento: this.selectedDepartamentosStr,
+      xmlDepartamento : this.xmlSend,      
       mes: this.mes,
-      anio: this.anio
+      anio: this.anio,
+      idSucursalSecuencia : this.selectedIdSucursalSecuencia
     })
-      .subscribe(sumaDepartamentos => {
-        // this.resultadoSumaDepartamentos = sumaDepartamentos;
+   .subscribe(sumaDepartamentos => {
+     console.log("Resultado: ",sumaDepartamentos);
+        this.resultadoSumaDepartamentos = sumaDepartamentos;
       },
-      error => this.errorMessage = <any>error);
-  }
+       error => this.errorMessage = <any>error);
+      // () =>{
+    } 
+      
+*/
+getSumaDepartamentos(): void { 
+  this._service.getSumaDepartamentos({
+    idCompania: this.selectedCompania,
+    idSucursal: this.selectedIdSucursal,// > 0 ? this.selectedIdSucursal : 0, TMC se cambia ya que ahy valores menores a cero
+    periodoYear: this.anio,
+    periodoMes: this.mes,
+    xmlDepartamento : this.xmlSend,
+    idSucursalSecuencia: this.selectedIdSucursalSecuencia
+  })
+    .subscribe(sumaDepartamentos => {
+      this.resultadoSumaDepartamentos = sumaDepartamentos;
+    },
+    error => { this.errorMessage = <any>error; },
+    () => {
+
+      const ventas = this.resultadoSumaDepartamentos.find(x => x.idEstadoResultadosI === 54);
+      const utilidadBrutaNeta = this.resultadoSumaDepartamentos.find(x => x.descripcion === 'Utilidad Bruta Neta');
+
+      this.resultadoSumaDepartamentos.forEach(er => {
+        // Calcula porcentaje real
+        switch (er.idEstadoResultadosI) {
+          case 54: { // ventas
+            er.porcentaje = 100;
+            er.porcentajeAcumulado = 100;
+            er.presupuestoPorcentaje = 100;
+            er.presupuestoPorcentajeAcumulado = 100;
+            break;
+          }
+          case 8: { // Costo de ventas
+            er.porcentaje = er.cantidad / ventas.cantidad * 100;
+            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
+            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
+            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+            break;
+          }
+          case 40: { // Otros costos
+            er.porcentaje = er.cantidad / ventas.cantidad * 100;
+            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
+            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
+            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+            break;
+          }
+          default: { // todos los demás van por utilidad bruta neta
+            er.porcentaje = er.cantidad / utilidadBrutaNeta.cantidad * 100;
+            er.porcentajeAcumulado = er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100;
+            er.presupuestoPorcentaje = er.cantidadPresupuesto / utilidadBrutaNeta.cantidadPresupuesto * 100;
+            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / utilidadBrutaNeta.cantidadPresupuestoAcumulado * 100;
+            break;
+          }
+        }
+
+        switch (er.descripcion) {
+          case 'Utilidad bruta': {
+            er.porcentaje = er.cantidad / ventas.cantidad * 100;
+            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
+            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
+            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+            break;
+          }
+          case 'Utilidad Bruta Neta': {
+            er.porcentaje = er.cantidad / ventas.cantidad * 100;
+            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
+            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
+            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+            break;
+          }
+        }
+
+        // Calcula la variacion
+        er.variacion = er.cantidad - er.cantidadPresupuesto;
+        er.variacionAcumulado = er.cantidadAcumulado - er.cantidadPresupuestoAcumulado;
+
+        // Calcula porcentaje de variacion
+        if (er.cantidadPresupuesto === 0) {
+          // Evitar division entre cero
+          er.porcentajeVariacion = 100;
+        } else {
+          er.porcentajeVariacion = er.porcentaje - er.presupuestoPorcentaje;
+        }
+
+        // Calcula porcentaje de variacion acumulado
+        if (er.cantidadPresupuestoAcumulado === 0) {
+          // Evitar division entre cero
+          er.porcentajeVariacionAcumulado = 100;
+        } else {
+          er.porcentajeVariacionAcumulado = er.porcentajeAcumulado - er.presupuestoPorcentajeAcumulado;
+        }
+      });
+    }
+  );
+}
+
+
+
 
   getUnidadesDepartamento(): void {
     if (this.selectedIdDepartamento !== 0) {
