@@ -855,7 +855,7 @@
                 </tr>
               </thead>
               <tbody>
-                  <ng-container *ngFor='let r of estadoResultados; let i = index;'>
+                  <ng-container *ngFor='let r of resultadoSumaDepartamentos; let i = index;'>
                     <!-- BEGIN Templates para la tabla -->
                     <ng-template #tipErReal>Por Unidad: {{ calculaTooltip(r.cantidad, 1) | number:'1.2-2' }}</ng-template>
                     <ng-template #tipErPpto>Por Unidad: {{ calculaTooltip(r.cantidadPresupuesto, 3) | number:'1.2-2' }}</ng-template>
