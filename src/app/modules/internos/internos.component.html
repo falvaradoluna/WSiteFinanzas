@@ -829,7 +829,7 @@
               </div>
               <select name="inputDepartamentoMulti" class="custom-select custom-select-sm" multiple size="13" [(ngModel)]='selectedDepartamentos'
                 (change)='onChangeSumaDepartamentos()'>
-                <option *ngFor='let depto of departamentos' [value]='depto.idPestana' [selected]='depto.Selected'>
+                <option *ngFor='let depto of departamentos' [value]='depto.idER' [selected]='depto.Selected'>
                   {{ depto.pestanaNombre }}
                 </option>
               </select>

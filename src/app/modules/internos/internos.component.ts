@@ -1100,10 +1100,12 @@ getSumaDepartamentos(): void {
 
   onChangeSumaDepartamentos(): void {
     const arrIds = [];
-    this.selectedDepartamentosStr = '\'';
-    this.selectedDepartamentos.forEach(d => {
+   // this.selectedDepartamentosStr = '\'';
+    this.selectedDepartamentos.forEach(d => { 
+      if (d!="")  {
       this.selectedDepartamentosStr += `${d},`;
       arrIds.push( `${d}` );
+    }
     });
 
     this.xmlDepartamento = [];
@@ -1111,7 +1113,7 @@ getSumaDepartamentos(): void {
       this.xmlSend = '';
     } else {
       for ( let i = 0; i <= (arrIds.length - 1); i++ ) {
-        this.xmlDepartamento.push('<departamento><id>' + arrIds[ i ] + '</id></departamento>');
+          this.xmlDepartamento.push('<departamento><id>' + arrIds[ i ] + '</id></departamento>');
       }
 
       this.xmlSend = '<departamentos>' + this.xmlDepartamento.join('') + '</departamentos>';
@@ -1620,8 +1622,9 @@ getSumaDepartamentos(): void {
     // Se actualizan los departamentos seleccionados a TODOS
     this.departamentos.forEach(d => {
       d.Selected = selected;
-      if (selected === true) {
-        this.selectedDepartamentos.push(d.pestanaNombre);
+      if (selected === true) {    
+            
+        this.selectedDepartamentos.push(`${d.idER}`);
       }
     });
 
