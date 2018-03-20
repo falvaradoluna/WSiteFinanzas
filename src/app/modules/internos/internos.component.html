@@ -1,6 +1,4 @@
-
 <div [@routerTransition]>
-  
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -12,77 +10,77 @@
         </div>
         <div class="card-body" *ngIf='showFilters' @ngIfAnimation>
           <form>
-              <div class="form-row">
-                  <div class="form-group col-md-6">
-                    <label for="inputCompania">Compañía</label>
-                    <select name="inputCompania" class="form-control form-control-sm" [(ngModel)]="selectedCompania" (ngModelChange)="onChangeCompania($event)">
-                      <option value="0">Seleccione Compañía</option>
-                      <option *ngFor="let compania of companias" [value]="compania.id">
-                        {{ compania.razonSocial }}
-                      </option>
-                    </select>
-                  </div>
-                  <div class="form-group col-md-3">
-                    <label for="inputPeriodo">Periodo</label>
-                    <input type="month" name="inputPeriodo" class="form-control form-control-sm"
-                    min="1960-01"
-                    [value]='periodo'
-                    (input)='onChangePeriodo($event.target.value)'>
-                  </div>
-                  <div class="form-group col-md-3">
-                    <label for="inputTipoReporte">Estado de Resultados</label>
-                    <select name="inputTipoReporte" class="form-control form-control-sm"
-                      ([ngModel])='selectedTipoReporte'
-                      (change)='onChangeTipoReporte($event.target.value)'>
-                      <option *ngFor='let tipo of tipoReporte' [value]='tipo.Id'>
-                        {{ tipo.Descripcion }}
-                      </option>
-                    </select>
-                  </div>
+            <div class="form-row">
+              <div class="form-group col-md-5">
+                <label for="inputCompania">Compañía</label>
+                <select name="inputCompania" class="form-control form-control-sm" [(ngModel)]="selectedCompania" (ngModelChange)="onChangeCompania($event)">
+                  <option value="0">Seleccione Compañía</option>
+                  <option *ngFor="let compania of companias" [value]="compania.id">
+                    {{ compania.razonSocial }}
+                  </option>
+                </select>
               </div>
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="inputSucursal">Sucursal</label>
-                  <select name="inputSucursal" class="form-control form-control-sm"
-                    [disabled]="disabledSucursalDepartamento()"
-                    [(ngModel)]='selectedIdSucursal'
-                    (change)='onChangeSucursal($event.target.value)'>
-                    <option *ngFor="let sucursal of sucursales" [value]="sucursal.id">
-                      {{ sucursal.nombreComercial }}
-                    </option>
-                  </select>
-                </div>
-                <div class="form-group col-md-3">
-                  <label for="inputDepartamento">Departamento</label>
-                  <select name="inputDepartamento" class="form-control form-control-sm"
-                    [disabled]="disabledSucursalDepartamento()"
-                    [(ngModel)]='selectedIdDepartamento'
-                    (ngModelChange)='onChangeDepartamento($event)'>
-                    <option *ngIf='departamentos.length > 0' value="0">Todos</option>
-                    <option *ngFor='let depto of departamentos' [value]='depto.idPestana'>
-                      {{ depto.pestanaNombre }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col-md-3">
-                  <div class="form-row">
-                      <div class="form-group col-md-5">
-                          <label> </label>
-                          <button type="button" class="btn btn-primary btn-sm btn-width" id="submit" (click)='procesar()'>Procesar</button>
-                      </div>
-                      <div class="form-group col-md-4">
-                          <label> </label>
-                          <button type="button" class="btn btn-secondary btn-sm btn-width" (click)='showSuma()'>Suma</button>
-                      </div>
-                      <div class="form-group col-md-3">
-                          <label> </label>
-                          <button type="button" class="btn btn-sm btn-width"
-                          (click)='togglePercents()'
-                          [ngClass]="showPercents ? 'btn-secondary' : 'btn-outline-secondary'">%</button>
-                      </div>
+              <div class="form-group col-md-4">
+                <label for="inputPeriodo">Periodo</label>
+                <input type="month" name="inputPeriodo" class="form-control form-control-sm"
+                  min="1960-01"
+                  [value]='periodo'
+                  (input)='onChangePeriodo($event.target.value)'>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="inputTipoReporte">Estado de Resultados</label>
+                <select name="inputTipoReporte" class="form-control form-control-sm"
+                  ([ngModel])='selectedTipoReporte'
+                  (change)='onChangeTipoReporte($event.target.value)'>
+                  <option *ngFor='let tipo of tipoReporte' [value]='tipo.Id'>
+                    {{ tipo.Descripcion }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-5">
+                <label for="inputSucursal">Sucursal</label>
+                <select name="inputSucursal" class="form-control form-control-sm"
+                  [disabled]="disabledSucursalDepartamento()"
+                  [(ngModel)]='selectedIdSucursal'
+                  (change)='onChangeSucursal($event.target.value)'>
+                  <option *ngFor="let sucursal of sucursales" [value]="sucursal.id">
+                    {{ sucursal.nombreComercial }}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="inputDepartamento">Departamento</label>
+                <select name="inputDepartamento" class="form-control form-control-sm"
+                  [disabled]="disabledSucursalDepartamento()"
+                  [(ngModel)]='selectedIdDepartamento'
+                  (ngModelChange)='onChangeDepartamento($event)'>
+                  <option *ngIf='departamentos.length > 0' value="0">Todos</option>
+                  <option *ngFor='let depto of departamentos' [value]='depto.idPestana'>
+                    {{ depto.pestanaNombre }}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <label class="invisible">invisible</label>
+                <!-- Para bajar los botones -->
+                <div class="form-row">
+                  <div class="col-sm-5">
+                    <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='procesar()'>Procesar</button>
+                  </div>
+                  <div class="col-sm-5">
+                    <button type="button" class="btn btn-secondary btn-sm btn-block" (click)='showSuma()'>Suma</button>
+                  </div>
+                  <div class="col-sm-2">
+                    <button type="button" class="btn btn-sm btn-block"
+                      (click)='togglePercents()'
+                      [ngClass]="showPercents ? 'btn-secondary' : 'btn-outline-secondary'"
+                    >%</button>
                   </div>
                 </div>
               </div>
+            </div>
           </form>
         </div>
       </div>
