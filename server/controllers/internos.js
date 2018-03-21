@@ -181,31 +181,39 @@ internos.prototype.get_estadoresultadosacumuladoreal = function (req, res, next)
 };
 
 // /api/internos/sumadepartamentos
-// Funcionalidad de la tabla SUMA DE DEPARMATEMTOS
-internos.prototype.get_sumadepartamentos = function (req, res, next) {
+// Funcionalidad de la tabla SUMA DE DEPARTAMENTOS
+internos.prototype.get_SumaDepartamentos = function (req, res, next) {
+  console.log("==================================");
+  console.log("get_sumadepartamentos")
   var self = this;
-  var idCompania = req.query.idCompania;
+  var idCompania = req.query.idcia;
   var idSucursal = req.query.idsucursal;
-  var PeriodoYear = req.query.periodoYear;
-  var PeriodoMes = req.query.periodoMes;
-  var departamento = req.query.departamento;
-  var IdSucursalSecuencia = req.query.idSucursalSecuencia;
+  var PeriodoYear = req.query.anio;
+  var PeriodoMes = req.query.mes;
+  var IdDepartamento = req.query.IdDepartamento;
+  var IdSucursalSecuencia = req.query.IdSucursalSecuencia;
   
+  console.log("IdDepartamento: " , IdDepartamento);
+
    var params = [
 
     { name: 'idCompania', value: idCompania, type: self.model.types.INT },
     { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
     { name: 'PeriodoYear', value: PeriodoYear, type: self.model.types.INT },
     { name: 'PeriodoMes', value: PeriodoMes, type: self.model.types.INT },
-    { name: 'IdDepartamento', value: departamento, type: self.model.types.STRING },
+    { name: 'IdDepartamento', value: IdDepartamento, type: self.model.types.STRING },
     { name: 'IdSucursalSecuencia', value: IdSucursalSecuencia, type: self.model.types.INT }
   ];
 
- // this.model.query('SP_SUMA_DE_DEPARTAMENTOS', params, function (error, result) {
+console.log("IdSucursalSecuencia: " , IdSucursalSecuencia);
+console.log("params:", params);
+
+// this.model.query('SP_SUMA_DE_DEPARTAMENTOS', params, function (error, result) {
     this.model.query('Contabilidad.ObtieneEstadoDeResultadosSumaDeDepartamentos', params, function (error, result) {
-     
+     console.log( "error:", error );
+     console.log( "resultado sp:", result );
    //console.log('Parametros: ' + params);
-    console.log(req.query);
+    //console.log(req.query);
     // if (result.length > 0) {
      //  console.log("Suma de departamentos " + result[0]);
      //}
