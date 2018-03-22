@@ -584,7 +584,34 @@
                 <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white"> Pct </th>
               </tr>
             </thead>
-            <tbody>
+            
+ <tbody>
+  <tr *ngFor='let drm of detalleResultadosMensual; let i = index;'
+       [ngClass]="{'font-weight-bold': shouldBeBold(drm.titulo)}">
+     <td [ngClass]="drm.numeroCuenta === '' ? 'col-md-3 font-weight-bold' : 'col-md-3'" >{{ drm.titulo }}</td>
+     <td [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">{{ drm.numeroCuenta || drm.Numcta }}</td>
+     <td class="col-md-3">{{ drm.descripcion || "descripcion" }}</td>
+     <td *ngIf='idEstadoResultado !== 3' [ngClass]="drm.numeroCuenta === '' ? 'col-md-3 text-right font-weight-bold' : 'col-md-3 text-right'"
+         (dblclick)="onClickDetalleSegundoNivel(i, drm.saldoMonto, 'Saldomes')" [suma-columnas]='drm.saldoMonto'>{{ drm.saldoMonto | number:'1.2-2' }}</td>
+     <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"
+         (dblclick)="onClickDetalleSegundoNivel(i, drm.Real, 'Real')"  [suma-columnas]='drm.Real'>{{ drm.Real | number:'1.2-2' }}</td>
+     <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pspsto'>{{ drm.Pspsto | number:'1.2-2' }}</td>
+     <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Variacion'>{{ drm.Variacion | number:'1.2-2' }}</td>
+     <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pct'>{{ drm.Pct | number:'1.2-2' }}</td>
+   </tr>
+   <tr>
+       <td class= "col-md-3 font-weight-bold" > {{ detalleConcepto}} ({{ detalleName }})</td>
+       <td [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'"></td>
+       <td class="col-md-3"></td>
+       <td *ngIf='idEstadoResultado !== 3' class= 'col-md-3 text-right font-weight-bold'>{{ detalleValue | number:'1.2-2' }}</td>
+       <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"></td>
+       <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"  ></td>
+       <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"  ></td>
+       <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"  ></td>
+      
+   </tr>
+ </tbody>
+            <!-- <tbody>
               <tr *ngFor='let drm of detalleResultadosMensual; let i = index;'
                   [ngClass]="{'font-weight-bold': shouldBeBold(drm.titulo)}">
                 <td class="col-md-3">{{ drm.titulo }}</td>
@@ -598,7 +625,7 @@
                 <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Variacion'>{{ drm.Variacion | number:'1.2-2' }}</td>
                 <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pct'>{{ drm.Pct | number:'1.2-2' }}</td>
               </tr>
-            </tbody>
+            </tbody> -->
           </table>
 
           <table id="detalleResultadosAcumulado" *ngIf='idDetalleResultados === 1' class="table table-sm table-bordered table-responsive table-hover-td table-double-scroll">
