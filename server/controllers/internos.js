@@ -42,6 +42,24 @@ internos.prototype.get_internos = function (req, res, next) {
   });
 };
 
+// /api/internos/estadodeResultadoscalculo
+// obtiene las formulados para los calculos de estado de resultados
+internos.prototype.get_estadodeResultadoscalculo = function (req, res, next) {
+  var self = this;
+  var periodoMes = req.query.periodoMes;
+  var periodoYear = req.query.periodoYear;
+  //console.log(idDepartamento);
+  console.log('QueryString ER Nv1 = ' + JSON.stringify(req.query));
+
+  var params = [
+    { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+  ];
+  this.model.query('[Contabilidad].[ObtieneEstadoDeResultadosCalculo]', params, function (error, result) {
+    self.view.expositor(res, {error: error, result: result, });
+  });
+};
+
 // /api/internos/estadoresultados
 // Funcionalidad de la tabla ESTADO DE RESULTADOS
 internos.prototype.get_estadoresultados = function (req, res, next) {

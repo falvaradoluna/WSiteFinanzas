@@ -28,4 +28,5 @@ export interface IResultadoInternos {
   AcPerc2: number;
   AcVariacion: number;
   AcPerc3: number;
+  calculaConFormula: boolean
 }

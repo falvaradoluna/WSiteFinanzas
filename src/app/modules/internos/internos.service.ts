@@ -19,12 +19,14 @@ import { IAcumuladoReal } from './acumuladoreal';
 import { IAutoLineaAcumulado } from './auto-linea-acumulado';
 import { ISeries } from './series';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { IResultadoEstadoDeResultadosCalculo } from './formulaEstadoResultado';
 
 @Injectable()
 export class InternosService {
 
   private _urlUnidades = 'api/internos/internos';
   private _urlEstadoResultados = 'api/internos/estadoresultados';
+  private _urlEstadoDeResultadosCalculo = 'api/internos/estadodeResultadoscalculo';
   private _urlEstadoResultadosNv2 = 'api/internos/estadoresultadosnv2';
   private _urlEstadoResultadosPresupuestoNv2 = 'api/internos/estadoresultadospresupuestonv2';
   private _urlEstadoResultadosAcumuladoReal = 'api/internos/estadoresultadosacumuladoreal';
@@ -72,6 +74,14 @@ export class InternosService {
     return this._http.get<IResultadoInternos[]>(this._urlUnidades, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
+  }
+
+  getEstadoDeResultadosCalculo(parameters): Observable<IResultadoEstadoDeResultadosCalculo[]> {
+    let Params = new HttpParams();
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    return this._http.get<IResultadoEstadoDeResultadosCalculo[]>(this._urlEstadoDeResultadosCalculo, { params: Params })
+    .catch(this.handleError);
   }
 
   getEstadoResultados(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades

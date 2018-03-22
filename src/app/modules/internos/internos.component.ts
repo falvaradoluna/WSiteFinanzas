@@ -15,6 +15,7 @@ import { trigger,
          state,
          animateChild } from '@angular/animations';
 import { IResultadoInternos } from './resultado-internos';
+import { IResultadoEstadoDeResultadosCalculo } from './formulaEstadoResultado';
 import { InternosService } from './internos.service';
 import { ISucursal } from './sucursal';
 import { ICompania } from './compania';
@@ -90,6 +91,7 @@ export class InternosComponent implements OnInit {
 
   resultadoUnidadesService: IResultadoInternos[] = [];
   estadoResultados: IResultadoInternos[] = [];
+  estadoResultadosCalculo: IResultadoEstadoDeResultadosCalculo[] = [];
   estadoResultadosAcumuladoReal: IDetalleUnidadesAcumulado[] = [];
   resultadoSumaDepartamentos: IResultadoInternos[] = [];
   unidadesDepartamento: IResultadoInternos[] = [];
@@ -192,6 +194,7 @@ export class InternosComponent implements OnInit {
     this.setDefaultDate();
     this.setTipoReporte();
     this.getCompanias();
+    this.getEstadoDeResultadosCalculo();
   }
 
   toggleFilters(): void {
@@ -373,6 +376,17 @@ export class InternosComponent implements OnInit {
       return a + b[prop];
     }, 0);
   }
+  
+  getEstadoDeResultadosCalculo(): void  {
+    this._service.getEstadoDeResultadosCalculo({
+      periodoYear: this.anio,
+      periodoMes: this.mes,
+    }).subscribe(estadoResultadosCalculo => {
+        this.estadoResultadosCalculo = estadoResultadosCalculo;
+      },
+      error => { this.errorMessage = <any>error; }
+    );
+  }
 
   getEstadoResultados(): void { 
     this._service.getEstadoResultados({
@@ -393,6 +407,7 @@ export class InternosComponent implements OnInit {
         const utilidadBrutaNeta = this.estadoResultados.find(x => x.descripcion === 'Utilidad Bruta Neta');
 
         this.estadoResultados.forEach(er => {
+          this.getCalculoER(er);
           // Calcula porcentaje real
           switch (er.idEstadoResultadosI) {
             case 54: { // ventas
@@ -464,6 +479,41 @@ export class InternosComponent implements OnInit {
         });
       }
     );
+  }
+
+  getCalculoER (er : IResultadoInternos): void{
+    const calc  = this.estadoResultadosCalculo.find(x=>x.idOrden == er.idOrden);
+    if(calc != null) {
+      var formulaOriginal = calc.formula;
+      var formulaOriginalAcumulado = calc.formula;
+
+      
+      let div = /\//gi;
+      let mul = /\*/gi;
+      let sum = /\+/gi;
+      let res = /\-/gi;
+      let parlef = /\(/gi;
+      let parig = /\)/gi;
+      var formulaSinOperador = calc.formula.replace(div,"operado")
+                                           .replace(mul,"operado")
+                                           .replace(sum,"operado")
+                                           .replace(res,"operado")
+                                           .replace(parlef,"operado")
+                                           .replace(parig,"operado")
+                                           //.replace("1.16","");
+      
+
+      formulaSinOperador.split('operado').forEach(erc=>{
+        if(erc.indexOf("idOrden") != -1){
+          var val =this.estadoResultados.find(x=>x.idOrden === +erc.replace("idOrden",""));
+          formulaOriginal =formulaOriginal.replace(erc, String(val.cantidad)).replace("diaMes",String(calc.numDiaMensual));
+          formulaOriginalAcumulado =formulaOriginalAcumulado.replace(erc, String(val.cantidadAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
+        }
+      });
+      var er = this.estadoResultados.find(x=>x.idOrden === er.idOrden);
+      er.cantidad = (eval(formulaOriginal)).toFixed(3);
+      er.cantidadAcumulado = eval(formulaOriginalAcumulado).toFixed(3);
+    }
   }
 
   getEstadoResultadosAcumuladoReal(): void {
@@ -1054,7 +1104,7 @@ getSumaDepartamentos(): void {
 
       this.mes = mesStr;
       this.anio = fullYearStr;
-
+      this.getEstadoDeResultadosCalculo();
       if (this.mes && this.anio && this.selectedCompania !== 0 && this.selectedIdSucursal) {
         this.getDepartamentos();
       }
