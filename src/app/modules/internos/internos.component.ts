@@ -1495,7 +1495,7 @@ getSumaDepartamentos(): void {
       PeriodoYear: this.anio,
       idEstadoResultadosI: this.idEstadoResultado || 0,
       IdDepartamento: this.selectedIdDepartamento > 0 ? this.selectedIdDepartamento : 0,
-      IdSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      IdSucursal: this.selectedIdSucursal, // > 0 ? this.selectedIdSucursal : 0, 
       idSucursalSecuencia: this.selectedIdSucursalSecuencia,
       EsAnul: esAnual
     }).subscribe(acumuladoVariacion => {
