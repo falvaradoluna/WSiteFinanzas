@@ -155,7 +155,7 @@ export class InternosService {
       .catch(this.handleError);
   }
 
-  getSumaDepartamentos(parameters): Observable<IDetalleUnidadesAcumulado[]> { // Se reutiliza la interfaz de unidades
+  getSumaDepartamentos(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
     // Initialize Params Object
     let Params = new HttpParams();
 
