@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
-import { FormsModule, ReactiveFormsModule, NgModel } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { trigger,
@@ -289,14 +289,17 @@ export class InternosComponent implements OnInit {
     this.getEstadoResultados();
     this.getUnidadesDepartamento();
   }
-//////
+
   sumaDepartamentos(): void {
     if (this.selectedDepartamentosStr && this.selectedDepartamentosStr !== '\'') {
       this.getSumaDepartamentos();
 
+
+
+
     }
   }
-//////////
+
   showSuma(): void {
     // console.log( "Suma" );
     this._service.getDepartamentos({
@@ -539,120 +542,20 @@ export class InternosComponent implements OnInit {
     },
     error => this.errorMessage = <any>error);
   }
-/*
+
   getSumaDepartamentos(): void {
     this._service.getSumaDepartamentos({
       idCia: this.selectedCompania,
       idSucursal: this.selectedIdSucursal,
-     // departamento: this.selectedDepartamentosStr,
-      xmlDepartamento : this.xmlSend,      
+      departamento: this.selectedDepartamentosStr,
       mes: this.mes,
-      anio: this.anio,
-      idSucursalSecuencia : this.selectedIdSucursalSecuencia
+      anio: this.anio
     })
-   .subscribe(sumaDepartamentos => {
-     console.log("Resultado: ",sumaDepartamentos);
-        this.resultadoSumaDepartamentos = sumaDepartamentos;
+      .subscribe(sumaDepartamentos => {
+        // this.resultadoSumaDepartamentos = sumaDepartamentos;
       },
-       error => this.errorMessage = <any>error);
-      // () =>{
-    } 
-      
-*/
-getSumaDepartamentos(): void { 
-  this._service.getSumaDepartamentos({
-    idCompania: this.selectedCompania,
-    idSucursal: this.selectedIdSucursal,// > 0 ? this.selectedIdSucursal : 0, TMC se cambia ya que ahy valores menores a cero
-    periodoYear: this.anio,
-    periodoMes: this.mes,
-    xmlDepartamento : this.xmlSend,
-    idSucursalSecuencia: this.selectedIdSucursalSecuencia
-  })
-    .subscribe(sumaDepartamentos => {
-      this.resultadoSumaDepartamentos = sumaDepartamentos;
-    },
-    error => { this.errorMessage = <any>error; },
-    () => {
-
-      const ventas = this.resultadoSumaDepartamentos.find(x => x.idEstadoResultadosI === 54);
-      const utilidadBrutaNeta = this.resultadoSumaDepartamentos.find(x => x.descripcion === 'Utilidad Bruta Neta');
-
-      this.resultadoSumaDepartamentos.forEach(er => {
-        // Calcula porcentaje real
-        switch (er.idEstadoResultadosI) {
-          case 54: { // ventas
-            er.porcentaje = 100;
-            er.porcentajeAcumulado = 100;
-            er.presupuestoPorcentaje = 100;
-            er.presupuestoPorcentajeAcumulado = 100;
-            break;
-          }
-          case 8: { // Costo de ventas
-            er.porcentaje = er.cantidad / ventas.cantidad * 100;
-            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
-            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
-            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
-            break;
-          }
-          case 40: { // Otros costos
-            er.porcentaje = er.cantidad / ventas.cantidad * 100;
-            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
-            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
-            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
-            break;
-          }
-          default: { // todos los demás van por utilidad bruta neta
-            er.porcentaje = er.cantidad / utilidadBrutaNeta.cantidad * 100;
-            er.porcentajeAcumulado = er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100;
-            er.presupuestoPorcentaje = er.cantidadPresupuesto / utilidadBrutaNeta.cantidadPresupuesto * 100;
-            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / utilidadBrutaNeta.cantidadPresupuestoAcumulado * 100;
-            break;
-          }
-        }
-
-        switch (er.descripcion) {
-          case 'Utilidad bruta': {
-            er.porcentaje = er.cantidad / ventas.cantidad * 100;
-            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
-            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
-            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
-            break;
-          }
-          case 'Utilidad Bruta Neta': {
-            er.porcentaje = er.cantidad / ventas.cantidad * 100;
-            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
-            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
-            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
-            break;
-          }
-        }
-
-        // Calcula la variacion
-        er.variacion = er.cantidad - er.cantidadPresupuesto;
-        er.variacionAcumulado = er.cantidadAcumulado - er.cantidadPresupuestoAcumulado;
-
-        // Calcula porcentaje de variacion
-        if (er.cantidadPresupuesto === 0) {
-          // Evitar division entre cero
-          er.porcentajeVariacion = 100;
-        } else {
-          er.porcentajeVariacion = er.porcentaje - er.presupuestoPorcentaje;
-        }
-
-        // Calcula porcentaje de variacion acumulado
-        if (er.cantidadPresupuestoAcumulado === 0) {
-          // Evitar division entre cero
-          er.porcentajeVariacionAcumulado = 100;
-        } else {
-          er.porcentajeVariacionAcumulado = er.porcentajeAcumulado - er.presupuestoPorcentajeAcumulado;
-        }
-      });
-    }
-  );
-}
-
-
-
+      error => this.errorMessage = <any>error);
+  }
 
   getUnidadesDepartamento(): void {
     if (this.selectedIdDepartamento !== 0) {
@@ -748,7 +651,7 @@ getSumaDepartamentos(): void {
     // Este servicio requiere el Id de la sucursal con un cero a la izquierda
     this._service.getEstadoResultadosNv2({
       idCompania: this.selectedCompania,
-      idSucursal: this.selectedIdSucursal, // > 0 ? this.selectedIdSucursal : 0,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       periodoYear: this.anio,
       periodoMes: this.mes,
       idDepartamento: this.selectedIdDepartamentoEr,
@@ -1064,12 +967,9 @@ getSumaDepartamentos(): void {
   onChangeCompania(newValue: number): void {
     this.selectedCompania = newValue;
     if (this.companias.find(x => x.id === +newValue)) {
-      const fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;      
+      const fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;
       this._fechaActualizacionService.onChangeFecha(fechaActualizacion);
     }
-   else{
-    this._fechaActualizacionService.onChangeFecha(null);
-   }
 
     if (this.selectedCompania !== 0 && this.selectedTipoReporte) {
       // Llenar dropdown de sucursales
@@ -1091,9 +991,9 @@ getSumaDepartamentos(): void {
   }
 
   onChangeDepartamento(newValue): void {
-    //console.log("NewValue", newValue);
+    console.log("NewValue", newValue);
     this.selectedIdDepartamento = newValue;
-   // console.log( "selectedIdDepartamento", this.selectedIdDepartamento );
+    console.log( "selectedIdDepartamento", this.selectedIdDepartamento );
     if (this.departamentos.find(x => x.idPestana === +newValue)) {
       this.selectedIdDepartamentoEr = this.departamentos.find(x => x.idPestana === +newValue).idER || 0;
     } else {
@@ -1104,13 +1004,9 @@ getSumaDepartamentos(): void {
   onChangeSumaDepartamentos(): void {
     const arrIds = [];
     this.selectedDepartamentosStr = '\'';
-    this.selectedDepartamentos.forEach(d => { 
-    
-      if (d!=="")  {
-     this.selectedDepartamentosStr += `${d},`;
-
+    this.selectedDepartamentos.forEach(d => {
+      this.selectedDepartamentosStr += `${d},`;
       arrIds.push( `${d}` );
-    }
     });
 
     this.xmlDepartamento = [];
@@ -1118,11 +1014,11 @@ getSumaDepartamentos(): void {
       this.xmlSend = '';
     } else {
       for ( let i = 0; i <= (arrIds.length - 1); i++ ) {
-          this.xmlDepartamento.push('<departamento><id>' + arrIds[ i ] + '</id></departamento>');
+        this.xmlDepartamento.push('<departamento><id>' + arrIds[ i ] + '</id></departamento>');
       }
 
       this.xmlSend = '<departamentos>' + this.xmlDepartamento.join('') + '</departamentos>';
-     // console.log( 'xmlSend', this.xmlSend );
+      console.log( 'xmlSend', this.xmlSend );
     }
   }
 
@@ -1137,7 +1033,6 @@ getSumaDepartamentos(): void {
       this.showReporteUnidades = true;
       this.setDefaultDate();
       this.getSucursales();
-      this.getDepartamentos();
     }
   }
 
@@ -1623,22 +1518,18 @@ getSumaDepartamentos(): void {
   // Selecciona o deselecciona todas las opciones del select suma de departamentos
   // True = Todos, False = ninguno
   selectTodosDeptos(selected: boolean) {
-  // this.selectedDepartamentos = [''];
+    this.selectedDepartamentos = [''];
 
     // Se actualizan los departamentos seleccionados a TODOS
     this.departamentos.forEach(d => {
       d.Selected = selected;
-      if (selected === true) { 
-        
-        this.selectedDepartamentos.push(`${d.idER}`);
-              }
-              else{
-                this.selectedDepartamentos = [''];
-              }
+      if (selected === true) {
+        this.selectedDepartamentos.push(d.pestanaNombre);
+      }
     });
 
     // Se dispara el evento de cambio en los departamentos seleccionados
-   this.onChangeSumaDepartamentos();
+    this.onChangeSumaDepartamentos();
   }
 }
 
