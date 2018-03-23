@@ -1,7 +1,7 @@
-export interface ITipoUnidad {
+export interface IAutoLineaAcumulado {
   UnidadDescripcion: string;
-  Cantidad: number;
-  Perc: number;
+  idAutoLinea: string;
+  autoLinea: string;
   enero: number;
   eneroPerc: number;
   febrero: number;

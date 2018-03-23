@@ -1,5 +1,8 @@
 export interface IAuth {
-  Cias: string,
-  NombreCompleto: string,
-  MensajeUsuario: string
+  id: number;
+  idRol: number;
+  nombreCompleto: string;
+  correoElectronico: string;
+  activo: boolean;
+  MensajeUsuario: string;
 }
