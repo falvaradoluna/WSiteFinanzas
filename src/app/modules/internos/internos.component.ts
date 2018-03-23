@@ -407,7 +407,9 @@ export class InternosComponent implements OnInit {
         const utilidadBrutaNeta = this.estadoResultados.find(x => x.descripcion === 'Utilidad Bruta Neta');
 
         this.estadoResultados.forEach(er => {
+
           this.getCalculoER(er, this.estadoResultados);
+
           // Calcula porcentaje real
           switch (er.idEstadoResultadosI) {
             case 54: { // ventas
@@ -505,6 +507,7 @@ export class InternosComponent implements OnInit {
 
       formulaSinOperador.split('operado').forEach(erc=>{
         if(erc.indexOf("idOrden") != -1){
+
           var val =ResultadoCalculo.find(x=>x.idOrden === +erc.replace("idOrden",""));
           formulaOriginal =formulaOriginal.replace(erc, String(val.cantidad)).replace("diaMes",String(calc.numDiaMensual));
           formulaOriginalAcumulado =formulaOriginalAcumulado.replace(erc, String(val.cantidadAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
