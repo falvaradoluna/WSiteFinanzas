@@ -129,7 +129,7 @@
 
 //Tabla con doble scroll (x,y)
 .table-double-scroll {
-  height: 300px;
+  //height: 300px;TMC Se comenta ya que se utiliza el scroll de la pagina
   border-spacing: 0px;
   border-collapse: separate;
   overflow: auto;
