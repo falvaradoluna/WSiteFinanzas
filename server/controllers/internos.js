@@ -83,7 +83,7 @@ internos.prototype.get_estadoresultados = function (req, res, next) {
   ];
 
   this.model.query('Contabilidad.ObtieneEstadoDeResultados', params, function (error, result) {
-   // console.log('Estado de Resultados Parametros: ' + params);
+    console.log('Estado de Resultados Parametros: ' + params);
     if (result.length > 0) {
       // console.log("Estado de Resultados " + result[0]);
     }
@@ -123,7 +123,7 @@ internos.prototype.get_estadoresultadosnv2 = function (req, res, next) {
   ];
 
   this.model.query('Contabilidad.ObtieneDetalleEstadoDeResultadosSegundoNivel', params, function (error, result) {
-    //console.log('Parametros: ' + params);
+    console.log('Parametros: ' + params);
     if (result.length > 0) {
       // console.log("Estado de Resultados " + result[0]);
     }
@@ -202,11 +202,11 @@ internos.prototype.get_estadoresultadosacumuladoreal = function (req, res, next)
 // Funcionalidad de la tabla SUMA DE DEPARMATEMTOS
 internos.prototype.get_sumadepartamentos = function (req, res, next) {
   var self = this;
-  var idCompania = req.query.idcia;
-  var idSucursal = req.query.idSucursal;
-  var PeriodoYear = req.query.periodoAnio;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idsucursal;
+  var PeriodoYear = req.query.periodoYear;
   var PeriodoMes = req.query.periodoMes;
-  var departamento = req.query.IdDepartamento;
+  var departamento = req.query.departamento;
   var IdSucursalSecuencia = req.query.idSucursalSecuencia;
   
    var params = [
@@ -223,7 +223,7 @@ internos.prototype.get_sumadepartamentos = function (req, res, next) {
     this.model.query('Contabilidad.ObtieneEstadoDeResultadosSumaDeDepartamentos', params, function (error, result) {
      
    //console.log('Parametros: ' + params);
-    //console.log(req.query);
+    console.log(req.query);
     // if (result.length > 0) {
      //  console.log("Suma de departamentos " + result[0]);
      //}
