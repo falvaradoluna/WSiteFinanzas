@@ -185,6 +185,9 @@ export class InternosComponent implements OnInit {
     'Utilidad (Pérdida) Neta',
     'ROS',
     'Rotación CxC',
+    'Cuentas X Pagar',
+    'Rotación x Pagar',
+    'Ciclo Financiero',
     'Rotación de Inventarios',
     'Rotación de CXP',
     'Neto'
