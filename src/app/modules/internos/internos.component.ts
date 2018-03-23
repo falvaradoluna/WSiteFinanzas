@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, NgModel } from '@angular/forms';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { trigger,
@@ -15,6 +15,7 @@ import { trigger,
          state,
          animateChild } from '@angular/animations';
 import { IResultadoInternos } from './resultado-internos';
+import { IResultadoEstadoDeResultadosCalculo } from './formulaEstadoResultado';
 import { InternosService } from './internos.service';
 import { ISucursal } from './sucursal';
 import { ICompania } from './compania';
@@ -90,6 +91,7 @@ export class InternosComponent implements OnInit {
 
   resultadoUnidadesService: IResultadoInternos[] = [];
   estadoResultados: IResultadoInternos[] = [];
+  estadoResultadosCalculo: IResultadoEstadoDeResultadosCalculo[] = [];
   estadoResultadosAcumuladoReal: IDetalleUnidadesAcumulado[] = [];
   resultadoSumaDepartamentos: IResultadoInternos[] = [];
   unidadesDepartamento: IResultadoInternos[] = [];
@@ -192,6 +194,7 @@ export class InternosComponent implements OnInit {
     this.setDefaultDate();
     this.setTipoReporte();
     this.getCompanias();
+    this.getEstadoDeResultadosCalculo();
   }
 
   toggleFilters(): void {
@@ -289,17 +292,14 @@ export class InternosComponent implements OnInit {
     this.getEstadoResultados();
     this.getUnidadesDepartamento();
   }
-
+//////
   sumaDepartamentos(): void {
     if (this.selectedDepartamentosStr && this.selectedDepartamentosStr !== '\'') {
       this.getSumaDepartamentos();
 
-
-
-
     }
   }
-
+//////////
   showSuma(): void {
     // console.log( "Suma" );
     this._service.getDepartamentos({
@@ -376,6 +376,17 @@ export class InternosComponent implements OnInit {
       return a + b[prop];
     }, 0);
   }
+  
+  getEstadoDeResultadosCalculo(): void  {
+    this._service.getEstadoDeResultadosCalculo({
+      periodoYear: this.anio,
+      periodoMes: this.mes,
+    }).subscribe(estadoResultadosCalculo => {
+        this.estadoResultadosCalculo = estadoResultadosCalculo;
+      },
+      error => { this.errorMessage = <any>error; }
+    );
+  }
 
   getEstadoResultados(): void { 
     this._service.getEstadoResultados({
@@ -396,6 +407,7 @@ export class InternosComponent implements OnInit {
         const utilidadBrutaNeta = this.estadoResultados.find(x => x.descripcion === 'Utilidad Bruta Neta');
 
         this.estadoResultados.forEach(er => {
+          this.getCalculoER(er, this.estadoResultados);
           // Calcula porcentaje real
           switch (er.idEstadoResultadosI) {
             case 54: { // ventas
@@ -467,6 +479,41 @@ export class InternosComponent implements OnInit {
         });
       }
     );
+  }
+
+  getCalculoER (er : IResultadoInternos, ResultadoCalculo : IResultadoInternos[]): void{
+    const calc  = this.estadoResultadosCalculo.find(x=>x.idOrden == er.idOrden);
+    if(calc != null) {
+      var formulaOriginal = calc.formula;
+      var formulaOriginalAcumulado = calc.formula;
+
+      
+      let div = /\//gi;
+      let mul = /\*/gi;
+      let sum = /\+/gi;
+      let res = /\-/gi;
+      let parlef = /\(/gi;
+      let parig = /\)/gi;
+      var formulaSinOperador = calc.formula.replace(div,"operado")
+                                           .replace(mul,"operado")
+                                           .replace(sum,"operado")
+                                           .replace(res,"operado")
+                                           .replace(parlef,"operado")
+                                           .replace(parig,"operado")
+                                           //.replace("1.16","");
+      
+
+      formulaSinOperador.split('operado').forEach(erc=>{
+        if(erc.indexOf("idOrden") != -1){
+          var val =ResultadoCalculo.find(x=>x.idOrden === +erc.replace("idOrden",""));
+          formulaOriginal =formulaOriginal.replace(erc, String(val.cantidad)).replace("diaMes",String(calc.numDiaMensual));
+          formulaOriginalAcumulado =formulaOriginalAcumulado.replace(erc, String(val.cantidadAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
+        }
+      });
+      var er = ResultadoCalculo.find(x=>x.idOrden === er.idOrden);
+      er.cantidad = (eval(formulaOriginal)).toFixed(3);
+      er.cantidadAcumulado = eval(formulaOriginalAcumulado).toFixed(3);
+    }
   }
 
   getEstadoResultadosAcumuladoReal(): void {
@@ -542,20 +589,121 @@ export class InternosComponent implements OnInit {
     },
     error => this.errorMessage = <any>error);
   }
-
+/*
   getSumaDepartamentos(): void {
     this._service.getSumaDepartamentos({
       idCia: this.selectedCompania,
       idSucursal: this.selectedIdSucursal,
-      departamento: this.selectedDepartamentosStr,
+     // departamento: this.selectedDepartamentosStr,
+      xmlDepartamento : this.xmlSend,      
       mes: this.mes,
-      anio: this.anio
+      anio: this.anio,
+      idSucursalSecuencia : this.selectedIdSucursalSecuencia
     })
-      .subscribe(sumaDepartamentos => {
-        // this.resultadoSumaDepartamentos = sumaDepartamentos;
+   .subscribe(sumaDepartamentos => {
+     console.log("Resultado: ",sumaDepartamentos);
+        this.resultadoSumaDepartamentos = sumaDepartamentos;
       },
-      error => this.errorMessage = <any>error);
-  }
+       error => this.errorMessage = <any>error);
+      // () =>{
+    } 
+      
+*/
+getSumaDepartamentos(): void { 
+  this._service.getSumaDepartamentos({
+    idCompania: this.selectedCompania,
+    idSucursal: this.selectedIdSucursal,// > 0 ? this.selectedIdSucursal : 0, TMC se cambia ya que ahy valores menores a cero
+    periodoYear: this.anio,
+    periodoMes: this.mes,
+    xmlDepartamento : this.xmlSend,
+    idSucursalSecuencia: this.selectedIdSucursalSecuencia
+  })
+    .subscribe(sumaDepartamentos => {
+      this.resultadoSumaDepartamentos = sumaDepartamentos;
+    },
+    error => { this.errorMessage = <any>error; },
+    () => {
+
+      const ventas = this.resultadoSumaDepartamentos.find(x => x.idEstadoResultadosI === 54);
+      const utilidadBrutaNeta = this.resultadoSumaDepartamentos.find(x => x.descripcion === 'Utilidad Bruta Neta');
+
+      this.resultadoSumaDepartamentos.forEach(er => {
+        this.getCalculoER(er, this.resultadoSumaDepartamentos);
+        // Calcula porcentaje real
+        switch (er.idEstadoResultadosI) {
+          case 54: { // ventas
+            er.porcentaje = 100;
+            er.porcentajeAcumulado = 100;
+            er.presupuestoPorcentaje = 100;
+            er.presupuestoPorcentajeAcumulado = 100;
+            break;
+          }
+          case 8: { // Costo de ventas
+            er.porcentaje = er.cantidad / ventas.cantidad * 100;
+            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
+            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
+            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+            break;
+          }
+          case 40: { // Otros costos
+            er.porcentaje = er.cantidad / ventas.cantidad * 100;
+            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
+            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
+            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+            break;
+          }
+          default: { // todos los demás van por utilidad bruta neta
+            er.porcentaje = er.cantidad / utilidadBrutaNeta.cantidad * 100;
+            er.porcentajeAcumulado = er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100;
+            er.presupuestoPorcentaje = er.cantidadPresupuesto / utilidadBrutaNeta.cantidadPresupuesto * 100;
+            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / utilidadBrutaNeta.cantidadPresupuestoAcumulado * 100;
+            break;
+          }
+        }
+
+        switch (er.descripcion) {
+          case 'Utilidad bruta': {
+            er.porcentaje = er.cantidad / ventas.cantidad * 100;
+            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
+            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
+            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+            break;
+          }
+          case 'Utilidad Bruta Neta': {
+            er.porcentaje = er.cantidad / ventas.cantidad * 100;
+            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
+            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
+            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+            break;
+          }
+        }
+
+        // Calcula la variacion
+        er.variacion = er.cantidad - er.cantidadPresupuesto;
+        er.variacionAcumulado = er.cantidadAcumulado - er.cantidadPresupuestoAcumulado;
+
+        // Calcula porcentaje de variacion
+        if (er.cantidadPresupuesto === 0) {
+          // Evitar division entre cero
+          er.porcentajeVariacion = 100;
+        } else {
+          er.porcentajeVariacion = er.porcentaje - er.presupuestoPorcentaje;
+        }
+
+        // Calcula porcentaje de variacion acumulado
+        if (er.cantidadPresupuestoAcumulado === 0) {
+          // Evitar division entre cero
+          er.porcentajeVariacionAcumulado = 100;
+        } else {
+          er.porcentajeVariacionAcumulado = er.porcentajeAcumulado - er.presupuestoPorcentajeAcumulado;
+        }
+      });
+    }
+  );
+}
+
+
+
 
   getUnidadesDepartamento(): void {
     if (this.selectedIdDepartamento !== 0) {
@@ -651,7 +799,7 @@ export class InternosComponent implements OnInit {
     // Este servicio requiere el Id de la sucursal con un cero a la izquierda
     this._service.getEstadoResultadosNv2({
       idCompania: this.selectedCompania,
-      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      idSucursal: this.selectedIdSucursal, // > 0 ? this.selectedIdSucursal : 0,
       periodoYear: this.anio,
       periodoMes: this.mes,
       idDepartamento: this.selectedIdDepartamentoEr,
@@ -957,7 +1105,7 @@ export class InternosComponent implements OnInit {
 
       this.mes = mesStr;
       this.anio = fullYearStr;
-
+      this.getEstadoDeResultadosCalculo();
       if (this.mes && this.anio && this.selectedCompania !== 0 && this.selectedIdSucursal) {
         this.getDepartamentos();
       }
@@ -967,9 +1115,12 @@ export class InternosComponent implements OnInit {
   onChangeCompania(newValue: number): void {
     this.selectedCompania = newValue;
     if (this.companias.find(x => x.id === +newValue)) {
-      const fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;
+      const fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;      
       this._fechaActualizacionService.onChangeFecha(fechaActualizacion);
     }
+   else{
+    this._fechaActualizacionService.onChangeFecha(null);
+   }
 
     if (this.selectedCompania !== 0 && this.selectedTipoReporte) {
       // Llenar dropdown de sucursales
@@ -991,9 +1142,9 @@ export class InternosComponent implements OnInit {
   }
 
   onChangeDepartamento(newValue): void {
-    console.log("NewValue", newValue);
+    //console.log("NewValue", newValue);
     this.selectedIdDepartamento = newValue;
-    console.log( "selectedIdDepartamento", this.selectedIdDepartamento );
+   // console.log( "selectedIdDepartamento", this.selectedIdDepartamento );
     if (this.departamentos.find(x => x.idPestana === +newValue)) {
       this.selectedIdDepartamentoEr = this.departamentos.find(x => x.idPestana === +newValue).idER || 0;
     } else {
@@ -1004,9 +1155,13 @@ export class InternosComponent implements OnInit {
   onChangeSumaDepartamentos(): void {
     const arrIds = [];
     this.selectedDepartamentosStr = '\'';
-    this.selectedDepartamentos.forEach(d => {
-      this.selectedDepartamentosStr += `${d},`;
+    this.selectedDepartamentos.forEach(d => { 
+    
+      if (d!=="")  {
+     this.selectedDepartamentosStr += `${d},`;
+
       arrIds.push( `${d}` );
+    }
     });
 
     this.xmlDepartamento = [];
@@ -1014,11 +1169,11 @@ export class InternosComponent implements OnInit {
       this.xmlSend = '';
     } else {
       for ( let i = 0; i <= (arrIds.length - 1); i++ ) {
-        this.xmlDepartamento.push('<departamento><id>' + arrIds[ i ] + '</id></departamento>');
+          this.xmlDepartamento.push('<departamento><id>' + arrIds[ i ] + '</id></departamento>');
       }
 
       this.xmlSend = '<departamentos>' + this.xmlDepartamento.join('') + '</departamentos>';
-      console.log( 'xmlSend', this.xmlSend );
+     // console.log( 'xmlSend', this.xmlSend );
     }
   }
 
@@ -1033,6 +1188,7 @@ export class InternosComponent implements OnInit {
       this.showReporteUnidades = true;
       this.setDefaultDate();
       this.getSucursales();
+      this.getDepartamentos();
     }
   }
 
@@ -1518,18 +1674,22 @@ export class InternosComponent implements OnInit {
   // Selecciona o deselecciona todas las opciones del select suma de departamentos
   // True = Todos, False = ninguno
   selectTodosDeptos(selected: boolean) {
-    this.selectedDepartamentos = [''];
+  // this.selectedDepartamentos = [''];
 
     // Se actualizan los departamentos seleccionados a TODOS
     this.departamentos.forEach(d => {
       d.Selected = selected;
-      if (selected === true) {
-        this.selectedDepartamentos.push(d.pestanaNombre);
-      }
+      if (selected === true) { 
+        
+        this.selectedDepartamentos.push(`${d.idER}`);
+              }
+              else{
+                this.selectedDepartamentos = [''];
+              }
     });
 
     // Se dispara el evento de cambio en los departamentos seleccionados
-    this.onChangeSumaDepartamentos();
+   this.onChangeSumaDepartamentos();
   }
 }
 
