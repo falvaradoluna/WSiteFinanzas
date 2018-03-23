@@ -70,7 +70,7 @@
                     <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='procesar()'>Procesar</button>
                   </div>
                   <div class="col-sm-5">
-                    <button type="button" class="btn btn-secondary btn-sm btn-block" (click)='showSuma()'>Suma</button>
+                    <button type="button" class="btn btn-secondary btn-sm btn-block" [disabled]="disabledSumaDepartamentos()" (click)='showSuma()'>Suma</button>
                   </div>
                   <div class="col-sm-2">
                     <button type="button" class="btn btn-sm btn-block"
