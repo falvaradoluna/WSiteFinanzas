@@ -407,7 +407,9 @@ export class InternosComponent implements OnInit {
         const utilidadBrutaNeta = this.estadoResultados.find(x => x.descripcion === 'Utilidad Bruta Neta');
 
         this.estadoResultados.forEach(er => {
-          this.getCalculoER(er);
+
+          this.getCalculoER(er, this.estadoResultados);
+
           // Calcula porcentaje real
           switch (er.idEstadoResultadosI) {
             case 54: { // ventas
@@ -481,7 +483,7 @@ export class InternosComponent implements OnInit {
     );
   }
 
-  getCalculoER (er : IResultadoInternos): void{
+  getCalculoER (er : IResultadoInternos, ResultadoCalculo : IResultadoInternos[]): void{
     const calc  = this.estadoResultadosCalculo.find(x=>x.idOrden == er.idOrden);
     if(calc != null) {
       var formulaOriginal = calc.formula;
@@ -505,12 +507,13 @@ export class InternosComponent implements OnInit {
 
       formulaSinOperador.split('operado').forEach(erc=>{
         if(erc.indexOf("idOrden") != -1){
-          var val =this.estadoResultados.find(x=>x.idOrden === +erc.replace("idOrden",""));
+
+          var val =ResultadoCalculo.find(x=>x.idOrden === +erc.replace("idOrden",""));
           formulaOriginal =formulaOriginal.replace(erc, String(val.cantidad)).replace("diaMes",String(calc.numDiaMensual));
           formulaOriginalAcumulado =formulaOriginalAcumulado.replace(erc, String(val.cantidadAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
         }
       });
-      var er = this.estadoResultados.find(x=>x.idOrden === er.idOrden);
+      var er = ResultadoCalculo.find(x=>x.idOrden === er.idOrden);
       er.cantidad = (eval(formulaOriginal)).toFixed(3);
       er.cantidadAcumulado = eval(formulaOriginalAcumulado).toFixed(3);
     }
@@ -628,6 +631,7 @@ getSumaDepartamentos(): void {
       const utilidadBrutaNeta = this.resultadoSumaDepartamentos.find(x => x.descripcion === 'Utilidad Bruta Neta');
 
       this.resultadoSumaDepartamentos.forEach(er => {
+        this.getCalculoER(er, this.resultadoSumaDepartamentos);
         // Calcula porcentaje real
         switch (er.idEstadoResultadosI) {
           case 54: { // ventas
