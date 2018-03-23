@@ -185,19 +185,19 @@ export class InternosComponent implements OnInit {
     'Utilidad (Pérdida) Neta',
     'ROS',
     'Rotación CxC',
-    'Cuentas X Pagar',
     'Rotación x Pagar',
     'Ciclo Financiero',
-    'Rotación de Inventarios',
+    'Rotación Inventarios',
     'Rotación de CXP',
     'Neto'
   ];
 
   ngOnInit() {
-    this.setDefaultDate();
+    this.setDefaultDate();TextTrackCueList
     this.setTipoReporte();
     this.getCompanias();
-    this.getEstadoDeResultadosCalculo();
+    this.getEstadoDeResultadosCalculo();   
+    //this.disabledSumaDepartamentos();
   }
 
   toggleFilters(): void {
@@ -236,6 +236,14 @@ export class InternosComponent implements OnInit {
     this.showPercents = !this.showPercents;
   }
 
+  disabledSumaDepartamentos(): boolean {
+  return false;
+  }
+  
+  enabledSumaDepartamentos(valor : boolean): boolean {
+    return valor;
+    }
+
   disabledSucursalDepartamento(): boolean {
     const sTipoReporte = this.selectedTipoReporte.toString();
     if (sTipoReporte === '4' || sTipoReporte === '5') {
@@ -246,6 +254,11 @@ export class InternosComponent implements OnInit {
   }
 
   procesar(): void {
+    
+    if (this.showSumaDepartamentos== true){
+      return;
+    }
+    
     const sTipoReporte = this.selectedTipoReporte.toString(); // Aunque se definio como number, la comparacion siempre lo toma como string
     const sCompania = this.selectedCompania.toString();
 
@@ -305,15 +318,20 @@ export class InternosComponent implements OnInit {
 //////////
   showSuma(): void {
     // console.log( "Suma" );
-    this._service.getDepartamentos({
-    })
-    .subscribe( departamentos => {
-      this.departamentos = departamentos;
-    },
-    error => this.errorMessage = <any>error
-    );
-    this.showReporteUnidades = false;
-    this.showSumaDepartamentos = true;
+      this._service.getDepartamentos({
+      })
+      .subscribe( departamentos => {
+        this.departamentos = departamentos;
+      },
+      error => this.errorMessage = <any>error
+      );
+      this.showReporteUnidades = false;
+      this.showSumaDepartamentos = true;
+      this.showAcumuladoPresupuesto= false;
+      this.showResultados= false;
+      this.showAcumuladoReal= false;
+      this.showReporteUnidades = false;
+    
   }
 
   hideSumaDepartamentos(): void {
@@ -845,7 +863,7 @@ getSumaDepartamentos(): void {
     // Este servicio requiere el Id de la sucursal con un cero a la izquierda
     this._service.getEstadoResultadosPresupuestoNv2({
       idCompania: this.selectedCompania,
-      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      idSucursal: this.selectedIdSucursal,// > 0 ? this.selectedIdSucursal : 0,
       periodoYear: this.anio,
       periodoMes: this.mes,
       idDepartamento: this.selectedIdDepartamentoEr,
@@ -1123,9 +1141,11 @@ getSumaDepartamentos(): void {
     if (this.companias.find(x => x.id === +newValue)) {
       const fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;      
       this._fechaActualizacionService.onChangeFecha(fechaActualizacion);
+     this.enabledSumaDepartamentos(false);
     }
    else{
     this._fechaActualizacionService.onChangeFecha(null);
+    this.enabledSumaDepartamentos (true);
    }
 
     if (this.selectedCompania !== 0 && this.selectedTipoReporte) {
@@ -1187,14 +1207,16 @@ getSumaDepartamentos(): void {
     this.selectedTipoReporte = newValue;
     const nv = newValue.toString();
 
-    if (nv === '4' || nv === '5') {
-      this.hideReporteUnidades();
-      this.showAcumuladoReal = false;
-    } else {
-      this.showReporteUnidades = true;
-      this.setDefaultDate();
-      this.getSucursales();
-      this.getDepartamentos();
+    if (this.showSumaDepartamentos!== true){
+        if (nv === '4' || nv === '5') {
+          this.hideReporteUnidades();
+          this.showAcumuladoReal = false;
+        } else {
+          this.showReporteUnidades = true;
+          this.setDefaultDate();
+          this.getSucursales();
+          this.getDepartamentos();
+     }
     }
   }
 

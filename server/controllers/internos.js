@@ -202,11 +202,11 @@ internos.prototype.get_estadoresultadosacumuladoreal = function (req, res, next)
 // Funcionalidad de la tabla SUMA DE DEPARMATEMTOS
 internos.prototype.get_sumadepartamentos = function (req, res, next) {
   var self = this;
-  var idCompania = req.query.idCompania;
-  var idSucursal = req.query.idsucursal;
-  var PeriodoYear = req.query.periodoYear;
+  var idCompania = req.query.idcia;
+  var idSucursal = req.query.idSucursal;
+  var PeriodoYear = req.query.periodoAnio;
   var PeriodoMes = req.query.periodoMes;
-  var departamento = req.query.departamento;
+  var departamento = req.query.IdDepartamento;
   var IdSucursalSecuencia = req.query.idSucursalSecuencia;
   
    var params = [
@@ -219,6 +219,7 @@ internos.prototype.get_sumadepartamentos = function (req, res, next) {
     { name: 'IdSucursalSecuencia', value: IdSucursalSecuencia, type: self.model.types.INT }
   ];
 
+  console.log("params SP", params);  
  // this.model.query('SP_SUMA_DE_DEPARTAMENTOS', params, function (error, result) {
     this.model.query('Contabilidad.ObtieneEstadoDeResultadosSumaDeDepartamentos', params, function (error, result) {
      
