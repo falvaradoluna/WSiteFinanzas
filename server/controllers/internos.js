@@ -199,7 +199,7 @@ internos.prototype.get_estadoresultadosacumuladoreal = function (req, res, next)
 };
 
 // /api/internos/sumadepartamentos
-// Funcionalidad de la tabla SUMA DE DEPARMATEMTOS
+// Funcionalidad de la tabla SUMA DE DEPARTAMENTOS
 internos.prototype.get_sumadepartamentos = function (req, res, next) {
   var self = this;
   var idCompania = req.query.idcia;
@@ -208,6 +208,7 @@ internos.prototype.get_sumadepartamentos = function (req, res, next) {
   var PeriodoMes = req.query.periodoMes;
   var departamento = req.query.IdDepartamento;
   var IdSucursalSecuencia = req.query.idSucursalSecuencia;
+  var tipoReporte = req.query.tipoReporte;
   
    var params = [
 
@@ -216,10 +217,13 @@ internos.prototype.get_sumadepartamentos = function (req, res, next) {
     { name: 'PeriodoYear', value: PeriodoYear, type: self.model.types.INT },
     { name: 'PeriodoMes', value: PeriodoMes, type: self.model.types.INT },
     { name: 'IdDepartamento', value: departamento, type: self.model.types.STRING },
-    { name: 'IdSucursalSecuencia', value: IdSucursalSecuencia, type: self.model.types.INT }
+    { name: 'IdSucursalSecuencia', value: IdSucursalSecuencia, type: self.model.types.INT },
+    { name: 'tipoReporte', value: 1, type: self.model.types.INT }
+    //{ name: 'tipoReporte', value: tipoReporte, type: self.model.types.INT }
+    
   ];
 
-  console.log("params SP", params);  
+  //console.log("params SP", params);  
  // this.model.query('SP_SUMA_DE_DEPARTAMENTOS', params, function (error, result) {
     this.model.query('Contabilidad.ObtieneEstadoDeResultadosSumaDeDepartamentos', params, function (error, result) {
      
