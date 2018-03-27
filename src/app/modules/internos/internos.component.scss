@@ -162,5 +162,10 @@
 
 .custom-select {
   padding: 0.375rem 0.1rem 0.375rem 0.75rem;
+  width: 100%
 }
 
+.table-responsive {  display: table !important; }
+.scrolltable{ overflow-x: auto;}
+.table-fixed[_ngcontent-c4] tbody[_ngcontent-c4] {width: 100% !important;}
+.table-fixed[_ngcontent-c4] {width: 100% !important;}
