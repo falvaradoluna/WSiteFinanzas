@@ -809,7 +809,78 @@
               </select>
             </form>
           </div>
-          <div class="col-sm-10">
+          <!-- SE AGREGA PARA EL ACUMULADO REAL EN SUMA DE DEPARTAMENTOS-->
+
+          <div *ngIf="showAcumuladoRealSumaDepartamentos" class="col-sm-10">
+              <table *ngIf='showUnidadesAcumuladoReal === 1' class="table table-sm table-bordered table-hover-td table-responsive">
+                  <thead>
+                    <tr>
+                      <th class="bg-secondary text-white">Departamento</th>
+                      <th class="bg-primary text-white">Enero</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Febrero</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Marzo</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Abril</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Mayo</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Junio</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Julio</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Agosto</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Septiembre</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Octubre</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Noviembre</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Diciembre</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Suma</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <ng-container *ngFor='let sdar of sumaDepartamentosAcumuladoReal; let i = index;'>
+                        <tr [ngClass]="{'table-info': sdar.descripcion.trim() === 'Total Unidades'}">
+                          <td>{{ sdar.descripcion }}</td>
+                          <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, sdar.Cantidad, 'Real', 1)" [suma-columnas]="sdar.enero" >{{ sdar.enero }}</td>
+                          <td class="text-center" *ngIf='showPercents'>{{ sdar.eneroPerc | number:'1.2-2' }}</td>
+                          <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, sdar.Cantidad, 'Real', 1)" [suma-columnas]="sdar.febrero">{{ sdar.febrero }}</td>
+                          <td class="text-center" *ngIf='showPercents'>{{ sdar.febreroPerc | number:'1.2-2' }}</td>
+                          <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, sdar.Cantidad, 'Real', 1)" [suma-columnas]="sdar.msdarzo">{{ sdar.msdarzo }}</td>
+                          <td class="text-center" *ngIf='showPercents'>{{ sdar.msdarzoPerc | number:'1.2-2' }}</td>
+                          <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, sdar.Cantidad, 'Real', 1)" [suma-columnas]="sdar.abril">{{ sdar.abril }}</td>
+                          <td class="text-center" *ngIf='showPercents'>{{ sdar.abrilPerc | number:'1.2-2' }}</td>
+                          <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, sdar.Cantidad, 'Real', 1)" [suma-columnas]="sdar.mayo">{{ sdar.mayo }}</td>
+                          <td class="text-center" *ngIf='showPercents'>{{ sdar.mayoPerc | number:'1.2-2' }}</td>
+                          <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, sdar.Cantidad, 'Real', 1)" [suma-columnas]="sdar.junio">{{ sdar.junio }}</td>
+                          <td class="text-center" *ngIf='showPercents'>{{ sdar.junioPerc | number:'1.2-2' }}</td>
+                          <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, sdar.Cantidad, 'Real', 1)" [suma-columnas]="sdar.julio">{{ sdar.julio }}</td>
+                          <td class="text-center" *ngIf='showPercents'>{{ sdar.julioPerc | number:'1.2-2' }}</td>
+                          <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, sdar.Cantidad, 'Real', 1)" [suma-columnas]="sdar.agosto">{{ sdar.agosto }}</td>
+                          <td class="text-center" *ngIf='showPercents'>{{ sdar.agostoPerc | number:'1.2-2' }}</td>
+                          <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, sdar.Cantidad, 'Real', 1)" [suma-columnas]="sdar.septiembre">{{ sdar.septiembre }}</td>
+                          <td class="text-center" *ngIf='showPercents'>{{ sdar.septiembrePerc | number:'1.2-2' }}</td>
+                          <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, sdar.Cantidad, 'Real', 1)" [suma-columnas]="sdar.octubre">{{ sdar.octubre }}</td>
+                          <td class="text-center" *ngIf='showPercents'>{{ sdar.octubrePerc | number:'1.2-2' }}</td>
+                          <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, sdar.Cantidad, 'Real', 1)" [suma-columnas]="sdar.noviembre">{{ sdar.noviembre }}</td>
+                          <td class="text-center" *ngIf='showPercents'>{{ sdar.noviembrePerc | number:'1.2-2' }}</td>
+                          <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, sdar.Cantidad, 'Real', 1)" [suma-columnas]="sdar.diciembre">{{ sdar.diciembre }}</td>
+                          <td class="text-center" *ngIf='showPercents'>{{ sdar.diciembrePerc | number:'1.2-2' }}</td>
+                          <td class="text-center" (dblclick)="onClickUnidadesAcumuladoReal(i, sdar.Cantidad, 'Real', 1)" [suma-columnas]="sdar.totalAnual">{{ sdar.totalAnual }}</td>
+                          <td class="text-center" *ngIf='showPercents'>{{ sdar.totalAnualPerc | number:'1.2-2' }}</td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+                <!-->END de   ACUMULADO REAL EN SUMA DE DEPARTAMENTOS<-->
+          <div *ngIf="showSumaDepartamentosHeader" class="col-sm-10">
             <table class="table table-sm table-bordered table-fixed">
               <thead>
                 <tr>
@@ -944,7 +1015,7 @@
         <table *ngIf='showUnidadesAcumuladoReal === 1' class="table table-sm table-bordered table-hover-td table-responsive">
           <thead>
             <tr>
-              <th class="bg-secondary text-white">Departamento1</th>
+              <th class="bg-secondary text-white">Departamento</th>
               <th class="bg-primary text-white">Enero</th>
               <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
               <th class="bg-primary text-white">Febrero</th>
@@ -1338,7 +1409,7 @@
         <table *ngIf='showEstadoResultadoAcumuladoReal === 1' class="table table-sm table-bordered table-hover-td table-responsive table-double-scroll">
           <thead>
             <tr>
-              <th class="bg-secondary text-white">Departamento</th>
+              <th class="bg-secondary text-white">Departamento1</th>
               <th class="bg-primary text-white">Enero</th>
               <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
               <th class="bg-primary text-white">Febrero</th>
