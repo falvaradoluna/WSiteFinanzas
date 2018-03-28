@@ -485,7 +485,7 @@
               </ng-template>
               <ng-template #sinTooltipPpto>
                 <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidadPresupuesto, 'PPto', 2, 0)">
-                  {{ r.descripcion === 'ROS' ? (r.cantidadPresupuesto | percent:'1.2-2') : (r.cantidadPresupuesto | number:'1.2-2') }}
+                  {{ r.calculaConFormula? r.cantidadPresupuesto : (r.cantidadPresupuesto | number:'1.2-2') }}
                 </td>
               </ng-template>
               <ng-template #conTooltipAcReal>
@@ -505,7 +505,7 @@
               </ng-template>
               <ng-template #sinTooltipAcPpto>
                 <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidadPresupuestoAcumulado, 'AcPPto', 2, 1)">
-                  {{ r.descripcion === 'ROS' ? (r.cantidadPresupuestoAcumulado | percent:'1.2-2') : (r.cantidadPresupuestoAcumulado | number:'1.2-2') }}
+                  {{ r.calculaConFormula? r.cantidadPresupuestoAcumulado : (r.cantidadPresupuestoAcumulado | number:'1.2-2') }}
                 </td>
               </ng-template>
               <!-- END Templates -->
