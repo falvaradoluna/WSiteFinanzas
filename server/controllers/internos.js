@@ -208,6 +208,7 @@ internos.prototype.get_sumadepartamentos = function (req, res, next) {
   var PeriodoMes = req.query.periodoMes;
   var departamento = req.query.IdDepartamento;
   var IdSucursalSecuencia = req.query.idSucursalSecuencia;
+  var tipoReporte =req.query.tipoReporte;
   
    var params = [
 
