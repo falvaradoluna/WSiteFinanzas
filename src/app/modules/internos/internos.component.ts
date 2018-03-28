@@ -240,10 +240,25 @@ export class InternosComponent implements OnInit {
   }
 
   disabledSumaDepartamentos(): boolean {
-  return false;
+    const sTipoReporte = this.selectedTipoReporte.toString();
+    if (sTipoReporte === '4' || sTipoReporte === '5') {
+      return true;
+    } else {
+      return false;
+    }
   }
   
+  disabledButtonPorcentaje() : boolean {
+    const sTipoReporte = this.selectedTipoReporte.toString();
+    if (sTipoReporte === '4' || sTipoReporte === '5') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   enabledSumaDepartamentos(valor : boolean): boolean {
+
     return valor;
     }
 
