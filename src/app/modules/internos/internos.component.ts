@@ -1354,6 +1354,7 @@ getReporteSumaDepartamentos() : void{
      }
     }
     else{
+      this.showSumaDepartamentos=true;
       switch (nv){
         case '1':
         this.showSumaDepartamentosHeader= true;
