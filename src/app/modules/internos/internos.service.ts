@@ -19,12 +19,14 @@ import { IAcumuladoReal } from './acumuladoreal';
 import { IAutoLineaAcumulado } from './auto-linea-acumulado';
 import { ISeries } from './series';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { IResultadoEstadoDeResultadosCalculo } from './formulaEstadoResultado';
 
 @Injectable()
 export class InternosService {
 
   private _urlUnidades = 'api/internos/internos';
   private _urlEstadoResultados = 'api/internos/estadoresultados';
+  private _urlEstadoDeResultadosCalculo = 'api/internos/estadodeResultadoscalculo';
   private _urlEstadoResultadosNv2 = 'api/internos/estadoresultadosnv2';
   private _urlEstadoResultadosPresupuestoNv2 = 'api/internos/estadoresultadospresupuestonv2';
   private _urlEstadoResultadosAcumuladoReal = 'api/internos/estadoresultadosacumuladoreal';
@@ -72,6 +74,14 @@ export class InternosService {
     return this._http.get<IResultadoInternos[]>(this._urlUnidades, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
+  }
+
+  getEstadoDeResultadosCalculo(parameters): Observable<IResultadoEstadoDeResultadosCalculo[]> {
+    let Params = new HttpParams();
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    return this._http.get<IResultadoEstadoDeResultadosCalculo[]>(this._urlEstadoDeResultadosCalculo, { params: Params })
+    .catch(this.handleError);
   }
 
   getEstadoResultados(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
@@ -145,20 +155,44 @@ export class InternosService {
       .catch(this.handleError);
   }
 
-  getSumaDepartamentos(parameters): Observable<IDetalleUnidadesAcumulado[]> { // Se reutiliza la interfaz de unidades
+  getSumaDepartamentos(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
     // Initialize Params Object
-    let Params = new HttpParams();
+    let Params = new HttpParams();  
 
     // Begin assigning parameters
-    Params = Params.append('idcia', parameters.idCia);
-    Params = Params.append('idsucursal', parameters.idSucursal);
-    Params = Params.append('departamento', parameters.departamento);
-    Params = Params.append('anio', parameters.anio);
-    Params = Params.append('mes', parameters.mes);
-
+   // Params = Params.append('idcia', parameters.idCia);
+   Params = Params.append('idcia', parameters.idCompania);
+   Params = Params.append('idSucursal', parameters.idSucursal);
+   Params = Params.append('periodoAnio', parameters.periodoYear);
+   Params = Params.append('periodoMes', parameters.periodoMes);
+   Params = Params.append('IdDepartamento',parameters.xmlDepartamento);
+   Params = Params.append('IdSucursalSecuencia',parameters.idSucursalSecuencia);
+ 
+   //console.log("params", Params);
     return this._http.get<IResultadoInternos[]>(this._urlSumaDepartamentos, { params: Params })
       .catch(this.handleError);
   }
+
+
+getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumulado[]> { // Se reutiliza la interfaz de detalle Unidades Acumulado
+  // Initialize Params Object
+  let Params = new HttpParams();  
+
+  // Begin assigning parameters
+ Params = Params.append('idcia', parameters.idCompania);
+ Params = Params.append('idSucursal', parameters.idSucursal);
+ Params = Params.append('periodoAnio', parameters.periodoYear);
+ Params = Params.append('periodoMes', parameters.periodoMes);
+ Params = Params.append('IdDepartamento',parameters.xmlDepartamento);
+ Params = Params.append('IdSucursalSecuencia',parameters.idSucursalSecuencia);
+ Params = Params.append('tipoReporte', parameters.tipoReporte);
+
+
+ //console.log("params", Params);
+  return this._http.get<IAcumuladoReal[]>(this._urlSumaDepartamentos, { params: Params })
+    .catch(this.handleError);
+}
+////
 
   getUnidadesDepartamento(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
     // Initialize Params Object

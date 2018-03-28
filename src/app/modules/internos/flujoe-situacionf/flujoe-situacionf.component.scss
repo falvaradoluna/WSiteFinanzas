@@ -1,0 +1,167 @@
+.table, .card-footer {
+    font-size: 0.75rem !important;
+  }
+  .form-control-sm {
+    line-height: 1.4;
+  }
+  
+  .card-body {
+    padding: 0.55rem 1.15rem;
+  }
+  
+  .card-header {
+    padding: 0.15rem 1.15rem;
+  }
+  
+  .table {
+    margin-bottom: 0;
+  }
+  
+  .col-width-concepto {
+    width: 15.04%;
+  }
+  
+  .col-width-cantidad {
+    width: 7.66%;
+  }
+  
+  .col-width-perc {
+    width: 6.5%;
+  }
+  
+  .min-width-220 {
+    min-width: 220px;
+  }
+  
+  .min-width-135 {
+    min-width: 135px;
+  }
+  
+  .min-width-150 {
+    min-width: 150px;
+  }
+  
+  .btn-vm, {
+    line-height: 1;
+  }
+  
+  .btn-primary:focus, .btn-primary.focus {
+    box-shadow: none;
+  }
+  
+  .btn-outline-secondary:hover {
+    color: #868e96;
+    background-color: #fff;
+    border-color: #868e96;
+  }
+  
+  //Boton cerrar
+  .close {
+    position:absolute;
+    top:30px;
+    right:0;
+    cursor: pointer;
+    z-index: 1000;
+  }
+  
+  .breadcrumb {
+    font-size: 0.95rem;
+    background-color: #fff;
+    line-height: 1.0;
+    padding: 0px;
+  }
+  
+  //Tabla con celdas hover
+  .table-hover-td tbody td:hover {
+    background-color: rgba(0,0,0,.075);
+    cursor: pointer;
+  }
+  
+  .bg-orange {
+    background-color: #ff6600 !important;
+  }
+  
+  .breadcrumb-item.active {
+    color: #343a40;
+    font-weight: bold;
+  }
+  
+  //Tabla con encabezados fixed
+  .table-fixed{
+    table-layout:fixed;
+    width: 98.4%;
+    tbody{
+      width: 101.6%;
+      height:800px;
+      overflow-y:auto;
+      }
+    thead,tbody,tr,td,th{
+      display:block;
+    }
+    tbody{
+      td{
+        float:left;
+        overflow:hidden;
+        white-space:nowrap;
+        min-height: 29.59px;
+      }
+    }
+    thead {
+      tr{
+        th{
+          float:left;
+        }
+      }
+    }
+  }
+  
+  .table-success {
+    background-color: #c3e6cb !important;
+  }
+  
+  //Tabla sin scroll
+  .table-without-scroll {
+    width: 100%;
+    tbody{
+      width: 100%;
+      }
+  }
+  
+  //Tabla con doble scroll (x,y)
+  .table-double-scroll {
+    height: 300px;
+    border-spacing: 0px;
+    border-collapse: separate;
+    overflow: auto;
+  
+    th, td {
+      border-bottom: 1px solid #e9ecef;
+      border-right: 1px solid #e9ecef;
+    }
+  
+    td {
+      background-color: #fff;
+    }
+  }
+  
+  .table-double-scroller {
+    height: 410px !important;
+    border-spacing: 0px;
+    border-collapse: separate;
+    overflow: auto;
+  
+    th, td {
+      border-bottom: 1px solid #e9ecef;
+      border-right: 1px solid #e9ecef;
+    }
+  
+    td {
+      background-color: #fff;
+    }
+  }
+  
+  .custom-select {
+    padding: 0.375rem 0.1rem 0.375rem 0.75rem;
+  }
+  
+  

@@ -7,84 +7,88 @@
       <div  *ngIf="selectedTipoReporte === '5'" class="card-header bg-primary text-white text-center">
         ESTADO DE SITUACION FINANCIERA
       </div>
-      <table id="tableEfectivo" class="table table-lg table-bordered table-responsive table-double-scroller" *ngIf="selectedTipoReporte === '4'">
-        <thead>
-          <tr>
-            <th class="bg-success text-white">Concepto</th>
-            <th width = "6%" class="bg-success text-white">Ene</th>
-            <th width = "6%" class="bg-success text-white">Feb</th>
-            <th width = "6%" class="bg-success text-white">Mar</th>
-            <th width = "6%" class="bg-success text-white">Abr</th>
-            <th width = "6%" class="bg-success text-white">May</th>
-            <th width = "6%" class="bg-success text-white">Jun</th>
-            <th width = "6%" class="bg-success text-white">Jul</th>
-            <th width = "6%" class="bg-success text-white">Ago</th>
-            <th width = "6%" class="bg-success text-white">Sep</th>
-            <th width = "6%" class="bg-success text-white">Oct</th>
-            <th width = "6%" class="bg-success text-white">Nov</th>
-            <th width = "6%" class="bg-success text-white">Dic</th>
-          </tr>
-        </thead>
-        <tbody>
-          <ng-container *ngFor='let es of efectivoSituacion; let i = index;'>
+      <div class="scrolltable">
+        <table id="tableEfectivo" class="table table-lg table-bordered table-hover-td table-responsive" *ngIf="selectedTipoReporte === '4'">
+          <thead>
             <tr>
-              <td class="">{{ es.concepto }}</td>
-              <td class="text-right">{{ es.Ene | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Feb | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Mar | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Abr | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.May | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Jun | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Jul | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Ago | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Sep | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Oct | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Nov | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Dic | number:'1.2-2' }}</td>
+              <th class="bg-secondary text-white">Concepto</th>
+              <th width = "6%" class="bg-primary text-white">Ene</th>
+              <th width = "6%" class="bg-primary text-white">Feb</th>
+              <th width = "6%" class="bg-primary text-white">Mar</th>
+              <th width = "6%" class="bg-primary text-white">Abr</th>
+              <th width = "6%" class="bg-primary text-white">May</th>
+              <th width = "6%" class="bg-primary text-white">Jun</th>
+              <th width = "6%" class="bg-primary text-white">Jul</th>
+              <th width = "6%" class="bg-primary text-white">Ago</th>
+              <th width = "6%" class="bg-primary text-white">Sep</th>
+              <th width = "6%" class="bg-primary text-white">Oct</th>
+              <th width = "6%" class="bg-primary text-white">Nov</th>
+              <th width = "6%" class="bg-primary text-white">Dic</th>
             </tr>
-          </ng-container>
-        </tbody>
-      </table>
-      <table id="tableEstado" class="table table-lg table-bordered table-responsive table-double-scroller" *ngIf="selectedTipoReporte === '5'">
-        <thead>
-          <tr>
-            <th class="bg-success text-white">Concepto</th>
-            <th class="bg-success text-white">Ene</th>
-            <th class="bg-success text-white">Feb</th>
-            <th class="bg-success text-white">Mar</th>
-            <th class="bg-success text-white">Abr</th>
-            <th class="bg-success text-white">May</th>
-            <th class="bg-success text-white">Jun</th>
-            <th class="bg-success text-white">Jul</th>
-            <th class="bg-success text-white">Ago</th>
-            <th class="bg-success text-white">Sep</th>
-            <th class="bg-success text-white">Oct</th>
-            <th class="bg-success text-white">Nov</th>
-            <th class="bg-success text-white">Dic</th>
-            <th class="bg-success text-white">DicAñoAnt</th>
-          </tr>
-        </thead>
-        <tbody>
-          <ng-container *ngFor='let es of estadoSituacion; let i = index;'>
+          </thead>
+          <tbody>
+            <ng-container *ngFor='let es of efectivoSituacion; let i = index;'>
+              <tr>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold ng-tns-c4-0' : ''" >{{ es.concepto }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Ene | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Feb | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Mar | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Abr | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.May | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Jun | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Jul | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Ago | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Sep | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Oct | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Nov | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Dic | number:'1.2-2' }}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+        <table id="tableEstado" class="table table-lg table-bordered table-hover-td table-responsive" *ngIf="selectedTipoReporte === '5'">
+          <thead> 
             <tr>
-              <td class="">{{ es.concepto }}</td>
-              <td class="text-right">{{ es.Ene | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Feb | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Mar | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Abr | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.May | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Jun | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Jul | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Ago | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Sep | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Oct | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Nov | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.Dic | number:'1.2-2' }}</td>
-              <td class="text-right">{{ es.dicAnioAnt | number:'1.2-2' }}</td>
+              <th class="bg-secondary text-white">Concepto</th>
+              <th class="bg-primary text-white">DicAñoAnt</th>
+              <th class="bg-primary text-white">Ene</th>
+              <th class="bg-primary text-white">Feb</th>
+              <th class="bg-primary text-white">Mar</th>
+              <th class="bg-primary text-white">Abr</th>
+              <th class="bg-primary text-white">May</th>
+              <th class="bg-primary text-white">Jun</th>
+              <th class="bg-primary text-white">Jul</th>
+              <th class="bg-primary text-white">Ago</th>
+              <th class="bg-primary text-white">Sep</th>
+              <th class="bg-primary text-white">Oct</th>
+              <th class="bg-primary text-white">Nov</th>
+              <th class="bg-primary text-white">Dic</th>
+          
             </tr>
-          </ng-container>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <ng-container *ngFor='let es of estadoSituacion; let i = index;'>
+              <tr>
+                <td  [ngClass]="es.concepto.includes('Total')? 'font-weight-bold ng-tns-c4-0' : ''" >{{ es.concepto }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right ng-tns-c4-0' : 'text-right'">{{ es.dicAnioAnt | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Ene | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Feb | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Mar | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Abr | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.May | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Jun | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Jul | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Ago | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Sep | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Oct | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Nov | number:'1.2-2' }}</td>
+                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Dic | number:'1.2-2' }}</td>
+                
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
