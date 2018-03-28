@@ -345,20 +345,33 @@ export class InternosComponent implements OnInit {
     },
     error => this.errorMessage = <any>error
     );
-    this.showSumaDepartamentos = true;
-    this. showSumaDepartamentosHeader=true;
-    this.showAcumuladoPresupuesto= false;
-    this.showResultados= false;
-    this.showAcumuladoReal= false;
-    this.showReporteUnidades = false;
-
+   
+    var tipoReporte= this.selectedTipoReporte.toString();
+    switch (tipoReporte){
+      case '1':
+        this.showSumaDepartamentos = true;
+        this.showSumaDepartamentosHeader=true;
+        this.showAcumuladoPresupuesto= false;
+        this.showResultados= false;
+        this.showAcumuladoReal= false;
+        this.showReporteUnidades = false;
+        break;
+      default :
+        this.showSumaDepartamentos = true;
+        this.showSumaDepartamentosHeader=false;
+        this.showSumaDepartamentosAReal=true;
+        this.showResultados= false;
+        this.showAcumuladoReal= false;
+        this.showReporteUnidades = false;
+        break;
+    }
 
     //   var sTipoReporte= this.selectedTipoReporte.toString();
     //  switch(sTipoReporte){
 
     //     case '1':
     //     this.showSumaDepartamentos = true;
-    //     this. showSumaDepartamentosHeader=true;
+    //     
     //     this.showAcumuladoPresupuesto= false;
     //     this.showResultados= false;
     //     this.showAcumuladoReal= false;
@@ -743,13 +756,10 @@ getSumaDepartamentos(): void {
   var sTipoReporte= this.selectedTipoReporte.toString();
 switch(sTipoReporte){
     case '1':
-    this.getReporteSumaDepartamentos();
+       this.getReporteSumaDepartamentos();
     break;
-    case '2':
-   this.getSumaDepartamentosAcumuladoReal();
-    break;
-    case '3':
-   this.getSumaDepartamentosAcumuladoReal();
+    default:
+      this.getSumaDepartamentosAcumuladoReal();
     break;
   }
 }
@@ -1344,23 +1354,15 @@ getReporteSumaDepartamentos() : void{
      }
     }
     else{
-switch (nv){
-      case '1':
-      this.showSumaDepartamentosHeader= true;
-      this.showSumaDepartamentosAReal=false;
-      break;
-      case '2':
-     // this.selectTodosDeptos(true);
-      //this.showSuma();
-      this.showSumaDepartamentosHeader= false;
-      this.showSumaDepartamentosAReal=true;
-      break;
-      case '3':
-      //this.selectTodosDeptos(true);
-      //this.showSuma();
-      this.showSumaDepartamentosHeader= false;
-      this.showSumaDepartamentosAReal=true;
-      break;
+      switch (nv){
+        case '1':
+        this.showSumaDepartamentosHeader= true;
+        this.showSumaDepartamentosAReal=false;
+        break;
+        default:      
+        this.showSumaDepartamentosHeader= false;
+        this.showSumaDepartamentosAReal=true;
+        break;
       }    
     }
   }
