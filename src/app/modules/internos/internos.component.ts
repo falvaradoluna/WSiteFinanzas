@@ -85,6 +85,8 @@ export class InternosComponent implements OnInit {
   showDetallePrimerNivel = false;
   showDetalleSegundoNivel = false;
   showSumaDepartamentos = false;
+  showSumaDepartamentosHeader=false;
+  showSumaDepartamentosAReal=false;
   showPercents = true;
   resultadosSeriesArNv4: ISeries[] = [];
   isCollapsed = true;
@@ -93,6 +95,7 @@ export class InternosComponent implements OnInit {
   estadoResultados: IResultadoInternos[] = [];
   estadoResultadosCalculo: IResultadoEstadoDeResultadosCalculo[] = [];
   estadoResultadosAcumuladoReal: IDetalleUnidadesAcumulado[] = [];
+  sumaDepartamentosAReal: IDetalleUnidadesAcumulado[] = [];
   resultadoSumaDepartamentos: IResultadoInternos[] = [];
   unidadesDepartamento: IResultadoInternos[] = [];
   unidadesAcumuladoPresupuesto: IDetalleUnidadesAcumulado[] = [];
@@ -237,10 +240,27 @@ export class InternosComponent implements OnInit {
   }
 
   disabledSumaDepartamentos(): boolean {
-  return false;
+    const sTipoReporte = this.selectedTipoReporte.toString();
+    const sCompania = this.selectedCompania.toString();
+    if (sCompania === '0' || (sTipoReporte === '4' || sTipoReporte === '5')) {
+      return true;
+    } else {
+      return false;
+    }
   }
   
+  disabledButtonPorcentaje() : boolean {
+    const sTipoReporte = this.selectedTipoReporte.toString();
+    const sCompania = this.selectedCompania.toString();
+    if (sCompania === '0' || (sTipoReporte === '4' || sTipoReporte === '5')) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   enabledSumaDepartamentos(valor : boolean): boolean {
+
     return valor;
     }
 
@@ -318,20 +338,60 @@ export class InternosComponent implements OnInit {
 //////////
   showSuma(): void {
     // console.log( "Suma" );
-      this._service.getDepartamentos({
-      })
-      .subscribe( departamentos => {
-        this.departamentos = departamentos;
-      },
-      error => this.errorMessage = <any>error
-      );
-      this.showReporteUnidades = false;
-      this.showSumaDepartamentos = true;
-      this.showAcumuladoPresupuesto= false;
-      this.showResultados= false;
-      this.showAcumuladoReal= false;
-      this.showReporteUnidades = false;
-    
+
+    this._service.getDepartamentos({
+    })
+    .subscribe( departamentos => {
+      this.departamentos = departamentos;
+    },
+    error => this.errorMessage = <any>error
+    );
+   
+    var tipoReporte= this.selectedTipoReporte.toString();
+    switch (tipoReporte){
+      case '1':
+        this.showSumaDepartamentos = true;
+        this.showSumaDepartamentosHeader=true;
+        this.showAcumuladoPresupuesto= false;
+        this.showResultados= false;
+        this.showAcumuladoReal= false;
+        this.showReporteUnidades = false;
+        break;
+      default :
+        this.showSumaDepartamentos = true;
+        this.showSumaDepartamentosHeader=false;
+        this.showSumaDepartamentosAReal=true;
+        this.showResultados= false;
+        this.showAcumuladoReal= false;
+        this.showReporteUnidades = false;
+        break;
+    }
+
+    //   var sTipoReporte= this.selectedTipoReporte.toString();
+    //  switch(sTipoReporte){
+
+    //     case '1':
+    //     this.showSumaDepartamentos = true;
+    //     
+    //     this.showAcumuladoPresupuesto= false;
+    //     this.showResultados= false;
+    //     this.showAcumuladoReal= false;
+    //     this.showReporteUnidades = false;
+    //     break;
+
+    //     case '2':
+    //     this.showSumaDepartamentos = true;
+    //     this. showSumaDepartamentosHeader=false;
+    //     this.showAcumuladoRealSumaDepartamentos=true;
+    //     this.showAcumuladoPresupuesto=false;
+    //     //this.showAcumuladoReal=true;
+    //     // this.showReporteUnidades = false;
+    //      //this.showSumaDepartamentos = false;
+    //     // this.showAcumuladoPresupuesto= false;         
+    //     // this.showAcumuladoReal= false;
+    //     //this.showResultados= false; 
+    //     break;
+    //    }
   }
 
   hideSumaDepartamentos(): void {
@@ -601,6 +661,62 @@ export class InternosComponent implements OnInit {
       }
     );
   }
+   
+getSumaDepartamentosAcumuladoReal(): void {
+  this._service.getSumaDepartamentosAcumuladoReal({
+    idCompania: this.selectedCompania,
+    idSucursal: this.selectedIdSucursal,// > 0 ? this.selectedIdSucursal : 0, TMC se cambia ya que ahy valores menores a cero
+    periodoYear: this.anio,
+    periodoMes: this.mes,
+    xmlDepartamento : this.xmlSend,
+    idSucursalSecuencia: this.selectedIdSucursalSecuencia,
+    tipoReporte: this.selectedTipoReporte
+  })
+    .subscribe(sumaDepartamentos => {
+      this.sumaDepartamentosAReal = sumaDepartamentos;
+    },
+    error => { this.errorMessage = <any>error; },
+    () => {
+      // Ciclo de 12 meses
+      for (let mes = 1; mes <= 12; mes++) {
+        const nombreMes = this.toLongMonth(mes.toString());
+        const ventas = this.sumaDepartamentosAReal.find(x => x.descripcion === 'Ventas');
+        const utilidadBrutaNeta = this.sumaDepartamentosAReal.find(x => x.descripcion === 'Utilidad Bruta Neta');
+
+        // Se calculan porcentajes del mes correspondiente
+        this.sumaDepartamentosAReal.forEach(er => {
+          switch (er.descripcion) {
+            case 'Ventas': {
+              er[nombreMes + 'Perc'] = 100;
+              break;
+            }
+            case 'Utilidad bruta': {
+              er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+              break;
+            }
+            case 'Utilidad Bruta Neta': {
+              er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+              break;
+            }
+            case 'Costo de Ventas': {
+              er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+              break;
+            }
+            case 'Otros Costos': {
+              er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+              break;
+            }
+            default: {
+              er[nombreMes + 'Perc'] = er[nombreMes] / utilidadBrutaNeta[nombreMes] * 100;
+              break;
+            }
+          }
+        });
+      }
+    }
+  );
+}
+
 
   onClickUnidadesAcumuladoRealNv3(UnidadDescripcion: string) {
     this.detalleUnidadesAcumuladoRealCuartoNivel = UnidadDescripcion;
@@ -643,6 +759,20 @@ export class InternosComponent implements OnInit {
       
 */
 getSumaDepartamentos(): void { 
+
+  var sTipoReporte= this.selectedTipoReporte.toString();
+switch(sTipoReporte){
+    case '1':
+       this.getReporteSumaDepartamentos();
+    break;
+    default:
+      this.getSumaDepartamentosAcumuladoReal();
+    break;
+  }
+}
+
+getReporteSumaDepartamentos() : void{
+
   this._service.getSumaDepartamentos({
     idCompania: this.selectedCompania,
     idSucursal: this.selectedIdSucursal,// > 0 ? this.selectedIdSucursal : 0, TMC se cambia ya que ahy valores menores a cero
@@ -1147,14 +1277,14 @@ getSumaDepartamentos(): void {
 
   onChangeCompania(newValue: number): void {
     this.selectedCompania = newValue;
+    this.disabledSumaDepartamentos();
+    this.disabledButtonPorcentaje();
     if (this.companias.find(x => x.id === +newValue)) {
       const fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;      
       this._fechaActualizacionService.onChangeFecha(fechaActualizacion);
-     this.enabledSumaDepartamentos(false);
     }
    else{
     this._fechaActualizacionService.onChangeFecha(null);
-    this.enabledSumaDepartamentos (true);
    }
 
     if (this.selectedCompania !== 0 && this.selectedTipoReporte) {
@@ -1226,6 +1356,20 @@ getSumaDepartamentos(): void {
           this.getSucursales();
           this.getDepartamentos();
      }
+    }
+
+    else{
+      this.showSumaDepartamentos=true;
+      switch (nv){
+        case '1':
+        this.showSumaDepartamentosHeader= true;
+        this.showSumaDepartamentosAReal=false;
+        break;
+        default:      
+        this.showSumaDepartamentosHeader= false;
+        this.showSumaDepartamentosAReal=true;
+        break;
+      }    
     }
   }
 
