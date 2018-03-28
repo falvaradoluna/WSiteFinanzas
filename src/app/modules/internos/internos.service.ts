@@ -175,7 +175,6 @@ export class InternosService {
       .catch(this.handleError);
   }
 
-///////
 getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumulado[]> { // Se reutiliza la interfaz de detalle Unidades Acumulado
   // Initialize Params Object
   let Params = new HttpParams();  

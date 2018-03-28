@@ -241,7 +241,8 @@ export class InternosComponent implements OnInit {
 
   disabledSumaDepartamentos(): boolean {
     const sTipoReporte = this.selectedTipoReporte.toString();
-    if (sTipoReporte === '4' || sTipoReporte === '5') {
+    const sCompania = this.selectedCompania.toString();
+    if (sCompania === '0' || (sTipoReporte === '4' || sTipoReporte === '5')) {
       return true;
     } else {
       return false;
@@ -250,7 +251,8 @@ export class InternosComponent implements OnInit {
   
   disabledButtonPorcentaje() : boolean {
     const sTipoReporte = this.selectedTipoReporte.toString();
-    if (sTipoReporte === '4' || sTipoReporte === '5') {
+    const sCompania = this.selectedCompania.toString();
+    if (sCompania === '0' || (sTipoReporte === '4' || sTipoReporte === '5')) {
       return true;
     } else {
       return false;
@@ -742,10 +744,11 @@ getSumaDepartamentos(): void {
 switch(sTipoReporte){
     case '1':
     this.getReporteSumaDepartamentos();
-    // this.getSumaDepartamentosAcumuladoReal();
     break;
     case '2':
-   // this.getReporteSumaDepartamentos();
+   this.getSumaDepartamentosAcumuladoReal();
+    break;
+    case '3':
    this.getSumaDepartamentosAcumuladoReal();
     break;
   }
@@ -1258,14 +1261,14 @@ getReporteSumaDepartamentos() : void{
   onChangeCompania(newValue: number): void {
   
     this.selectedCompania = newValue;
+    this.disabledSumaDepartamentos();
+    this.disabledButtonPorcentaje();
     if (this.companias.find(x => x.id === +newValue)) {
       const fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;      
       this._fechaActualizacionService.onChangeFecha(fechaActualizacion);
-     this.enabledSumaDepartamentos(false);
     }
    else{
     this._fechaActualizacionService.onChangeFecha(null);
-    this.enabledSumaDepartamentos (true);
    }
 
    if (this.selectedCompania !== 0 && this.selectedTipoReporte <=3) {     
@@ -1345,14 +1348,18 @@ switch (nv){
       case '1':
       this.showSumaDepartamentosHeader= true;
       this.showSumaDepartamentosAReal=false;
-  
       break;
       case '2':
+     // this.selectTodosDeptos(true);
+      //this.showSuma();
       this.showSumaDepartamentosHeader= false;
       this.showSumaDepartamentosAReal=true;
       break;
       case '3':
-     // this.showEstadoResultadoAcumuladoReal=1;
+      //this.selectTodosDeptos(true);
+      //this.showSuma();
+      this.showSumaDepartamentosHeader= false;
+      this.showSumaDepartamentosAReal=true;
       break;
       }    
     }
