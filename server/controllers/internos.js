@@ -218,8 +218,8 @@ internos.prototype.get_sumadepartamentos = function (req, res, next) {
     { name: 'PeriodoMes', value: PeriodoMes, type: self.model.types.INT },
     { name: 'IdDepartamento', value: departamento, type: self.model.types.STRING },
     { name: 'IdSucursalSecuencia', value: IdSucursalSecuencia, type: self.model.types.INT },
-    { name: 'tipoReporte', value: 1, type: self.model.types.INT }
-    //{ name: 'tipoReporte', value: tipoReporte, type: self.model.types.INT }
+    //{ name: 'tipoReporte', value: 1, type: self.model.types.INT }
+    { name: 'tipoReporte', value: tipoReporte, type: self.model.types.INT }
     
   ];
 

@@ -86,7 +86,7 @@ export class InternosComponent implements OnInit {
   showDetalleSegundoNivel = false;
   showSumaDepartamentos = false;
   showSumaDepartamentosHeader=false;
-  showAcumuladoRealSumaDepartamentos=false;
+  showSumaDepartamentosAReal=false;
   showPercents = true;
   resultadosSeriesArNv4: ISeries[] = [];
   isCollapsed = true;
@@ -95,7 +95,7 @@ export class InternosComponent implements OnInit {
   estadoResultados: IResultadoInternos[] = [];
   estadoResultadosCalculo: IResultadoEstadoDeResultadosCalculo[] = [];
   estadoResultadosAcumuladoReal: IDetalleUnidadesAcumulado[] = [];
-  sumaDepartamentosAcumuladoReal: IDetalleUnidadesAcumulado[] = [];
+  sumaDepartamentosAReal: IDetalleUnidadesAcumulado[] = [];
   resultadoSumaDepartamentos: IResultadoInternos[] = [];
   unidadesDepartamento: IResultadoInternos[] = [];
   unidadesAcumuladoPresupuesto: IDetalleUnidadesAcumulado[] = [];
@@ -639,8 +639,6 @@ export class InternosComponent implements OnInit {
     );
   }
 
-
-///////
 getSumaDepartamentosAcumuladoReal(): void {
   this._service.getSumaDepartamentosAcumuladoReal({
     idCompania: this.selectedCompania,
@@ -651,19 +649,19 @@ getSumaDepartamentosAcumuladoReal(): void {
     idSucursalSecuencia: this.selectedIdSucursalSecuencia,
     tipoReporte: this.selectedTipoReporte
   })
-    .subscribe(sumaDepartamentosAcumuladoReal => {
-      this.sumaDepartamentosAcumuladoReal = sumaDepartamentosAcumuladoReal;
+    .subscribe(sumaDepartamentos => {
+      this.sumaDepartamentosAReal = sumaDepartamentos;
     },
     error => { this.errorMessage = <any>error; },
     () => {
       // Ciclo de 12 meses
       for (let mes = 1; mes <= 12; mes++) {
         const nombreMes = this.toLongMonth(mes.toString());
-        const ventas = this.estadoResultadosAcumuladoReal.find(x => x.descripcion === 'Ventas');
-        const utilidadBrutaNeta = this.estadoResultadosAcumuladoReal.find(x => x.descripcion === 'Utilidad Bruta Neta');
+        const ventas = this.sumaDepartamentosAReal.find(x => x.descripcion === 'Ventas');
+        const utilidadBrutaNeta = this.sumaDepartamentosAReal.find(x => x.descripcion === 'Utilidad Bruta Neta');
 
         // Se calculan porcentajes del mes correspondiente
-        this.estadoResultadosAcumuladoReal.forEach(er => {
+        this.sumaDepartamentosAReal.forEach(er => {
           switch (er.descripcion) {
             case 'Ventas': {
               er[nombreMes + 'Perc'] = 100;
@@ -695,8 +693,6 @@ getSumaDepartamentosAcumuladoReal(): void {
     }
   );
 }
-
-
 
   onClickUnidadesAcumuladoRealNv3(UnidadDescripcion: string) {
     this.detalleUnidadesAcumuladoRealCuartoNivel = UnidadDescripcion;
@@ -749,8 +745,8 @@ switch(sTipoReporte){
     // this.getSumaDepartamentosAcumuladoReal();
     break;
     case '2':
-    this.getReporteSumaDepartamentos();
-   // this.getSumaDepartamentosAcumuladoReal();
+   // this.getReporteSumaDepartamentos();
+   this.getSumaDepartamentosAcumuladoReal();
     break;
   }
 }
@@ -1348,14 +1344,15 @@ getReporteSumaDepartamentos() : void{
 switch (nv){
       case '1':
       this.showSumaDepartamentosHeader= true;
-      this.showAcumuladoRealSumaDepartamentos=false;
+      this.showSumaDepartamentosAReal=false;
   
       break;
       case '2':
       this.showSumaDepartamentosHeader= false;
-      this.showAcumuladoRealSumaDepartamentos=true;
+      this.showSumaDepartamentosAReal=true;
       break;
       case '3':
+     // this.showEstadoResultadoAcumuladoReal=1;
       break;
       }    
     }

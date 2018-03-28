@@ -809,7 +809,8 @@
               </select>
             </form>
           </div>
-          <div class="col-sm-10">
+         <!-- INICIO SUMA DEPARTAMENTOS> <-->
+          <div class="col-sm-10" *ngIf='showSumaDepartamentosHeader'>
             <table class="table table-sm table-bordered table-fixed">
               <thead>
                 <tr>
@@ -921,6 +922,81 @@
               </tbody> 
             </table>
           </div>
+         <!-- END SUMA DEPARTAMENTOS> <-->
+         <!-- INICIO SUMA DEPARTAMENTOS ACUMULADO REAL> <-->
+         <div class="col-sm-10" *ngIf='showSumaDepartamentosAReal'>
+            <table  class="table table-sm table-bordered table-hover-td table-responsive table-double-scroll">
+              <thead>
+                  <tr>
+                      <th class="bg-secondary text-white">Departamento1</th>
+                      <th class="bg-primary text-white">Enero</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Febrero</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Marzo</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Abril</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Mayo</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Junio</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Julio</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Agosto</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Septiembre</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Octubre</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Noviembre</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Diciembre</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                      <th class="bg-primary text-white">Suma</th>
+                      <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
+                    </tr>
+              </thead>
+              <tbody>
+                  <ng-container *ngFor='let ar of sumaDepartamentosAReal; let i = index;'>
+                      <tr>
+                        <td>{{ ar.descripcion }}</td>
+                        <td class="text-center" (click)="onClickUnidadesAcumuladoReal(i, ar.Cantidad, 'Real', 1)">{{ ar.enero | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.eneroPerc | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.febrero | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.febreroPerc | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.marzo | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.marzoPerc | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.abril | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.abrilPerc | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.mayo | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.mayoPerc | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.junio | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.junioPerc | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.julio | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.julioPerc | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.agosto | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.agostoPerc | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.septiembre | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.septiembrePerc | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.octubre | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.octubrePerc | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.noviembre | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.noviembrePerc | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.diciembre | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.diciembrePerc | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.totalAnual | number:'1.2-2' }}</td>
+                        <td class="text-center">{{ ar.totalAnualPerc | number:'1.2-2' }}</td>
+                      </tr>
+                    </ng-container>
+
+
+
+              </tbody> 
+            </table>
+          </div>
+
+         <!-- END SUMA DEPARTAMENTOS ACUMULADO REAL> <-->
         </div>
       </div>
     </div>
@@ -944,7 +1020,7 @@
         <table *ngIf='showUnidadesAcumuladoReal === 1' class="table table-sm table-bordered table-hover-td table-responsive">
           <thead>
             <tr>
-              <th class="bg-secondary text-white">Departamento1</th>
+              <th class="bg-secondary text-white">Departamento</th>
               <th class="bg-primary text-white">Enero</th>
               <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
               <th class="bg-primary text-white">Febrero</th>
@@ -1647,7 +1723,7 @@
         <table id="tableAcumuladoPresupuesto" class="table table-sm table-bordered table-hover-td table-responsive table-double-scroll">
           <thead>
             <tr>
-              <th class="bg-secondary text-white">Departamento</th>
+              <th class="bg-secondary text-white">Departamento1</th>
               <th class="bg-primary text-white">Enero</th>
               <th class="bg-primary text-white">%</th>
               <th class="bg-primary text-white">Febrero</th>

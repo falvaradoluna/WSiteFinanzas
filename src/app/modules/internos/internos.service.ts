@@ -176,12 +176,11 @@ export class InternosService {
   }
 
 ///////
-getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumulado[]> { // Se reutiliza la interfaz de unidades
+getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumulado[]> { // Se reutiliza la interfaz de detalle Unidades Acumulado
   // Initialize Params Object
   let Params = new HttpParams();  
 
   // Begin assigning parameters
- // Params = Params.append('idcia', parameters.idCia);
  Params = Params.append('idcia', parameters.idCompania);
  Params = Params.append('idSucursal', parameters.idSucursal);
  Params = Params.append('periodoAnio', parameters.periodoYear);
@@ -189,7 +188,7 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
  Params = Params.append('IdDepartamento',parameters.xmlDepartamento);
  Params = Params.append('IdSucursalSecuencia',parameters.idSucursalSecuencia);
  Params = Params.append('tipoReporte', parameters.tipoReporte);
- 
+
 
  //console.log("params", Params);
   return this._http.get<IAcumuladoReal[]>(this._urlSumaDepartamentos, { params: Params })
