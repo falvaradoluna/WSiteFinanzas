@@ -85,8 +85,6 @@ export class InternosComponent implements OnInit {
   showDetallePrimerNivel = false;
   showDetalleSegundoNivel = false;
   showSumaDepartamentos = false;
-  showSumaDepartamentosHeader=false;
-  showAcumuladoRealSumaDepartamentos=false;
   showPercents = true;
   resultadosSeriesArNv4: ISeries[] = [];
   isCollapsed = true;
@@ -95,7 +93,6 @@ export class InternosComponent implements OnInit {
   estadoResultados: IResultadoInternos[] = [];
   estadoResultadosCalculo: IResultadoEstadoDeResultadosCalculo[] = [];
   estadoResultadosAcumuladoReal: IDetalleUnidadesAcumulado[] = [];
-  sumaDepartamentosAcumuladoReal: IDetalleUnidadesAcumulado[] = [];
   resultadoSumaDepartamentos: IResultadoInternos[] = [];
   unidadesDepartamento: IResultadoInternos[] = [];
   unidadesAcumuladoPresupuesto: IDetalleUnidadesAcumulado[] = [];
@@ -321,46 +318,20 @@ export class InternosComponent implements OnInit {
 //////////
   showSuma(): void {
     // console.log( "Suma" );
-    this._service.getDepartamentos({
-    })
-    .subscribe( departamentos => {
-      this.departamentos = departamentos;
-    },
-    error => this.errorMessage = <any>error
-    );
-    this.showSumaDepartamentos = true;
-    this. showSumaDepartamentosHeader=true;
-    this.showAcumuladoPresupuesto= false;
-    this.showResultados= false;
-    this.showAcumuladoReal= false;
-    this.showReporteUnidades = false;
-
-
-    //   var sTipoReporte= this.selectedTipoReporte.toString();
-    //  switch(sTipoReporte){
-
-    //     case '1':
-    //     this.showSumaDepartamentos = true;
-    //     this. showSumaDepartamentosHeader=true;
-    //     this.showAcumuladoPresupuesto= false;
-    //     this.showResultados= false;
-    //     this.showAcumuladoReal= false;
-    //     this.showReporteUnidades = false;
-    //     break;
-
-    //     case '2':
-    //     this.showSumaDepartamentos = true;
-    //     this. showSumaDepartamentosHeader=false;
-    //     this.showAcumuladoRealSumaDepartamentos=true;
-    //     this.showAcumuladoPresupuesto=false;
-    //     //this.showAcumuladoReal=true;
-    //     // this.showReporteUnidades = false;
-    //      //this.showSumaDepartamentos = false;
-    //     // this.showAcumuladoPresupuesto= false;         
-    //     // this.showAcumuladoReal= false;
-    //     //this.showResultados= false; 
-    //     break;
-    //    }
+      this._service.getDepartamentos({
+      })
+      .subscribe( departamentos => {
+        this.departamentos = departamentos;
+      },
+      error => this.errorMessage = <any>error
+      );
+      this.showReporteUnidades = false;
+      this.showSumaDepartamentos = true;
+      this.showAcumuladoPresupuesto= false;
+      this.showResultados= false;
+      this.showAcumuladoReal= false;
+      this.showReporteUnidades = false;
+    
   }
 
   hideSumaDepartamentos(): void {
@@ -569,8 +540,6 @@ export class InternosComponent implements OnInit {
     }
   }
 
-  ///////////
-
   getEstadoResultadosAcumuladoReal(): void {
     this._service.getEstadoResultadosAcumuladoReal({
       idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
@@ -624,65 +593,6 @@ export class InternosComponent implements OnInit {
     );
   }
 
-
-///////
-getSumaDepartamentosAcumuladoReal(): void {
-  this._service.getSumaDepartamentosAcumuladoReal({
-    idCompania: this.selectedCompania,
-    idSucursal: this.selectedIdSucursal,// > 0 ? this.selectedIdSucursal : 0, TMC se cambia ya que ahy valores menores a cero
-    periodoYear: this.anio,
-    periodoMes: this.mes,
-    xmlDepartamento : this.xmlSend,
-    idSucursalSecuencia: this.selectedIdSucursalSecuencia,
-    tipoReporte: this.selectedTipoReporte
-  })
-    .subscribe(sumaDepartamentosAcumuladoReal => {
-      this.sumaDepartamentosAcumuladoReal = sumaDepartamentosAcumuladoReal;
-    },
-    error => { this.errorMessage = <any>error; },
-    () => {
-      // Ciclo de 12 meses
-      for (let mes = 1; mes <= 12; mes++) {
-        const nombreMes = this.toLongMonth(mes.toString());
-        const ventas = this.estadoResultadosAcumuladoReal.find(x => x.descripcion === 'Ventas');
-        const utilidadBrutaNeta = this.estadoResultadosAcumuladoReal.find(x => x.descripcion === 'Utilidad Bruta Neta');
-
-        // Se calculan porcentajes del mes correspondiente
-        this.estadoResultadosAcumuladoReal.forEach(er => {
-          switch (er.descripcion) {
-            case 'Ventas': {
-              er[nombreMes + 'Perc'] = 100;
-              break;
-            }
-            case 'Utilidad bruta': {
-              er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
-              break;
-            }
-            case 'Utilidad Bruta Neta': {
-              er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
-              break;
-            }
-            case 'Costo de Ventas': {
-              er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
-              break;
-            }
-            case 'Otros Costos': {
-              er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
-              break;
-            }
-            default: {
-              er[nombreMes + 'Perc'] = er[nombreMes] / utilidadBrutaNeta[nombreMes] * 100;
-              break;
-            }
-          }
-        });
-      }
-    }
-  );
-}
-
-
-
   onClickUnidadesAcumuladoRealNv3(UnidadDescripcion: string) {
     this.detalleUnidadesAcumuladoRealCuartoNivel = UnidadDescripcion;
     this.showUnidadesAcumuladoReal = 4;
@@ -722,33 +632,15 @@ getSumaDepartamentosAcumuladoReal(): void {
       // () =>{
     } 
       
-*///
-
-////////
+*/
 getSumaDepartamentos(): void { 
-
-  var sTipoReporte= this.selectedTipoReporte.toString();
-switch(sTipoReporte){
-    case '1':
-    this.getReporteSumaDepartamentos();
-    // this.getSumaDepartamentosAcumuladoReal();
-    break;
-    case '2':
-    this.getReporteSumaDepartamentos();
-   // this.getSumaDepartamentosAcumuladoReal();
-    break;
-  }
-}
-
-getReporteSumaDepartamentos() : void{
   this._service.getSumaDepartamentos({
     idCompania: this.selectedCompania,
     idSucursal: this.selectedIdSucursal,// > 0 ? this.selectedIdSucursal : 0, TMC se cambia ya que ahy valores menores a cero
     periodoYear: this.anio,
     periodoMes: this.mes,
     xmlDepartamento : this.xmlSend,
-    idSucursalSecuencia: this.selectedIdSucursalSecuencia,
-    tipoReporte: this.selectedTipoReporte
+    idSucursalSecuencia: this.selectedIdSucursalSecuencia
   })
     .subscribe(sumaDepartamentos => {
       this.resultadoSumaDepartamentos = sumaDepartamentos;
@@ -1245,7 +1137,6 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeCompania(newValue: number): void {
-  
     this.selectedCompania = newValue;
     if (this.companias.find(x => x.id === +newValue)) {
       const fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;      
@@ -1257,7 +1148,7 @@ getReporteSumaDepartamentos() : void{
     this.enabledSumaDepartamentos (true);
    }
 
-   if (this.selectedCompania !== 0 && this.selectedTipoReporte <=3) {     
+    if (this.selectedCompania !== 0 && this.selectedTipoReporte) {
       // Llenar dropdown de sucursales
       this.getSucursales();
     }
@@ -1290,14 +1181,12 @@ getReporteSumaDepartamentos() : void{
   onChangeSumaDepartamentos(): void {
     const arrIds = [];
     this.selectedDepartamentosStr = '\'';
-    this.selectedDepartamentos.forEach(d => {     
+    this.selectedDepartamentos.forEach(d => { 
+    
       if (d!=="")  {
-        
-          this.selectedDepartamentosStr += `${d},`;
-          var iPos= arrIds.lastIndexOf(`${d}`);
-          if(iPos<0){
-             arrIds.push( `${d}` );
-          }
+     this.selectedDepartamentosStr += `${d},`;
+
+      arrIds.push( `${d}` );
     }
     });
 
@@ -1328,21 +1217,6 @@ getReporteSumaDepartamentos() : void{
           this.getSucursales();
           this.getDepartamentos();
      }
-    }
-    else{
-switch (nv){
-      case '1':
-      this.showSumaDepartamentosHeader= true;
-      this.showAcumuladoRealSumaDepartamentos=false;
-  
-      break;
-      case '2':
-      this.showSumaDepartamentosHeader= false;
-      this.showAcumuladoRealSumaDepartamentos=true;
-      break;
-      case '3':
-      break;
-      }    
     }
   }
 
@@ -1828,19 +1702,18 @@ switch (nv){
   // Selecciona o deselecciona todas las opciones del select suma de departamentos
   // True = Todos, False = ninguno
   selectTodosDeptos(selected: boolean) {
-   
+  // this.selectedDepartamentos = [''];
+
     // Se actualizan los departamentos seleccionados a TODOS
     this.departamentos.forEach(d => {
       d.Selected = selected;
-      if (selected === true) {  
-      var iPos= this.selectedDepartamentos.lastIndexOf(`${d.idER}`);
-      if(iPos<0){
+      if (selected === true) { 
+        
         this.selectedDepartamentos.push(`${d.idER}`);
-        }
-      }
-      else{
-        this.selectedDepartamentos = [''];
-      }
+              }
+              else{
+                this.selectedDepartamentos = [''];
+              }
     });
 
     // Se dispara el evento de cambio en los departamentos seleccionados
