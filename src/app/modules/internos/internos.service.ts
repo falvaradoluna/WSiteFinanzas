@@ -5,9 +5,12 @@ import { IResultadoInternos } from './resultado-internos';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
-import { ICompania } from './compania';
-import { ISucursal } from './sucursal';
-import { IDepartamento } from './departamento';
+import { ICompania } from '../../models/catalog/compania';
+import { ITipoReporte } from '../../models/catalog/tipoReporte';
+import { ISucursal } from '../../models/catalog/sucursal';
+import { IDepartamento } from '../../models/catalog/departamento';
+
+
 import { IEfectivoSituacion } from './efectivo-y-situacion-financiera';
 import { IEstadoSituacion } from './estado-Situacion-Financiera';
 import { IDetalleUnidadesMensual } from './detalle-unidades-mensual';
@@ -20,6 +23,7 @@ import { IAutoLineaAcumulado } from './auto-linea-acumulado';
 import { ISeries } from './series';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { IResultadoEstadoDeResultadosCalculo } from './formulaEstadoResultado';
+
 
 @Injectable()
 export class InternosService {
@@ -653,8 +657,8 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     let Params = new HttpParams();
     Params = Params.append('idUsuario', parameters.idUsuario);
 
-    return this._http.get(this._urlTipoReporte, { params: Params })
-       //.do(data => console.log(JSON.stringify(data)))
+    return this._http.get<ITipoReporte[]>(this._urlTipoReporte, { params: Params })
+       
       .catch(this.handleError);
   }
 

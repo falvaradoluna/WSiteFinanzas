@@ -14,13 +14,16 @@ import { trigger,
          group,
          state,
          animateChild } from '@angular/animations';
+
+import { ICompania } from '../../models/catalog/compania';
+import { ITipoReporte } from '../../models/catalog/tipoReporte';
+import { ISucursal } from '../../models/catalog/sucursal';
+import { IDepartamento } from '../../models/catalog/departamento';
+
+
 import { IResultadoInternos } from './resultado-internos';
 import { IResultadoEstadoDeResultadosCalculo } from './formulaEstadoResultado';
 import { InternosService } from './internos.service';
-import { ISucursal } from './sucursal';
-import { ICompania } from './compania';
-import { IDepartamento } from './departamento';
-import { ITipoReporte } from './tipo-reporte';
 import { IAcumuladoReal } from './acumuladoreal';
 import { IDetalleUnidadesMensual } from './detalle-unidades-mensual';
 import { IDetalleResultadosMensual } from './detalle-resultados-mensual';
@@ -335,7 +338,6 @@ export class InternosComponent implements OnInit {
   }
 //////////
   showSuma(): void {
-    // console.log( "Suma" );
     this._service.getDepartamentos({
     })
     .subscribe( departamentos => {
@@ -363,32 +365,6 @@ export class InternosComponent implements OnInit {
         this.showReporteUnidades = false;
         break;
     }
-
-    //   var sTipoReporte= this.selectedTipoReporte.toString();
-    //  switch(sTipoReporte){
-
-    //     case '1':
-    //     this.showSumaDepartamentos = true;
-    //     
-    //     this.showAcumuladoPresupuesto= false;
-    //     this.showResultados= false;
-    //     this.showAcumuladoReal= false;
-    //     this.showReporteUnidades = false;
-    //     break;
-
-    //     case '2':
-    //     this.showSumaDepartamentos = true;
-    //     this. showSumaDepartamentosHeader=false;
-    //     this.showAcumuladoRealSumaDepartamentos=true;
-    //     this.showAcumuladoPresupuesto=false;
-    //     //this.showAcumuladoReal=true;
-    //     // this.showReporteUnidades = false;
-    //      //this.showSumaDepartamentos = false;
-    //     // this.showAcumuladoPresupuesto= false;         
-    //     // this.showAcumuladoReal= false;
-    //     //this.showResultados= false; 
-    //     break;
-    //    }
   }
 
   hideSumaDepartamentos(): void {
@@ -927,13 +903,12 @@ getReporteSumaDepartamentos() : void{
 
   setTipoReporte(): void {
     let usuario = JSON.parse(localStorage.getItem('userLogged'));
-        this._service.getTipoReporte({
-          idUsuario: usuario.id
-        }).subscribe(
-            resp => { this.tipoReporte = resp; },
-            error => { },
-            () => { }
-        );
+    this._service.getTipoReporte({idUsuario: usuario.id})
+    .subscribe(
+        resp => { this.tipoReporte = resp; },
+        error => { },
+        () => { }
+    );
   }
 
   setDefaultDate(): void {
