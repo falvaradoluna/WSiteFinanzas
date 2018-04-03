@@ -33,7 +33,6 @@ import { IAutoLineaAcumulado } from './auto-linea-acumulado';
 import { FechaActualizacionService } from '../../shared';
 import { FlujoeSituacionfComponent } from './flujoe-situacionf/flujoe-situacionf.component'
 
-
 @Component({
   selector: 'app-internos',
   templateUrl: './internos.component.html',
@@ -924,13 +923,14 @@ getReporteSumaDepartamentos() : void{
   }
 
   setTipoReporte(): void {
-    this.tipoReporte = [
-      { Id: 1, Descripcion: 'Mensual' },
-      { Id: 2, Descripcion: 'Acumulado Real' },
-      { Id: 3, Descripcion: 'Acumulado Presupuestos' },
-      { Id: 4, Descripcion: 'Flujo de Efectivo Real' },
-      { Id: 5, Descripcion: 'Estado de Situación Financiera' }
-    ];
+    let usuario = JSON.parse(localStorage.getItem('userLogged'));
+        this._service.getTipoReporte({
+          idUsuario: usuario.id
+        }).subscribe(
+            resp => { this.tipoReporte = resp; },
+            error => { },
+            () => { }
+        );
   }
 
   setDefaultDate(): void {

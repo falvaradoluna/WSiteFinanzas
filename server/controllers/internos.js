@@ -330,7 +330,7 @@ internos.prototype.get_departamentos = function (req, res, next) {
 
   var params = [];
 
-  this.model.query('Unidad.ObtienePestania', params, function (error, result) {
+  this.model.query('Interno.ObtienePestania', params, function (error, result) {
     // console.log(params);
     self.view.expositor(res, {
       error: error,
@@ -1192,6 +1192,21 @@ internos.prototype.get_estadoderesultadosvariacionsegundonivel = function (req, 
 //     console.log('Mensaje: ' + error);
 // }
 // };
+
+internos.prototype.get_tipoReporte = function (req, res, next) {
+  var self = this;
+  var idUsuario = req.query.idUsuario;
+  var params = [
+    { name: 'idUsuario', value: idUsuario, type: self.model.types.INT }
+  ];
+
+  this.model.query('Interno.ReporteXUsuario', params, function (error, result) {
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
 
 module.exports = internos;
 

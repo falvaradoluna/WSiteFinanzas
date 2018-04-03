@@ -9,6 +9,7 @@ import { IAuth } from './auth';
 @Injectable()
 export class LoginService {
   private _urlLogin = 'api/login/auth';
+  private _urlMenu = 'api/login/menu';
   constructor(private _http: HttpClient) { }
 
   private handleError(err: HttpErrorResponse) {
@@ -27,6 +28,15 @@ export class LoginService {
 
     return this._http.get<IAuth[]>(this._urlLogin, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
+      .catch(this.handleError);
+  }
+
+  getMenu(parameters): Observable<any[]> {
+    let Params = new HttpParams();
+    Params = Params.append('roleId', parameters.rolId);
+
+    return this._http.get(this._urlMenu, { params: Params })
+       //.do(data => console.log('Menu:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 }

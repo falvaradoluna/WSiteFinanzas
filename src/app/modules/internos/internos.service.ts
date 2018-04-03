@@ -58,6 +58,7 @@ export class InternosService {
   private _urlEstadoResultadosAcumuladoByIdER = 'api/internos/estadoresultadosacumuladobyider';
   private _urlDetalleUnidadesSeriesAr = 'api/internos/detalleunidadesseriesar';
   private _urlEstadoDeResultadosVariacionSegundoNivel = 'api/internos/estadoderesultadosvariacionsegundonivel';
+  private _urlTipoReporte = 'api/internos/tipoReporte';
 
   constructor(private _http: HttpClient) { }
 
@@ -643,6 +644,15 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     Params = Params.append('EsAnul',              parameters.EsAnul);
 
     return this._http.get<IAcumuladoReal[]>(this._urlEstadoDeResultadosVariacionSegundoNivel, { params: Params })
+      .catch(this.handleError);
+  }
+
+  getTipoReporte(parameters): Observable<any[]> {
+    let Params = new HttpParams();
+    Params = Params.append('idUsuario', parameters.idUsuario);
+
+    return this._http.get(this._urlTipoReporte, { params: Params })
+       //.do(data => console.log(JSON.stringify(data)))
       .catch(this.handleError);
   }
 
