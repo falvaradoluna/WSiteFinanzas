@@ -20,22 +20,24 @@ import { ITipoReporte } from '../../models/catalog/tipoReporte';
 import { ISucursal } from '../../models/catalog/sucursal';
 import { IDepartamento } from '../../models/catalog/departamento';
 
+import { IAcumuladoReal } from '../../models/reports/acumuladoreal';
+import { IAutoLineaAcumulado } from '../../models/reports/auto-linea-acumulado';
+import { IDetalleResultadosCuentas } from '../../models/reports/detalle-resultados-cuentas';
+import { IResultadoInternos } from '../../models/reports/resultado-internos';
+import { IResultadoEstadoDeResultadosCalculo } from '../../models/reports/formulaEstadoResultado';
+import { IDetalleResultadosMensual } from '../../models/reports/detalle-resultados-mensual';
+import { IDetalleUnidadesAcumulado } from '../../models/reports/detalle-unidades-acumulado';
+import { ITipoUnidad } from '../../models/reports/tipo-unidad';
+import { IDetalleUnidadesMensual } from '../../models/reports/detalle-unidades-mensual';
+import { ISeries } from '../../models/reports/series';
 
-import { IResultadoInternos } from './resultado-internos';
-import { IResultadoEstadoDeResultadosCalculo } from './formulaEstadoResultado';
-import { InternosService } from './internos.service';
-import { IAcumuladoReal } from './acumuladoreal';
-import { IDetalleUnidadesMensual } from './detalle-unidades-mensual';
-import { IDetalleResultadosMensual } from './detalle-resultados-mensual';
-import { IDetalleResultadosCuentas } from './detalle-resultados-cuentas';
-import { ITipoUnidad } from './tipo-unidad';
-import { IDetalleUnidadesAcumulado } from './detalle-unidades-acumulado';
-import { ISeries } from './series';
+
+
 import { ColumnSortedEvent } from '../../shared/services/sort.service';
-import { IAutoLineaAcumulado } from './auto-linea-acumulado';
+import { InternosService } from './internos.service';
 import { FechaActualizacionService } from '../../shared';
 import { FlujoeSituacionfComponent } from './flujoe-situacionf/flujoe-situacionf.component'
-//import { clearImmediate } from 'timers';
+
 
 @Component({
   selector: 'app-internos',

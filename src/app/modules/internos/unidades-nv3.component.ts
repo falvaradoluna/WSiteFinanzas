@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange } from '@angular/core';
+
+import { ITipoUnidad } from '../../models/reports/tipo-unidad';
+
 import { InternosService } from './internos.service';
-import { ITipoUnidad } from './tipo-unidad';
 import { Observable } from 'rxjs/Observable';
 import { ColumnSortedEvent } from '../../shared/index';
 

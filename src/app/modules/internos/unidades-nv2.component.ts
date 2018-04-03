@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChange, OnChanges } from '@angular/core';
-import { IDetalleUnidadesMensual } from './detalle-unidades-mensual';
-import { IDetalleUnidadesAcumulado } from './detalle-unidades-acumulado';
+import { IDetalleUnidadesMensual } from '../../models/reports/detalle-unidades-mensual';
+import { IDetalleUnidadesAcumulado } from '../../models/reports/detalle-unidades-acumulado';
+import { ITipoUnidad } from '../../models/reports/tipo-unidad';
+
 import { ColumnSortedEvent } from '../../shared/index';
-import { ITipoUnidad } from './tipo-unidad';
 import { InternosService } from './internos.service';
 import { Observable } from 'rxjs/Observable';
 import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
