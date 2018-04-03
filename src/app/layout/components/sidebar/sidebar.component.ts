@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MenuService } from '../../../modules/seguridad/menu.service';
+
 
 @Component({
     selector: 'app-sidebar',
@@ -8,6 +10,11 @@ import { Component, OnInit } from '@angular/core';
 export class SidebarComponent {
     isActive: boolean = false;
     showMenu: string = '';
+    menu: any = [];
+    
+    constructor(private _menuService: MenuService) {
+        this.getMenu();
+    }
 
     eventCalled() {
         this.isActive = !this.isActive;
@@ -19,5 +26,16 @@ export class SidebarComponent {
         } else {
             this.showMenu = element;
         }
+    }
+
+    getMenu(){
+        let usuario = JSON.parse(localStorage.getItem('userLogged'));
+        this._menuService.getMenu({
+            rolId: usuario.idRol
+        }).subscribe(
+            resp => { this.menu = resp; },
+            error => { },
+            () => { }
+        );
     }
 }

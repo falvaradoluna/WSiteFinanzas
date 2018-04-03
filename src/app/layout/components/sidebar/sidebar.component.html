@@ -1,5 +1,5 @@
 <nav class="sidebar" [ngClass]="{sidebarPushRight: isActive}">
-    <ul class="list-group">
+    <!--<ul class="list-group">
       <a [routerLink]="['/cuentas']" [routerLinkActive]="" class="list-group-item">
             <i class="fa fa-file-o"></i>&nbsp;{{ 'Catálogos' | translate }}
       </a>
@@ -26,7 +26,9 @@
       </a>
       <a [routerLink]="['/']" [routerLinkActive]="" class="list-group-item">
             <i class="fa fa-cog"></i>&nbsp;{{ 'Ajustes' | translate }}
-      </a>
+      </a>-->
+
+
         <!-- <a routerLink="/dashboard" [routerLinkActive]="['router-link-active']" class="list-group-item">
             <i class="fa fa-fw fa-dashboard"></i>&nbsp;{{ 'Dashboard' | translate }}
         </a>
@@ -70,5 +72,28 @@
             <i class="fa fa-file-o"></i>&nbsp;{{ 'Blank Page' | translate }}
         </a> -->
 
+    <!--</ul>-->
+    <ul class="list-group" *ngFor="let menu of menu">
+        <div class="nested-menu">
+            <a *ngIf="menu.submenu.length" class="list-group-item" (click)="addExpandClass(menu.showMenu, menu.url)">
+                <span>
+                    <i [class]="menu.icono"></i> {{ menu.titulo | translate }}
+                </span>
+            </a>
+            <a *ngIf="!menu.submenu.length" [routerLink]="[ menu.url ]" class="list-group-item" (click)="addExpandClass(menu.showMenu, menu.url)">
+                    <span>
+                        <i [class]="menu.icono"></i> {{ menu.titulo | translate }}
+                    </span>
+            </a>
+            <li *ngIf="menu.submenu.length" class="nested" [class.expand]="showMenu === menu.showMenu">
+                <ul class="submenu">
+                    <li *ngFor="let submenu of menu.submenu">
+                        <a [routerLink]="[ submenu.url ]">
+                            <span><i [class]="menu.icono"></i> {{ submenu.titulo | translate }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </div>
     </ul>
 </nav>

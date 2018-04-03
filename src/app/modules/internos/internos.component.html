@@ -32,8 +32,8 @@
                 <select name="inputTipoReporte" class="form-control form-control-sm"
                   ([ngModel])='selectedTipoReporte'
                   (change)='onChangeTipoReporte($event.target.value)'>
-                  <option *ngFor='let tipo of tipoReporte' [value]='tipo.Id'>
-                    {{ tipo.Descripcion }}
+                  <option *ngFor='let tipo of tipoReporte' [value]='tipo.id'>
+                    {{ tipo.Reporte }}
                   </option>
                 </select>
               </div>
