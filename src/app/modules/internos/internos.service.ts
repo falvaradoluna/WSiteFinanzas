@@ -157,18 +157,43 @@ export class InternosService {
 
   getSumaDepartamentos(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
     // Initialize Params Object
-    let Params = new HttpParams();
+    let Params = new HttpParams();  
 
     // Begin assigning parameters
-    Params = Params.append('idcia', parameters.idCia);
-    Params = Params.append('idsucursal', parameters.idSucursal);
-    Params = Params.append('departamento', parameters.departamento);
-    Params = Params.append('anio', parameters.anio);
-    Params = Params.append('mes', parameters.mes);
-
+   // Params = Params.append('idcia', parameters.idCia);
+   Params = Params.append('idcia', parameters.idCompania);
+   Params = Params.append('idSucursal', parameters.idSucursal);
+   Params = Params.append('periodoAnio', parameters.periodoYear);
+   Params = Params.append('periodoMes', parameters.periodoMes);
+   Params = Params.append('IdDepartamento',parameters.xmlDepartamento);
+   Params = Params.append('IdSucursalSecuencia',parameters.idSucursalSecuencia);
+   Params = Params.append('tipoReporte', parameters.tipoReporte);
+   
+ 
+   //console.log("params", Params);
     return this._http.get<IResultadoInternos[]>(this._urlSumaDepartamentos, { params: Params })
       .catch(this.handleError);
   }
+
+getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumulado[]> { // Se reutiliza la interfaz de detalle Unidades Acumulado
+  // Initialize Params Object
+  let Params = new HttpParams();  
+
+  // Begin assigning parameters
+ Params = Params.append('idcia', parameters.idCompania);
+ Params = Params.append('idSucursal', parameters.idSucursal);
+ Params = Params.append('periodoAnio', parameters.periodoYear);
+ Params = Params.append('periodoMes', parameters.periodoMes);
+ Params = Params.append('IdDepartamento',parameters.xmlDepartamento);
+ Params = Params.append('IdSucursalSecuencia',parameters.idSucursalSecuencia);
+ Params = Params.append('tipoReporte', parameters.tipoReporte);
+
+
+ //console.log("params", Params);
+  return this._http.get<IAcumuladoReal[]>(this._urlSumaDepartamentos, { params: Params })
+    .catch(this.handleError);
+}
+////
 
   getUnidadesDepartamento(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
     // Initialize Params Object
