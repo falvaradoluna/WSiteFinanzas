@@ -297,9 +297,12 @@ internos.prototype.get_companias = function (req, res, next) {
 internos.prototype.get_sucursales = function (req, res, next) {
   var self = this;
   var idCompania = req.query.idCompania;
+  var idUsuario = req.query.idUsuario;
 
   var params = [
     { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'idUsuario', value: idUsuario, type: self.model.types.INT }
+    
   ];
 
   this.model.query('Catalogo.ObtenerSucursalXCompania', params, function (error, result) {

@@ -168,12 +168,13 @@ export class InternosService {
    Params = Params.append('IdDepartamento',parameters.xmlDepartamento);
    Params = Params.append('IdSucursalSecuencia',parameters.idSucursalSecuencia);
    Params = Params.append('tipoReporte', parameters.tipoReporte);
-   
+
  
    //console.log("params", Params);
     return this._http.get<IResultadoInternos[]>(this._urlSumaDepartamentos, { params: Params })
       .catch(this.handleError);
   }
+
 
 getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumulado[]> { // Se reutiliza la interfaz de detalle Unidades Acumulado
   // Initialize Params Object
@@ -230,6 +231,7 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
 
     // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idUsuario', parameters.idUsuario);
 
     return this._http.get<ISucursal[]>(this._urlSucursales, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
