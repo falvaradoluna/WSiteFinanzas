@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-//import 'rxjs/add/operator/do';
+import { IMenu } from '../models/security/menu';
 
 @Injectable()
-export class MenuService {
+export class SeguridadService {
   private _urlMenu = 'api/seguridad/menu';
 
   constructor(private _http: HttpClient) { }
@@ -14,12 +14,11 @@ export class MenuService {
     return Observable.throw(err.message);
   }
 
-  getMenu(parameters): Observable<any[]> {
+  getMenu(parameters): Observable<IMenu[]> {
     let Params = new HttpParams();
     Params = Params.append('roleId', parameters.rolId);
 
-    return this._http.get(this._urlMenu, { params: Params })
-       //.do(data => console.log('Menu:' + JSON.stringify(data)))
+    return this._http.get<IMenu[]>(this._urlMenu, { params: Params })
       .catch(this.handleError);
   }
 }

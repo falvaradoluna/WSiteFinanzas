@@ -297,9 +297,12 @@ internos.prototype.get_companias = function (req, res, next) {
 internos.prototype.get_sucursales = function (req, res, next) {
   var self = this;
   var idCompania = req.query.idCompania;
+  var idUsuario = req.query.idUsuario;
 
   var params = [
     { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'idUsuario', value: idUsuario, type: self.model.types.INT }
+    
   ];
 
   this.model.query('Catalogo.ObtenerSucursalXCompania', params, function (error, result) {
@@ -327,8 +330,11 @@ internos.prototype.get_departamentos = function (req, res, next) {
   //   { name: 'Anio', value: anio, type: self.model.types.STRING },
   //   { name: 'Mes', value: mes, type: self.model.types.STRING }
   // ];
-
-  var params = [];
+  var params = [
+    { name: 'idCompania', value: req.query.idCompania, type: self.model.types.INT },
+    { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT },
+    { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }
+  ];
 
   this.model.query('Interno.ObtienePestania', params, function (error, result) {
     // console.log(params);

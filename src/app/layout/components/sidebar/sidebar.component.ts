@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuService } from '../../../modules/seguridad/menu.service';
+import { SeguridadService } from '../../../services/seguridad.service';
 
 
 @Component({
@@ -12,7 +12,7 @@ export class SidebarComponent {
     showMenu: string = '';
     menu: any = [];
     
-    constructor(private _menuService: MenuService) {
+    constructor(private _service: SeguridadService) {
         this.getMenu();
     }
 
@@ -30,9 +30,8 @@ export class SidebarComponent {
 
     getMenu(){
         let usuario = JSON.parse(localStorage.getItem('userLogged'));
-        this._menuService.getMenu({
-            rolId: usuario.idRol
-        }).subscribe(
+        this._service.getMenu({ rolId: usuario.idRol })
+        .subscribe(
             resp => { this.menu = resp; },
             error => { },
             () => { }
