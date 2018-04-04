@@ -886,7 +886,7 @@ getReporteSumaDepartamentos() : void{
     const usuario = JSON.parse(localStorage.getItem('userLogged'));
     this._service.getSucursales({
       idCompania: this.selectedCompania,
-       idUsuario: usuario.id   
+       idUsuario: usuario.id  
 
     })
       .subscribe(
