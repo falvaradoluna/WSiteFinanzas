@@ -876,7 +876,8 @@ getReporteSumaDepartamentos() : void{
   }
 
   getCompanias(): void {
-    this._service.getCompanias({ idUsuario: 3 })
+    const usuario = JSON.parse(localStorage.getItem('userLogged'));
+    this._service.getCompanias({ idUsuario: usuario.id })
       .subscribe(
         companias => { this.companias = companias; },
         error => this.errorMessage = <any>error);
