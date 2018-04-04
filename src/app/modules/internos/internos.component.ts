@@ -214,7 +214,12 @@ export class InternosComponent implements OnInit {
   }
 
   toggleUnidades(): void {
-    this.showUnidades = !this.showUnidades;
+    if (this.showDetalleUnidadesPrimerNivel==true || this.showDetalleUnidadesSegundoNivel==true || this.showDetalleUnidadesTercerNivel==true){
+      this.hideDetalleUnidadesTercerNivel();
+      this.hideDetalleUnidadesSegundoNivel();
+      this.hideDetalleUnidadesPrimerNivel();
+     }
+      this.showUnidades = !this.showUnidades;
   }
 
   toggleUnidadesAcumuladoPresupuesto() {
@@ -224,12 +229,17 @@ export class InternosComponent implements OnInit {
   toggleUnidadesAcumuladoReal() {
     this.showUnidadesAcumuladoReal = this.showUnidadesAcumuladoReal === 1 ? 0 : 1;
   }
-
+//estado de resultados
   toggleResultados(): void {
+   if(this.showDetallePrimerNivel==true || this.showDetalleSegundoNivel==true){
+      this.hideDetalleSegundoNivel(); 
+      this.hideDetallePrimerNivel();
+   }
     this.showResultados = !this.showResultados;
   }
-
+//UNIDADES 2
   toggleUnidadesDepartamento(): void {
+    //if (this.showUnidades){}
     this.showUnidadesDepartamento = !this.showUnidadesDepartamento;
   }
 
@@ -254,6 +264,16 @@ export class InternosComponent implements OnInit {
       return false;
     }
   }
+// desabilitamos el boton de procesar en SUMA DEPARTAMENTOS
+  // disabledProcesarSumaDepartamentos(): boolean {
+  //   const sTipoReporte = this.selectedTipoReporte.toString();
+  //   if (sTipoReporte === '4' || sTipoReporte === '5') {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
   
   disabledButtonPorcentaje() : boolean {
     const sTipoReporte = this.selectedTipoReporte.toString();
@@ -1261,6 +1281,7 @@ getReporteSumaDepartamentos() : void{
     this.selectedCompania = newValue;
     if (this.selectedCompania==0){
       this.selectedIdSucursal=-2;
+      this.selectedTipoReporte=1;
     }
     
     this.disabledButtonPorcentaje();
@@ -1356,9 +1377,13 @@ getReporteSumaDepartamentos() : void{
         this.showSumaDepartamentosHeader= true;
         this.showSumaDepartamentosAReal=false;
         break;
-        default:      
+        case '2': case '3':      
         this.showSumaDepartamentosHeader= false;
         this.showSumaDepartamentosAReal=true;
+        delete(this.sumaDepartamentosAReal);
+        break;
+        case '4': case '5':
+          this.disabledProcesarSumaDepartamentos();
         break;
       }    
     }
