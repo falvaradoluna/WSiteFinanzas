@@ -883,9 +883,10 @@ getReporteSumaDepartamentos() : void{
   }
 
   getSucursales(): void {
+    const usuario = JSON.parse(localStorage.getItem('userLogged'));
     this._service.getSucursales({
       idCompania: this.selectedCompania,
-       idUsuario: 3    
+       idUsuario: usuario.id   
 
     })
       .subscribe(
@@ -897,11 +898,11 @@ getReporteSumaDepartamentos() : void{
   }
 
   getDepartamentos(): void {
+    const usuario = JSON.parse(localStorage.getItem('userLogged'));
     this._service.getDepartamentos({
-      // idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
-      // idAgencia: this.selectedCompania,
-      // anio: this.anio,
-      // mes: +this.mes
+       idCompania: this.selectedCompania,
+       idSucursal: this.selectedIdSucursal,
+       idUsuario: usuario.id
     })
       .subscribe(
         departamentos => { this.departamentos = departamentos; },
