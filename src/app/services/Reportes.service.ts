@@ -1,36 +1,35 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
-import { ICompania } from '../../models/catalog/compania';
-import { ITipoReporte } from '../../models/catalog/tipoReporte';
-import { ISucursal } from '../../models/catalog/sucursal';
-import { IDepartamento } from '../../models/catalog/departamento';
-
-
-import { IResultadoInternos } from '../../models/reports/resultado-internos';
-import { IDetalleUnidadesMensual } from '../../models/reports/detalle-unidades-mensual';
-import { IDetalleResultadosMensual } from '../../models/reports/detalle-resultados-mensual';
-import { IDetalleResultadosCuentas } from '../../models/reports/detalle-resultados-cuentas';
-import { ITipoUnidad } from '../../models/reports/tipo-unidad';
-import { IDetalleUnidadesAcumulado } from '../../models/reports/detalle-unidades-acumulado';
-import { IAcumuladoReal } from '../../models/reports/acumuladoreal';
-import { IAutoLineaAcumulado } from '../../models/reports/auto-linea-acumulado';
-import { ISeries } from '../../models/reports/series';
-import { IResultadoEstadoDeResultadosCalculo } from '../../models/reports/formulaEstadoResultado';
-
-
-import { IEfectivoSituacion } from './efectivo-y-situacion-financiera';
-import { IEstadoSituacion } from './estado-Situacion-Financiera';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
+import { ICompania } from '../models/catalog/compania';
+import { ITipoReporte } from '../models/catalog/tipoReporte';
+import { ISucursal } from '../models/catalog/sucursal';
+import { IDepartamento } from '../models/catalog/departamento';
+
+
+import { IResultadoInternos } from '../models/reports/resultado-internos';
+import { IEfectivoSituacion } from '../models/reports/efectivo-y-situacion-financiera';
+import { IEstadoSituacion } from '../models/reports/estado-Situacion-Financiera';
+import { IDetalleUnidadesMensual } from '../models/reports/detalle-unidades-mensual';
+import { IDetalleResultadosMensual } from '../models/reports/detalle-resultados-mensual';
+import { IDetalleResultadosCuentas } from '../models/reports/detalle-resultados-cuentas';
+import { IDetalleUnidadesAcumulado } from '../models/reports/detalle-unidades-acumulado';
+import { ITipoUnidad } from '../models/reports/tipo-unidad';
+import { IAcumuladoReal } from '../models/reports/acumuladoreal';
+import { IAutoLineaAcumulado } from '../models/reports/auto-linea-acumulado';
+import { ISeries } from '../models/reports/series';
+
+
+import { IResultadoEstadoDeResultadosCalculo } from '../models/reports/formulaEstadoResultado';
 
 
 @Injectable()
-export class InternosService {
+export class ReportesService {
 
   private _urlUnidades = 'api/internos/internos';
   private _urlEstadoResultados = 'api/internos/estadoresultados';
@@ -71,17 +70,13 @@ export class InternosService {
   constructor(private _http: HttpClient) { }
 
   getUnidades(parameters): Observable<IResultadoInternos[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
-
-    // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
 
     return this._http.get<IResultadoInternos[]>(this._urlUnidades, { params: Params })
-      // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
@@ -93,11 +88,9 @@ export class InternosService {
     .catch(this.handleError);
   }
 
-  getEstadoResultados(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
-    // Initialize Params Object
+  getEstadoResultados(parameters): Observable<IResultadoInternos[]> {
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
@@ -106,15 +99,12 @@ export class InternosService {
     Params = Params.append('idSucursalSecuencia', parameters.idSucursalSecuencia);
 
     return this._http.get<IResultadoInternos[]>(this._urlEstadoResultados, { params: Params })
-      // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
-  getEstadoResultadosNv2(parameters): Observable<IDetalleResultadosMensual[]> { // Se reutiliza la interfaz de unidades
-    // Initialize Params Object
+  getEstadoResultadosNv2(parameters): Observable<IDetalleResultadosMensual[]> {
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
@@ -130,11 +120,9 @@ export class InternosService {
       .catch(this.handleError);
   }
 
-  getEstadoResultadosPresupuestoNv2(parameters): Observable<IDetalleResultadosMensual[]> { // Se reutiliza la interfaz de unidades
-    // Initialize Params Object
+  getEstadoResultadosPresupuestoNv2(parameters): Observable<IDetalleResultadosMensual[]> { 
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
@@ -144,15 +132,12 @@ export class InternosService {
     Params = Params.append('idOrden', parameters.idOrden);
 
     return this._http.get<IDetalleResultadosMensual[]>(this._urlEstadoResultadosPresupuestoNv2, { params: Params })
-      // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
-  getEstadoResultadosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumulado[]> { // Se reutiliza la interfaz de unidades
-    // Initialize Params Object
+  getEstadoResultadosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumulado[]> {
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idCompania',            parameters.idCompania);
     Params = Params.append('idSucursal',            parameters.idSucursal);
     Params = Params.append('periodoYear',           parameters.periodoYear);
@@ -160,56 +145,45 @@ export class InternosService {
     Params = Params.append('idSucursalSecuencia',   parameters.idSucursalSecuencia);
 
     return this._http.get<IAcumuladoReal[]>(this._urlEstadoResultadosAcumuladoReal, { params: Params })
-      // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
-  getSumaDepartamentos(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
-    // Initialize Params Object
+  getSumaDepartamentos(parameters): Observable<IResultadoInternos[]> {
+    
     let Params = new HttpParams();  
 
-    // Begin assigning parameters
-   // Params = Params.append('idcia', parameters.idCia);
-   Params = Params.append('idcia', parameters.idCompania);
-   Params = Params.append('idSucursal', parameters.idSucursal);
-   Params = Params.append('periodoAnio', parameters.periodoYear);
-   Params = Params.append('periodoMes', parameters.periodoMes);
-   Params = Params.append('IdDepartamento',parameters.xmlDepartamento);
-   Params = Params.append('IdSucursalSecuencia',parameters.idSucursalSecuencia);
-   Params = Params.append('tipoReporte', parameters.tipoReporte);
+    Params = Params.append('idcia', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoAnio', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    Params = Params.append('IdDepartamento',parameters.xmlDepartamento);
+    Params = Params.append('IdSucursalSecuencia',parameters.idSucursalSecuencia);
+    Params = Params.append('tipoReporte', parameters.tipoReporte);
 
- 
-   //console.log("params", Params);
     return this._http.get<IResultadoInternos[]>(this._urlSumaDepartamentos, { params: Params })
       .catch(this.handleError);
   }
 
 
-getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumulado[]> { // Se reutiliza la interfaz de detalle Unidades Acumulado
-  // Initialize Params Object
-  let Params = new HttpParams();  
+  getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumulado[]> { // Se reutiliza la interfaz de detalle Unidades Acumulado
+    let Params = new HttpParams();  
 
-  // Begin assigning parameters
- Params = Params.append('idcia', parameters.idCompania);
- Params = Params.append('idSucursal', parameters.idSucursal);
- Params = Params.append('periodoAnio', parameters.periodoYear);
- Params = Params.append('periodoMes', parameters.periodoMes);
- Params = Params.append('IdDepartamento',parameters.xmlDepartamento);
- Params = Params.append('IdSucursalSecuencia',parameters.idSucursalSecuencia);
- Params = Params.append('tipoReporte', parameters.tipoReporte);
+    Params = Params.append('idcia', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoAnio', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    Params = Params.append('IdDepartamento',parameters.xmlDepartamento);
+    Params = Params.append('IdSucursalSecuencia',parameters.idSucursalSecuencia);
+    Params = Params.append('tipoReporte', parameters.tipoReporte);
 
+    return this._http.get<IAcumuladoReal[]>(this._urlSumaDepartamentos, { params: Params })
+      .catch(this.handleError);
+  }
 
- //console.log("params", Params);
-  return this._http.get<IAcumuladoReal[]>(this._urlSumaDepartamentos, { params: Params })
-    .catch(this.handleError);
-}
-////
 
   getUnidadesDepartamento(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
-    // Initialize Params Object
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
@@ -217,51 +191,30 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     Params = Params.append('idPestana', parameters.idPestana);
 
     return this._http.get<IResultadoInternos[]>(this._urlUnidadesDepartamento, { params: Params })
-      // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
   getCompanias(parameters): Observable<ICompania[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idusuario', parameters.idUsuario);
-    // Params = Params.append('secondParameter', parameters.valueTwo);
-
     return this._http.get<ICompania[]>(this._urlCompanias, { params: Params })
-      // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
   getSucursales(parameters): Observable<ISucursal[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idUsuario', parameters.idUsuario);
 
     return this._http.get<ISucursal[]>(this._urlSucursales, { params: Params })
-      // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
   getDepartamentos(parameters): Observable<IDepartamento[]> {
-    // Initialize Params Object
-    // let Params = new HttpParams();
-
-    // Begin assigning parameters
-    // Params = Params.append('idreporte', parameters.idReporte);
-    // Params = Params.append('idsucursal', parameters.idSucursal);
-    // Params = Params.append('idcia', parameters.idAgencia);
-    // Params = Params.append('anio', parameters.anio);
-    // Params = Params.append('mes', parameters.mes);
-
-    // return this._http.get<IDepartamento[]>(this._urlDepartamentos, { params: Params })
 
     return this._http.get<IDepartamento[]>(this._urlDepartamentos)
-      // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
@@ -270,7 +223,6 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     let Params = new HttpParams();
     let url = this._urlDetalleUnidadesMensual;
 
-    // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
@@ -286,10 +238,9 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   getDetalleUnidadesMensualFlotillas(parameters): Observable<IDetalleUnidadesMensual[]> {
-    // Initialize Params Object
+
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
@@ -301,12 +252,11 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   getDetalleUnidadesTipo(parameters): Observable<ITipoUnidad[]> {
-    // Initialize Params Object
+
     let Params = new HttpParams();
 
     let url = 'api/internos/detalleunidadestipo';
 
-    // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('idOrigen', parameters.idOrigen);
@@ -324,10 +274,8 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   getDetalleUnidadesTipoFlotillas(parameters): Observable<ITipoUnidad[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idDepartamento', parameters.idDepartamento);
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
@@ -341,11 +289,9 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   getDetalleUnidadesTipoAcumulado(parameters): Observable<ITipoUnidad[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
     let url = 'api/internos/detalleunidadestipoacumulado';
 
-    // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('idOrigen', parameters.idOrigen);
@@ -366,10 +312,8 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   getDetalleUnidadesTipoAcumuladoFlotillas(parameters): Observable<ITipoUnidad[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idDepartamento', parameters.idDepartamento);
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
@@ -386,11 +330,9 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   getDetalleUnidadesSeries(parameters): Observable<ISeries[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
     let url = 'api/internos/detalleunidadesseries';
 
-    // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('idOrigen', parameters.idOrigen);
@@ -408,11 +350,9 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   getDetalleUnidadesAcumulado(parameters): Observable<IDetalleUnidadesAcumulado[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
     let url = this._urlDetalleUnidadesAcumulado;
 
-    // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
@@ -428,10 +368,8 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   getDetalleUnidadesAcumuladoFlotillas(parameters): Observable<IDetalleUnidadesAcumulado[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
@@ -442,32 +380,8 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
       .catch(this.handleError);
   }
 
-  // getDetalleResultadosMensual(parameters): Observable<IDetalleResultadosMensual[]> {
-  //   // Initialize Params Object
-  //   let Params = new HttpParams();
-
-  //   // Begin assigning parameters
-  //   Params = Params.append('idcia', parameters.idAgencia);
-  //   Params = Params.append('anio', parameters.anio);
-  //   Params = Params.append('mes', parameters.mes);
-  //   Params = Params.append('idsucursal', parameters.idSucursal);
-  //   Params = Params.append('msucursal', parameters.mSucursal);
-  //   Params = Params.append('departamento', parameters.departamento);
-  //   Params = Params.append('concepto', parameters.concepto);
-  //   Params = Params.append('idEstadoDeResultado', parameters.idEstadoDeResultado);
-  //   Params = Params.append('idDetalle', parameters.idDetalle);
-
-  //   return this._http.get<IDetalleResultadosMensual[]>(this._urlDetalleResultadosMensual, { params: Params })
-  //     .catch(this.handleError);
-  // }
-
   getDetalleResultadosCuentas(parameters): Observable<IDetalleResultadosCuentas[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
-
-    // Begin assigning parameters
-    // Params = Params.append('servidoragencia', parameters.servidorAgencia);
-    // Params = Params.append('concentradora', parameters.concentradora);
 
     Params = Params.append('IdCia', parameters.IdCia);
     Params = Params.append('idSucursal', parameters.idSucursal);
@@ -480,24 +394,19 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   get_EfectivoSituacion(parameters): Observable<IEfectivoSituacion[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idreporte', parameters.idTipoReporte);
     Params = Params.append('idcia', parameters.idAgencia);
     Params = Params.append('anio', parameters.anio);
 
     return this._http.get<IEfectivoSituacion[]>(this._urlEfectivoSituacion, { params: Params })
-      // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
   get_EstadoSituacion(parameters): Observable<IEstadoSituacion[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idreporte', parameters.idTipoReporte);
     Params = Params.append('idcia', parameters.idAgencia);
     Params = Params.append('anio', parameters.anio);
@@ -507,9 +416,8 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   get_AcumuladoReal(parameters): Observable<IAcumuladoReal[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
-    // Begin assigning parameters
+
     Params = Params.append('IdSucursal', parameters.IdSucursal);
     Params = Params.append('IdCompania', parameters.IdCompania);
     Params = Params.append('anio',       parameters.anio);
@@ -518,9 +426,8 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   get_AutoLineaAcumulado(parameters): Observable<IAutoLineaAcumulado[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
-    // Begin assigning parameters
+
     Params = Params.append('IdCompania',  parameters.IdCompania);
     Params = Params.append('IdSucursal',  parameters.IdSucursal);
     Params = Params.append('anio',        parameters.anio);
@@ -532,9 +439,8 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   get_TipoUnidadAcumulado(parameters): Observable<IAutoLineaAcumulado[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
-    // Begin assigning parameters
+
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
@@ -552,53 +458,43 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   getUnidadesAcumuladoPresupuesto(parameters): Observable<IDetalleUnidadesAcumulado[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
 
     return this._http.get<IDetalleUnidadesAcumulado[]>(this._urlUnidadesAcumuladoPresupuesto, { params: Params })
-      // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
   getUnidadesAcumuladoPresupuestoDepartamento(parameters): Observable<IDetalleUnidadesAcumulado[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idPestana', parameters.idPestana);
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
 
     return this._http.get<IDetalleUnidadesAcumulado[]>(this._urlUnidadesAcumuladoPresupuestoDepartamento, { params: Params })
-      // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
   getUnidadesAcumuladoRealDepartamento(parameters): Observable<IAcumuladoReal[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idPestana', parameters.idPestana);
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
 
     return this._http.get<IAcumuladoReal[]>(this._urlUnidadesAcumuladoRealDepartamento, { params: Params })
-      // .do(data => console.log('All:' + JSON.stringify(data)))
       .catch(this.handleError);
   }
 
   get_ResultadosPresupuesto(parameters): Observable<IAcumuladoReal[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
-    // Begin assigning parameters
+
     Params = Params.append('idCompania',      parameters.idCompania);
     Params = Params.append('IdSucursal',      parameters.IdSucursal);
     Params = Params.append('anio',            parameters.anio);
@@ -609,9 +505,8 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   get_ResultadosAcumuladoXIdER(parameters): Observable<IAcumuladoReal[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
-    // Begin assigning parameters
+    
     Params = Params.append('idCompania',          parameters.idCompania);
     Params = Params.append('IdSucursal',          parameters.IdSucursal);
     Params = Params.append('anio',                parameters.anio);
@@ -625,10 +520,8 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   getDetalleUnidadesSeriesAr(parameters): Observable<ISeries[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
 
-    // Begin assigning parameters
     Params = Params.append('idCompania',        parameters.idCompania);
     Params = Params.append('idSucursal',        parameters.idSucursal);
     Params = Params.append('idOrigen',          parameters.idOrigen);
@@ -641,9 +534,8 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   }
 
   getEstadoResultadosVariacion(parameters): Observable<IAcumuladoReal[]> {
-    // Initialize Params Object
     let Params = new HttpParams();
-    // Begin assigning parameters
+
     Params = Params.append('idCompania',          parameters.idCompania);
     Params = Params.append('PeriodoMes',          parameters.PeriodoMes);
     Params = Params.append('PeriodoYear',         parameters.PeriodoYear);
@@ -662,7 +554,6 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     Params = Params.append('idUsuario', parameters.idUsuario);
 
     return this._http.get<ITipoReporte[]>(this._urlTipoReporte, { params: Params })
-       
       .catch(this.handleError);
   }
 

@@ -14,25 +14,29 @@ import { trigger,
          group,
          state,
          animateChild } from '@angular/animations';
-import { IResultadoInternos } from './resultado-internos';
-import { IResultadoEstadoDeResultadosCalculo } from './formulaEstadoResultado';
-import { InternosService } from './internos.service';
-import { ISucursal } from './sucursal';
-import { ICompania } from './compania';
-import { IDepartamento } from './departamento';
-import { ITipoReporte } from './tipo-reporte';
-import { IAcumuladoReal } from './acumuladoreal';
-import { IDetalleUnidadesMensual } from './detalle-unidades-mensual';
-import { IDetalleResultadosMensual } from './detalle-resultados-mensual';
-import { IDetalleResultadosCuentas } from './detalle-resultados-cuentas';
-import { ITipoUnidad } from './tipo-unidad';
-import { IDetalleUnidadesAcumulado } from './detalle-unidades-acumulado';
-import { ISeries } from './series';
+
+import { ICompania } from '../../models/catalog/compania';
+import { ITipoReporte } from '../../models/catalog/tipoReporte';
+import { ISucursal } from '../../models/catalog/sucursal';
+import { IDepartamento } from '../../models/catalog/departamento';
+
+import { IAcumuladoReal } from '../../models/reports/acumuladoreal';
+import { IAutoLineaAcumulado } from '../../models/reports/auto-linea-acumulado';
+import { IDetalleResultadosCuentas } from '../../models/reports/detalle-resultados-cuentas';
+import { IResultadoInternos } from '../../models/reports/resultado-internos';
+import { IResultadoEstadoDeResultadosCalculo } from '../../models/reports/formulaEstadoResultado';
+import { IDetalleResultadosMensual } from '../../models/reports/detalle-resultados-mensual';
+import { IDetalleUnidadesAcumulado } from '../../models/reports/detalle-unidades-acumulado';
+import { ITipoUnidad } from '../../models/reports/tipo-unidad';
+import { IDetalleUnidadesMensual } from '../../models/reports/detalle-unidades-mensual';
+import { ISeries } from '../../models/reports/series';
+
+
+
 import { ColumnSortedEvent } from '../../shared/services/sort.service';
-import { IAutoLineaAcumulado } from './auto-linea-acumulado';
+import { InternosService } from './internos.service';
 import { FechaActualizacionService } from '../../shared';
 import { FlujoeSituacionfComponent } from './flujoe-situacionf/flujoe-situacionf.component'
-//import { clearImmediate } from 'timers';
 
 
 @Component({
@@ -338,7 +342,6 @@ export class InternosComponent implements OnInit {
   }
 //////////
   showSuma(): void {
-    // console.log( "Suma" );
     this._service.getDepartamentos({
     })
     .subscribe( departamentos => {
@@ -367,32 +370,6 @@ export class InternosComponent implements OnInit {
         this.showReporteUnidades = false;
         break;
     }
-
-    //   var sTipoReporte= this.selectedTipoReporte.toString();
-    //  switch(sTipoReporte){
-
-    //     case '1':
-    //     this.showSumaDepartamentos = true;
-    //     
-    //     this.showAcumuladoPresupuesto= false;
-    //     this.showResultados= false;
-    //     this.showAcumuladoReal= false;
-    //     this.showReporteUnidades = false;
-    //     break;
-
-    //     case '2':
-    //     this.showSumaDepartamentos = true;
-    //     this. showSumaDepartamentosHeader=false;
-    //     this.showAcumuladoRealSumaDepartamentos=true;
-    //     this.showAcumuladoPresupuesto=false;
-    //     //this.showAcumuladoReal=true;
-    //     // this.showReporteUnidades = false;
-    //      //this.showSumaDepartamentos = false;
-    //     // this.showAcumuladoPresupuesto= false;         
-    //     // this.showAcumuladoReal= false;
-    //     //this.showResultados= false; 
-    //     break;
-    //    }
   }
 
   hideSumaDepartamentos(): void {
@@ -934,13 +911,13 @@ getReporteSumaDepartamentos() : void{
   }
 
   setTipoReporte(): void {
-    this.tipoReporte = [
-      { Id: 1, Descripcion: 'Mensual' },
-      { Id: 2, Descripcion: 'Acumulado Real' },
-      { Id: 3, Descripcion: 'Acumulado Presupuestos' },
-      { Id: 4, Descripcion: 'Flujo de Efectivo Real' },
-      { Id: 5, Descripcion: 'Estado de Situación Financiera' }
-    ];
+    let usuario = JSON.parse(localStorage.getItem('userLogged'));
+    this._service.getTipoReporte({idUsuario: usuario.id})
+    .subscribe(
+        resp => { this.tipoReporte = resp; },
+        error => { },
+        () => { }
+    );
   }
 
   setDefaultDate(): void {
