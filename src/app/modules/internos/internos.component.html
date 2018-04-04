@@ -31,7 +31,7 @@
                 <label for="inputTipoReporte">Estado de Resultados</label>
                 <select name="inputTipoReporte" class="form-control form-control-sm"
                   ([ngModel])='selectedTipoReporte'
-                  (change)='onChangeTipoReporte($event.target.value)'>
+                  (change)='onChangeTipoReporte($event.target.value)'>                  
                   <option *ngFor='let tipo of tipoReporte' [value]='tipo.Id'>
                     {{ tipo.Descripcion }}
                   </option>
@@ -846,10 +846,10 @@
                   </ng-template>
                   <ng-template #sinTooltipReal>
                     <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidad, 'Real', 1, 0)">
-                      {{ r.calculaConFormula? r.cantidad : (r.cantidad | number:'1.2-2') }}
+                      {{(r.cantidad | number:'1.2-2') }}
+                      <!-->{{ r.calculaConFormula ? r.cantidad : (r.cantidad | number:'1.2-2') }}<-->
                     </td>
                   </ng-template>
-    
                   <ng-template #conTooltipPpto>
                     <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidadPresupuesto, 'PPto', 2, 0)" [ngbTooltip]="tipErPpto" container="body">
                       {{ r.descripcion === 'ROS' ? (r.cantidadPresupuesto | percent:'1.2-2') : (r.cantidadPresupuesto | number:'1.2-2') }}
@@ -866,8 +866,9 @@
                     </td>
                   </ng-template>
                   <ng-template #sinTooltipAcReal>
-                    <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidadAcumulado, 'AcReal', 1, 1)">
-                      {{ r.calculaConFormula? r.cantidadAcumulado : (r.cantidadAcumulado | number:'1.2-2') }}
+                    <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidadAcumulado, 'AcReal', 1, 1)">                      
+                      {{(r.cantidadAcumulado | number:'1.2-2') }}
+                      <!-->{{ r.calculaConFormula ? r.cantidadAcumulado : (r.cantidadAcumulado | number:'1.2-2') }}<-->
                     </td>
                   </ng-template>
                   <ng-template #conTooltipAcPpto>
@@ -1415,7 +1416,7 @@
           </button>
         </div>
 
-        <!-- BEGIN Estado resultados Primer Nivel -->
+        <!-- BEGIN Estado resultados Primer Nivel tercer tabla principal-->
         <div class="scrolltable">
           <table *ngIf='showEstadoResultadoAcumuladoReal === 1' class="table table-sm table-bordered table-hover-td table-responsive table-double-scroll">
             <thead>

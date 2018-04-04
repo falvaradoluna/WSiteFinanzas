@@ -201,12 +201,12 @@ export class InternosComponent implements OnInit {
     //TextTrackCueList
     this.setTipoReporte();
     this.getCompanias();
-    this.getEstadoDeResultadosCalculo();   
+    //this.getEstadoDeResultadosCalculo();   
     //this.disabledSumaDepartamentos();
   }
 
   toggleFilters(): void {
-    this.showFilters = !this.showFilters;
+     this.showFilters = !this.showFilters;
   }
 
   toggleUnidades(): void {
@@ -321,9 +321,11 @@ export class InternosComponent implements OnInit {
     this.showEfectivoSituacion = false;
     this.showAcumuladoReal = false;
     this.showAcumuladoPresupuesto = false;
-    this.getResultadoUnidades();
-    this.getEstadoResultados();
-    this.getUnidadesDepartamento();
+    if(this.selectedCompania!=0){  // solo se ejecutan cuando seseleciona una empresa del catalogo
+      this.getResultadoUnidades();
+      this.getEstadoResultados();
+      this.getUnidadesDepartamento();
+    }
     delete(this.resultadoSumaDepartamentos);
     delete (this.sumaDepartamentosAReal);
   }
@@ -344,7 +346,8 @@ export class InternosComponent implements OnInit {
     },
     error => this.errorMessage = <any>error
     );
-   
+   delete(this.resultadoUnidades);
+
     var tipoReporte= this.selectedTipoReporte.toString();
     switch (tipoReporte){
       case '1':
@@ -621,6 +624,8 @@ export class InternosComponent implements OnInit {
 
           // Se calculan porcentajes del mes correspondiente
           this.estadoResultadosAcumuladoReal.forEach(er => {
+             er.totalAnual=er['enero'] +er['febrero'] + er['marzo']+er['abril'] + er['mayo'] + er['junio'] + er['julio'] + er['agosto']
+          + er['septiembre']+ er['octubre']+ er['noviembre']+ er['diciembre'];
             switch (er.descripcion) {
               case 'Ventas': {
                 er[nombreMes + 'Perc'] = 100;
@@ -674,9 +679,11 @@ getSumaDepartamentosAcumuladoReal(): void {
         const nombreMes = this.toLongMonth(mes.toString());
         const ventas = this.sumaDepartamentosAReal.find(x => x.descripcion === 'Ventas');
         const utilidadBrutaNeta = this.sumaDepartamentosAReal.find(x => x.descripcion === 'Utilidad Bruta Neta');
-        this.sumaDepartamentosAReal[totalAnual] =  this.sumaDepartamentosAReal[totalAnual] + ventas[nombreMes];
+        //this.sumaDepartamentosAReal[totalAnual] =  this.sumaDepartamentosAReal[totalAnual] + ventas[nombreMes];
         // Se calculan porcentajes del mes correspondiente
         this.sumaDepartamentosAReal.forEach(er => {
+          er.totalAnual=er['enero'] +er['febrero'] + er['marzo']+er['abril'] + er['mayo'] + er['junio'] + er['julio'] + er['agosto']
+          + er['septiembre']+ er['octubre']+ er['noviembre']+ er['diciembre'];
           switch (er.descripcion) {
             case 'Ventas': {
               er[nombreMes + 'Perc'] = 100;
@@ -1273,10 +1280,12 @@ getReporteSumaDepartamentos() : void{
   onChangeCompania(newValue: number): void {
   
     this.selectedCompania = newValue;
-    this.disabledSumaDepartamentos();
+    if (this.selectedCompania==0){
+      this.selectedIdSucursal=-2;
+    }
+    
     this.disabledButtonPorcentaje();
-    this.hideResultados();  
-      
+            
     if (this.companias.find(x => x.id === +newValue)) {
       const fechaActualizacion = this.companias.find(x => x.id === +newValue).fechaActualizacion;      
       this._fechaActualizacionService.onChangeFecha(fechaActualizacion);
@@ -1288,13 +1297,16 @@ getReporteSumaDepartamentos() : void{
    if (this.selectedCompania !== 0 && this.selectedTipoReporte <=3) {     
       // Llenar dropdown de sucursales
       this.getSucursales();
+    
     }
-
-    if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal) {
-      this.getDepartamentos();
-    }
+   //if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal!==-2) {
+    if ( this.selectedCompania != 0) {
+        this.getDepartamentos();
+      }
+      
+    this.hideResultados();
   }
-
+  
   onChangeSucursal(selectedIndex): void {
     this.selectedIdSucursal = selectedIndex;
     this.selectedIdSucursalSecuencia = this.sucursales.find(x => x.id === +selectedIndex).idSucursalSecuencia;
@@ -1352,17 +1364,14 @@ getReporteSumaDepartamentos() : void{
           this.hideReporteUnidades();
           this.showAcumuladoReal = false;
         } else {
-
-          this.showReporteUnidades = true;
-
-          this.setDefaultDate();
-          this.getSucursales();
-          this.getDepartamentos();
+            this.setDefaultDate();
+            this.getSucursales();
+            this.getDepartamentos();          
      }
     }
     else{
       delete (this.resultadoSumaDepartamentos);
-      this.showSumaDepartamentos=true;
+    //  this.showSumaDepartamentos=true;
       switch (nv){
         case '1':
         this.showSumaDepartamentosHeader= true;
@@ -1786,19 +1795,24 @@ getReporteSumaDepartamentos() : void{
    // ocultamos todos los resultados cuando no hay compañia seleccionada
 hideResultados(): void{
   if  (this.selectedCompania==0){
+    this.hideSumaDepartamentos();
+    this.hideDetalleUnidadesPrimerNivel();
     delete(this.resultadoUnidades);
-    delete (this.unidadesDepartamento);
-    delete (this.estadoResultados);
-    delete (this.sumaDepartamentos);
+    delete(this.unidadesDepartamento);
+    delete(this.estadoResultados);
+    delete(this.sumaDepartamentos);
     delete(this.sumaDepartamentosAReal);
     delete(this.acumuladoReal);
-    delete (this.estadoResultadosAcumuladoReal);
-    delete (this.autoLineaAcumulado);
-    delete (this.tipoUnidadAcumulado);
-    delete (this.unidadesAcumuladoPresupuesto);
-    delete (this.unidadesAcumuladoPresupuestoDepartamento);
-    this.disabledSucursalDepartamento();
- }
+    delete(this.estadoResultadosAcumuladoReal);
+    delete(this.autoLineaAcumulado);
+    delete(this.tipoUnidadAcumulado);
+    delete(this.unidadesAcumuladoPresupuesto);
+    delete(this.unidadesAcumuladoPresupuestoDepartamento);   
+    delete(this.showUnidadesAcumuladoByLevel);
+    this.ngOnInit();
+    this.sucursales = [];
+    this.departamentos =[];
+  }
 }
 
   hideDetalles(): void {
