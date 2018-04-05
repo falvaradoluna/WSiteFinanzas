@@ -1383,7 +1383,7 @@ getReporteSumaDepartamentos() : void{
         delete(this.sumaDepartamentosAReal);
         break;
         case '4': case '5':
-          this.disabledProcesarSumaDepartamentos();
+         // this.disabledProcesarSumaDepartamentos();
         break;
       }    
     }
