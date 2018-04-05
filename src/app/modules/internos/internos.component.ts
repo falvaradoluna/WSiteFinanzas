@@ -362,7 +362,11 @@ export class InternosComponent implements OnInit {
   }
 //////////
   showSuma(): void {
+    const usuario = JSON.parse(localStorage.getItem('userLogged'));
     this._service.getDepartamentos({
+       idCompania: this.selectedCompania,
+       idSucursal: this.selectedIdSucursal,
+       idUsuario: usuario.id
     })
     .subscribe( departamentos => {
       this.departamentos = departamentos;
