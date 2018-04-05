@@ -37,6 +37,7 @@ import { ColumnSortedEvent } from '../../shared/services/sort.service';
 import { InternosService } from './internos.service';
 import { FechaActualizacionService } from '../../shared';
 import { FlujoeSituacionfComponent } from './flujoe-situacionf/flujoe-situacionf.component'
+import { ENETUNREACH } from 'constants';
 
 
 @Component({
@@ -79,6 +80,7 @@ export class InternosComponent implements OnInit {
   showResultados = true;
   showUnidadesDepartamento = true;
   showUnidadesDepartamentoAcumulado = true;
+  showEstadoResultadoAcumuladoPresupuesto=true;  //DCG
   showUnidadesDepartamentoReal = true;
   showEfectivoSituacion = false;
   showAcumuladoReal = false;
@@ -205,7 +207,7 @@ export class InternosComponent implements OnInit {
     //TextTrackCueList
     this.setTipoReporte();
     this.getCompanias();
-    //this.getEstadoDeResultadosCalculo();   
+    this.getEstadoDeResultadosCalculo();   
     //this.disabledSumaDepartamentos();
   }
 
@@ -214,11 +216,12 @@ export class InternosComponent implements OnInit {
   }
 
   toggleUnidades(): void {
-    if (this.showDetalleUnidadesPrimerNivel==true || this.showDetalleUnidadesSegundoNivel==true || this.showDetalleUnidadesTercerNivel==true){
-      this.hideDetalleUnidadesTercerNivel();
-      this.hideDetalleUnidadesSegundoNivel();
-      this.hideDetalleUnidadesPrimerNivel();
-     }
+     if (this.showDetalleUnidadesPrimerNivel==true ||  this.showDetalleUnidadesSegundoNivel==true 
+        || this.showDetalleUnidadesTercerNivel==true){
+           this.hideDetalleUnidadesTercerNivel();
+           this.hideDetalleUnidadesSegundoNivel();
+           this.hideDetalleUnidadesPrimerNivel();
+       }
       this.showUnidades = !this.showUnidades;
   }
 
@@ -231,12 +234,38 @@ export class InternosComponent implements OnInit {
   }
 //estado de resultados
   toggleResultados(): void {
-   if(this.showDetallePrimerNivel==true || this.showDetalleSegundoNivel==true){
-      this.hideDetalleSegundoNivel(); 
-      this.hideDetallePrimerNivel();
+   var tr = this.selectedTipoReporte.toString();
+   switch (tr)
+   {
+     case '1': {
+        //mensual
+          if(this.showDetallePrimerNivel==true || this.showDetalleSegundoNivel==true){
+            this.hideDetalleSegundoNivel(); 
+            this.hideDetallePrimerNivel();
+            this.showResultados = !this.showResultados;
+          }
+         
+          break;
+        }
+     case '2':{
+        //Acumulado real
+        if(this.showEstadoResultadoAcumuladoReal===1 || this.showEstadoResultadoAcumuladoReal===2){
+          // this.showEstadoResultadoAcumuladoReal = this.showEstadoResultadoAcumuladoReal === 1 ? 0 : 1;
+          this.showEstadoResultadoAcumuladoReal= 0;
+          }else{
+            this.showEstadoResultadoAcumuladoReal=1;
+        }
+        break;
+      }
+     case '3':{
+        //Acumulado presupuesto 
+        this.showEstadoResultadoAcumuladoPresupuesto = !this.showEstadoResultadoAcumuladoPresupuesto;          
+        break;
+      }
    }
-    this.showResultados = !this.showResultados;
+   
   }
+
 //UNIDADES 2
   toggleUnidadesDepartamento(): void {
     //if (this.showUnidades){}
@@ -345,6 +374,7 @@ export class InternosComponent implements OnInit {
     this.showEfectivoSituacion = false;
     this.showAcumuladoReal = false;
     this.showAcumuladoPresupuesto = false;
+    
     if(this.selectedCompania!=0){  // solo se ejecutan cuando seseleciona una empresa del catalogo
       this.getResultadoUnidades();
       this.getEstadoResultados();
@@ -597,7 +627,7 @@ export class InternosComponent implements OnInit {
       });
       var er = ResultadoCalculo.find(x=>x.idOrden === er.idOrden);
       er.cantidad = (eval(formulaOriginal)).toFixed(3);
-      er.cantidad = "-Infinity" ? 0.00 : er.cantidad;  // se sustituye cuando el valo es -infinity
+      er.cantidad = er.cantidad;  
       er.cantidadAcumulado = eval(formulaOriginalAcumulado).toFixed(3);
     }
   }
@@ -865,9 +895,6 @@ getReporteSumaDepartamentos() : void{
     }
   );
 }
-
-
-
 
   getUnidadesDepartamento(): void {
     if (this.selectedIdDepartamento !== 0) {
@@ -1367,7 +1394,9 @@ getReporteSumaDepartamentos() : void{
         if (nv === '4' || nv === '5') {
           this.hideReporteUnidades();
           this.showAcumuladoReal = false;
+         
         } else {
+          ;
             this.setDefaultDate();
             this.getSucursales();
             this.getDepartamentos();          
@@ -1387,7 +1416,7 @@ getReporteSumaDepartamentos() : void{
         delete(this.sumaDepartamentosAReal);
         break;
         case '4': case '5':
-         // this.disabledProcesarSumaDepartamentos();
+        this.hideSumaDepartamentos();
         break;
       }    
     }
