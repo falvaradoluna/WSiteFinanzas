@@ -441,7 +441,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
   }
 
   onClickDetalleUnidadesMensual(idAutoLinea: number, carLine: string, mes: string = '', idDepartamento: string = '') {
-    if (carLine.trim() !== 'Total') {
+  
       if (this.isUnidadesDepto) {
         this.showUnidadesDepartamentoByLevel.emit(3);
       } else {
@@ -457,7 +457,6 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
       this.mesAcumulado.emit(mes);
       this.idAutoLinea.emit(idAutoLinea);
       this.idDepartamento.emit(idDepartamento);
-    }
   }
 
   // Ordenamiento de tabla

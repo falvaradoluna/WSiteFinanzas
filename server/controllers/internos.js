@@ -84,9 +84,7 @@ internos.prototype.get_estadoresultados = function (req, res, next) {
 
   this.model.query('Contabilidad.ObtieneEstadoDeResultados', params, function (error, result) {
     console.log('Estado de Resultados Parametros: ' + params);
-    if (result.length > 0) {
-      // console.log("Estado de Resultados " + result[0]);
-    }
+  
     self.view.expositor(res, {
       error: error,
       result: result,

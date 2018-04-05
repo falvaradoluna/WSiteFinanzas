@@ -761,6 +761,7 @@
                   <th class="bg-orange text-white">CONCEPTO</th>
                   <th class="bg-orange text-white">CARGO</th>
                   <th class="bg-orange text-white">ABONO</th>
+                  <th class="bg-orange text-white">Fecha Operación</th>
                 </tr>
               </thead>
               <tbody>
@@ -771,6 +772,7 @@
                   <td class="">{{ drc.MOV_CONCEPTO }}</td>
                   <td class=" text-right" [suma-columnas]='drc.MOV_DEBE'>{{ drc.MOV_DEBE | number:'1.2-2' }}</td>
                   <td class=" text-right" [suma-columnas]='drc.MOV_HABER'>{{ drc.MOV_HABER | number:'1.2-2' }}</td>
+                  <td class="text-center">{{ drc.MOV_FECHOPE }}</td>
                 </tr>
               </tbody>
             </table>
