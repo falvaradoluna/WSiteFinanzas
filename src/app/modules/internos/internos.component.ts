@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { routerTransition } from '../../router.animations';
-import { TreeviewItem, TreeviewConfig } from 'ngx-treeview';
+import { TreeviewItem, TreeviewConfig, TreeviewModule } from 'ngx-treeview';
 import { FormsModule, ReactiveFormsModule, NgModel } from '@angular/forms';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -96,6 +96,7 @@ export class InternosComponent implements OnInit {
   showPercents = true;
   resultadosSeriesArNv4: ISeries[] = [];
   isCollapsed = true;
+  showOriginal= 0;  // para almacenar el nivel donde se esta posocionado y poder ocultar los detalles
 
   resultadoUnidadesService: IResultadoInternos[] = [];
   estadoResultados: IResultadoInternos[] = [];
@@ -229,23 +230,50 @@ export class InternosComponent implements OnInit {
   }
 
   toggleUnidadesAcumuladoReal() {
-    this.showUnidadesAcumuladoReal = this.showUnidadesAcumuladoReal === 1 ? 0 : 1;
+    if (this.showUnidadesAcumuladoReal>0){
+      this.showOriginal= this.showUnidadesAcumuladoReal;
+      this.showUnidadesAcumuladoReal=0;
+    }
+      else{   
+        this.showUnidadesAcumuladoReal= this.showOriginal;
+    }
+   // this.showOriginal= this.showUnidadesAcumuladoReal;
+   // this.showUnidadesAcumuladoReal = this.showUnidadesAcumuladoReal === 1 ? 0 : 1;
   }
+
 //estado de resultados
   toggleResultados(): void {
+    
    var tr = this.selectedTipoReporte.toString();
    switch (tr)
    {
      case '1': {
         //mensual
-          if(this.showDetallePrimerNivel==true || this.showDetalleSegundoNivel==true){
-            this.hideDetalleSegundoNivel(); 
-            this.hideDetallePrimerNivel();
-            this.showResultados = !this.showResultados;
+        // this.showResultados = !this.showResultados;
+        if(this.showResultados==true){
+          if (this.showDetalleSegundoNivel==true){
+            this.showDetallePrimerNivel=false;
+            this.showDetalleSegundoNivel=false;
+            this.showOriginal=2;
           }
-         
-          break;
+          if (this.showDetallePrimerNivel==true){
+            this.showDetallePrimerNivel=false;
+            this.showOriginal=1;
+          }
+          this.showResultados=false;
+       }else{
+        this.showResultados=true;
+          if(this.showOriginal==1){           
+            this.showDetallePrimerNivel=true;
+          }
+          if(this.showOriginal==2){
+            this.showDetalleSegundoNivel=true;
+            this.showDetallePrimerNivel=true;
+          }
         }
+       
+      break;
+      }
      case '2':{
         //Acumulado real
         if(this.showEstadoResultadoAcumuladoReal===1 || this.showEstadoResultadoAcumuladoReal===2){
@@ -267,7 +295,15 @@ export class InternosComponent implements OnInit {
 
 //UNIDADES 2
   toggleUnidadesDepartamento(): void {
-    //if (this.showUnidades){}
+
+    if(this.showUnidadesDepartamento==true){
+      this.showOriginal= this. showUnidadesDeptoNivel;
+      if (this. showUnidadesDeptoNivel==4){
+          this.showUnidadesDeptoByLevel(3);
+      }
+    }else{
+      this.showUnidadesDeptoNivel=this.showOriginal;
+    }
     this.showUnidadesDepartamento = !this.showUnidadesDepartamento;
   }
 
@@ -416,7 +452,7 @@ export class InternosComponent implements OnInit {
         break;
       default :
         this.showSumaDepartamentos = true;
-        this.showSumaDepartamentosHeader=false;
+       // this.showSumaDepartamentosHeader=false;
         this.showSumaDepartamentosAReal=true;
         this.showResultados= false;
         this.showAcumuladoReal= false;
@@ -600,6 +636,8 @@ export class InternosComponent implements OnInit {
     if(calc != null) {
       var formulaOriginal = calc.formula;
       var formulaOriginalAcumulado = calc.formula;
+      var formulaOriginalPresupuesto = calc.formula;
+      var formulaOriginalPresupuestoAcumulado = calc.formula;
       
       let div = /\//gi;
       let mul = /\*/gi;
@@ -622,11 +660,17 @@ export class InternosComponent implements OnInit {
           var val =ResultadoCalculo.find(x=>x.idOrden === +erc.replace("idOrden",""));
           formulaOriginal =formulaOriginal.replace(erc, String(val.cantidad)).replace("diaMes",String(calc.numDiaMensual));
           formulaOriginalAcumulado =formulaOriginalAcumulado.replace(erc, String(val.cantidadAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
+          formulaOriginalPresupuesto = formulaOriginalPresupuesto.replace(erc, String(val.cantidadPresupuesto)).replace("diaMes",String(calc.numDiaMensual));;
+          formulaOriginalPresupuestoAcumulado = formulaOriginalPresupuestoAcumulado.replace(erc, String(val.cantidadPresupuestoAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
         }
       });
       var er = ResultadoCalculo.find(x=>x.idOrden === er.idOrden);
       er.cantidad = (eval(formulaOriginal)).toFixed(3);
       er.cantidadAcumulado = eval(formulaOriginalAcumulado).toFixed(3);
+      if (er.idOrden == 23) {
+        er.cantidadPresupuesto = (eval(formulaOriginalPresupuesto)).toFixed(3);;
+        er.cantidadPresupuestoAcumulado = eval(formulaOriginalPresupuestoAcumulado).toFixed(3);;
+      }
     }
   }
 
@@ -1306,7 +1350,7 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeCompania(newValue: number): void {
-  
+    this.showOriginal=0;
     this.selectedCompania = newValue;
     if (this.selectedCompania==0){
       this.selectedIdSucursal=-2;
@@ -1331,8 +1375,11 @@ getReporteSumaDepartamentos() : void{
    //if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal!==-2) {
     if ( this.selectedCompania != 0) {
         this.getDepartamentos();
+        if(this.showSumaDepartamentos==true){
+          this.sumaDepartamentos();
+        }
       }
-      
+     
     this.hideResultados();
   }
   
@@ -1385,6 +1432,7 @@ getReporteSumaDepartamentos() : void{
 
   onChangeTipoReporte(newValue: number): void {
     this.selectedTipoReporte = newValue;
+    this.showOriginal=0;
     const nv = newValue.toString();
 
     if (this.showSumaDepartamentos!== true){
@@ -1405,7 +1453,7 @@ getReporteSumaDepartamentos() : void{
     //  this.showSumaDepartamentos=true;
       switch (nv){
         case '1':
-        this.showSumaDepartamentosHeader= true;
+       // this.showSumaDepartamentosHeader= true;
         this.showSumaDepartamentosAReal=false;
         break;
         case '2': case '3':      
