@@ -37,8 +37,7 @@ import { ColumnSortedEvent } from '../../shared/services/sort.service';
 import { InternosService } from './internos.service';
 import { FechaActualizacionService } from '../../shared';
 import { FlujoeSituacionfComponent } from './flujoe-situacionf/flujoe-situacionf.component'
-import { ENETUNREACH } from 'constants';
-
+//import { ENETUNREACH } from 'constants';
 
 @Component({
   selector: 'app-internos',
