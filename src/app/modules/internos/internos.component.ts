@@ -559,6 +559,21 @@ export class InternosComponent implements OnInit {
         this.estadoResultados.forEach(er => {
 
           this.getCalculoER(er, this.estadoResultados);
+         
+          ventas.cantidad = ventas.cantidad > 0 ? ventas.cantidad : 0;
+          ventas.cantidadAcumulado = ventas.cantidadAcumulado >0 ? ventas.cantidadAcumulado : 0;
+          ventas.cantidadPresupuesto= ventas.cantidadPresupuesto >0 ? ventas.cantidadPresupuesto : 0;
+          ventas.cantidadPresupuestoAcumulado = ventas.cantidadPresupuestoAcumulado >0 ? ventas.cantidadPresupuestoAcumulado : 0;
+
+          utilidadBrutaNeta.cantidad = utilidadBrutaNeta.cantidad > 0  ? utilidadBrutaNeta.cantidad : 0;
+          utilidadBrutaNeta.cantidadPresupuesto = utilidadBrutaNeta.cantidadPresupuesto >0 ? utilidadBrutaNeta.cantidadPresupuesto : 0;
+          utilidadBrutaNeta.cantidadAcumulado = utilidadBrutaNeta.cantidadAcumulado > 0 ? utilidadBrutaNeta.cantidadAcumulado : 0;
+          utilidadBrutaNeta.cantidadPresupuestoAcumulado = utilidadBrutaNeta.cantidadPresupuestoAcumulado >0 ? utilidadBrutaNeta.cantidadPresupuestoAcumulado : 0;
+          
+          er.cantidad = er.cantidad > 0 ? er.cantidad :0;
+          er.cantidadAcumulado = er.cantidadAcumulado > 0 ? er.cantidadAcumulado: 0;
+          er.cantidadPresupuesto = er.cantidadPresupuesto >0 ? er.cantidadPresupuesto : 0;          
+          er.cantidadPresupuestoAcumulado = er.cantidadPresupuestoAcumulado > 0 ? er.cantidadPresupuestoAcumulado : 0;
 
           // Calcula porcentaje real
           switch (er.idEstadoResultadosI) {
@@ -658,8 +673,13 @@ export class InternosComponent implements OnInit {
 
       formulaSinOperador.split('operado').forEach(erc=>{
         if(erc.indexOf("idOrden") != -1){
-
+                   
           var val =ResultadoCalculo.find(x=>x.idOrden === +erc.replace("idOrden",""));
+          val.cantidad = val.cantidad > 0 ? val.cantidad : 0;
+          val.cantidadAcumulado = val.cantidadAcumulado > 0 ? val.cantidadAcumulado: 0;
+          val.cantidadPresupuesto = val.cantidadPresupuesto > 0 ? val.cantidadPresupuesto : 0;
+          val.cantidadPresupuestoAcumulado = val.cantidadPresupuestoAcumulado > 0 ? val.cantidadPresupuestoAcumulado : 0;
+
           formulaOriginal =formulaOriginal.replace(erc, String(val.cantidad)).replace("diaMes",String(calc.numDiaMensual));
           formulaOriginalAcumulado =formulaOriginalAcumulado.replace(erc, String(val.cantidadAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
           formulaOriginalPresupuesto = formulaOriginalPresupuesto.replace(erc, String(val.cantidadPresupuesto)).replace("diaMes",String(calc.numDiaMensual));;
