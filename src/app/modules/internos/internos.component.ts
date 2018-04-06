@@ -402,6 +402,7 @@ export class InternosComponent implements OnInit {
   }
 
   private showUnidadesInit(): void {
+    this.showOriginal=0;
     this.hideDetalles();
     this.showReporteUnidades = true;
     this.showEfectivoSituacion = false;
@@ -444,7 +445,8 @@ export class InternosComponent implements OnInit {
     switch (tipoReporte){
       case '1':
         this.showSumaDepartamentos = true;
-        //this.showSumaDepartamentosHeader=true;
+        this.showSumaDepartamentosHeader=true;
+        this.showSumaDepartamentosAReal=false;
         this.showAcumuladoPresupuesto= false;
         this.showResultados= false;
         this.showAcumuladoReal= false;
@@ -452,7 +454,7 @@ export class InternosComponent implements OnInit {
         break;
       default :
         this.showSumaDepartamentos = true;
-       // this.showSumaDepartamentosHeader=false;
+        this.showSumaDepartamentosHeader=false;
         this.showSumaDepartamentosAReal=true;
         this.showResultados= false;
         this.showAcumuladoReal= false;
@@ -1453,7 +1455,7 @@ getReporteSumaDepartamentos() : void{
     //  this.showSumaDepartamentos=true;
       switch (nv){
         case '1':
-       // this.showSumaDepartamentosHeader= true;
+        this.showSumaDepartamentosHeader= true;
         this.showSumaDepartamentosAReal=false;
         break;
         case '2': case '3':      
