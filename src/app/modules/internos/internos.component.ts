@@ -444,7 +444,7 @@ export class InternosComponent implements OnInit {
     switch (tipoReporte){
       case '1':
         this.showSumaDepartamentos = true;
-        this.showSumaDepartamentosHeader=true;
+        //this.showSumaDepartamentosHeader=true;
         this.showAcumuladoPresupuesto= false;
         this.showResultados= false;
         this.showAcumuladoReal= false;
