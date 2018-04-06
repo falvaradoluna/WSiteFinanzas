@@ -10,7 +10,7 @@
         </div>
         <div class="card-body" *ngIf='showFilters' @ngIfAnimation>
           <form>
-            <div class="form-row">
+            <div class="form-row">  
               <div class="form-group col-md-5">
                 <label for="inputCompania">Compañía</label>
                 <select name="inputCompania" class="form-control form-control-sm" [(ngModel)]="selectedCompania" (ngModelChange)="onChangeCompania($event)">
@@ -529,7 +529,7 @@
                   {{ r.descripcion === 'ROS' ? (r.variacion | percent:'1.2-2') : (r.variacion | number:'1.2-2') }}
                 </td>
                 <td class="text-right col-width-perc">
-                  {{ r.descripcion === 'ROS' ? (r.porcentajeVariacion | percent:'1.2-2') : (r.porcentajeVariacion | number:'1.2-2') }}
+                  {{ r.descripcion === 'ROS' ? (0 | percent:'1.2-2') : (r.porcentajeVariacion | number:'1.2-2') }}
                 </td>
                 <ng-container *ngIf='r.descripcion === "Utilidad bruta"; then conTooltipAcReal; else sinTooltipAcReal'> <!-- Se usan templates para ver si lleva o no tooltip-->
                   Esto no se muestra !!!!!!!
@@ -547,7 +547,7 @@
                   {{ r.descripcion === 'ROS' ? (r.variacionAcumulado | percent:'1.2-2') : (r.variacionAcumulado | number:'1.2-2') }}
                 </td>
                 <td class="text-right col-width-perc">
-                  {{ r.descripcion === 'ROS' ? (r.porcentajeVariacionAcumulado | percent:'1.2-2') : (r.porcentajeVariacionAcumulado | number:'1.2-2') }}
+                  {{ r.descripcion === 'ROS' ? (0 | percent:'1.2-2') : (r.porcentajeVariacionAcumulado | number:'1.2-2') }}
                 </td>
               </tr>
             </ng-container>
