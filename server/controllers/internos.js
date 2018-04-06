@@ -84,9 +84,7 @@ internos.prototype.get_estadoresultados = function (req, res, next) {
 
   this.model.query('Contabilidad.ObtieneEstadoDeResultados', params, function (error, result) {
     console.log('Estado de Resultados Parametros: ' + params);
-    if (result.length > 0) {
-      // console.log("Estado de Resultados " + result[0]);
-    }
+  
     self.view.expositor(res, {
       error: error,
       result: result,
@@ -202,12 +200,13 @@ internos.prototype.get_estadoresultadosacumuladoreal = function (req, res, next)
 // Funcionalidad de la tabla SUMA DE DEPARMATEMTOS
 internos.prototype.get_sumadepartamentos = function (req, res, next) {
   var self = this;
-  var idCompania = req.query.idCompania;
-  var idSucursal = req.query.idsucursal;
-  var PeriodoYear = req.query.periodoYear;
+  var idCompania = req.query.idcia;
+  var idSucursal = req.query.idSucursal;
+  var PeriodoYear = req.query.periodoAnio;
   var PeriodoMes = req.query.periodoMes;
-  var departamento = req.query.departamento;
-  var IdSucursalSecuencia = req.query.idSucursalSecuencia;
+  var departamento = req.query.IdDepartamento;
+  var IdSucursalSecuencia = req.query.IdSucursalSecuencia;
+  var tipoReporte = req.query.tipoReporte;
   
    var params = [
 
@@ -216,9 +215,13 @@ internos.prototype.get_sumadepartamentos = function (req, res, next) {
     { name: 'PeriodoYear', value: PeriodoYear, type: self.model.types.INT },
     { name: 'PeriodoMes', value: PeriodoMes, type: self.model.types.INT },
     { name: 'IdDepartamento', value: departamento, type: self.model.types.STRING },
-    { name: 'IdSucursalSecuencia', value: IdSucursalSecuencia, type: self.model.types.INT }
+    { name: 'IdSucursalSecuencia', value: IdSucursalSecuencia, type: self.model.types.INT },
+    //{ name: 'tipoReporte', value: 1, type: self.model.types.INT }
+    { name: 'tipoReporte', value: tipoReporte, type: self.model.types.INT }
+   
   ];
 
+  console.log("params SP", params);  
  // this.model.query('SP_SUMA_DE_DEPARTAMENTOS', params, function (error, result) {
     this.model.query('Contabilidad.ObtieneEstadoDeResultadosSumaDeDepartamentos', params, function (error, result) {
      
@@ -292,9 +295,12 @@ internos.prototype.get_companias = function (req, res, next) {
 internos.prototype.get_sucursales = function (req, res, next) {
   var self = this;
   var idCompania = req.query.idCompania;
+  var idUsuario = req.query.idUsuario;
 
   var params = [
     { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'idUsuario', value: idUsuario, type: self.model.types.INT }
+    
   ];
 
   this.model.query('Catalogo.ObtenerSucursalXCompania', params, function (error, result) {
@@ -322,10 +328,13 @@ internos.prototype.get_departamentos = function (req, res, next) {
   //   { name: 'Anio', value: anio, type: self.model.types.STRING },
   //   { name: 'Mes', value: mes, type: self.model.types.STRING }
   // ];
+  var params = [
+    { name: 'idCompania', value: req.query.idCompania, type: self.model.types.INT },
+    { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT },
+    { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }
+  ];
 
-  var params = [];
-
-  this.model.query('Unidad.ObtienePestania', params, function (error, result) {
+  this.model.query('Interno.ObtienePestania', params, function (error, result) {
     // console.log(params);
     self.view.expositor(res, {
       error: error,
@@ -1187,6 +1196,21 @@ internos.prototype.get_estadoderesultadosvariacionsegundonivel = function (req, 
 //     console.log('Mensaje: ' + error);
 // }
 // };
+
+internos.prototype.get_tipoReporte = function (req, res, next) {
+  var self = this;
+  var idUsuario = req.query.idUsuario;
+  var params = [
+    { name: 'idUsuario', value: idUsuario, type: self.model.types.INT }
+  ];
+
+  this.model.query('Interno.ReporteXUsuario', params, function (error, result) {
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
 
 module.exports = internos;
 
