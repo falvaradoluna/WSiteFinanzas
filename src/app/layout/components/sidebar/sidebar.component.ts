@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { SeguridadService } from '../../../services/seguridad.service';
-
+import 'rxjs/add/operator/catch'
 
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.scss']
+    styleUrls: ['./sidebar.component.scss'],
+    providers: [SeguridadService]
 })
 export class SidebarComponent {
     isActive: boolean = false;
