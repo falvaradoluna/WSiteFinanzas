@@ -626,7 +626,6 @@ export class InternosComponent implements OnInit {
       });
       var er = ResultadoCalculo.find(x=>x.idOrden === er.idOrden);
       er.cantidad = (eval(formulaOriginal)).toFixed(3);
-      er.cantidad = er.cantidad;  
       er.cantidadAcumulado = eval(formulaOriginalAcumulado).toFixed(3);
     }
   }
