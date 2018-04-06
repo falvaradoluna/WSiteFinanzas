@@ -638,7 +638,7 @@ export class InternosComponent implements OnInit {
       var formulaOriginalAcumulado = calc.formula;
       var formulaOriginalPresupuesto = calc.formula;
       var formulaOriginalPresupuestoAcumulado = calc.formula;
-      
+
       let div = /\//gi;
       let mul = /\*/gi;
       let sum = /\+/gi;
