@@ -39,7 +39,6 @@ import { FechaActualizacionService } from '../../shared';
 import { FlujoeSituacionfComponent } from './flujoe-situacionf/flujoe-situacionf.component'
 //import { ENETUNREACH } from 'constants';
 
-
 @Component({
   selector: 'app-internos',
   templateUrl: './internos.component.html',
