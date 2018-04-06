@@ -692,50 +692,54 @@ export class InternosComponent implements OnInit {
   }
 
   getCalculoER (er : IResultadoInternos, ResultadoCalculo : IResultadoInternos[]): void{
-    const calc  = this.estadoResultadosCalculo.find(x=>x.idOrden == er.idOrden);
-    if(calc != null) {
-      var formulaOriginal = calc.formula;
-      var formulaOriginalAcumulado = calc.formula;
-      var formulaOriginalPresupuesto = calc.formula;
-      var formulaOriginalPresupuestoAcumulado = calc.formula;
-
-      let div = /\//gi;
-      let mul = /\*/gi;
-      let sum = /\+/gi;
-      let res = /\-/gi;
-      let parlef = /\(/gi;
-      let parig = /\)/gi;
-      var formulaSinOperador = calc.formula.replace(div,"operado")
-                                           .replace(mul,"operado")
-                                           .replace(sum,"operado")
-                                           .replace(res,"operado")
-                                           .replace(parlef,"operado")
-                                           .replace(parig,"operado")
-                                           //.replace("1.16","");
-      
-
-      formulaSinOperador.split('operado').forEach(erc=>{
-        if(erc.indexOf("idOrden") != -1){
-                   
-          var val =ResultadoCalculo.find(x=>x.idOrden === +erc.replace("idOrden",""));
-          val.cantidad = val.cantidad >= 0 ? val.cantidad : 0;
-          val.cantidadAcumulado = val.cantidadAcumulado >= 0 ? val.cantidadAcumulado: 0;
-          val.cantidadPresupuesto = val.cantidadPresupuesto >= 0 ? val.cantidadPresupuesto : 0;
-          val.cantidadPresupuestoAcumulado = val.cantidadPresupuestoAcumulado >= 0 ? val.cantidadPresupuestoAcumulado : 0;
-
-          formulaOriginal =formulaOriginal.replace(erc, String(val.cantidad)).replace("diaMes",String(calc.numDiaMensual));
-          formulaOriginalAcumulado =formulaOriginalAcumulado.replace(erc, String(val.cantidadAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
-          formulaOriginalPresupuesto = formulaOriginalPresupuesto.replace(erc, String(val.cantidadPresupuesto)).replace("diaMes",String(calc.numDiaMensual));;
-          formulaOriginalPresupuestoAcumulado = formulaOriginalPresupuestoAcumulado.replace(erc, String(val.cantidadPresupuestoAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
+    try{
+      const calc  = this.estadoResultadosCalculo.find(x=>x.idOrden == er.idOrden);
+      if(calc != null) {
+        var formulaOriginal = calc.formula;
+        var formulaOriginalAcumulado = calc.formula;
+        var formulaOriginalPresupuesto = calc.formula;
+        var formulaOriginalPresupuestoAcumulado = calc.formula;
+  
+        let div = /\//gi;
+        let mul = /\*/gi;
+        let sum = /\+/gi;
+        let res = /\-/gi;
+        let parlef = /\(/gi;
+        let parig = /\)/gi;
+        var formulaSinOperador = calc.formula.replace(div,"operado")
+                                             .replace(mul,"operado")
+                                             .replace(sum,"operado")
+                                             .replace(res,"operado")
+                                             .replace(parlef,"operado")
+                                             .replace(parig,"operado")
+                                             //.replace("1.16","");
+        
+  
+        formulaSinOperador.split('operado').forEach(erc=>{
+          if(erc.indexOf("idOrden") != -1){
+                     
+            var val =ResultadoCalculo.find(x=>x.idOrden === +erc.replace("idOrden",""));
+            val.cantidad = val.cantidad >= 0 ? val.cantidad : 0;
+            val.cantidadAcumulado = val.cantidadAcumulado >= 0 ? val.cantidadAcumulado: 0;
+            val.cantidadPresupuesto = val.cantidadPresupuesto >= 0 ? val.cantidadPresupuesto : 0;
+            val.cantidadPresupuestoAcumulado = val.cantidadPresupuestoAcumulado >= 0 ? val.cantidadPresupuestoAcumulado : 0;
+  
+            formulaOriginal =formulaOriginal.replace(erc, String(val.cantidad)).replace("diaMes",String(calc.numDiaMensual));
+            formulaOriginalAcumulado =formulaOriginalAcumulado.replace(erc, String(val.cantidadAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
+            formulaOriginalPresupuesto = formulaOriginalPresupuesto.replace(erc, String(val.cantidadPresupuesto)).replace("diaMes",String(calc.numDiaMensual));;
+            formulaOriginalPresupuestoAcumulado = formulaOriginalPresupuestoAcumulado.replace(erc, String(val.cantidadPresupuestoAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
+          }
+        });
+        var er = ResultadoCalculo.find(x=>x.idOrden === er.idOrden);
+        er.cantidad = (eval(formulaOriginal)).toFixed(3) >= 0 ? (eval(formulaOriginal)).toFixed(3) : 0;
+        er.cantidadAcumulado = eval(formulaOriginalAcumulado).toFixed(3) >= 0?eval(formulaOriginalAcumulado).toFixed(3):0;
+        if (er.idOrden == 23) {
+          er.cantidadPresupuesto = (eval(formulaOriginalPresupuesto)).toFixed(3) >= 0? (eval(formulaOriginalPresupuesto)).toFixed(3) : 0;
+          er.cantidadPresupuestoAcumulado = eval(formulaOriginalPresupuestoAcumulado).toFixed(3) >= 0? eval(formulaOriginalPresupuestoAcumulado).toFixed(3) : 0;
         }
-      });
-      var er = ResultadoCalculo.find(x=>x.idOrden === er.idOrden);
-      er.cantidad = (eval(formulaOriginal)).toFixed(3);
-      er.cantidadAcumulado = eval(formulaOriginalAcumulado).toFixed(3);
-      if (er.idOrden == 23) {
-        er.cantidadPresupuesto = (eval(formulaOriginalPresupuesto)).toFixed(3);;
-        er.cantidadPresupuestoAcumulado = eval(formulaOriginalPresupuestoAcumulado).toFixed(3);;
       }
+    }catch(e) {
+        console.log(e);
     }
   }
 
