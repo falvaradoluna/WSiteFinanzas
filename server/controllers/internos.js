@@ -84,9 +84,7 @@ internos.prototype.get_estadoresultados = function (req, res, next) {
 
   this.model.query('Contabilidad.ObtieneEstadoDeResultados', params, function (error, result) {
     console.log('Estado de Resultados Parametros: ' + params);
-    if (result.length > 0) {
-      // console.log("Estado de Resultados " + result[0]);
-    }
+  
     self.view.expositor(res, {
       error: error,
       result: result,
@@ -207,7 +205,7 @@ internos.prototype.get_sumadepartamentos = function (req, res, next) {
   var PeriodoYear = req.query.periodoAnio;
   var PeriodoMes = req.query.periodoMes;
   var departamento = req.query.IdDepartamento;
-  var IdSucursalSecuencia = req.query.idSucursalSecuencia;
+  var IdSucursalSecuencia = req.query.IdSucursalSecuencia;
   var tipoReporte = req.query.tipoReporte;
   
    var params = [
