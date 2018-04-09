@@ -98,7 +98,7 @@
             <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
           </button>
         </div>
-
+        
         <!-- BEGIN Unidades Primer Nivel -->
         <table *ngIf='showUnidades && !showDetalleUnidadesPrimerNivel' class="table table-sm table-bordered table-hover-td">
           <thead>
@@ -524,35 +524,35 @@
                 </ng-container>
                 <td class="text-right col-width-perc">
                   <!-- uno -->
-                  {{ r.descripcion === 'ROS' ? (r.presupuestoPorcentaje | percent:'3.2-3') : (r.presupuestoPorcentaje | number:'3.2-3') }}
+                  {{ r.descripcion === 'ROS' ? (r.presupuestoPorcentaje | percent:'1.2-2') : (r.presupuestoPorcentaje | number:'1.2-2') }}
                 </td>
                 <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.variacion, 'Variacion', 3, 2)">
                   {{ r.descripcion === 'ROS' ? (r.variacion | percent:'1.2-2') : (r.variacion | number:'1.2-2') }}
                 </td>
                 <td class="text-right col-width-perc">
                   <!-- xxxxxxx -->
-                  {{ r.descripcion === 'ROS' ? (r.porcentajeVariacion | percent:'3.2-3') : (r.porcentajeVariacion | number:'3.2-3') }}
+                  {{ r.descripcion === 'ROS' ? (r.porcentajeVariacion | percent:'1.2-2') : (r.porcentajeVariacion | number:'1.2-2') }}
                   
                 </td>
                 <ng-container *ngIf='r.descripcion === "Utilidad bruta"; then conTooltipAcReal; else sinTooltipAcReal'> <!-- Se usan templates para ver si lleva o no tooltip-->
                   Esto no se muestra !!!!!!!
                 </ng-container>
                 <td class="text-right col-width-perc">
-                  {{ r.descripcion === 'ROS' ? (r.porcentajeAcumulado | percent:'3.2-3') : (r.porcentajeAcumulado | number:'3.2-3') }}
+                  {{ r.descripcion === 'ROS' ? (r.porcentajeAcumulado | percent:'1.2-2') : (r.porcentajeAcumulado | number:'1.2-2') }}
                   <!-- xxxxx -->
                 </td>
                 <ng-container *ngIf='r.descripcion === "Utilidad bruta"; then conTooltipAcPpto; else sinTooltipAcPpto'> <!-- Se usan templates para ver si lleva o no tooltip-->
                   Esto no se muestra !!!!!!!
                 </ng-container>
                 <td class="text-right col-width-perc">
-                  {{ r.descripcion === 'ROS' ? (r.presupuestoPorcentajeAcumulado | percent:'3.2-3') : (r.presupuestoPorcentajeAcumulado | number:'3.2-3') }}
+                  {{ r.descripcion === 'ROS' ? (r.presupuestoPorcentajeAcumulado | percent:'1.2-2') : (r.presupuestoPorcentajeAcumulado | number:'1.2-2') }}
                   <!-- AAAA -->
                 </td>
                 <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.variacionAcumulado, 'AcVariacion', 3, 3)">
                   {{ r.descripcion === 'ROS' ? (r.variacionAcumulado | percent:'1.2-2') : (r.variacionAcumulado | number:'1.2-2') }}
                 </td>
                 <td class="text-right col-width-perc">
-                  {{ r.descripcion === 'ROS' ? (r.porcentajeVariacionAcumulado | percent:'3.2-3') : (r.porcentajeVariacionAcumulado | number:'3.2-3') }}
+                  {{ r.descripcion === 'ROS' ? (r.porcentajeVariacionAcumulado | percent:'1.2-2') : (r.porcentajeVariacionAcumulado | number:'1.2-2') }}
                   <!-- BBBBB -->
                 </td>
               </tr>
@@ -1818,3 +1818,5 @@
   </div>
   <!-- END Estado de resultados -->
 </div>
+
+
