@@ -89,7 +89,7 @@
                 <ul class="submenu">
                     <li *ngFor="let submenu of menu.submenu">
                         <a [routerLink]="[ submenu.url ]">
-                            <span><i [class]="menu.icono"></i> {{ submenu.titulo | translate }}</span>
+                            <span><i [class]="submenu.icono"></i> {{ submenu.titulo | translate }}</span>
                         </a>
                     </li>
                 </ul>
