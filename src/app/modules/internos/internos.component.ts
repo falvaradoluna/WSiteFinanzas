@@ -37,6 +37,7 @@ import { ColumnSortedEvent } from '../../shared/services/sort.service';
 import { InternosService } from './internos.service';
 import { FechaActualizacionService } from '../../shared';
 import { FlujoeSituacionfComponent } from './flujoe-situacionf/flujoe-situacionf.component'
+import { ElementSchemaRegistry } from '@angular/compiler';
 //import { ENETUNREACH } from 'constants';
 
 @Component({
@@ -605,20 +606,20 @@ export class InternosComponent implements OnInit {
 
           this.getCalculoER(er, this.estadoResultados);
          
-          ventas.cantidad = ventas.cantidad >= 0 ? ventas.cantidad : 0;
-          ventas.cantidadAcumulado = ventas.cantidadAcumulado >= 0 ? ventas.cantidadAcumulado : 0;
-          ventas.cantidadPresupuesto= ventas.cantidadPresupuesto >= 0 ? ventas.cantidadPresupuesto : 0;
-          ventas.cantidadPresupuestoAcumulado = ventas.cantidadPresupuestoAcumulado >= 0 ? ventas.cantidadPresupuestoAcumulado : 0;
+          ventas.cantidad = this.getIsNumber(ventas.cantidad) //ventas.cantidad >= 0 ? ventas.cantidad : 0;
+          ventas.cantidadAcumulado = this.getIsNumber(ventas.cantidadAcumulado);// ventas.cantidadAcumulado >= 0 ? ventas.cantidadAcumulado : 0;
+          ventas.cantidadPresupuesto= this.getIsNumber(ventas.cantidadPresupuesto);//ventas.cantidadPresupuesto >= 0 ? ventas.cantidadPresupuesto : 0;
+          ventas.cantidadPresupuestoAcumulado = this.getIsNumber(ventas.cantidadPresupuestoAcumulado);//ventas.cantidadPresupuestoAcumulado >= 0 ? ventas.cantidadPresupuestoAcumulado : 0;
 
-          utilidadBrutaNeta.cantidad = utilidadBrutaNeta.cantidad >= 0  ? utilidadBrutaNeta.cantidad : 0;
-          utilidadBrutaNeta.cantidadPresupuesto = utilidadBrutaNeta.cantidadPresupuesto >= 0 ? utilidadBrutaNeta.cantidadPresupuesto : 0;
-          utilidadBrutaNeta.cantidadAcumulado = utilidadBrutaNeta.cantidadAcumulado >= 0 ? utilidadBrutaNeta.cantidadAcumulado : 0;
-          utilidadBrutaNeta.cantidadPresupuestoAcumulado = utilidadBrutaNeta.cantidadPresupuestoAcumulado >= 0 ? utilidadBrutaNeta.cantidadPresupuestoAcumulado : 0;
+          utilidadBrutaNeta.cantidad = this.getIsNumber(utilidadBrutaNeta.cantidad);//utilidadBrutaNeta.cantidad >= 0  ? utilidadBrutaNeta.cantidad : 0;
+          utilidadBrutaNeta.cantidadPresupuesto = this.getIsNumber(utilidadBrutaNeta.cantidadPresupuesto);//utilidadBrutaNeta.cantidadPresupuesto >= 0 ? utilidadBrutaNeta.cantidadPresupuesto : 0;
+          utilidadBrutaNeta.cantidadAcumulado = this.getIsNumber(utilidadBrutaNeta.cantidadAcumulado);//utilidadBrutaNeta.cantidadAcumulado >= 0 ? utilidadBrutaNeta.cantidadAcumulado : 0;
+          utilidadBrutaNeta.cantidadPresupuestoAcumulado = this.getIsNumber(utilidadBrutaNeta.cantidadPresupuestoAcumulado);//utilidadBrutaNeta.cantidadPresupuestoAcumulado >= 0 ? utilidadBrutaNeta.cantidadPresupuestoAcumulado : 0;
           
-          er.cantidad = er.cantidad >= 0 ? er.cantidad :0;
-          er.cantidadAcumulado = er.cantidadAcumulado >= 0 ? er.cantidadAcumulado: 0;
-          er.cantidadPresupuesto = er.cantidadPresupuesto >= 0 ? er.cantidadPresupuesto : 0;          
-          er.cantidadPresupuestoAcumulado = er.cantidadPresupuestoAcumulado >= 0 ? er.cantidadPresupuestoAcumulado : 0;
+          er.cantidad = this.getIsNumber(er.cantidad);//er.cantidad >= 0 ? er.cantidad :0;
+          er.cantidadAcumulado = this.getIsNumber(er.cantidadAcumulado);//er.cantidadAcumulado >= 0 ? er.cantidadAcumulado: 0;
+          er.cantidadPresupuesto = this.getIsNumber(er.cantidadPresupuesto);//er.cantidadPresupuesto >= 0 ? er.cantidadPresupuesto : 0;          
+          er.cantidadPresupuestoAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado);//er.cantidadPresupuestoAcumulado >= 0 ? er.cantidadPresupuestoAcumulado : 0;
 
           // Calcula porcentaje real
           switch (er.idEstadoResultadosI) {
@@ -630,55 +631,55 @@ export class InternosComponent implements OnInit {
               break;
             }
             case 8: { // Costo de ventas
-              er.porcentaje = er.cantidad / ventas.cantidad * 100;
-              er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
-              er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
-              er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+              er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
+              er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
+              er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
+              er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
               break;
             }
             case 40: { // Otros costos
-              er.porcentaje = er.cantidad / ventas.cantidad * 100;
-              er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
-              er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
-              er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+              er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
+              er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
+              er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
+              er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
               break;
             }
             default: { // todos los demás van por utilidad bruta neta
-              er.porcentaje = er.cantidad / utilidadBrutaNeta.cantidad * 100;
-              er.porcentajeAcumulado = er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100;
-              er.presupuestoPorcentaje = er.cantidadPresupuesto / utilidadBrutaNeta.cantidadPresupuesto * 100;
-              er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / utilidadBrutaNeta.cantidadPresupuestoAcumulado * 100;
+              er.porcentaje = this.getIsNumber(er.cantidad / utilidadBrutaNeta.cantidad * 100);
+              er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100);
+              er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / utilidadBrutaNeta.cantidadPresupuesto * 100);
+              er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / utilidadBrutaNeta.cantidadPresupuestoAcumulado * 100);
               break;
             }
           }
 
           switch (er.descripcion) {
             case 'Utilidad bruta': {
-              er.porcentaje = er.cantidad / ventas.cantidad * 100;
-              er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
-              er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
-              er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+              er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
+              er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
+              er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
+              er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
               break;
             }
             case 'Utilidad Bruta Neta': {
-              er.porcentaje = er.cantidad / ventas.cantidad * 100;
-              er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
-              er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
-              er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+              er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
+              er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
+              er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
+              er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
               break;
             }
           }
 
           // Calcula la variacion
-          er.variacion = er.cantidad - er.cantidadPresupuesto;
-          er.variacionAcumulado = er.cantidadAcumulado - er.cantidadPresupuestoAcumulado;
+          er.variacion = this.getIsNumber(er.cantidad - er.cantidadPresupuesto);
+          er.variacionAcumulado = this.getIsNumber(er.cantidadAcumulado - er.cantidadPresupuestoAcumulado);
 
           // Calcula porcentaje de variacion
           if (er.cantidadPresupuesto === 0) {
             // Evitar division entre cero
             er.porcentajeVariacion = 100;
           } else {
-            er.porcentajeVariacion = er.porcentaje - er.presupuestoPorcentaje;
+            er.porcentajeVariacion = this.getIsNumber(er.porcentaje - er.presupuestoPorcentaje);
           }
 
           // Calcula porcentaje de variacion acumulado
@@ -686,11 +687,23 @@ export class InternosComponent implements OnInit {
             // Evitar division entre cero
             er.porcentajeVariacionAcumulado = 100;
           } else {
-            er.porcentajeVariacionAcumulado = er.porcentajeAcumulado - er.presupuestoPorcentajeAcumulado;
+            er.porcentajeVariacionAcumulado = this.getIsNumber(er.porcentajeAcumulado - er.presupuestoPorcentajeAcumulado);
           }
         });
       }
     );
+  }
+
+  getIsNumber(value: number ): number {
+    //if(isNaN(parseFloat(value.toString())))
+    if (isNaN(value) || 
+        value.toString() === "-Infinity" || 
+        value.toString() === "Infinity" ||
+        value.toString() ==="-∞" ||
+        value.toString() ==="∞")
+      return 0;
+      else  
+      return parseFloat(value.toString());
   }
 
   getCalculoER (er : IResultadoInternos, ResultadoCalculo : IResultadoInternos[]): void{
@@ -721,10 +734,10 @@ export class InternosComponent implements OnInit {
           if(erc.indexOf("idOrden") != -1){
                      
             var val =ResultadoCalculo.find(x=>x.idOrden === +erc.replace("idOrden",""));
-            val.cantidad = val.cantidad >= 0 ? val.cantidad : 0;
-            val.cantidadAcumulado = val.cantidadAcumulado >= 0 ? val.cantidadAcumulado: 0;
-            val.cantidadPresupuesto = val.cantidadPresupuesto >= 0 ? val.cantidadPresupuesto : 0;
-            val.cantidadPresupuestoAcumulado = val.cantidadPresupuestoAcumulado >= 0 ? val.cantidadPresupuestoAcumulado : 0;
+            val.cantidad = this.getIsNumber(val.cantidad); //val.cantidad >= 0 ? val.cantidad : 0;
+            val.cantidadAcumulado = this.getIsNumber(val.cantidadAcumulado); //val.cantidadAcumulado >= 0 ? val.cantidadAcumulado: 0;
+            val.cantidadPresupuesto = this.getIsNumber(val.cantidadPresupuesto); //val.cantidadPresupuesto >= 0 ? val.cantidadPresupuesto : 0;
+            val.cantidadPresupuestoAcumulado = this.getIsNumber(val.cantidadPresupuestoAcumulado); //val.cantidadPresupuestoAcumulado >= 0 ? val.cantidadPresupuestoAcumulado : 0;
   
             formulaOriginal =formulaOriginal.replace(erc, String(val.cantidad)).replace("diaMes",String(calc.numDiaMensual));
             formulaOriginalAcumulado =formulaOriginalAcumulado.replace(erc, String(val.cantidadAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
@@ -733,11 +746,12 @@ export class InternosComponent implements OnInit {
           }
         });
         var er = ResultadoCalculo.find(x=>x.idOrden === er.idOrden);
-        er.cantidad = (eval(formulaOriginal)).toFixed(3) >= 0 ? (eval(formulaOriginal)).toFixed(3) : 0;
-        er.cantidadAcumulado = eval(formulaOriginalAcumulado).toFixed(3) >= 0?eval(formulaOriginalAcumulado).toFixed(3):0;
+        er.cantidad = this.getIsNumber((eval(formulaOriginal)).toFixed(3)); // (eval(formulaOriginal)).toFixed(3) >= 0 ? (eval(formulaOriginal)).toFixed(3) : 0;
+        er.cantidadAcumulado = this.getIsNumber(eval(formulaOriginalAcumulado).toFixed(3)); //eval(formulaOriginalAcumulado).toFixed(3) >= 0?eval(formulaOriginalAcumulado).toFixed(3):0;
         if (er.idOrden == 23) {
-          er.cantidadPresupuesto = (eval(formulaOriginalPresupuesto)).toFixed(3) >= 0? (eval(formulaOriginalPresupuesto)).toFixed(3) : 0;
-          er.cantidadPresupuestoAcumulado = eval(formulaOriginalPresupuestoAcumulado).toFixed(3) >= 0? eval(formulaOriginalPresupuestoAcumulado).toFixed(3) : 0;
+
+          er.cantidadPresupuesto = this.getIsNumber((eval(formulaOriginalPresupuesto)).toFixed(3)); //(eval(formulaOriginalPresupuesto)).toFixed(3) >= 0? (eval(formulaOriginalPresupuesto)).toFixed(3) : 0;
+          er.cantidadPresupuestoAcumulado = this.getIsNumber(eval(formulaOriginalPresupuestoAcumulado).toFixed(3)); //eval(formulaOriginalPresupuestoAcumulado).toFixed(3) >= 0? eval(formulaOriginalPresupuestoAcumulado).toFixed(3) : 0;
         }
       }
     }catch(e) {
@@ -946,55 +960,55 @@ getReporteSumaDepartamentos() : void{
             break;
           }
           case 8: { // Costo de ventas
-            er.porcentaje = er.cantidad / ventas.cantidad * 100;
-            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
-            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
-            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+            er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
+            er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
+            er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
+            er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
             break;
           }
           case 40: { // Otros costos
-            er.porcentaje = er.cantidad / ventas.cantidad * 100;
-            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
-            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
-            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+            er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
+            er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
+            er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
+            er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
             break;
           }
           default: { // todos los demás van por utilidad bruta neta
-            er.porcentaje = er.cantidad / utilidadBrutaNeta.cantidad * 100;
-            er.porcentajeAcumulado = er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100;
-            er.presupuestoPorcentaje = er.cantidadPresupuesto / utilidadBrutaNeta.cantidadPresupuesto * 100;
-            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / utilidadBrutaNeta.cantidadPresupuestoAcumulado * 100;
+            er.porcentaje = this.getIsNumber(er.cantidad / utilidadBrutaNeta.cantidad * 100);
+            er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100);
+            er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / utilidadBrutaNeta.cantidadPresupuesto * 100);
+            er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / utilidadBrutaNeta.cantidadPresupuestoAcumulado * 100);
             break;
           }
         }
 
         switch (er.descripcion) {
           case 'Utilidad bruta': {
-            er.porcentaje = er.cantidad / ventas.cantidad * 100;
-            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
-            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
-            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+            er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
+            er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
+            er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
+            er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
             break;
           }
           case 'Utilidad Bruta Neta': {
-            er.porcentaje = er.cantidad / ventas.cantidad * 100;
-            er.porcentajeAcumulado = er.cantidadAcumulado / ventas.cantidadAcumulado * 100;
-            er.presupuestoPorcentaje = er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100;
-            er.presupuestoPorcentajeAcumulado = er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100;
+            er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
+            er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
+            er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
+            er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
             break;
           }
         }
 
         // Calcula la variacion
-        er.variacion = er.cantidad - er.cantidadPresupuesto;
-        er.variacionAcumulado = er.cantidadAcumulado - er.cantidadPresupuestoAcumulado;
+        er.variacion = this.getIsNumber(er.cantidad - er.cantidadPresupuesto);
+        er.variacionAcumulado = this.getIsNumber(er.cantidadAcumulado - er.cantidadPresupuestoAcumulado);
 
         // Calcula porcentaje de variacion
         if (er.cantidadPresupuesto === 0) {
           // Evitar division entre cero
           er.porcentajeVariacion = 100;
         } else {
-          er.porcentajeVariacion = er.porcentaje - er.presupuestoPorcentaje;
+          er.porcentajeVariacion = this.getIsNumber(er.porcentaje - er.presupuestoPorcentaje);
         }
 
         // Calcula porcentaje de variacion acumulado
@@ -1002,7 +1016,7 @@ getReporteSumaDepartamentos() : void{
           // Evitar division entre cero
           er.porcentajeVariacionAcumulado = 100;
         } else {
-          er.porcentajeVariacionAcumulado = er.porcentajeAcumulado - er.presupuestoPorcentajeAcumulado;
+          er.porcentajeVariacionAcumulado = this.getIsNumber(er.porcentajeAcumulado - er.presupuestoPorcentajeAcumulado);
         }
       });
     }

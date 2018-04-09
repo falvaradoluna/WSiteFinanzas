@@ -359,7 +359,6 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
   }
 
   onClickDetalleUnidadesTipo(tipoUnidad: string, mes: string = '') {
-    if (tipoUnidad.trim() !== 'Total') {
       const idReporte = this.detalleName === 'Real' ? 'MRQ' : 'ARQ'; // Real = mensual y AcReal = Acumulado
 
       if (this.isUnidadesDepto) {
@@ -377,7 +376,6 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       this.idReporte.emit(idReporte);
       this.mesAcumuladoNv3.emit(mes);
       // this.fixedHeader('detalleUnidadesSeries');
-    }
   }
 
   private calculaTotalesMensual() {
