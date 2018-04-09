@@ -37,6 +37,7 @@ import { ColumnSortedEvent } from '../../shared/services/sort.service';
 import { InternosService } from './internos.service';
 import { FechaActualizacionService } from '../../shared';
 import { FlujoeSituacionfComponent } from './flujoe-situacionf/flujoe-situacionf.component'
+import { ElementSchemaRegistry } from '@angular/compiler';
 //import { ENETUNREACH } from 'constants';
 
 @Component({
@@ -603,20 +604,20 @@ export class InternosComponent implements OnInit {
 
           this.getCalculoER(er, this.estadoResultados);
          
-          ventas.cantidad = ventas.cantidad >= 0 ? ventas.cantidad : 0;
-          ventas.cantidadAcumulado = ventas.cantidadAcumulado >= 0 ? ventas.cantidadAcumulado : 0;
-          ventas.cantidadPresupuesto= ventas.cantidadPresupuesto >= 0 ? ventas.cantidadPresupuesto : 0;
-          ventas.cantidadPresupuestoAcumulado = ventas.cantidadPresupuestoAcumulado >= 0 ? ventas.cantidadPresupuestoAcumulado : 0;
+          ventas.cantidad = this.getIsNumber(ventas.cantidad) //ventas.cantidad >= 0 ? ventas.cantidad : 0;
+          ventas.cantidadAcumulado = this.getIsNumber(ventas.cantidadAcumulado);// ventas.cantidadAcumulado >= 0 ? ventas.cantidadAcumulado : 0;
+          ventas.cantidadPresupuesto= this.getIsNumber(ventas.cantidadPresupuesto);//ventas.cantidadPresupuesto >= 0 ? ventas.cantidadPresupuesto : 0;
+          ventas.cantidadPresupuestoAcumulado = this.getIsNumber(ventas.cantidadPresupuestoAcumulado);//ventas.cantidadPresupuestoAcumulado >= 0 ? ventas.cantidadPresupuestoAcumulado : 0;
 
-          utilidadBrutaNeta.cantidad = utilidadBrutaNeta.cantidad >= 0  ? utilidadBrutaNeta.cantidad : 0;
-          utilidadBrutaNeta.cantidadPresupuesto = utilidadBrutaNeta.cantidadPresupuesto >= 0 ? utilidadBrutaNeta.cantidadPresupuesto : 0;
-          utilidadBrutaNeta.cantidadAcumulado = utilidadBrutaNeta.cantidadAcumulado >= 0 ? utilidadBrutaNeta.cantidadAcumulado : 0;
-          utilidadBrutaNeta.cantidadPresupuestoAcumulado = utilidadBrutaNeta.cantidadPresupuestoAcumulado >= 0 ? utilidadBrutaNeta.cantidadPresupuestoAcumulado : 0;
+          utilidadBrutaNeta.cantidad = this.getIsNumber(utilidadBrutaNeta.cantidad);//utilidadBrutaNeta.cantidad >= 0  ? utilidadBrutaNeta.cantidad : 0;
+          utilidadBrutaNeta.cantidadPresupuesto = this.getIsNumber(utilidadBrutaNeta.cantidadPresupuesto);//utilidadBrutaNeta.cantidadPresupuesto >= 0 ? utilidadBrutaNeta.cantidadPresupuesto : 0;
+          utilidadBrutaNeta.cantidadAcumulado = this.getIsNumber(utilidadBrutaNeta.cantidadAcumulado);//utilidadBrutaNeta.cantidadAcumulado >= 0 ? utilidadBrutaNeta.cantidadAcumulado : 0;
+          utilidadBrutaNeta.cantidadPresupuestoAcumulado = this.getIsNumber(utilidadBrutaNeta.cantidadPresupuestoAcumulado);//utilidadBrutaNeta.cantidadPresupuestoAcumulado >= 0 ? utilidadBrutaNeta.cantidadPresupuestoAcumulado : 0;
           
-          er.cantidad = er.cantidad >= 0 ? er.cantidad :0;
-          er.cantidadAcumulado = er.cantidadAcumulado >= 0 ? er.cantidadAcumulado: 0;
-          er.cantidadPresupuesto = er.cantidadPresupuesto >= 0 ? er.cantidadPresupuesto : 0;          
-          er.cantidadPresupuestoAcumulado = er.cantidadPresupuestoAcumulado >= 0 ? er.cantidadPresupuestoAcumulado : 0;
+          er.cantidad = this.getIsNumber(er.cantidad);//er.cantidad >= 0 ? er.cantidad :0;
+          er.cantidadAcumulado = this.getIsNumber(er.cantidadAcumulado);//er.cantidadAcumulado >= 0 ? er.cantidadAcumulado: 0;
+          er.cantidadPresupuesto = this.getIsNumber(er.cantidadPresupuesto);//er.cantidadPresupuesto >= 0 ? er.cantidadPresupuesto : 0;          
+          er.cantidadPresupuestoAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado);//er.cantidadPresupuestoAcumulado >= 0 ? er.cantidadPresupuestoAcumulado : 0;
 
           // Calcula porcentaje real
           switch (er.idEstadoResultadosI) {
@@ -691,6 +692,18 @@ export class InternosComponent implements OnInit {
     );
   }
 
+  getIsNumber(value: number ): number {
+    //if(isNaN(parseFloat(value.toString())))
+    if (isNaN(value) || 
+        value.toString() === "-Infinity" || 
+        value.toString() === "Infinity" ||
+        value.toString() ==="-∞" ||
+        value.toString() ==="∞")
+      return 0;
+      else  
+      return parseFloat(value.toString());
+  }
+
   getCalculoER (er : IResultadoInternos, ResultadoCalculo : IResultadoInternos[]): void{
     try{
       const calc  = this.estadoResultadosCalculo.find(x=>x.idOrden == er.idOrden);
@@ -719,10 +732,10 @@ export class InternosComponent implements OnInit {
           if(erc.indexOf("idOrden") != -1){
                      
             var val =ResultadoCalculo.find(x=>x.idOrden === +erc.replace("idOrden",""));
-            val.cantidad = val.cantidad >= 0 ? val.cantidad : 0;
-            val.cantidadAcumulado = val.cantidadAcumulado >= 0 ? val.cantidadAcumulado: 0;
-            val.cantidadPresupuesto = val.cantidadPresupuesto >= 0 ? val.cantidadPresupuesto : 0;
-            val.cantidadPresupuestoAcumulado = val.cantidadPresupuestoAcumulado >= 0 ? val.cantidadPresupuestoAcumulado : 0;
+            val.cantidad = this.getIsNumber(val.cantidad); //val.cantidad >= 0 ? val.cantidad : 0;
+            val.cantidadAcumulado = this.getIsNumber(val.cantidadAcumulado); //val.cantidadAcumulado >= 0 ? val.cantidadAcumulado: 0;
+            val.cantidadPresupuesto = this.getIsNumber(val.cantidadPresupuesto); //val.cantidadPresupuesto >= 0 ? val.cantidadPresupuesto : 0;
+            val.cantidadPresupuestoAcumulado = this.getIsNumber(val.cantidadPresupuestoAcumulado); //val.cantidadPresupuestoAcumulado >= 0 ? val.cantidadPresupuestoAcumulado : 0;
   
             formulaOriginal =formulaOriginal.replace(erc, String(val.cantidad)).replace("diaMes",String(calc.numDiaMensual));
             formulaOriginalAcumulado =formulaOriginalAcumulado.replace(erc, String(val.cantidadAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
@@ -731,11 +744,11 @@ export class InternosComponent implements OnInit {
           }
         });
         var er = ResultadoCalculo.find(x=>x.idOrden === er.idOrden);
-        er.cantidad = (eval(formulaOriginal)).toFixed(3) >= 0 ? (eval(formulaOriginal)).toFixed(3) : 0;
-        er.cantidadAcumulado = eval(formulaOriginalAcumulado).toFixed(3) >= 0?eval(formulaOriginalAcumulado).toFixed(3):0;
+        er.cantidad = this.getIsNumber((eval(formulaOriginal)).toFixed(3)); // (eval(formulaOriginal)).toFixed(3) >= 0 ? (eval(formulaOriginal)).toFixed(3) : 0;
+        er.cantidadAcumulado = this.getIsNumber(eval(formulaOriginalAcumulado).toFixed(3)); //eval(formulaOriginalAcumulado).toFixed(3) >= 0?eval(formulaOriginalAcumulado).toFixed(3):0;
         if (er.idOrden == 23) {
-          er.cantidadPresupuesto = (eval(formulaOriginalPresupuesto)).toFixed(3) >= 0? (eval(formulaOriginalPresupuesto)).toFixed(3) : 0;
-          er.cantidadPresupuestoAcumulado = eval(formulaOriginalPresupuestoAcumulado).toFixed(3) >= 0? eval(formulaOriginalPresupuestoAcumulado).toFixed(3) : 0;
+          er.cantidadPresupuesto = this.getIsNumber((eval(formulaOriginalPresupuesto)).toFixed(3)); //(eval(formulaOriginalPresupuesto)).toFixed(3) >= 0? (eval(formulaOriginalPresupuesto)).toFixed(3) : 0;
+          er.cantidadPresupuestoAcumulado = this.getIsNumber(eval(formulaOriginalPresupuestoAcumulado).toFixed(3)); //eval(formulaOriginalPresupuestoAcumulado).toFixed(3) >= 0? eval(formulaOriginalPresupuestoAcumulado).toFixed(3) : 0;
 
         }
       }
