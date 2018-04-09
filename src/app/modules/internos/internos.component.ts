@@ -1471,8 +1471,20 @@ getReporteSumaDepartamentos() : void{
     this.hideResultados();
   }
   
+  closeDetallesUnidades (): void{
+    this.showDetalleUnidadesPrimerNivel= false;
+    this.showDetalleUnidadesSegundoNivel= false;
+    this.showDetalleUnidadesTercerNivel= false;
+  }
+
+ closeDetalleUnidadesConcentrado() : void{
+    this.showUnidadesDeptoNivel=1;
+  }
+
   onChangeSucursal(selectedIndex): void {
     this.selectedIdSucursal = selectedIndex;
+    this.closeDetallesUnidades();
+    this.closeDetalleUnidadesConcentrado();
     this.selectedIdSucursalSecuencia = this.sucursales.find(x => x.id === +selectedIndex).idSucursalSecuencia;
 
     if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal) {
@@ -1805,6 +1817,7 @@ getReporteSumaDepartamentos() : void{
   onClickResultado(i: number, value: number, name: string, idEstadoResultado: number, idDetalleResultados: number) {
 
     const idOrden = this.estadoResultados[i].idOrden;
+    this.showResultados=false;
     this.showDetallePrimerNivel = true;
     this.detalleName = name;
     this.detalleValue = value;
