@@ -315,11 +315,22 @@ export class InternosComponent implements OnInit {
       }
      case '2':{
         //Acumulado real
-        if(this.showEstadoResultadoAcumuladoReal===1 || this.showEstadoResultadoAcumuladoReal===2){
-          // this.showEstadoResultadoAcumuladoReal = this.showEstadoResultadoAcumuladoReal === 1 ? 0 : 1;
-          this.showEstadoResultadoAcumuladoReal= 0;
-          }else{
+        if(this.showOriginal===0){
+            if(this.showEstadoResultadoAcumuladoReal===1){
+              this.showOriginal=1;
+            }
+            if(this.showEstadoResultadoAcumuladoReal===2){
+              this.showOriginal=2;
+            }
+            this.showEstadoResultadoAcumuladoReal= 0;
+        }else{
+          if(this.showOriginal===1){
             this.showEstadoResultadoAcumuladoReal=1;
+          }
+          if(this.showOriginal===2){
+            this.showEstadoResultadoAcumuladoReal=2;
+          }
+          this.showOriginal=0;
         }
         break;
       }
@@ -368,16 +379,6 @@ export class InternosComponent implements OnInit {
       return false;
     }
   }
-// desabilitamos el boton de procesar en SUMA DEPARTAMENTOS
-  // disabledProcesarSumaDepartamentos(): boolean {
-  //   const sTipoReporte = this.selectedTipoReporte.toString();
-  //   if (sTipoReporte === '4' || sTipoReporte === '5') {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
   
   disabledButtonPorcentaje() : boolean {
     const sTipoReporte = this.selectedTipoReporte.toString();
@@ -500,6 +501,7 @@ export class InternosComponent implements OnInit {
         this.showSumaDepartamentos = true;
         this.showSumaDepartamentosHeader=false;
         this.showSumaDepartamentosAReal=true;
+        this.showAcumuladoPresupuesto= false;
         this.showResultados= false;
         this.showAcumuladoReal= false;
         this.showReporteUnidades = false;
@@ -747,9 +749,9 @@ export class InternosComponent implements OnInit {
         er.cantidad = this.getIsNumber((eval(formulaOriginal)).toFixed(3)); // (eval(formulaOriginal)).toFixed(3) >= 0 ? (eval(formulaOriginal)).toFixed(3) : 0;
         er.cantidadAcumulado = this.getIsNumber(eval(formulaOriginalAcumulado).toFixed(3)); //eval(formulaOriginalAcumulado).toFixed(3) >= 0?eval(formulaOriginalAcumulado).toFixed(3):0;
         if (er.idOrden == 23) {
+
           er.cantidadPresupuesto = this.getIsNumber((eval(formulaOriginalPresupuesto)).toFixed(3)); //(eval(formulaOriginalPresupuesto)).toFixed(3) >= 0? (eval(formulaOriginalPresupuesto)).toFixed(3) : 0;
           er.cantidadPresupuestoAcumulado = this.getIsNumber(eval(formulaOriginalPresupuestoAcumulado).toFixed(3)); //eval(formulaOriginalPresupuestoAcumulado).toFixed(3) >= 0? eval(formulaOriginalPresupuestoAcumulado).toFixed(3) : 0;
-
         }
       }
     }catch(e) {
