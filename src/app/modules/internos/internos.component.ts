@@ -465,6 +465,8 @@ export class InternosComponent implements OnInit {
       this.getResultadoUnidades();
       this.getEstadoResultados();
       this.getUnidadesDepartamento();
+    } else {
+      this.controlarSpinner(false);
     }
     delete(this.resultadoSumaDepartamentos);
     delete (this.sumaDepartamentosAReal);
@@ -597,12 +599,13 @@ export class InternosComponent implements OnInit {
       periodoMes: this.mes,
       idDepartamento: this.selectedIdDepartamentoEr,
       idSucursalSecuencia: this.selectedIdSucursalSecuencia
-    })
+    }).do(() => { this.controlarSpinner(false); } )
       .subscribe(estadoResultados => {
-        this.estadoResultados = estadoResultados;
-        this.controlarSpinner(false);
+        this.estadoResultados = estadoResultados;        
       },
-      error => { this.errorMessage = <any>error; },
+      error => { 
+        this.errorMessage = <any>error; 
+      },
       () => {
 
         const ventas = this.estadoResultados.find(x => x.idEstadoResultadosI === 54);
@@ -775,12 +778,13 @@ export class InternosComponent implements OnInit {
       periodoYear: this.anio,
       idDepartamento: this.selectedIdDepartamento,
       idSucursalSecuencia: this.selectedIdSucursalSecuencia
-    })
+    }).do(() => { this.controlarSpinner(false); } )
       .subscribe(estadoResultadosAcumuladoReal => {
         this.estadoResultadosAcumuladoReal = estadoResultadosAcumuladoReal;
-        this.controlarSpinner(false);
       },
-      error => { this.errorMessage = <any>error; },
+      error => { 
+        this.errorMessage = <any>error; 
+      },
       () => {
         // Ciclo de 12 meses
         for (let mes = 1; mes <= 12; mes++) {
@@ -833,11 +837,13 @@ getSumaDepartamentosAcumuladoReal(): void {
     xmlDepartamento : this.xmlSend,
     idSucursalSecuencia: this.selectedIdSucursalSecuencia,
     tipoReporte: this.selectedTipoReporte
-  })
+  }).do(() => { this.controlarSpinner(false); } )
     .subscribe(sumaDepartamentos => {
       this.sumaDepartamentosAReal = sumaDepartamentos;
     },
-    error => { this.errorMessage = <any>error; },
+    error => { 
+      this.errorMessage = <any>error;       
+    },
     () => {
       var totalAnual=0;
       // Ciclo de 12 meses
@@ -925,7 +931,7 @@ getSumaDepartamentosAcumuladoReal(): void {
 
 ////////
 getSumaDepartamentos(): void { 
-
+  this.activeSpinner = true;
   var sTipoReporte= this.selectedTipoReporte.toString();
 switch(sTipoReporte){
     case '1':
@@ -946,11 +952,13 @@ getReporteSumaDepartamentos() : void{
     xmlDepartamento : this.xmlSend,
     idSucursalSecuencia: this.selectedIdSucursalSecuencia,
     tipoReporte: this.selectedTipoReporte
-  })
+  }).do(() => { this.controlarSpinner(false); } )
     .subscribe(sumaDepartamentos => {
       this.resultadoSumaDepartamentos = sumaDepartamentos;
     },
-    error => { this.errorMessage = <any>error; },
+    error => { 
+      this.errorMessage = <any>error;
+     },
     () => {
 
       const ventas = this.resultadoSumaDepartamentos.find(x => x.idEstadoResultadosI === 54);
@@ -1283,13 +1291,14 @@ getReporteSumaDepartamentos() : void{
       IdSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       anio: this.anio,
       IdDepartamento: this.selectedIdDepartamentoEr
-    })
+    }).do(() => { this.controlarSpinner(false); } )
       .subscribe(acumuladoReal => {
         this.acumuladoReal = acumuladoReal;
         this.fixedHeader('tableAcumuladoPresupuesto');
-        this.controlarSpinner(false);
       },
-      error => this.errorMessage = <any>error,
+      error => { 
+        this.errorMessage = <any>error;
+      },
       () => {
          // Ciclo de 12 meses
          for (let mes = 1; mes <= 12; mes++) {
@@ -1493,7 +1502,7 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeSucursal(selectedIndex): void {
-    if(!this.activeSpinner){
+    if(!this.activeSpinner && this.selectedCompania != 0){
       this.controlarSpinner(true);
     }
     this.selectedIdSucursal = selectedIndex;
