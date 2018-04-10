@@ -1272,7 +1272,7 @@ getReporteSumaDepartamentos() : void{
 
   getResultadosPresupuesto(): void {
     this._service.get_ResultadosPresupuesto({
-      idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
+      idCompania: this.selectedCompania, //this.selectedIdSucursal > 0 ? 0 : this.selectedCompania, TMC
       IdSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       anio: this.anio,
       IdDepartamento: this.selectedIdDepartamentoEr
