@@ -764,7 +764,7 @@ export class InternosComponent implements OnInit {
 
   getEstadoResultadosAcumuladoReal(): void {
     this._service.getEstadoResultadosAcumuladoReal({
-      idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
+      idCompania: this.selectedCompania, //this.selectedIdSucursal > 0 ?  0 : this.selectedCompania, TMC Se envia siempre la sucursal
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       periodoYear: this.anio,
       idDepartamento: this.selectedIdDepartamento,
