@@ -205,6 +205,7 @@ export class InternosComponent implements OnInit {
     'Rotación de CXP',
     'Neto'
   ];
+  public activeSpinner: boolean = false;
 
   ngOnInit() {
     this.setDefaultDate();
@@ -404,6 +405,9 @@ export class InternosComponent implements OnInit {
     if (this.showSumaDepartamentos== true){
       return;
     }
+    if(!this.activeSpinner){
+      this.controlarSpinner(true);
+    }
     
     const sTipoReporte = this.selectedTipoReporte.toString(); // Aunque se definio como number, la comparacion siempre lo toma como string
     const sCompania = this.selectedCompania.toString();
@@ -414,6 +418,7 @@ export class InternosComponent implements OnInit {
       this.showAcumuladoReal = false;
       this.showAcumuladoPresupuesto = false;
       this.showAcumuladoReal = false;
+      this.controlarSpinner(false);
       //this.FlujoeSituacionfComponent.getEfectivoSituacion();
     } else if (sTipoReporte === '2' && sCompania !== '0') { // Acumulado real
       this.showReporteUnidades = false;
@@ -595,6 +600,7 @@ export class InternosComponent implements OnInit {
     })
       .subscribe(estadoResultados => {
         this.estadoResultados = estadoResultados;
+        this.controlarSpinner(false);
       },
       error => { this.errorMessage = <any>error; },
       () => {
@@ -772,6 +778,7 @@ export class InternosComponent implements OnInit {
     })
       .subscribe(estadoResultadosAcumuladoReal => {
         this.estadoResultadosAcumuladoReal = estadoResultadosAcumuladoReal;
+        this.controlarSpinner(false);
       },
       error => { this.errorMessage = <any>error; },
       () => {
@@ -1280,6 +1287,7 @@ getReporteSumaDepartamentos() : void{
       .subscribe(acumuladoReal => {
         this.acumuladoReal = acumuladoReal;
         this.fixedHeader('tableAcumuladoPresupuesto');
+        this.controlarSpinner(false);
       },
       error => this.errorMessage = <any>error,
       () => {
@@ -1443,6 +1451,8 @@ getReporteSumaDepartamentos() : void{
     if (this.selectedCompania==0){
       this.selectedIdSucursal=-2;
       this.selectedTipoReporte=1;
+    }else {
+      this.controlarSpinner(true);
     }
     
     this.disabledButtonPorcentaje();
@@ -1458,6 +1468,7 @@ getReporteSumaDepartamentos() : void{
    if (this.selectedCompania !== 0 && this.selectedTipoReporte <=3) {     
       // Llenar dropdown de sucursales
       this.getSucursales();
+      this.selectedIdSucursal = 0;
     
     }
    //if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal!==-2) {
@@ -1482,6 +1493,9 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeSucursal(selectedIndex): void {
+    if(!this.activeSpinner){
+      this.controlarSpinner(true);
+    }
     this.selectedIdSucursal = selectedIndex;
     this.closeDetallesUnidades();
     this.closeDetalleUnidadesConcentrado();
@@ -1531,6 +1545,7 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeTipoReporte(newValue: number): void {
+    this.activeSpinner = true;
     this.selectedTipoReporte = newValue;
     this.showOriginal=0;
     this. showOriginalUD=0;
@@ -2093,6 +2108,10 @@ hideResultados(): void{
 
     // Se dispara el evento de cambio en los departamentos seleccionados
    this.onChangeSumaDepartamentos();
+  }
+  // Se encarga de controlar el spinner
+  controlarSpinner(estado) {
+    this.activeSpinner = estado;
   }
 }
 
