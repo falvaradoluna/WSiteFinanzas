@@ -222,25 +222,22 @@ export class InternosComponent implements OnInit {
 
   toggleUnidades(): void {
         
-    if (this.showUnidades === true || this.showDetalleUnidadesSegundoNivel===true 
+    if (this.showUnidades === true || this.showDetalleUnidadesPrimerNivel === true || this.showDetalleUnidadesSegundoNivel===true 
       ||  this.showDetalleUnidadesTercerNivel ===true){
        this.showOriginalUN = 0;
         if (this.showDetalleUnidadesTercerNivel === true){
           this.showOriginalUN = 3;
           this.showDetalleUnidadesTercerNivel = false;
-          this.showUnidades = true;
         }
         if (this.showDetalleUnidadesSegundoNivel === true){
             this.showOriginalUN = 2;
             this.showDetalleUnidadesSegundoNivel = false;
-            this.showUnidades = true;
         }
         if (this.showDetalleUnidadesPrimerNivel === true){
           this.showOriginalUN = 1;
           this.showDetalleUnidadesPrimerNivel = false;
-          
       }
-      this.showUnidades = !this.showUnidades;
+      if (this.showUnidades) {this.showUnidades= !this.showUnidades};
     }else{
       if (this.showUnidades === false && this.showOriginalUN === 0 ){
         this.showUnidades = !this.showUnidades;
@@ -250,18 +247,6 @@ export class InternosComponent implements OnInit {
       if( this.showOriginalUN === 3){this.showDetalleUnidadesTercerNivel = true;}
       this.showOriginalUN = 0;
       }
-      
-   
-
-
-
-    //  if (this.showDetalleUnidadesPrimerNivel==true ||  this.showDetalleUnidadesSegundoNivel==true 
-    //     || this.showDetalleUnidadesTercerNivel==true){
-    //        this.hideDetalleUnidadesTercerNivel();
-    //        this.hideDetalleUnidadesSegundoNivel();
-    //        this.hideDetalleUnidadesPrimerNivel();
-    //    }
-    //   this.showUnidades = !this.showUnidades;
   }
 
   toggleUnidadesAcumuladoPresupuesto() {
@@ -287,11 +272,10 @@ export class InternosComponent implements OnInit {
    switch (tr)
    {
      case '1': {
-        //mensual
-        // this.showResultados = !this.showResultados;
-        if(this.showResultados===true){
+        //mensual         
+        if(this.showResultados===true || this.showDetallePrimerNivel===true ||this.showDetalleSegundoNivel===true ){
           if (this.showDetalleSegundoNivel==true){
-            this.showDetallePrimerNivel=false;
+           // this.showDetallePrimerNivel=false;
             this.showDetalleSegundoNivel=false;
             this.showOriginal=2;
           }
@@ -299,16 +283,22 @@ export class InternosComponent implements OnInit {
             this.showDetallePrimerNivel=false;
             this.showOriginal=1;
           }
-          this.showResultados=false;
+          if ( this.showOriginal===0){
+             this.showResultados=!this.showResultados;
+          }
+          
        }else{
-          this.showResultados=true;
+          if (this.showOriginal===0){
+            this.showResultados=!this.showResultados;
+          }
           if(this.showOriginal===1){           
             this.showDetallePrimerNivel=true;
           }
           if(this.showOriginal===2){
-            this.showDetallePrimerNivel=true;
+           // this.showDetallePrimerNivel=true;
             this.showDetalleSegundoNivel=true;
           }
+          //this.showResultados=true;
           this.showOriginal=0;
         }
        
@@ -401,7 +391,6 @@ export class InternosComponent implements OnInit {
   }
 
   procesar(): void {
-    
     if (this.showSumaDepartamentos== true){
       return;
     }
@@ -446,6 +435,15 @@ export class InternosComponent implements OnInit {
       this.selectedNombreCompania = a.nombreComercial;
     }
   }
+
+private changeCursorWait(): void {
+  document.body.style.cursor='wait';
+}
+
+private changeCursorDefault(): void {
+  document.body.style.cursor='default';
+}
+
 
   private showUnidadesInit(): void {
    if (this.showSumaDepartamentos === false){
@@ -1453,6 +1451,7 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeCompania(newValue: number): void {
+   // this.changeCursorWait();
     this.showOriginal=0;
     this.showOriginalUD=0;
     this.showOriginalUN=0;
@@ -2100,8 +2099,13 @@ hideResultados(): void{
   // Selecciona o deselecciona todas las opciones del select suma de departamentos
   // True = Todos, False = ninguno
   selectTodosDeptos(selected: boolean) {
-   
     // Se actualizan los departamentos seleccionados a TODOS
+    if (selected===true){
+        this.departamentos.forEach(d => {
+          d.Selected = !selected;
+        })
+    }
+
     this.departamentos.forEach(d => {
       d.Selected = selected;
       if (selected === true) {  
