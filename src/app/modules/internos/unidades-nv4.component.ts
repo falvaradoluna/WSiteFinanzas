@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ISeries } from '../../models/reports/series';
+
 import { InternosService } from './internos.service';
-import { ISeries } from './series';
 import { Observable } from 'rxjs/Observable';
 
 @Component({

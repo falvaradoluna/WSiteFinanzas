@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange } from '@angular/core';
+
+import { ITipoUnidad } from '../../models/reports/tipo-unidad';
+
 import { InternosService } from './internos.service';
-import { ITipoUnidad } from './tipo-unidad';
 import { Observable } from 'rxjs/Observable';
 import { ColumnSortedEvent } from '../../shared/index';
 
@@ -357,7 +359,6 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
   }
 
   onClickDetalleUnidadesTipo(tipoUnidad: string, mes: string = '') {
-    if (tipoUnidad.trim() !== 'Total') {
       const idReporte = this.detalleName === 'Real' ? 'MRQ' : 'ARQ'; // Real = mensual y AcReal = Acumulado
 
       if (this.isUnidadesDepto) {
@@ -375,7 +376,6 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       this.idReporte.emit(idReporte);
       this.mesAcumuladoNv3.emit(mes);
       // this.fixedHeader('detalleUnidadesSeries');
-    }
   }
 
   private calculaTotalesMensual() {

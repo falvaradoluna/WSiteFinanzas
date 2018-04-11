@@ -7,7 +7,7 @@ const routes: Routes = [
         path: '',
         component: LayoutComponent,
         children: [
-          { path: '', redirectTo: 'internos' },
+          { path: '', redirectTo: 'blank-page' },
           { path: 'cuentas', loadChildren: '../modules/catalogos/cuentas/cuentas.module#CuentasModule' },
           { path: 'dashboard', loadChildren: './dashboard/dashboard.module#DashboardModule' },
           { path: 'charts', loadChildren: './charts/charts.module#ChartsModule' },

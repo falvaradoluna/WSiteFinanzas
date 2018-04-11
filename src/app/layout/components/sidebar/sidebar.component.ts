@@ -1,13 +1,21 @@
 import { Component, OnInit } from '@angular/core';
+import { SeguridadService } from '../../../services/seguridad.service';
+import 'rxjs/add/operator/catch'
 
 @Component({
     selector: 'app-sidebar',
     templateUrl: './sidebar.component.html',
-    styleUrls: ['./sidebar.component.scss']
+    styleUrls: ['./sidebar.component.scss'],
+    providers: [SeguridadService]
 })
 export class SidebarComponent {
     isActive: boolean = false;
     showMenu: string = '';
+    menu: any = [];
+    
+    constructor(private _service: SeguridadService) {
+        this.getMenu();
+    }
 
     eventCalled() {
         this.isActive = !this.isActive;
@@ -19,5 +27,15 @@ export class SidebarComponent {
         } else {
             this.showMenu = element;
         }
+    }
+
+    getMenu(){
+        let usuario = JSON.parse(localStorage.getItem('userLogged'));
+        this._service.getMenu({ rolId: usuario.idRol })
+        .subscribe(
+            resp => { this.menu = resp; },
+            error => { },
+            () => { }
+        );
     }
 }
