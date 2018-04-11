@@ -568,7 +568,6 @@ export class InternosComponent implements OnInit {
     if(calc != null) {
       var formulaOriginal = calc.formula;
       var formulaOriginalAcumulado = calc.formula;
-
       
       let div = /\//gi;
       let mul = /\*/gi;
