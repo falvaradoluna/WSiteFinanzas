@@ -1220,6 +1220,33 @@ internos.prototype.get_tipoReporte = function (req, res, next) {
     });
   });
 };
+// 
+// /api/internos/detalleunidadeSinDepartamento
+// Funcionalidad para series de Unidades (cuarto nivel de unidades)
+internos.prototype.get_detalleunidadesSinDepartamento = function (req, res, next) {
+  var self = this;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var idOrigen = req.query.idOrigen;
+  var periodoYear = req.query.periodoYear;
+  var periodoMes = req.query.periodoMes;
+  var unidadDescripcion = req.query.unidadDescripcion;
+
+  var params = [
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'idOrigen', value: idOrigen, type: self.model.types.INT },
+    { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'unidadDescripcion', value: unidadDescripcion, type: self.model.types.STRING }
+  ];
+  this.model.query('Unidad.ObtenerDetalleUnidadesXTipoDeUnidad', params, function (error, result) {
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
 
 module.exports = internos;
 
