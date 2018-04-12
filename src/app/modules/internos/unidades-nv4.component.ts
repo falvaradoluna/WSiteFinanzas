@@ -70,7 +70,6 @@ export class UnidadesNv4Component implements OnInit {
       idDepartamento: this.idReporte,
     })
       .subscribe(detalleUnidadesSeries => {
-        //console.log( "Subscribe getDetalleUnidadesSeries" );
         this.detalleUnidadesSeries = detalleUnidadesSeries;
         console.log( "detalleUnidadesSeries", this.detalleUnidadesSeries );
         //this.fixedHeader('tableAcumuladoRealNv2');
