@@ -47,8 +47,7 @@ export class UnidadesNv4Component implements OnInit {
       periodoMes: +this.mes,
       unidadDescripcion: this.tipoAuto,
       isUnidadesDepto: this.isUnidadesDepto,
-      idDepartamento: parseInt(this.idReporte),
-
+      idDepartamento: this.idReporte,
     });
   }
 

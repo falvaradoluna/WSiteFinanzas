@@ -364,15 +364,20 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
 
   onClickDetalleUnidadesTipo(tipoUnidad: string, idDepartamento: number, mes: string = '') {    
     var xmlTipoUnidad: any;
+    var xmlDepartamento: any;
     var xmlUnidadesDescripcion: any = [];
+    var xmlUnidadDepartamento: any = [];
     if(tipoUnidad == 'Total'){
         for ( let i = 0; i <= (this.detalleUnidadesTipo.length - 1); i++ ) {
           xmlUnidadesDescripcion.push('<unidadDescripcion><descripcion>' + this.detalleUnidadesTipo[i].UnidadDescripcion + '</descripcion></unidadDescripcion>');
+          xmlUnidadDepartamento.push('<departamento><id>' + this.detalleUnidadesTipo[i].idDepartamento + '</id></departamento>');
         }
     } else{
       xmlUnidadesDescripcion.push('<unidadDescripcion><descripcion>' + tipoUnidad + '</descripcion></unidadDescripcion>');
+      xmlUnidadDepartamento.push('<departamento><id>' + idDepartamento + '</id></departamento>');
     }
     xmlTipoUnidad = '<unidadesDescripcion>' + xmlUnidadesDescripcion.join('') + '</unidadesDescripcion>';
+    xmlDepartamento = '<departamentos>' + xmlUnidadDepartamento.join('') + '</departamentos>';
 
       const idReporte = this.detalleName === 'Real' ? 'MRQ' : 'ARQ'; // Real = mensual y AcReal = Acumulado
       if (this.isUnidadesDepto) {
@@ -387,7 +392,7 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       this.detalleUnidadesNameTercerNivel.emit(mes);
       this.detalleUnidadesValueTercerNivel.emit(xmlTipoUnidad);
       this.detalleUnidadesConceptoTercerNivel.emit(tipoUnidad);
-      this.idReporte.emit('' + idDepartamento);
+      this.idReporte.emit(xmlDepartamento);
       this.mesAcumuladoNv3.emit(mes);
       //this.idDepartamentoNew.emit(idDepartamento);
       // this.fixedHeader('detalleUnidadesSeries');

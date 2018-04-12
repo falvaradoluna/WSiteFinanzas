@@ -1234,31 +1234,31 @@
                 <ng-container *ngFor='let al of tipoUnidadAcumulado; let i = index;'>
                   <tr>
                     <td>{{ al.UnidadDescripcion }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.enero">{{ al.enero }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 1)" [suma-columnas]="al.enero">{{ al.enero }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.eneroPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.febrero">{{ al.febrero }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 2)" [suma-columnas]="al.febrero">{{ al.febrero }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.febreroPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.marzo">{{ al.marzo }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 3)" [suma-columnas]="al.marzo">{{ al.marzo }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.marzoPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.abril">{{ al.abril }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 4)" [suma-columnas]="al.abril">{{ al.abril }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.abrilPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.mayo">{{ al.mayo }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 5)" [suma-columnas]="al.mayo">{{ al.mayo }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.mayoPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.junio">{{ al.junio }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 6)" [suma-columnas]="al.junio">{{ al.junio }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.junioPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.julio">{{ al.julio }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 7)" [suma-columnas]="al.julio">{{ al.julio }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.julioPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.agosto">{{ al.agosto }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 8)" [suma-columnas]="al.agosto">{{ al.agosto }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.agostoPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.septiembre">{{ al.septiembre }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 9)" [suma-columnas]="al.septiembre">{{ al.septiembre }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.septiembrePerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.octubre">{{ al.octubre }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 10)" [suma-columnas]="al.octubre">{{ al.octubre }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.octubrePerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.noviembre">{{ al.noviembre }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 11)" [suma-columnas]="al.noviembre">{{ al.noviembre }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.noviembrePerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.diciembre">{{ al.diciembre }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 12)" [suma-columnas]="al.diciembre">{{ al.diciembre }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.diciembrePerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.totalAnual">{{ al.totalAnual }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 0)" [suma-columnas]="al.totalAnual">{{ al.totalAnual }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.totalAnualPerc | number:'1.2-2' }}</td>
                   </tr>
                 </ng-container>

@@ -28,4 +28,5 @@ export interface IAutoLineaAcumulado {
   diciembrePerc: number;
   totalAnual: number;
   totalAnualPerc: number;
+  idDepartamento: number;
 }

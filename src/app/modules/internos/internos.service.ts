@@ -389,7 +389,6 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     // Initialize Params Object
     let Params = new HttpParams();
     let url = 'api/internos/detalleunidadesseries';
-
     // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
@@ -628,7 +627,6 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   getDetalleUnidadesSeriesAr(parameters): Observable<ISeries[]> {
     // Initialize Params Object
     let Params = new HttpParams();
-
     // Begin assigning parameters
     Params = Params.append('idCompania',        parameters.idCompania);
     Params = Params.append('idSucursal',        parameters.idSucursal);
@@ -636,6 +634,7 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     Params = Params.append('periodoYear',       parameters.periodoYear);
     Params = Params.append('periodoMes',        parameters.periodoMes);
     Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
+    Params = Params.append('idDepartamento', parameters.idDepartamento);
 
     return this._http.get<ISeries[]>(this._urlDetalleUnidadesSeriesAr, { params: Params })
       .catch(this.handleError);
