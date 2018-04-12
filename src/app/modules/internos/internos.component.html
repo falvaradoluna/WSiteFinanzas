@@ -1,4 +1,10 @@
 <div [@routerTransition]>
+    <div class="preloader" *ngIf="activeSpinner">
+        <div class="loader">
+            <div class="loader__figure"></div>
+            <p class="loader__label">Cargando...</p>
+        </div>
+    </div>
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -98,7 +104,7 @@
             <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
           </button>
         </div>
-
+        
         <!-- BEGIN Unidades Primer Nivel -->
         <table *ngIf='showUnidades && !showDetalleUnidadesPrimerNivel' class="table table-sm table-bordered table-hover-td">
           <thead>
@@ -248,9 +254,10 @@
                             [anio]='anio'
                             [selectedCompania]='selectedCompania'
                             [selectedIdSucursal]='selectedIdSucursal'
+                            [selectedIdDepartamento]='idDepartamento'
                             [tipoAuto]='detalleUnidadesValueTercerNivel'
                             [idReporte]='idReporte'
-                            [deptoFlotillas]='deptoFlotillas'>
+                            [deptoFlotillas]='deptoFlotillas'>  
           </int-unidades-nv4>
         </div>
         <!-- END Unidades Cuarto Nivel -->
@@ -421,7 +428,7 @@
                             [anio]='anio'
                             [selectedCompania]='selectedCompania'
                             [selectedIdSucursal]='selectedIdSucursal'
-                            [selectedIdDepartamento]='selectedIdDepartamento'
+                            [selectedIdDepartamento]='idDepartamento'
                             [tipoAuto]='detalleUnidadesValueTercerNivel'
                             [idReporte]='idReporte'
                             [deptoFlotillas]='deptoFlotillas'
@@ -443,7 +450,7 @@
           </button>
         </div>
 
-        <table *ngIf='showResultados && !showDetallePrimerNivel' class="table table-sm table-bordered table-hover-td">
+        <table *ngIf='showResultados && !showDetallePrimerNivel' class="table-fixed table table-sm table-bordered table-hover-td">
           <thead>
             <tr>
               <th class="bg-secondary text-white col-width-concepto">Concepto</th>
@@ -524,35 +531,35 @@
                 </ng-container>
                 <td class="text-right col-width-perc">
                   <!-- uno -->
-                  {{ r.descripcion === 'ROS' ? (r.presupuestoPorcentaje | percent:'3.2-3') : (r.presupuestoPorcentaje | number:'3.2-3') }}
+                  {{ r.descripcion === 'ROS' ? (r.presupuestoPorcentaje | percent:'1.2-2') : (r.presupuestoPorcentaje | number:'1.2-2') }}
                 </td>
                 <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.variacion, 'Variacion', 3, 2)">
                   {{ r.descripcion === 'ROS' ? (r.variacion | percent:'1.2-2') : (r.variacion | number:'1.2-2') }}
                 </td>
                 <td class="text-right col-width-perc">
                   <!-- xxxxxxx -->
-                  {{ r.descripcion === 'ROS' ? (r.porcentajeVariacion | percent:'3.2-3') : (r.porcentajeVariacion | number:'3.2-3') }}
+                  {{ r.descripcion === 'ROS' ? (r.porcentajeVariacion | percent:'1.2-2') : (r.porcentajeVariacion | number:'1.2-2') }}
                   
                 </td>
                 <ng-container *ngIf='r.descripcion === "Utilidad bruta"; then conTooltipAcReal; else sinTooltipAcReal'> <!-- Se usan templates para ver si lleva o no tooltip-->
                   Esto no se muestra !!!!!!!
                 </ng-container>
                 <td class="text-right col-width-perc">
-                  {{ r.descripcion === 'ROS' ? (r.porcentajeAcumulado | percent:'3.2-3') : (r.porcentajeAcumulado | number:'3.2-3') }}
+                  {{ r.descripcion === 'ROS' ? (r.porcentajeAcumulado | percent:'1.2-2') : (r.porcentajeAcumulado | number:'1.2-2') }}
                   <!-- xxxxx -->
                 </td>
                 <ng-container *ngIf='r.descripcion === "Utilidad bruta"; then conTooltipAcPpto; else sinTooltipAcPpto'> <!-- Se usan templates para ver si lleva o no tooltip-->
                   Esto no se muestra !!!!!!!
                 </ng-container>
                 <td class="text-right col-width-perc">
-                  {{ r.descripcion === 'ROS' ? (r.presupuestoPorcentajeAcumulado | percent:'3.2-3') : (r.presupuestoPorcentajeAcumulado | number:'3.2-3') }}
+                  {{ r.descripcion === 'ROS' ? (r.presupuestoPorcentajeAcumulado | percent:'1.2-2') : (r.presupuestoPorcentajeAcumulado | number:'1.2-2') }}
                   <!-- AAAA -->
                 </td>
                 <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.variacionAcumulado, 'AcVariacion', 3, 3)">
                   {{ r.descripcion === 'ROS' ? (r.variacionAcumulado | percent:'1.2-2') : (r.variacionAcumulado | number:'1.2-2') }}
                 </td>
                 <td class="text-right col-width-perc">
-                  {{ r.descripcion === 'ROS' ? (r.porcentajeVariacionAcumulado | percent:'3.2-3') : (r.porcentajeVariacionAcumulado | number:'3.2-3') }}
+                  {{ r.descripcion === 'ROS' ? (r.porcentajeVariacionAcumulado | percent:'1.2-2') : (r.porcentajeVariacionAcumulado | number:'1.2-2') }}
                   <!-- BBBBB -->
                 </td>
               </tr>
@@ -758,15 +765,15 @@
             </ol>
           </nav>
 
-          <table class="table table-sm table-bordered">
+          <table id='ventasTercerNivelTable' class="table table-sm table-bordered table-responsive table-hover-td table-double-scroll" sortable-table (sorted)="onSorted($event, detalleResultadosCuentas)">
               <thead>
                 <tr>
-                  <th class="bg-orange text-white">TIPOPOL</th>
+                  <th class="bg-orange text-white">TIPOPOLLuis</th>
                   <th class="bg-orange text-white">CONSPOL</th>
                   <th class="bg-orange text-white">NUMCTA</th>
                   <th class="bg-orange text-white">CONCEPTO</th>
-                  <th class="bg-orange text-white">CARGO</th>
-                  <th class="bg-orange text-white">ABONO</th>
+                  <th class="bg-orange text-white" sortable-column='MOV_DEBE'>CARGO</th>
+                  <th class="bg-orange text-white" sortable-column='MOV_HABER'>ABONO</th>
                   <th class="bg-orange text-white">Fecha Operación</th>
                 </tr>
               </thead>
@@ -827,18 +834,18 @@
               <thead>
                 <tr>
                   <th class="bg-secondary text-white col-width-concepto">Concepto</th>
-                  <th class="bg-primary text-white col-width-cantidad">Real</th>
-                  <th class="bg-primary text-white col-width-perc">%</th>
-                  <th class="bg-primary text-white col-width-cantidad">PPto</th>
-                  <th class="bg-primary text-white col-width-perc">%</th>
-                  <th class="bg-primary text-white col-width-cantidad">Variación</th>
-                  <th class="bg-primary text-white col-width-perc">%</th>
-                  <th class="bg-success text-white col-width-cantidad">Real</th>
-                  <th class="bg-success text-white col-width-perc">%</th>
-                  <th class="bg-success text-white col-width-cantidad">PPto</th>
-                  <th class="bg-success text-white col-width-perc">%</th>
-                  <th class="bg-success text-white col-width-cantidad">Variación</th>
-                  <th class="bg-success text-white col-width-perc">%</th>
+                  <th class="bg-primary text-white col-width-cantidad2">Real</th>
+                  <th class="bg-primary text-white col-width-perc2">%</th>
+                  <th class="bg-primary text-white col-width-cantidad2">PPto</th>
+                  <th class="bg-primary text-white col-width-perc2">%</th>
+                  <th class="bg-primary text-white col-width-cantidad2">Variación</th>
+                  <th class="bg-primary text-white col-width-perc2">%</th>
+                  <th class="bg-success text-white col-width-cantidad2">Real</th>
+                  <th class="bg-success text-white col-width-perc2">%</th>
+                  <th class="bg-success text-white col-width-cantidad2">PPto</th>
+                  <th class="bg-success text-white col-width-perc2">%</th>
+                  <th class="bg-success text-white col-width-cantidad2">Variación</th>
+                  <th class="bg-success text-white col-width-perc2">%</th>
                 </tr>
               </thead>
               <tbody>
@@ -850,44 +857,44 @@
                   <ng-template #tipErAcPpto>Por Unidad: {{ calculaTooltip(r.cantidadPresupuestoAcumulado, 9) | number:'1.2-2' }}</ng-template>
     
                   <ng-template #conTooltipReal>
-                    <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidad, 'Real', 1, 0)" [ngbTooltip]="tipErReal" container="body">
+                    <td class="text-right col-width-cantidad2" (click)="onClickResultado(i, r.cantidad, 'Real', 1, 0)" [ngbTooltip]="tipErReal" container="body">
                       {{ r.descripcion === 'ROS' ? (r.cantidad | percent:'1.2-2') : (r.cantidad | number:'1.2-2') }}
                     </td>
                   </ng-template>
                   <ng-template #sinTooltipReal>
-                    <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidad, 'Real', 1, 0)">
+                    <td class="text-right col-width-cantidad2" (click)="onClickResultado(i, r.cantidad, 'Real', 1, 0)">
                       <!--{{(r.cantidad | number:'1.2-2') }}-->
                       {{ r.calculaConFormula ? r.cantidad : (r.cantidad | number:'1.2-2') }}
                     </td>
                   </ng-template>
                   <ng-template #conTooltipPpto>
-                    <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidadPresupuesto, 'PPto', 2, 0)" [ngbTooltip]="tipErPpto" container="body">
+                    <td class="text-right col-width-cantidad2" (click)="onClickResultado(i, r.cantidadPresupuesto, 'PPto', 2, 0)" [ngbTooltip]="tipErPpto" container="body">
                       {{ r.descripcion === 'ROS' ? (r.cantidadPresupuesto | percent:'1.2-2') : (r.cantidadPresupuesto | number:'1.2-2') }}
                     </td>
                   </ng-template>
                   <ng-template #sinTooltipPpto>
-                    <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidadPresupuesto, 'PPto', 2, 0)">
+                    <td class="text-right col-width-cantidad2" (click)="onClickResultado(i, r.cantidadPresupuesto, 'PPto', 2, 0)">
                       {{ r.descripcion === 'ROS' ? (r.cantidadPresupuesto | percent:'1.2-2') : (r.cantidadPresupuesto | number:'1.2-2') }}
                     </td>
                   </ng-template>
                   <ng-template #conTooltipAcReal>
-                    <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidadAcumulado, 'AcReal', 1, 1)" [ngbTooltip]="tipErAcReal" container="body">
+                    <td class="text-right col-width-cantidad2" (click)="onClickResultado(i, r.cantidadAcumulado, 'AcReal', 1, 1)" [ngbTooltip]="tipErAcReal" container="body">
                       {{ r.descripcion === 'ROS' ? (r.cantidadAcumulado | percent:'1.2-2') : (r.cantidadAcumulado | number:'1.2-2') }}
                     </td>
                   </ng-template>
                   <ng-template #sinTooltipAcReal>
-                    <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidadAcumulado, 'AcReal', 1, 1)">                      
+                    <td class="text-right col-width-cantidad2" (click)="onClickResultado(i, r.cantidadAcumulado, 'AcReal', 1, 1)">                      
                       <!--{{(r.cantidadAcumulado | number:'1.2-2') }}-->
                       {{ r.calculaConFormula ? r.cantidadAcumulado : (r.cantidadAcumulado | number:'1.2-2') }}
                     </td>
                   </ng-template>
                   <ng-template #conTooltipAcPpto>
-                    <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidadPresupuestoAcumulado, 'AcPPto', 2, 1)" [ngbTooltip]="tipErAcPpto" container="body">
+                    <td class="text-right col-width-cantidad2" (click)="onClickResultado(i, r.cantidadPresupuestoAcumulado, 'AcPPto', 2, 1)" [ngbTooltip]="tipErAcPpto" container="body">
                       {{ r.descripcion === 'ROS' ? (r.cantidadPresupuestoAcumulado | percent:'1.2-2') : (r.cantidadPresupuestoAcumulado | number:'1.2-2') }}
                     </td>
                   </ng-template>
                   <ng-template #sinTooltipAcPpto>
-                    <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.cantidadPresupuestoAcumulado, 'AcPPto', 2, 1)">
+                    <td class="text-right col-width-cantidad2" (click)="onClickResultado(i, r.cantidadPresupuestoAcumulado, 'AcPPto', 2, 1)">
                       {{ r.descripcion === 'ROS' ? (r.cantidadPresupuestoAcumulado | percent:'1.2-2') : (r.cantidadPresupuestoAcumulado | number:'1.2-2') }}
                     </td>
                   </ng-template>
@@ -897,37 +904,37 @@
                     <ng-container *ngIf='r.descripcion === "Utilidad bruta"; then conTooltipReal; else sinTooltipReal'> <!-- Se usan templates para ver si lleva o no tooltip-->
                       Esto no se muestra !!!!!!!
                     </ng-container>
-                    <td class="text-right col-width-perc">
+                    <td class="text-right col-width-perc2">
                       {{ r.descripcion === 'ROS' ? (r.porcentaje | percent:'1.2-2') : (r.porcentaje | number:'1.2-2') }}
                     </td>
                     <ng-container *ngIf='r.descripcion === "Utilidad bruta"; then conTooltipPpto; else sinTooltipPpto'> <!-- Se usan templates para ver si lleva o no tooltip-->
                       Esto no se muestra !!!!!!!
                     </ng-container>
-                    <td class="text-right col-width-perc">
+                    <td class="text-right col-width-perc2">
                       {{ r.descripcion === 'ROS' ? (r.presupuestoPorcentaje | percent:'1.2-2') : (r.presupuestoPorcentaje | number:'1.2-2') }}
                     </td>
-                    <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.variacion, 'Variacion', 3, 2)">
+                    <td class="text-right col-width-cantidad2" (click)="onClickResultado(i, r.variacion, 'Variacion', 3, 2)">
                       {{ r.descripcion === 'ROS' ? (r.variacion | percent:'1.2-2') : (r.variacion | number:'1.2-2') }}
                     </td>
-                    <td class="text-right col-width-perc">
+                    <td class="text-right col-width-perc2">
                       {{ r.descripcion === 'ROS' ? (r.porcentajeVariacion | percent:'1.2-2') : (r.porcentajeVariacion | number:'1.2-2') }}
                     </td>
                     <ng-container *ngIf='r.descripcion === "Utilidad bruta"; then conTooltipAcReal; else sinTooltipAcReal'> <!-- Se usan templates para ver si lleva o no tooltip-->
                       Esto no se muestra !!!!!!!
                     </ng-container>
-                    <td class="text-right col-width-perc">
+                    <td class="text-right col-width-perc2">
                       {{ r.descripcion === 'ROS' ? (r.porcentajeAcumulado | percent:'1.2-2') : (r.porcentajeAcumulado | number:'1.2-2') }}
                     </td>
                     <ng-container *ngIf='r.descripcion === "Utilidad bruta"; then conTooltipAcPpto; else sinTooltipAcPpto'> <!-- Se usan templates para ver si lleva o no tooltip-->
                       Esto no se muestra !!!!!!!
                     </ng-container>
-                    <td class="text-right col-width-perc">
+                    <td class="text-right col-width-perc2">
                       {{ r.descripcion === 'ROS' ? (r.presupuestoPorcentajeAcumulado | percent:'1.2-2') : (r.presupuestoPorcentajeAcumulado | number:'1.2-2') }}
                     </td>
-                    <td class="text-right col-width-cantidad" (click)="onClickResultado(i, r.variacionAcumulado, 'AcVariacion', 3, 3)">
+                    <td class="text-right col-width-cantidad2" (click)="onClickResultado(i, r.variacionAcumulado, 'AcVariacion', 3, 3)">
                       {{ r.descripcion === 'ROS' ? (r.variacionAcumulado | percent:'1.2-2') : (r.variacionAcumulado | number:'1.2-2') }}
                     </td>
-                    <td class="text-right col-width-perc">
+                    <td class="text-right col-width-perc2">
                       {{ r.descripcion === 'ROS' ? (r.porcentajeVariacionAcumulado | percent:'1.2-2') : (r.porcentajeVariacionAcumulado | number:'1.2-2') }}
                     </td>
                   </tr>
@@ -1227,31 +1234,31 @@
                 <ng-container *ngFor='let al of tipoUnidadAcumulado; let i = index;'>
                   <tr>
                     <td>{{ al.UnidadDescripcion }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.enero">{{ al.enero }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 1)" [suma-columnas]="al.enero">{{ al.enero }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.eneroPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.febrero">{{ al.febrero }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 2)" [suma-columnas]="al.febrero">{{ al.febrero }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.febreroPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.marzo">{{ al.marzo }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 3)" [suma-columnas]="al.marzo">{{ al.marzo }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.marzoPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.abril">{{ al.abril }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 4)" [suma-columnas]="al.abril">{{ al.abril }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.abrilPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.mayo">{{ al.mayo }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 5)" [suma-columnas]="al.mayo">{{ al.mayo }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.mayoPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.junio">{{ al.junio }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 6)" [suma-columnas]="al.junio">{{ al.junio }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.junioPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.julio">{{ al.julio }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 7)" [suma-columnas]="al.julio">{{ al.julio }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.julioPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.agosto">{{ al.agosto }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 8)" [suma-columnas]="al.agosto">{{ al.agosto }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.agostoPerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.septiembre">{{ al.septiembre }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 9)" [suma-columnas]="al.septiembre">{{ al.septiembre }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.septiembrePerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.octubre">{{ al.octubre }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 10)" [suma-columnas]="al.octubre">{{ al.octubre }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.octubrePerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.noviembre">{{ al.noviembre }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 11)" [suma-columnas]="al.noviembre">{{ al.noviembre }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.noviembrePerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.diciembre">{{ al.diciembre }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 12)" [suma-columnas]="al.diciembre">{{ al.diciembre }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.diciembrePerc | number:'1.2-2' }}</td>
-                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion)" [suma-columnas]="al.totalAnual">{{ al.totalAnual }}</td>
+                    <td class="text-center" (dblclick)="onClickUnidadesAcumuladoRealNv3(al.UnidadDescripcion, al.idDepartamento, 0)" [suma-columnas]="al.totalAnual">{{ al.totalAnual }}</td>
                     <td class="text-center" *ngIf='showPercents'>{{ al.totalAnualPerc | number:'1.2-2' }}</td>
                   </tr>
                 </ng-container>
@@ -1573,62 +1580,62 @@
               <tr>
                 <th class="bg-secondary text-white">Departamento</th>
                 <th class="bg-primary text-white">Enero</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Febrero</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Marzo</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Abril</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Mayo</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Junio</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Julio</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Agosto</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Septiembre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Octubre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Noviembre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Diciembre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Suma</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor='let uap of unidadesAcumuladoPresupuesto' [ngClass]="{'table-info': uap.descripcion.trim() === 'Total Unidades'}">
                 <td>{{ uap.descripcion }}</td>
                 <td class="text-center">{{ uap.enero }}</td>
-                <td class="text-center">{{ uap.eneroPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.eneroPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.febrero }}</td>
-                <td class="text-center">{{ uap.febreroPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.febreroPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.marzo }}</td>
-                <td class="text-center">{{ uap.marzoPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.marzoPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.abril }}</td>
-                <td class="text-center">{{ uap.abrilPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.abrilPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.mayo }}</td>
-                <td class="text-center">{{ uap.mayoPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.mayoPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.junio }}</td>
-                <td class="text-center">{{ uap.junioPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.junioPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.julio }}</td>
-                <td class="text-center">{{ uap.julioPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.julioPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.agosto }}</td>
-                <td class="text-center">{{ uap.agostoPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.agostoPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.septiembre }}</td>
-                <td class="text-center">{{ uap.septiembrePerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.septiembrePerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.octubre }}</td>
-                <td class="text-center">{{ uap.octubrePerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.octubrePerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.noviembre }}</td>
-                <td class="text-center">{{ uap.noviembrePerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.noviembrePerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.diciembre }}</td>
-                <td class="text-center">{{ uap.diciembrePerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.diciembrePerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.totalAnual }}</td>
-                <td class="text-center">{{ uap.totalAnualPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.totalAnualPerc | number:'1.2-2' }}</td>
               </tr>
             </tbody>
           </table>
@@ -1818,3 +1825,5 @@
   </div>
   <!-- END Estado de resultados -->
 </div>
+
+

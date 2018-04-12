@@ -28,4 +28,5 @@ export interface ITipoUnidad {
   diciembrePerc: number;
   totalAnual: number;
   totalAnualPerc: number;
+  idDepartamento: number;
 }
