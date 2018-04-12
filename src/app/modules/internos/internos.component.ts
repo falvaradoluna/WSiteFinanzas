@@ -885,20 +885,36 @@ getSumaDepartamentosAcumuladoReal(): void {
   );
 }
 
-  onClickUnidadesAcumuladoRealNv3(UnidadDescripcion: string) {
+  onClickUnidadesAcumuladoRealNv3(UnidadDescripcion: string, idDepartamento: number, mesSelccionado: number) {
     this.detalleUnidadesAcumuladoRealCuartoNivel = UnidadDescripcion;
     this.showUnidadesAcumuladoReal = 4;
-    this.getDetalleUnidadesSeriesArNv4(UnidadDescripcion);
+    this.getDetalleUnidadesSeriesArNv4(UnidadDescripcion, idDepartamento, mesSelccionado);
   }
 
-  getDetalleUnidadesSeriesArNv4(UnidadDescripcion): void {
+  getDetalleUnidadesSeriesArNv4(UnidadDescripcion, idDepartamento, mesSelccionado): void {
+    var xmlTipoUnidad: any;
+    var xmlDepartamento: any;
+    var xmlUnidadesDescripcion: any = [];
+    var xmlUnidadDepartamento: any = [];
+    if(UnidadDescripcion == ''){
+      for ( let i = 0; i <= (this.tipoUnidadAcumulado.length - 1); i++ ) {
+        xmlUnidadesDescripcion.push('<unidadDescripcion><descripcion>' + this.tipoUnidadAcumulado[i].UnidadDescripcion + '</descripcion></unidadDescripcion>');
+          xmlUnidadDepartamento.push('<departamento><id>' + this.tipoUnidadAcumulado[i].idDepartamento + '</id></departamento>');
+      }
+    } else {
+    xmlUnidadesDescripcion.push('<unidadDescripcion><descripcion>' + UnidadDescripcion + '</descripcion></unidadDescripcion>');
+    xmlUnidadDepartamento.push('<departamento><id>' + idDepartamento + '</id></departamento>');
+    }
+  xmlTipoUnidad = '<unidadesDescripcion>' + xmlUnidadesDescripcion.join('') + '</unidadesDescripcion>';
+  xmlDepartamento = '<departamentos>' + xmlUnidadDepartamento.join('') + '</departamentos>';
      this._service.getDetalleUnidadesSeriesAr({
       idCompania:         this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
       idSucursal:         this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       idOrigen:           this.idOrigen,
       periodoYear:        this.anio,
-      periodoMes:         this.mes,
-      unidadDescripcion:  UnidadDescripcion
+      periodoMes:         mesSelccionado,
+      unidadDescripcion:  xmlTipoUnidad,
+      idDepartamento: xmlDepartamento
     })
     .subscribe(resultadosSeriesArNv4 => {
       this.resultadosSeriesArNv4 = resultadosSeriesArNv4;
@@ -1647,7 +1663,7 @@ getReporteSumaDepartamentos() : void{
   }
 
   onClickUnidadesAcumuladoRealNv2(idAutoLinea: number, carLine: string) {
-    if (carLine.trim() !== 'Total') {
+    if (carLine.trim() !== 'Total' && carLine.trim() !== '') {
       this.showUnidadesAcumuladoReal = 3;
       this.detalleUnidadesNameSegundoNivel = '';
       this.detalleUnidadesValueSegundoNivel = carLine; // Revisar ya que son 3 que usan el mismo valor
@@ -1726,7 +1742,8 @@ getReporteSumaDepartamentos() : void{
           'diciembre': 0,
           'diciembrePerc': 100,
           'totalAnual': 0,
-          'totalAnualPerc': 100
+          'totalAnualPerc': 100,
+          'idDepartamento': 0
         };
 
         // Ciclo de 12 meses
@@ -1803,7 +1820,8 @@ getReporteSumaDepartamentos() : void{
           'diciembre': 0,
           'diciembrePerc': 100,
           'totalAnual': 0,
-          'totalAnualPerc': 100
+          'totalAnualPerc': 100,
+          'idDepartamento': 0
         };
 
         // Ciclo de 12 meses
