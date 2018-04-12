@@ -3,6 +3,7 @@ import { ISeries } from '../../models/reports/series';
 
 import { InternosService } from './internos.service';
 import { Observable } from 'rxjs/Observable';
+import { ColumnSortedEvent } from '../../shared/services/sort.service';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -48,6 +49,19 @@ export class UnidadesNv4Component implements OnInit {
       isUnidadesDepto: this.isUnidadesDepto,
       idDepartamento: parseInt(this.idReporte),
 
+    });
+  }
+
+  //LAGP
+  // Ordenamiento de tabla
+  onSorted(event: ColumnSortedEvent, obj: Object[]) {
+    // Se pasa como referencia el objeto que se quiere ordenar
+    obj.sort(function (a, b) {
+      if (event.sortDirection === 'asc') {
+        return a[event.sortColumn] - b[event.sortColumn];
+      } else {
+        return b[event.sortColumn] - a[event.sortColumn];
+      }
     });
   }
 }

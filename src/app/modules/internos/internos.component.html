@@ -765,15 +765,15 @@
             </ol>
           </nav>
 
-          <table class="table table-sm table-bordered">
+          <table id='ventasTercerNivelTable' class="table table-sm table-bordered table-responsive table-hover-td table-double-scroll" sortable-table (sorted)="onSorted($event, detalleResultadosCuentas)">
               <thead>
                 <tr>
-                  <th class="bg-orange text-white">TIPOPOL</th>
+                  <th class="bg-orange text-white">TIPOPOLLuis</th>
                   <th class="bg-orange text-white">CONSPOL</th>
                   <th class="bg-orange text-white">NUMCTA</th>
                   <th class="bg-orange text-white">CONCEPTO</th>
-                  <th class="bg-orange text-white">CARGO</th>
-                  <th class="bg-orange text-white">ABONO</th>
+                  <th class="bg-orange text-white" sortable-column='MOV_DEBE'>CARGO</th>
+                  <th class="bg-orange text-white" sortable-column='MOV_HABER'>ABONO</th>
                   <th class="bg-orange text-white">Fecha Operación</th>
                 </tr>
               </thead>

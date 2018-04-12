@@ -2091,6 +2091,7 @@ hideResultados(): void{
   onSorted(event: ColumnSortedEvent, obj: Object[]) {
     // Se pasa como referencia el objeto que se quiere ordenar
     obj.sort(function (a, b) {
+      
       if (event.sortDirection === 'asc') {
         return a[event.sortColumn] - b[event.sortColumn];
       } else {
