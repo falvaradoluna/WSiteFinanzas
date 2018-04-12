@@ -25,7 +25,7 @@ export class UnidadesNv4Component implements OnInit {
   @Input() deptoFlotillas: string;
 
   @Input() isUnidadesDepto: boolean;
-  @Input() selectedIdDepartamento: number;
+  @Input() selectedIdDepartamento: string;
 
 
   detalleUnidadesSeries: Observable<ISeries[]>;
@@ -45,7 +45,9 @@ export class UnidadesNv4Component implements OnInit {
       periodoYear: +this.anio,
       periodoMes: +this.mes,
       unidadDescripcion: this.tipoAuto,
-      isUnidadesDepto: this.isUnidadesDepto
+      isUnidadesDepto: this.isUnidadesDepto,
+      idDepartamento: parseInt(this.idReporte),
+
     });
   }
 }

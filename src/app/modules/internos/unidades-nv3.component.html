@@ -9,7 +9,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor='let d of detalleUnidadesTipo; let i = index;' (dblclick)='onClickDetalleUnidadesTipo(d.UnidadDescripcion)'>
+        <tr *ngFor='let d of detalleUnidadesTipo; let i = index;' (dblclick)='onClickDetalleUnidadesTipo(d.UnidadDescripcion, d.idDepartamento)'>
           <td>{{ d.UnidadDescripcion }}</td>
           <td class="text-center" [suma-columnas]='d.Cantidad'>{{ d.Cantidad }}</td>
           <td *ngIf='showPercents' class="text-right" [suma-columnas]='d.Perc'>{{ d.Perc | number: '1.2-2' }}</td>
@@ -58,27 +58,27 @@
       <td>{{ dut.UnidadDescripcion }}</td>
       <td class="text-center" [suma-columnas]='dut.enero' (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "01")'>{{ dut.enero }}</td>
       <td *ngIf='showPercents' class="text-right" [suma-columnas]='dut.eneroPerc'>{{ dut.eneroPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "02"' [suma-columnas]='dut.febrero' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "02")'>{{ dut.febrero }}</td>
+      <td *ngIf='mes >= "02"' [suma-columnas]='dut.febrero' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, dut.idDepartamento, "02")'>{{ dut.febrero }}</td>
       <td *ngIf='mes >= "02" && showPercents' [suma-columnas]='dut.febreroPerc' class="text-right">{{ dut.febreroPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "03"' [suma-columnas]='dut.marzo' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "03")'>{{ dut.marzo }}</td>
+      <td *ngIf='mes >= "03"' [suma-columnas]='dut.marzo' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, dut.idDepartamento, "03")'>{{ dut.marzo }}</td>
       <td *ngIf='mes >= "03" && showPercents' [suma-columnas]='dut.marzoPerc' class="text-right">{{ dut.marzoPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "04"' [suma-columnas]='dut.abril' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "04")'>{{ dut.abril }}</td>
+      <td *ngIf='mes >= "04"' [suma-columnas]='dut.abril' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, dut.idDepartamento, "04")'>{{ dut.abril }}</td>
       <td *ngIf='mes >= "04" && showPercents' [suma-columnas]='dut.abrilPerc' class="text-right">{{ dut.abrilPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "05"' [suma-columnas]='dut.mayo' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "05")'>{{ dut.mayo }}</td>
+      <td *ngIf='mes >= "05"' [suma-columnas]='dut.mayo' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, dut.idDepartamento, "05")'>{{ dut.mayo }}</td>
       <td *ngIf='mes >= "05" && showPercents' [suma-columnas]='dut.mayoPerc' class="text-right">{{ dut.mayoPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "06"' [suma-columnas]='dut.junio' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "06")'>{{ dut.junio }}</td>
+      <td *ngIf='mes >= "06"' [suma-columnas]='dut.junio' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, dut.idDepartamento, "06")'>{{ dut.junio }}</td>
       <td *ngIf='mes >= "06" && showPercents' [suma-columnas]='dut.junioPerc' class="text-right">{{ dut.junioPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "07"' [suma-columnas]='dut.julio' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "07")'>{{ dut.julio }}</td>
+      <td *ngIf='mes >= "07"' [suma-columnas]='dut.julio' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, dut.idDepartamento, "07")'>{{ dut.julio }}</td>
       <td *ngIf='mes >= "07" && showPercents' [suma-columnas]='dut.julioPerc' class="text-right">{{ dut.julioPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "08"' [suma-columnas]='dut.agosto' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "08")'>{{ dut.agosto }}</td>
+      <td *ngIf='mes >= "08"' [suma-columnas]='dut.agosto' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, dut.idDepartamento, "08")'>{{ dut.agosto }}</td>
       <td *ngIf='mes >= "08" && showPercents' [suma-columnas]='dut.agostoPerc' class="text-right">{{ dut.agostoPerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "09"' [suma-columnas]='dut.septiembre' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "09")'>{{ dut.septiembre }}</td>
+      <td *ngIf='mes >= "09"' [suma-columnas]='dut.septiembre' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, dut.idDepartamento, "09")'>{{ dut.septiembre }}</td>
       <td *ngIf='mes >= "09" && showPercents' [suma-columnas]='dut.septiembrePerc' class="text-right">{{ dut.septiembrePerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "10"' [suma-columnas]='dut.octubre' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "10")'>{{ dut.octubre }}</td>
+      <td *ngIf='mes >= "10"' [suma-columnas]='dut.octubre' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, dut.idDepartamento, "10")'>{{ dut.octubre }}</td>
       <td *ngIf='mes >= "10" && showPercents' [suma-columnas]='dut.octubrePerc' class="text-right">{{ dut.octubrePerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "11"' [suma-columnas]='dut.noviembre' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "11")'>{{ dut.noviembre }}</td>
+      <td *ngIf='mes >= "11"' [suma-columnas]='dut.noviembre' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, dut.idDepartamento, "11")'>{{ dut.noviembre }}</td>
       <td *ngIf='mes >= "11" && showPercents' [suma-columnas]='dut.noviembrePerc' class="text-right">{{ dut.noviembrePerc | number:'1.2-2' }}</td>
-      <td *ngIf='mes >= "12"' [suma-columnas]='dut.diciembre' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, "12")'>{{ dut.diciembre }}</td>
+      <td *ngIf='mes >= "12"' [suma-columnas]='dut.diciembre' class="text-center" (dblclick)='onClickDetalleUnidadesTipo(dut.UnidadDescripcion, dut.idDepartamento, "12")'>{{ dut.diciembre }}</td>
       <td *ngIf='mes >= "12" && showPercents' [suma-columnas]='dut.diciembrePerc' class="text-right">{{ dut.diciembrePerc | number:'1.2-2' }}</td>
       <td class="text-center" [suma-columnas]='dut.totalAnual'>{{ dut.totalAnual }}</td>
       <td *ngIf='showPercents' class="text-right" [suma-columnas]='dut.totalAnualPerc'>{{ dut.totalAnualPerc | number:'1.2-2' }}</td>

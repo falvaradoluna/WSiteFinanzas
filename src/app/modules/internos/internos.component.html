@@ -254,9 +254,10 @@
                             [anio]='anio'
                             [selectedCompania]='selectedCompania'
                             [selectedIdSucursal]='selectedIdSucursal'
+                            [selectedIdDepartamento]='idDepartamento'
                             [tipoAuto]='detalleUnidadesValueTercerNivel'
                             [idReporte]='idReporte'
-                            [deptoFlotillas]='deptoFlotillas'>
+                            [deptoFlotillas]='deptoFlotillas'>  
           </int-unidades-nv4>
         </div>
         <!-- END Unidades Cuarto Nivel -->
@@ -427,7 +428,7 @@
                             [anio]='anio'
                             [selectedCompania]='selectedCompania'
                             [selectedIdSucursal]='selectedIdSucursal'
-                            [selectedIdDepartamento]='selectedIdDepartamento'
+                            [selectedIdDepartamento]='idDepartamento'
                             [tipoAuto]='detalleUnidadesValueTercerNivel'
                             [idReporte]='idReporte'
                             [deptoFlotillas]='deptoFlotillas'
@@ -449,7 +450,7 @@
           </button>
         </div>
 
-        <table *ngIf='showResultados && !showDetallePrimerNivel' class="table table-sm table-bordered table-hover-td">
+        <table *ngIf='showResultados && !showDetallePrimerNivel' class="table-fixed table table-sm table-bordered table-hover-td">
           <thead>
             <tr>
               <th class="bg-secondary text-white col-width-concepto">Concepto</th>
@@ -1579,62 +1580,62 @@
               <tr>
                 <th class="bg-secondary text-white">Departamento</th>
                 <th class="bg-primary text-white">Enero</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Febrero</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Marzo</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Abril</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Mayo</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Junio</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Julio</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Agosto</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Septiembre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Octubre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Noviembre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Diciembre</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
                 <th class="bg-primary text-white">Suma</th>
-                <th class="bg-primary text-white">%</th>
+                <th class="bg-primary text-white" *ngIf='showPercents'>%</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor='let uap of unidadesAcumuladoPresupuesto' [ngClass]="{'table-info': uap.descripcion.trim() === 'Total Unidades'}">
                 <td>{{ uap.descripcion }}</td>
                 <td class="text-center">{{ uap.enero }}</td>
-                <td class="text-center">{{ uap.eneroPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.eneroPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.febrero }}</td>
-                <td class="text-center">{{ uap.febreroPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.febreroPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.marzo }}</td>
-                <td class="text-center">{{ uap.marzoPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.marzoPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.abril }}</td>
-                <td class="text-center">{{ uap.abrilPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.abrilPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.mayo }}</td>
-                <td class="text-center">{{ uap.mayoPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.mayoPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.junio }}</td>
-                <td class="text-center">{{ uap.junioPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.junioPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.julio }}</td>
-                <td class="text-center">{{ uap.julioPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.julioPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.agosto }}</td>
-                <td class="text-center">{{ uap.agostoPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.agostoPerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.septiembre }}</td>
-                <td class="text-center">{{ uap.septiembrePerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.septiembrePerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.octubre }}</td>
-                <td class="text-center">{{ uap.octubrePerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.octubrePerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.noviembre }}</td>
-                <td class="text-center">{{ uap.noviembrePerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.noviembrePerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.diciembre }}</td>
-                <td class="text-center">{{ uap.diciembrePerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.diciembrePerc | number:'1.2-2' }}</td>
                 <td class="text-center">{{ uap.totalAnual }}</td>
-                <td class="text-center">{{ uap.totalAnualPerc | number:'1.2-2' }}</td>
+                <td class="text-center" *ngIf='showPercents'>{{ uap.totalAnualPerc | number:'1.2-2' }}</td>
               </tr>
             </tbody>
           </table>

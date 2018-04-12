@@ -398,6 +398,7 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
+    Params = Params.append('idDepartamento', parameters.idDepartamento);
 
     if (parameters.isUnidadesDepto) {
       url = 'api/internos/detalleunidadesdepartamentoseries';

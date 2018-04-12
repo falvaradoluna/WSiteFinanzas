@@ -42,6 +42,7 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
   @Output() mesAcumuladoNv3 = new EventEmitter<string>();
   @Output() idReporte = new EventEmitter<string>();
   @Output() fixedHeaderId = new EventEmitter<string>();
+  @Output() idDepartamentoNew: EventEmitter<number> = new EventEmitter<number>();
 
   @Output() showUnidadesDepartamentoByLevel = new EventEmitter<number>();
 
@@ -159,7 +160,8 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
           'diciembre': 0,
           'diciembrePerc': 100,
           'totalAnual': 0,
-          'totalAnualPerc': 100
+          'totalAnualPerc': 100,
+          'idDepartamento': 0
         };
         this.detalleUnidadesTipo.push(t);
 
@@ -224,7 +226,8 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
           'diciembre': 0,
           'diciembrePerc': 100,
           'totalAnual': 0,
-          'totalAnualPerc': 100
+          'totalAnualPerc': 100,
+          'idDepartamento': 0
         };
 
         // Ciclo de 12 meses
@@ -308,7 +311,8 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
           'diciembre': 0,
           'diciembrePerc': 100,
           'totalAnual': 0,
-          'totalAnualPerc': 100
+          'totalAnualPerc': 100,
+          'idDepartamento': 0
         };
 
         // Ciclo de 12 meses
@@ -358,9 +362,19 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
     return month;
   }
 
-  onClickDetalleUnidadesTipo(tipoUnidad: string, mes: string = '') {
-      const idReporte = this.detalleName === 'Real' ? 'MRQ' : 'ARQ'; // Real = mensual y AcReal = Acumulado
+  onClickDetalleUnidadesTipo(tipoUnidad: string, idDepartamento: number, mes: string = '') {    
+    var xmlTipoUnidad: any;
+    var xmlUnidadesDescripcion: any = [];
+    if(tipoUnidad == 'Total'){
+        for ( let i = 0; i <= (this.detalleUnidadesTipo.length - 1); i++ ) {
+          xmlUnidadesDescripcion.push('<unidadDescripcion><descripcion>' + this.detalleUnidadesTipo[i].UnidadDescripcion + '</descripcion></unidadDescripcion>');
+        }
+    } else{
+      xmlUnidadesDescripcion.push('<unidadDescripcion><descripcion>' + tipoUnidad + '</descripcion></unidadDescripcion>');
+    }
+    xmlTipoUnidad = '<unidadesDescripcion>' + xmlUnidadesDescripcion.join('') + '</unidadesDescripcion>';
 
+      const idReporte = this.detalleName === 'Real' ? 'MRQ' : 'ARQ'; // Real = mensual y AcReal = Acumulado
       if (this.isUnidadesDepto) {
         this.showUnidadesDepartamentoByLevel.emit(4);
       } else {
@@ -371,10 +385,11 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       }
 
       this.detalleUnidadesNameTercerNivel.emit(mes);
-      this.detalleUnidadesValueTercerNivel.emit(tipoUnidad);
+      this.detalleUnidadesValueTercerNivel.emit(xmlTipoUnidad);
       this.detalleUnidadesConceptoTercerNivel.emit(tipoUnidad);
-      this.idReporte.emit(idReporte);
+      this.idReporte.emit('' + idDepartamento);
       this.mesAcumuladoNv3.emit(mes);
+      //this.idDepartamentoNew.emit(idDepartamento);
       // this.fixedHeader('detalleUnidadesSeries');
   }
 
@@ -410,7 +425,8 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       'diciembre': 0,
       'diciembrePerc': 100,
       'totalAnual': 0,
-      'totalAnualPerc': 100
+      'totalAnualPerc': 100,
+      'idDepartamento': 0
     };
     this.detalleUnidadesTipo.push(t);
 
