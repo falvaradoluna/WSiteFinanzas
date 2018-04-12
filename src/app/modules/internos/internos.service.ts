@@ -387,8 +387,8 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
 
   getDetalleUnidadesSeries(parameters): Observable<ISeries[]> {
     // Initialize Params Object
-    let Params = new HttpParams();
-    let url = 'api/internos/detalleunidadesseries';
+    let Params = new HttpParams();    
+    var url: string;
     // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
@@ -397,12 +397,18 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
-    Params = Params.append('idDepartamento', parameters.idDepartamento);
+    if(parameters.idOrigen !== 3){
+        url = 'api/internos/detalleunidadesSinDepartamento';  
+        console.log();
+      } else {
+        Params = Params.append('idDepartamento', parameters.idDepartamento);
+        url = 'api/internos/detalleunidadesseries';
+      }
 
     if (parameters.isUnidadesDepto) {
       url = 'api/internos/detalleunidadesdepartamentoseries';
     }
-
+    
     return this._http.get<ISeries[]>(url, { params: Params })
       .catch(this.handleError);
   }
