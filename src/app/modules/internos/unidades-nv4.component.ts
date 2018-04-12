@@ -3,7 +3,7 @@ import { ISeries } from '../../models/reports/series';
 
 import { InternosService } from './internos.service';
 import { Observable } from 'rxjs/Observable';
-import { ColumnSortedEvent } from '../../shared/services/sort.service';
+import { ColumnSortedEvent } from '../../shared/index';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -12,6 +12,8 @@ import { ColumnSortedEvent } from '../../shared/services/sort.service';
   styleUrls: ['./internos.component.scss']
 })
 export class UnidadesNv4Component implements OnInit {
+
+  errorMessage: any;
 
   @Input() detalleUnidadesConcepto: string;
   @Input() detalleUnidadesConceptoSegundoNivel: string;
@@ -29,16 +31,34 @@ export class UnidadesNv4Component implements OnInit {
   @Input() selectedIdDepartamento: string;
 
 
-  detalleUnidadesSeries: Observable<ISeries[]>;
+  //detalleUnidadesSeries: Observable<ISeries[]>;
+  detalleUnidadesSeries: ISeries[] = [];
 
   constructor(private _service: InternosService) { }
 
   ngOnInit() {
-    this.detalleUnidadesSeries = this.getDetalleUnidadesSeries();
+    //this.detalleUnidadesSeries = this.getDetalleUnidadesSeries();
+    this.getDetalleUnidadesSeries()
+    //console.log( "detalleUnidadesSeries", this.detalleUnidadesSeries );
   }
 
-  getDetalleUnidadesSeries(): Observable<ISeries[]> {
-    return this._service.getDetalleUnidadesSeries({
+  // getDetalleUnidadesSeries(): Observable<ISeries[]> {
+  //   return this._service.getDetalleUnidadesSeries({
+  //     idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
+  //     idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+  //     idOrigen: this.idOrigen,
+  //     idPestana: this.selectedIdDepartamento,
+  //     periodoYear: +this.anio,
+  //     periodoMes: +this.mes,
+  //     unidadDescripcion: this.tipoAuto,
+  //     isUnidadesDepto: this.isUnidadesDepto,
+  //     idDepartamento: this.idReporte,
+  //   });
+  // }
+
+  getDetalleUnidadesSeries(): void {
+
+    this._service.getDetalleUnidadesSeries({
       idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       idOrigen: this.idOrigen,
@@ -48,13 +68,22 @@ export class UnidadesNv4Component implements OnInit {
       unidadDescripcion: this.tipoAuto,
       isUnidadesDepto: this.isUnidadesDepto,
       idDepartamento: this.idReporte,
-    });
+    })
+      .subscribe(detalleUnidadesSeries => {
+        //console.log( "Subscribe getDetalleUnidadesSeries" );
+        this.detalleUnidadesSeries = detalleUnidadesSeries;
+        console.log( "detalleUnidadesSeries", this.detalleUnidadesSeries );
+        //this.fixedHeader('tableAcumuladoRealNv2');
+      },
+      error => this.errorMessage = <any>error);
   }
 
   //LAGP
   // Ordenamiento de tabla
   onSorted(event: ColumnSortedEvent, obj: Object[]) {
     // Se pasa como referencia el objeto que se quiere ordenar
+    console.log( "obj", obj );
+    console.log( "event", event );
     obj.sort(function (a, b) {
       if (event.sortDirection === 'asc') {
         return a[event.sortColumn] - b[event.sortColumn];
