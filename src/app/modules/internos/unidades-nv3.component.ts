@@ -367,19 +367,26 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
     var xmlDepartamento: any;
     var xmlUnidadesDescripcion: any = [];
     var xmlUnidadDepartamento: any = [];
-    
     if(idDepartamento === undefined){
       idDepartamento = '';
     }  
     if(tipoUnidad == 'Total'){
         for ( let i = 0; i <= (this.detalleUnidadesTipo.length - 1); i++ ) {
+          if(this.detalleUnidadesTipo[i].UnidadDescripcion !== 'Total'){
           xmlUnidadesDescripcion.push('<unidadDescripcion><descripcion>' + this.detalleUnidadesTipo[i].UnidadDescripcion + '</descripcion></unidadDescripcion>');
+          if(this.detalleUnidadesTipo[i].idDepartamento !== undefined){
+          xmlUnidadDepartamento.push('<departamento><id>' + this.detalleUnidadesTipo[i].idDepartamento + '</id></departamento>');
+          }          
+          else{
+            xmlUnidadDepartamento.push('<departamento><id>' + '' + '</id></departamento>');            
+          }
+        }
         }      
-        xmlUnidadDepartamento.push('<departamento><id>' + '' + '</id></departamento>');
     } else{
       xmlUnidadesDescripcion.push('<unidadDescripcion><descripcion>' + tipoUnidad + '</descripcion></unidadDescripcion>');
       xmlUnidadDepartamento.push('<departamento><id>' + idDepartamento + '</id></departamento>');
     }
+    
     xmlTipoUnidad = '<unidadesDescripcion>' + xmlUnidadesDescripcion.join('') + '</unidadesDescripcion>';
     xmlDepartamento = '<departamentos>' + xmlUnidadDepartamento.join('') + '</departamentos>';
 
