@@ -362,16 +362,20 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
     return month;
   }
 
-  onClickDetalleUnidadesTipo(tipoUnidad: string, idDepartamento: number, mes: string = '') {    
+  onClickDetalleUnidadesTipo(tipoUnidad: string, idDepartamento: string, mes: string = '') {   
     var xmlTipoUnidad: any;
     var xmlDepartamento: any;
     var xmlUnidadesDescripcion: any = [];
     var xmlUnidadDepartamento: any = [];
+    
+    if(idDepartamento === undefined){
+      idDepartamento = '';
+    }  
     if(tipoUnidad == 'Total'){
         for ( let i = 0; i <= (this.detalleUnidadesTipo.length - 1); i++ ) {
           xmlUnidadesDescripcion.push('<unidadDescripcion><descripcion>' + this.detalleUnidadesTipo[i].UnidadDescripcion + '</descripcion></unidadDescripcion>');
-          xmlUnidadDepartamento.push('<departamento><id>' + this.detalleUnidadesTipo[i].idDepartamento + '</id></departamento>');
-        }
+        }      
+        xmlUnidadDepartamento.push('<departamento><id>' + '' + '</id></departamento>');
     } else{
       xmlUnidadesDescripcion.push('<unidadDescripcion><descripcion>' + tipoUnidad + '</descripcion></unidadDescripcion>');
       xmlUnidadDepartamento.push('<departamento><id>' + idDepartamento + '</id></departamento>');
@@ -388,7 +392,6 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
         this.showDetalleUnidadesSegundoNivel.emit(false);
         this.showDetalleUnidadesTercerNivel.emit(true);
       }
-
       this.detalleUnidadesNameTercerNivel.emit(mes);
       this.detalleUnidadesValueTercerNivel.emit(xmlTipoUnidad);
       this.detalleUnidadesConceptoTercerNivel.emit(tipoUnidad);
