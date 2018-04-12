@@ -389,7 +389,9 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     // Initialize Params Object
     let Params = new HttpParams();    
     var url: string;
-    parameters.idOrigen = parameters.idOrigen === undefined ? 0 : parameters.idOrigen;
+    if (parameters.isUnidadesDepto || parameters.idOrigen === undefined) {
+      parameters.idOrigen = 0;
+    }
     
     // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
@@ -402,7 +404,7 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     
     if(parameters.idOrigen !== 3){
         url = 'api/internos/detalleunidadesSinDepartamento';  
-      } else if(parameters.idOrigen === 3) {
+      } else {
         Params = Params.append('idDepartamento', parameters.idDepartamento);
         url = 'api/internos/detalleunidadesseries';
       }
