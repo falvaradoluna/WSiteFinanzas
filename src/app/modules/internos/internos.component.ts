@@ -188,7 +188,7 @@ export class InternosComponent implements OnInit {
   detalleUnidadesDepartamentoValueSegundoNivel: string;
 
   detalleUnidadesDepartamentoConceptoTercerNivel: string;
-
+  idDepartamentoSalida: number = 3;
   valuesNegritas = [
     'Utilidad bruta',
     'Utilidad Bruta Neta',
@@ -220,8 +220,7 @@ export class InternosComponent implements OnInit {
      this.showFilters = !this.showFilters;
   }
 
-  toggleUnidades(): void {
-        
+  toggleUnidades(): void {    
     if (this.showUnidades === true || this.showDetalleUnidadesPrimerNivel === true || this.showDetalleUnidadesSegundoNivel===true 
       ||  this.showDetalleUnidadesTercerNivel ===true){
        this.showOriginalUN = 0;
@@ -394,7 +393,7 @@ export class InternosComponent implements OnInit {
     if (this.showSumaDepartamentos== true){
       return;
     }
-    if(!this.activeSpinner){
+    if(!this.activeSpinner && this.selectedCompania != 0){
       this.controlarSpinner(true);
     }
     
@@ -929,7 +928,9 @@ getSumaDepartamentosAcumuladoReal(): void {
 
 ////////
 getSumaDepartamentos(): void { 
-  this.activeSpinner = true;
+  if(!this.activeSpinner && this.selectedCompania != 0){
+    this.activeSpinner = true;
+  }
   var sTipoReporte= this.selectedTipoReporte.toString();
 switch(sTipoReporte){
     case '1':
@@ -1553,7 +1554,9 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeTipoReporte(newValue: number): void {
-    this.activeSpinner = true;
+    if(this.selectedCompania != 0){
+      this.activeSpinner = true;
+    }
     this.selectedTipoReporte = newValue;
     this.showOriginal=0;
     this. showOriginalUD=0;

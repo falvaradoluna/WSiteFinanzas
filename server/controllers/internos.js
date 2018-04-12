@@ -630,6 +630,7 @@ internos.prototype.get_detalleunidadesseries = function (req, res, next) {
   var periodoYear = req.query.periodoYear;
   var periodoMes = req.query.periodoMes;
   var unidadDescripcion = req.query.unidadDescripcion;
+  var idDepartamento = req.query.idDepartamento;
 
   console.log('QueryString Unidades Nv4 = ' + JSON.stringify(req.query));
 
@@ -639,7 +640,8 @@ internos.prototype.get_detalleunidadesseries = function (req, res, next) {
     { name: 'idOrigen', value: idOrigen, type: self.model.types.INT },
     { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
     { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
-    { name: 'unidadDescripcion', value: unidadDescripcion, type: self.model.types.STRING }
+    { name: 'unidadDescripcion', value: unidadDescripcion, type: self.model.types.STRING },
+    { name: 'idDepartamento', value: idDepartamento, type: self.model.types.INT }
   ];
 
   this.model.query('Unidad.ObtenerDetalleUnidades', params, function (error, result) {
@@ -660,7 +662,8 @@ internos.prototype.get_detalleunidadesdepartamentoseries = function (req, res, n
   var idPestana = req.query.idPestana;
   var periodoYear = req.query.periodoYear;
   var periodoMes = req.query.periodoMes;
-  var unidadDescripcion = req.query.unidadDescripcion;
+  var unidadDescripcion = req.query.unidadDescripcion;  
+
 
   console.log('QueryString Unidades Series Nv4 = ' + JSON.stringify(req.query));
 
