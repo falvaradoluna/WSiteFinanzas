@@ -445,6 +445,8 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
   // Ordenamiento de tabla
   onSorted(event: ColumnSortedEvent, obj: Object[]) {
     // Se pasa como referencia el objeto que se quiere ordenar
+    console.log( "obj", obj );
+    console.log( "event", event );
     obj.sort(function (a, b) {
       if (event.sortDirection === 'asc') {
         return a[event.sortColumn] - b[event.sortColumn];

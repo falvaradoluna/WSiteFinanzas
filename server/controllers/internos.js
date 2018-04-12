@@ -645,7 +645,9 @@ internos.prototype.get_detalleunidadesseries = function (req, res, next) {
   ];
 
   this.model.query('Unidad.ObtenerDetalleUnidades', params, function (error, result) {
-    console.log(params);
+    console.log("================================================");
+    console.log( "result", result );
+    console.log( "error", error );
     self.view.expositor(res, {
       error: error,
       result: result,
