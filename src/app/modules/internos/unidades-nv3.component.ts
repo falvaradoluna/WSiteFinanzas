@@ -372,21 +372,27 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
     var xmlUnidadTotal: any;
     var xmlDepartamentoCanalTotal: any;
     var xmlUnidadesDescripcion: any = [];
-    var xmlDepartamento: any = [];
-    var xmlCanalVenta: any = [];
+    var xmlDepartamento = [];
+    var xmlCanalVenta = [];
 
     if(tipoUnidad == 'Total') {
         for ( let i = 0; i <= (this.detalleUnidadesTipo.length - 1); i++ ) {
           if(this.detalleUnidadesTipo[i].UnidadDescripcion !== 'Total') {
-            xmlUnidadesDescripcion.push(this.getXmlUnidadDescripcion(this.detalleUnidadesTipo[i].UnidadDescripcion));
+            if ( !xmlUnidadesDescripcion.includes(this.getXmlUnidadDescripcion(this.detalleUnidadesTipo[i].UnidadDescripcion)) ){
+              xmlUnidadesDescripcion.push(this.getXmlUnidadDescripcion(this.detalleUnidadesTipo[i].UnidadDescripcion));
+            }
             if(this.detalleUnidadesTipo[i].idDepartamento !== undefined) {
-              xmlDepartamento.push(this.getXmlDepartamento(this.detalleUnidadesTipo[i].idDepartamento));
+              if( !xmlDepartamento.includes(this.getXmlDepartamento(this.detalleUnidadesTipo[i].idDepartamento)) ) {
+                xmlDepartamento.push(this.getXmlDepartamento(this.detalleUnidadesTipo[i].idDepartamento));
+              }
             }          
             else {
-              xmlCanalVenta.push(this.getXmlCanalVenta(this.detalleUnidadesTipo[i].idCanalVenta));            
+              if( !xmlCanalVenta.includes(this.getXmlCanalVenta(this.detalleUnidadesTipo[i].idCanalVenta)) ) {
+                xmlCanalVenta.push(this.getXmlCanalVenta(this.detalleUnidadesTipo[i].idCanalVenta));            
+              }
             }
-          }
-        }      
+          }          
+        }  
     } else {      
       xmlUnidadesDescripcion.push(this.getXmlUnidadDescripcion(tipoUnidad));
       if (idDepartamento !== undefined) {
