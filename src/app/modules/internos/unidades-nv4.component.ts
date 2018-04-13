@@ -71,7 +71,6 @@ export class UnidadesNv4Component implements OnInit {
     })
       .subscribe(detalleUnidadesSeries => {
         this.detalleUnidadesSeries = detalleUnidadesSeries;
-        console.log( "detalleUnidadesSeries", this.detalleUnidadesSeries );
         //this.fixedHeader('tableAcumuladoRealNv2');
       },
       error => this.errorMessage = <any>error);
