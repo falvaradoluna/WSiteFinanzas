@@ -23,6 +23,7 @@
         <th class="bg-secondary text-white" sortable-column='incentivo'>Incentivo</th>
         <th class="bg-secondary text-white" sortable-column='costoTotal'>Total Compra</th>
         <th class="bg-secondary text-white" sortable-column='utilidad'>Utilidad</th>
+        <th class="bg-secondary text-white" sortable-column='cantidad'>Cantidad</th>
         <!-- <th>% Utilidad</th> -->
       </tr>
     </thead>
@@ -47,6 +48,7 @@
         <td class="text-right" [suma-columnas]='dus.incentivo'>{{ dus.incentivo | number:'1.2-2' }}</td>
         <td class="text-right" [suma-columnas]='dus.costoTotal'>{{ dus.costoTotal | number:'1.2-2' }}</td>
         <td class="text-right" [suma-columnas]='dus.utilidad'>{{ dus.utilidad | number:'1.2-2' }}</td>
+        <td class="text-right" [suma-columnas]='dus.cantidad'>{{ dus.cantidad | number:'1.0-2' }}</td>
       </tr>
     </tbody>
   </table>
