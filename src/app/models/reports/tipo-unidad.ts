@@ -29,4 +29,5 @@ export interface ITipoUnidad {
   totalAnual: number;
   totalAnualPerc: number;
   idDepartamento: number;
+  idCanalVenta: number;
 }
