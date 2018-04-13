@@ -677,8 +677,6 @@ internos.prototype.get_detalleunidadesdepartamentoseries = function (req, res, n
     { name: 'unidadDescripcion', value: unidadDescripcion, type: self.model.types.STRING },
     { name: 'idDepartamento', value: idDepartamento, type: self.model.types.STRING }
   ];
-console.log('Paramsssss');
-console.log(params);
   this.model.query('Unidad.ObtenerxPestaniaDetalleUnidades', params, function (error, result) {
     console.log(params);
     self.view.expositor(res, {
@@ -1229,6 +1227,7 @@ internos.prototype.get_detalleunidadesSinDepartamento = function (req, res, next
   var periodoYear = req.query.periodoYear;
   var periodoMes = req.query.periodoMes;
   var unidadDescripcion = req.query.unidadDescripcion;
+  var idCanalVenta = req.query.idCanalVenta;
 
   var params = [
     { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
@@ -1236,6 +1235,7 @@ internos.prototype.get_detalleunidadesSinDepartamento = function (req, res, next
     { name: 'idOrigen', value: idOrigen, type: self.model.types.INT },
     { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
     { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+    { name: 'IdCanalVenta', value: idCanalVenta, type: self.model.types.STRING },
     { name: 'unidadDescripcion', value: unidadDescripcion, type: self.model.types.STRING }
   ];
   this.model.query('Unidad.ObtenerDetalleUnidadesXTipoDeUnidad', params, function (error, result) {

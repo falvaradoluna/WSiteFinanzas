@@ -161,7 +161,9 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
           'diciembrePerc': 100,
           'totalAnual': 0,
           'totalAnualPerc': 100,
-          'idDepartamento': 0
+          'idDepartamento': 0,
+          'idCanalVenta': 0
+    
         };
         this.detalleUnidadesTipo.push(t);
 
@@ -227,7 +229,9 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
           'diciembrePerc': 100,
           'totalAnual': 0,
           'totalAnualPerc': 100,
-          'idDepartamento': 0
+          'idDepartamento': 0,
+          'idCanalVenta': 0
+    
         };
 
         // Ciclo de 12 meses
@@ -312,7 +316,9 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
           'diciembrePerc': 100,
           'totalAnual': 0,
           'totalAnualPerc': 100,
-          'idDepartamento': 0
+          'idDepartamento': 0,
+          'idCanalVenta': 0
+    
         };
 
         // Ciclo de 12 meses
@@ -362,33 +368,40 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
     return month;
   }
 
-  onClickDetalleUnidadesTipo(tipoUnidad: string, idDepartamento: string, mes: string = '') {   
-    var xmlTipoUnidad: any;
-    var xmlDepartamento: any;
+  onClickDetalleUnidadesTipo(tipoUnidad: string, idDepartamento: string, idCanalVenta: number, mes: string = '') { 
+    var xmlUnidadTotal: any;
+    var xmlDepartamentoCanalTotal: any;
     var xmlUnidadesDescripcion: any = [];
-    var xmlUnidadDepartamento: any = [];
-    if(idDepartamento === undefined){
-      idDepartamento = '';
-    }  
-    if(tipoUnidad == 'Total'){
+    var xmlDepartamento: any = [];
+    var xmlCanalVenta: any = [];
+
+    if(tipoUnidad == 'Total') {
         for ( let i = 0; i <= (this.detalleUnidadesTipo.length - 1); i++ ) {
-          if(this.detalleUnidadesTipo[i].UnidadDescripcion !== 'Total'){
-          xmlUnidadesDescripcion.push('<unidadDescripcion><descripcion>' + this.detalleUnidadesTipo[i].UnidadDescripcion + '</descripcion></unidadDescripcion>');
-          if(this.detalleUnidadesTipo[i].idDepartamento !== undefined){
-          xmlUnidadDepartamento.push('<departamento><id>' + this.detalleUnidadesTipo[i].idDepartamento + '</id></departamento>');
-          }          
-          else{
-            xmlUnidadDepartamento.push('<departamento><id>' + '' + '</id></departamento>');            
+          if(this.detalleUnidadesTipo[i].UnidadDescripcion !== 'Total') {
+            xmlUnidadesDescripcion.push(this.getXmlUnidadDescripcion(this.detalleUnidadesTipo[i].UnidadDescripcion));
+            if(this.detalleUnidadesTipo[i].idDepartamento !== undefined) {
+              xmlDepartamento.push(this.getXmlDepartamento(this.detalleUnidadesTipo[i].idDepartamento));
+            }          
+            else {
+              xmlCanalVenta.push(this.getXmlCanalVenta(this.detalleUnidadesTipo[i].idCanalVenta));            
+            }
           }
-        }
         }      
-    } else{
-      xmlUnidadesDescripcion.push('<unidadDescripcion><descripcion>' + tipoUnidad + '</descripcion></unidadDescripcion>');
-      xmlUnidadDepartamento.push('<departamento><id>' + idDepartamento + '</id></departamento>');
+    } else {      
+      xmlUnidadesDescripcion.push(this.getXmlUnidadDescripcion(tipoUnidad));
+      if (idDepartamento !== undefined) {
+        xmlDepartamento.push(this.getXmlDepartamento(idDepartamento));
+      } else {
+        xmlCanalVenta.push(this.getXmlCanalVenta(idCanalVenta));
+      }
     }
     
-    xmlTipoUnidad = '<unidadesDescripcion>' + xmlUnidadesDescripcion.join('') + '</unidadesDescripcion>';
-    xmlDepartamento = '<departamentos>' + xmlUnidadDepartamento.join('') + '</departamentos>';
+    xmlUnidadTotal = '<unidadesDescripcion>' + xmlUnidadesDescripcion.join('') + '</unidadesDescripcion>';
+    if(xmlDepartamento.length > 0){
+      xmlDepartamentoCanalTotal = '<departamentos>' + xmlDepartamento.join('') + '</departamentos>';
+    } else {
+      xmlDepartamentoCanalTotal = '<CanalVentas>' + xmlCanalVenta.join('') + '</CanalVentas>';
+    }
 
       const idReporte = this.detalleName === 'Real' ? 'MRQ' : 'ARQ'; // Real = mensual y AcReal = Acumulado
       if (this.isUnidadesDepto) {
@@ -400,13 +413,22 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
         this.showDetalleUnidadesTercerNivel.emit(true);
       }
       this.detalleUnidadesNameTercerNivel.emit(mes);
-      this.detalleUnidadesValueTercerNivel.emit(xmlTipoUnidad);
+      this.detalleUnidadesValueTercerNivel.emit(xmlUnidadTotal);
       this.detalleUnidadesConceptoTercerNivel.emit(tipoUnidad);
-      this.idReporte.emit(xmlDepartamento);
+      this.idReporte.emit(xmlDepartamentoCanalTotal);
       this.mesAcumuladoNv3.emit(mes);
-      //this.idDepartamentoNew.emit(idDepartamento);
       // this.fixedHeader('detalleUnidadesSeries');
   }
+
+private getXmlUnidadDescripcion(unidadDescripcion){    
+    return '<unidadDescripcion><descripcion>' + unidadDescripcion + '</descripcion></unidadDescripcion>';
+}
+private getXmlDepartamento(idDepartamento){
+    return '<departamento><id>' + idDepartamento + '</id></departamento>';   
+}
+private getXmlCanalVenta(idCanalVenta){
+  return '<CanalVenta><Id>' + idCanalVenta + '</Id></CanalVenta>';      
+}
 
   private calculaTotalesMensual() {
     // Se calcula el total y se inserta en el objeto
@@ -441,7 +463,9 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       'diciembrePerc': 100,
       'totalAnual': 0,
       'totalAnualPerc': 100,
-      'idDepartamento': 0
+      'idDepartamento': 0,
+      'idCanalVenta': 0
+
     };
     this.detalleUnidadesTipo.push(t);
 

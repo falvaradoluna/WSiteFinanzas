@@ -403,11 +403,12 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
     
     if(parameters.idOrigen !== 3){
+      Params = Params.append('idCanalVenta', parameters.idDepartamento);
         url = 'api/internos/detalleunidadesSinDepartamento';  
       } else {
         Params = Params.append('idDepartamento', parameters.idDepartamento);
         url = 'api/internos/detalleunidadesseries';
-      }
+      }      
 
     return this._http.get<ISeries[]>(url, { params: Params })
       .catch(this.handleError);
