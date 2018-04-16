@@ -338,7 +338,7 @@ export class InternosComponent implements OnInit {
 
 //UNIDADES 2
   toggleUnidadesDepartamento(): void {
-
+    
     if(this.showUnidadesDepartamento==true){
       this.showOriginalUD = this. showUnidadesDeptoNivel;
       if (this. showUnidadesDeptoNivel==4){
@@ -442,8 +442,9 @@ export class InternosComponent implements OnInit {
     // si se procesa por un departamento en especifico
     if( this.selectedIdDepartamento == 16 || this.selectedIdDepartamento == 17){
       this.showUnidades = false;
-      this.showDetalleUnidadesPrimerNivel = false;
-    }
+    }    
+    // this.showReporteUnidades, this.showUnidadesDepartamento, this.showUnidadesDeptoNivel
+    this.showUnidadesDepartamento = true
   }
 
 private changeCursorWait(): void {
@@ -481,6 +482,7 @@ private changeCursorDefault(): void {
   }
 //////
   sumaDepartamentos(): void {
+    this.controlarSpinner(true, 5000);
     if (this.selectedDepartamentosStr && this.selectedDepartamentosStr !== '\'') {
       this.getSumaDepartamentos();
 
@@ -956,7 +958,7 @@ getSumaDepartamentosAcumuladoReal(): void {
 ////////
 getSumaDepartamentos(): void { 
   if(!this.activeSpinner && this.selectedCompania != 0){
-    this.activeSpinner = true;
+    this.controlarSpinner(true, 4000);
   }
   var sTipoReporte= this.selectedTipoReporte.toString();
 switch(sTipoReporte){
@@ -2081,6 +2083,8 @@ hideResultados(): void{
   }
 
   hideDetalleUnidadesTercerNivel(): void {
+    console.log('hideDetalleUnidadesTercerNivel');
+    //this.controlarSpinner(true, 5000);
     this.showUnidades = false;
     this.showDetalleUnidadesSegundoNivel = true;
     this.showDetalleUnidadesTercerNivel = false;
@@ -2160,8 +2164,8 @@ hideResultados(): void{
     this.activeSpinner = estado;
     if(estado){
       this._spinnerService.show(); 
-      setTimeout(() => { this._spinnerService.hide(); this.activeSpinner = false; }, valueTime);
-    } else{ this._spinnerService.hide(); this.activeSpinner = false; }
+      setTimeout(() => { this._spinnerService.hide(); }, valueTime);
+    } else{ this._spinnerService.hide(); }
   }
 }
 

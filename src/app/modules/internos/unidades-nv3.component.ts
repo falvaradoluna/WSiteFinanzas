@@ -117,8 +117,9 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
     // Se usa como parametro de departamento el texto de Concepto del primer nivel,
     // sin las letras N o S que se le agregan al inicio
     const concepto = this.detalleUnidadesConcepto;
-
     // this.deptoFlotillas.emit(idDepartamento); // Se usa el departamento que aparece solo para flotillas en el segundo nivel
+    this._spinnerService.show(); 
+    setTimeout(() => { this._spinnerService.hide(); }, 2000);
 
     this._service.getDetalleUnidadesTipoFlotillas({
       idDepartamento: this.idDepartamento,
@@ -130,7 +131,9 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       idAutoLinea: this.idAutoLinea
     })
       .subscribe(
-      dut => { this.detalleUnidadesTipo = dut; this._spinnerService.hide(); },
+      dut => { this.detalleUnidadesTipo = dut; this._spinnerService.hide();
+        this._spinnerService.hide();
+       },
       error => { console.log(JSON.stringify(error)); },
       () => {
         // Se calcula el total y se inserta en el objeto
