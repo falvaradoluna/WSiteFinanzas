@@ -440,10 +440,10 @@ export class InternosComponent implements OnInit {
     
     // Oculta la tabla de unidades
     // si se procesa por un departamento en especifico
-    /*if(this.selectedIdDepartamento !== 0){
+    if( this.selectedIdDepartamento == 16 || this.selectedIdDepartamento == 17){
       this.showUnidades = false;
       this.showDetalleUnidadesPrimerNivel = false;
-    }*/
+    }
   }
 
 private changeCursorWait(): void {
