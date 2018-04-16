@@ -1218,7 +1218,7 @@ internos.prototype.get_tipoReporte = function (req, res, next) {
 };
 // 
 // /api/internos/detalleunidadeSinDepartamento
-// Funcionalidad para series de Unidades (cuarto nivel de unidades)
+// Funcionalidad para series de Unidades (cuarto nivel de unidades) por canal de venta
 internos.prototype.get_detalleunidadesSinDepartamento = function (req, res, next) {
   var self = this;
   var idCompania = req.query.idCompania;
@@ -1239,6 +1239,33 @@ internos.prototype.get_detalleunidadesSinDepartamento = function (req, res, next
     { name: 'unidadDescripcion', value: unidadDescripcion, type: self.model.types.STRING }
   ];
   this.model.query('Unidad.ObtenerDetalleUnidadesXTipoDeUnidad', params, function (error, result) {
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/detalleDepartamentosEspeciales
+// Funcionalidad para detalle de departamentos especiales
+internos.prototype.get_detalleDepartamentosEspeciales = function (req, res, next) {
+  var self = this;
+  var idCompania = req.query.idCompania;
+  var idSucursal = req.query.idSucursal;
+  var idOrigen = req.query.idOrigen;
+  var periodoAnio = req.query.periodoAnio;
+  var periodoMes = req.query.periodoMes;
+
+  var params = [
+    { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'IdOrigen', value: idOrigen, type: self.model.types.INT },
+    { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: periodoAnio, type: self.model.types.INT }
+  ];
+  console.log('paramssss');
+  console.log(params);
+  this.model.query('Unidad.ObtenerDetalleDepartamentosEspeciales', params, function (error, result) {
     self.view.expositor(res, {
       error: error,
       result: result,

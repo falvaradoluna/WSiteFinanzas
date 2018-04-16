@@ -4,6 +4,7 @@ import { ISeries } from '../../models/reports/series';
 import { InternosService } from './internos.service';
 import { Observable } from 'rxjs/Observable';
 import { ColumnSortedEvent } from '../../shared/index';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -34,10 +35,12 @@ export class UnidadesNv4Component implements OnInit {
   //detalleUnidadesSeries: Observable<ISeries[]>;
   detalleUnidadesSeries: ISeries[] = [];
 
-  constructor(private _service: InternosService) { }
+  constructor(private _service: InternosService, private _spinnerService: NgxSpinnerService) { }
 
   ngOnInit() {
     //this.detalleUnidadesSeries = this.getDetalleUnidadesSeries();
+    this._spinnerService.show(); 
+    setTimeout(() => { this._spinnerService.hide(); }, 5000);
     this.getDetalleUnidadesSeries()
     //console.log( "detalleUnidadesSeries", this.detalleUnidadesSeries );
   }
@@ -71,6 +74,7 @@ export class UnidadesNv4Component implements OnInit {
     })
       .subscribe(detalleUnidadesSeries => {
         this.detalleUnidadesSeries = detalleUnidadesSeries;
+        this._spinnerService.hide();
         //this.fixedHeader('tableAcumuladoRealNv2');
       },
       error => this.errorMessage = <any>error);

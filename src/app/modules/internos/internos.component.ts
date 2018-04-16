@@ -38,6 +38,7 @@ import { InternosService } from './internos.service';
 import { FechaActualizacionService } from '../../shared';
 import { FlujoeSituacionfComponent } from './flujoe-situacionf/flujoe-situacionf.component'
 import { ElementSchemaRegistry } from '@angular/compiler';
+import { NgxSpinnerService } from 'ngx-spinner';
 //import { ENETUNREACH } from 'constants';
 
 @Component({
@@ -69,7 +70,9 @@ import { ElementSchemaRegistry } from '@angular/compiler';
 export class InternosComponent implements OnInit {
   errorMessage: any;
 
-  constructor(private _service: InternosService, private _fechaActualizacionService: FechaActualizacionService) { }
+  constructor(private _service: InternosService, private _fechaActualizacionService: FechaActualizacionService, private _spinnerService: NgxSpinnerService) {
+    this.controlarSpinner(true, 2000);
+   }
 
   showFilters = true;
   showUnidades = true;
@@ -390,11 +393,12 @@ export class InternosComponent implements OnInit {
   }
 
   procesar(): void {
+    this.showUnidadesDeptoNivel = 1;
     if (this.showSumaDepartamentos== true){
       return;
     }
     if(!this.activeSpinner && this.selectedCompania != 0){
-      this.controlarSpinner(true);
+      this.controlarSpinner(true, 5000);
     }
     
     const sTipoReporte = this.selectedTipoReporte.toString(); // Aunque se definio como number, la comparacion siempre lo toma como string
@@ -433,6 +437,13 @@ export class InternosComponent implements OnInit {
       const a = this.companias.find(x => x.id === +this.selectedCompania);
       this.selectedNombreCompania = a.nombreComercial;
     }
+    
+    // Oculta la tabla de unidades
+    // si se procesa por un departamento en especifico
+    /*if(this.selectedIdDepartamento !== 0){
+      this.showUnidades = false;
+      this.showDetalleUnidadesPrimerNivel = false;
+    }*/
   }
 
 private changeCursorWait(): void {
@@ -596,9 +607,9 @@ private changeCursorDefault(): void {
       periodoMes: this.mes,
       idDepartamento: this.selectedIdDepartamentoEr,
       idSucursalSecuencia: this.selectedIdSucursalSecuencia
-    }).do(() => { this.controlarSpinner(false); } )
-      .subscribe(estadoResultados => {
+    }).subscribe(estadoResultados => {
         this.estadoResultados = estadoResultados;        
+        this.controlarSpinner(false);
       },
       error => { 
         this.errorMessage = <any>error; 
@@ -775,9 +786,9 @@ private changeCursorDefault(): void {
       periodoYear: this.anio,
       idDepartamento: this.selectedIdDepartamento,
       idSucursalSecuencia: this.selectedIdSucursalSecuencia
-    }).do(() => { this.controlarSpinner(false); } )
-      .subscribe(estadoResultadosAcumuladoReal => {
+    }).subscribe(estadoResultadosAcumuladoReal => {
         this.estadoResultadosAcumuladoReal = estadoResultadosAcumuladoReal;
+        this.controlarSpinner(false);
       },
       error => { 
         this.errorMessage = <any>error; 
@@ -834,9 +845,9 @@ getSumaDepartamentosAcumuladoReal(): void {
     xmlDepartamento : this.xmlSend,
     idSucursalSecuencia: this.selectedIdSucursalSecuencia,
     tipoReporte: this.selectedTipoReporte
-  }).do(() => { this.controlarSpinner(false); } )
-    .subscribe(sumaDepartamentos => {
+  }).subscribe(sumaDepartamentos => {
       this.sumaDepartamentosAReal = sumaDepartamentos;
+      this.controlarSpinner(false);
     },
     error => { 
       this.errorMessage = <any>error;       
@@ -967,9 +978,9 @@ getReporteSumaDepartamentos() : void{
     xmlDepartamento : this.xmlSend,
     idSucursalSecuencia: this.selectedIdSucursalSecuencia,
     tipoReporte: this.selectedTipoReporte
-  }).do(() => { this.controlarSpinner(false); } )
-    .subscribe(sumaDepartamentos => {
+  }).subscribe(sumaDepartamentos => {
       this.resultadoSumaDepartamentos = sumaDepartamentos;
+      this.controlarSpinner(false);
     },
     error => { 
       this.errorMessage = <any>error;
@@ -1306,10 +1317,10 @@ getReporteSumaDepartamentos() : void{
       IdSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       anio: this.anio,
       IdDepartamento: this.selectedIdDepartamentoEr
-    }).do(() => { this.controlarSpinner(false); } )
-      .subscribe(acumuladoReal => {
+    }).subscribe(acumuladoReal => {
         this.acumuladoReal = acumuladoReal;
         this.fixedHeader('tableAcumuladoPresupuesto');
+        this.controlarSpinner(false);
       },
       error => { 
         this.errorMessage = <any>error;
@@ -1477,7 +1488,7 @@ getReporteSumaDepartamentos() : void{
       this.selectedIdSucursal=-2;
       this.selectedTipoReporte=1;
     }else {
-      this.controlarSpinner(true);
+      this.controlarSpinner(true, 5000);
     }
     
     this.disabledButtonPorcentaje();
@@ -1519,7 +1530,7 @@ getReporteSumaDepartamentos() : void{
 
   onChangeSucursal(selectedIndex): void {
     if(!this.activeSpinner && this.selectedCompania != 0){
-      this.controlarSpinner(true);
+      this.controlarSpinner(true, 5000);
     }
     this.selectedIdSucursal = selectedIndex;
     this.closeDetallesUnidades();
@@ -1618,7 +1629,7 @@ getReporteSumaDepartamentos() : void{
     this.departamentos = [];
   }
 
-  onClickUnidades(i: number, value: number, name: string, idDetalleUnidades: number) {
+  onClickUnidades(i: number, value: number, name: string, idDetalleUnidades: number) {    
     const concepto = this.resultadoUnidades[i].descripcion;
     const idOrigen = this.resultadoUnidades[i].idOrigen;
 
@@ -2145,8 +2156,12 @@ hideResultados(): void{
    this.onChangeSumaDepartamentos();
   }
   // Se encarga de controlar el spinner
-  controlarSpinner(estado) {
+  controlarSpinner(estado: boolean, valueTime: number = 0) {
     this.activeSpinner = estado;
+    if(estado){
+      this._spinnerService.show(); 
+      setTimeout(() => { this._spinnerService.hide(); this.activeSpinner = false; }, valueTime);
+    } else{ this._spinnerService.hide(); this.activeSpinner = false; }
   }
 }
 

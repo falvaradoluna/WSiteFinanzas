@@ -67,6 +67,7 @@ export class InternosService {
   private _urlDetalleUnidadesSeriesAr = 'api/internos/detalleunidadesseriesar';
   private _urlEstadoDeResultadosVariacionSegundoNivel = 'api/internos/estadoderesultadosvariacionsegundonivel';
   private _urlTipoReporte = 'api/internos/tipoReporte';
+  private _urlDetalleDepartamentosEspeciales = 'api/internos/detalleDepartamentosEspeciales';
 
   constructor(private _http: HttpClient) { }
 
@@ -669,6 +670,21 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     Params = Params.append('idUsuario', parameters.idUsuario);
 
     return this._http.get<ITipoReporte[]>(this._urlTipoReporte, { params: Params })
+       
+      .catch(this.handleError);
+  }
+
+  // Funcionalidad para detalle de departamentos especiales
+  getDetalleDepartamentosEspeciales(parameters): Observable<any[]> {
+
+    let Params = new HttpParams();
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('idOrigen', parameters.idOrigen);
+    Params = Params.append('periodoAnio', parameters.periodoAnio);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+
+    return this._http.get<ITipoReporte[]>(this._urlDetalleDepartamentosEspeciales, { params: Params })
        
       .catch(this.handleError);
   }

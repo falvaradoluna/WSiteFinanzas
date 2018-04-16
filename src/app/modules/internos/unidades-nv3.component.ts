@@ -5,6 +5,7 @@ import { ITipoUnidad } from '../../models/reports/tipo-unidad';
 import { InternosService } from './internos.service';
 import { Observable } from 'rxjs/Observable';
 import { ColumnSortedEvent } from '../../shared/index';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -48,9 +49,12 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
 
   detalleUnidadesTipo: ITipoUnidad[];
 
-  constructor(private _service: InternosService) { }
+  constructor(private _service: InternosService, private _spinnerService: NgxSpinnerService) {
+   }
 
   ngOnInit() {
+    this._spinnerService.show(); 
+    setTimeout(() => { this._spinnerService.hide(); }, 5000);
     this.fixedHeaderId.emit('idDetalleUnidadesTipo');
     if (this.isUnidadesDepto) {
       if (this.idDetalleUnidades === 1) { // Mensual
@@ -100,7 +104,7 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       isUnidadesDepto: this.isUnidadesDepto
     })
       .subscribe(
-      dut => { this.detalleUnidadesTipo = dut; },
+      dut => { this.detalleUnidadesTipo = dut; this._spinnerService.hide(); },
       error => { console.log(JSON.stringify(error)); },
       () => {
         this.calculaTotalesMensual();
@@ -126,7 +130,7 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       idAutoLinea: this.idAutoLinea
     })
       .subscribe(
-      dut => { this.detalleUnidadesTipo = dut; },
+      dut => { this.detalleUnidadesTipo = dut; this._spinnerService.hide(); },
       error => { console.log(JSON.stringify(error)); },
       () => {
         // Se calcula el total y se inserta en el objeto
@@ -196,7 +200,7 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       idPestania: this.selectedIdDepartamento,
       isUnidadesDepto: this.isUnidadesDepto
     }).subscribe(
-      dut => { this.detalleUnidadesTipo = dut; },
+      dut => { this.detalleUnidadesTipo = dut; this._spinnerService.hide(); },
       error => { console.log(JSON.stringify(error)); },
       () => {
         const totales: ITipoUnidad = {
@@ -283,7 +287,7 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       periodoMes: mes,
       idAutoLinea: this.idAutoLinea
     }).subscribe(
-      dut => { this.detalleUnidadesTipo = dut; },
+      dut => { this.detalleUnidadesTipo = dut; this._spinnerService.hide(); },
       error => { console.log(JSON.stringify(error)); },
       () => {
         const totales: ITipoUnidad = {
