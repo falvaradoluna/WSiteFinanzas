@@ -1,5 +1,6 @@
  module.exports = {
      login: require('./controllers/login'),
      internos: require('./controllers/internos'),
-     seguridad: require('./controllers/seguridad')
+     seguridad: require('./controllers/seguridad'),
+     externos: require('./controllers/externos')
  }
