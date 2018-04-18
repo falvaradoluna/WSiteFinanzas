@@ -96,6 +96,7 @@ export class InternosComponent implements OnInit {
   showDetalleSegundoNivel = false;
   showSumaDepartamentos = false;
   showSumaDepartamentosHeader=false;
+  showSumaDepartamentosPrimerNivel=false;
   showSumaDepartamentosAReal=false;
   showPercents = true;
   resultadosSeriesArNv4: ISeries[] = [];
@@ -209,6 +210,9 @@ export class InternosComponent implements OnInit {
     'Neto'
   ];
   public activeSpinner: boolean = false;
+  showSumaDepartamentosSegundoNivel=false;
+  descripcionSumaDeptoSegundoNivel = '';
+  descripcionSumaDeptoTercerNivel = '';
 
   ngOnInit() {
     this.setDefaultDate();
@@ -481,13 +485,17 @@ private changeCursorDefault(): void {
     delete (this.sumaDepartamentosAReal);
   }
 //////
-  sumaDepartamentos(): void {
-    this.controlarSpinner(true, 5000);
-    if (this.selectedDepartamentosStr && this.selectedDepartamentosStr !== '\'') {
-      this.getSumaDepartamentos();
-
-    }
-  }
+  sumaDepartamentos(): void {      
+      if (this.selectedDepartamentosStr && this.selectedDepartamentosStr !== '\'') {
+        this.controlarSpinner(true, 5000);
+        if(this.selectedTipoReporte === 1){
+          this.showSumaDepartamentosHeader = true;
+          this.showSumaDepartamentosPrimerNivel = false;
+          this.showSumaDepartamentosSegundoNivel = false;
+        }
+        this.getSumaDepartamentos();
+      } 
+}
 //////////
   showSuma(): void {
     const usuario = JSON.parse(localStorage.getItem('userLogged'));
@@ -528,6 +536,9 @@ private changeCursorDefault(): void {
 
   hideSumaDepartamentos(): void {
     this.showUnidadesInit();
+    this.showSumaDepartamentosPrimerNivel = false; 
+    this.showSumaDepartamentosSegundoNivel = false;
+    this.showSumaDepartamentosHeader = false;   
     // TODO: reiniciar objeto de suma
   }
 
@@ -784,7 +795,7 @@ private changeCursorDefault(): void {
   getEstadoResultadosAcumuladoReal(): void {
     this._service.getEstadoResultadosAcumuladoReal({
       idCompania: this.selectedCompania, //this.selectedIdSucursal > 0 ?  0 : this.selectedCompania, TMC Se envia siempre la sucursal
-      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      idSucursal: this.selectedIdSucursal,
       periodoYear: this.anio,
       idDepartamento: this.selectedIdDepartamento,
       idSucursalSecuencia: this.selectedIdSucursalSecuencia
@@ -1161,14 +1172,14 @@ getReporteSumaDepartamentos() : void{
     }
   }
 
-  getDetalleResultadosMensual(idOrden: number, esAnual: number): void {
+  getDetalleResultadosMensual(idOrden: number, esAnual: number, xmlDepto: string): void {
     // Este servicio requiere el Id de la sucursal con un cero a la izquierda
     this._service.getEstadoResultadosNv2({
       idCompania: this.selectedCompania,
       idSucursal: this.selectedIdSucursal, // > 0 ? this.selectedIdSucursal : 0,
       periodoYear: this.anio,
       periodoMes: this.mes,
-      idDepartamento: this.selectedIdDepartamentoEr,
+      idDepartamento: xmlDepto,
       idSucursalSecuencia: this.selectedIdSucursalSecuencia,
       idEstadoResultadosI: this.idEstadoResultado || 0,
       idOrden: idOrden,
@@ -1176,6 +1187,7 @@ getReporteSumaDepartamentos() : void{
     })
       .subscribe(detalleResultadosMensual => {
         this.detalleResultadosMensual = detalleResultadosMensual;
+        this.controlarSpinner(false);
       },
       error => {
         this.errorMessage = <any>error;
@@ -1201,19 +1213,20 @@ getReporteSumaDepartamentos() : void{
     );
   }
 
-  getDetalleResultadosMensualPresupuesto(idOrden: number): void {
+  getDetalleResultadosMensualPresupuesto(idOrden: number, xmlDepartamento: string): void {
     // Este servicio requiere el Id de la sucursal con un cero a la izquierda
     this._service.getEstadoResultadosPresupuestoNv2({
       idCompania: this.selectedCompania,
       idSucursal: this.selectedIdSucursal,// > 0 ? this.selectedIdSucursal : 0,
       periodoYear: this.anio,
       periodoMes: this.mes,
-      idDepartamento: this.selectedIdDepartamentoEr,
+      idDepartamento: xmlDepartamento,
       idEstadoResultadosI: this.idEstadoResultado || 0,
       idOrden: idOrden,
     })
       .subscribe(detalleResultadosMensual => {
         this.detalleResultadosMensual = detalleResultadosMensual;
+        this.controlarSpinner(false);
       },
       error => {
         this.errorMessage = <any>error;
@@ -1237,7 +1250,7 @@ getReporteSumaDepartamentos() : void{
       }
     );
   }
-
+  
   getDetalleResultadosCuentas(numCta: string, mes: string = ''): void {
     // Limpiar tabla antes de consultar
     this.detalleResultadosCuentas = [];
@@ -1252,7 +1265,7 @@ getReporteSumaDepartamentos() : void{
       numCta: numCta
     })
       .subscribe(
-        detalleResultadosCuentas => { this.detalleResultadosCuentas = detalleResultadosCuentas; },
+        detalleResultadosCuentas => { this.detalleResultadosCuentas = detalleResultadosCuentas; this.controlarSpinner(false); },
         error => {
           this.errorMessage = <any>error;
           this.detalleResultadosCuentas = [];
@@ -1491,6 +1504,10 @@ getReporteSumaDepartamentos() : void{
       this.selectedTipoReporte=1;
     }else {
       this.controlarSpinner(true, 5000);
+      const a = this.companias.find(x => x.id === +newValue);
+      if ( a !== undefined) {
+        this.selectedNombreCompania = a.nombreComercial;
+      }
     }
     
     this.disabledButtonPorcentaje();
@@ -1870,43 +1887,89 @@ getReporteSumaDepartamentos() : void{
     );
   }
 
-
-  onClickResultado(i: number, value: number, name: string, idEstadoResultado: number, idDetalleResultados: number) {
-
+  onClickResultado(i: number, value: number, name: string, idEstadoResultado: number, idDetalleResultados: number, detallePrimerNivel = '') {
+    this.controlarSpinner(true, 3000);   
+    var xmlDepartamento: any; 
     const idOrden = this.estadoResultados[i].idOrden;
     this.showResultados=false;
-    this.showDetallePrimerNivel = true;
-    this.detalleName = name;
     this.detalleValue = value;
     this.detalleConcepto = this.estadoResultados[i].descripcion;
     this.idDetalleResultados = idDetalleResultados;
     this.idEstadoResultado = this.estadoResultados[i].idEstadoResultadosI;
-    if (name === 'Real' || name === 'AcReal') {
-      this.getDetalleResultadosMensual(idOrden, idDetalleResultados);
-    }else if( name === "AcVariacion" || name === "Variacion" ){
-      if( idDetalleResultados === 2 ){
-        this.getDetalleResultadosVariacion(0);
-      }else if( idDetalleResultados === 3 ){
-        this.getDetalleResultadosVariacion(1);
-      }
-    }else {
-      this.getDetalleResultadosMensualPresupuesto(idOrden);
-    }
+    if( detallePrimerNivel === 'DetalleSumaDepartamentos' ) {          
+      this.showSumaDepartamentosHeader = false;   
+      this.showSumaDepartamentosSegundoNivel = false;
+      this.showSumaDepartamentosPrimerNivel = true; 
+      xmlDepartamento = this.getXmlDepartamentosByValueER();
+      this.descripcionSumaDeptoSegundoNivel = this.resultadoSumaDepartamentos[i].descripcion + ' (' + name +  ')';
+    } else {      
+    this.showDetallePrimerNivel = true;
+    this.detalleName = name;
+    xmlDepartamento = this.getXmlDepartamentos();
   }
+  
+  if (name === 'Real' || name === 'AcReal') {
+    this.getDetalleResultadosMensual(idOrden, idDetalleResultados, xmlDepartamento);
+  } else if( name === "AcVariacion" || name === "Variacion" ){
+    if( idDetalleResultados === 2 ){
+      this.getDetalleResultadosVariacion(0, xmlDepartamento);
+    }else if( idDetalleResultados === 3 ){
+      this.getDetalleResultadosVariacion(1, xmlDepartamento);
+    }
+  }else {
+    this.getDetalleResultadosMensualPresupuesto(idOrden, xmlDepartamento);
+  }
+}
 
-  getDetalleResultadosVariacion(esAnual): void {
+// Obtiene el xml de los departamentos
+private getXmlDepartamentos(){
+  console.log(this.selectedIdDepartamento);
+  var xmlTotalDepartamento: any;
+  var xmlDepartamentos = [];
+  if(this.selectedIdDepartamento === 0){
+    for ( let i = 0; i <= (this.departamentos.length - 1); i++ ) {
+      xmlDepartamentos.push('<departamento><id>' + this.departamentos[i].idPestana + '</id></departamento>');
+    }
+  } else {    
+    xmlDepartamentos.push('<departamento><id>' + this.selectedIdDepartamento + '</id></departamento>');
+  }
+  xmlTotalDepartamento = '<departamentos>' + xmlDepartamentos.join('') + '</departamentos>';              
+  return xmlTotalDepartamento;
+}
+
+// Realiza la conversión de idER a idPestaña de los departamentos seleccionados
+private getXmlDepartamentosByValueER(){
+  var xmlTotalDepartamento: any;
+  var xmlDepartamentos = [];
+  var deptoElement: any;
+  if(this.selectedIdDepartamento === 0){    
+    console.log(this.selectedDepartamentos);
+    for ( let i = 0; i <= (this.selectedDepartamentos.length - 1); i++ ) {
+      deptoElement = this.departamentos.find(x => x.idER === parseInt(this.selectedDepartamentos[i]));    
+      if ( deptoElement !== undefined ) {
+        xmlDepartamentos.push('<departamento><id>' + deptoElement.idPestana + '</id></departamento>');
+      }
+    }
+  } 
+  xmlTotalDepartamento = '<departamentos>' + xmlDepartamentos.join('') + '</departamentos>';
+  console.log(xmlTotalDepartamento);              
+  return xmlTotalDepartamento;
+}
+
+  getDetalleResultadosVariacion(esAnual, xmlDepartamento: string): void {
     // Este servicio requiere el Id de la sucursal con un cero a la izquierda
     this._service.getEstadoResultadosVariacion({
       idCompania: this.selectedCompania,
       PeriodoMes: this.mes,
       PeriodoYear: this.anio,
       idEstadoResultadosI: this.idEstadoResultado || 0,
-      IdDepartamento: this.selectedIdDepartamento > 0 ? this.selectedIdDepartamento : 0,
+      IdDepartamento: xmlDepartamento, //this.selectedIdDepartamento > 0 ? this.selectedIdDepartamento : 0,
       IdSucursal: this.selectedIdSucursal, // > 0 ? this.selectedIdSucursal : 0, 
       idSucursalSecuencia: this.selectedIdSucursalSecuencia,
       EsAnul: esAnual
     }).subscribe(acumuladoVariacion => {
-        this.acumuladoVariacion = acumuladoVariacion;
+        this.acumuladoVariacion = acumuladoVariacion;        
+        this.controlarSpinner(false);
         if (esAnual === 0) {
 
           this.acumuladoVariacion.forEach(ac => {
@@ -2015,16 +2078,23 @@ getReporteSumaDepartamentos() : void{
     }
   }
 
-  onClickDetalleSegundoNivel(i: number, value: number, name: string, mes: string = '') {
-    // validar que solo entre cuando viene de real (excluir Ppto y Variacion)
-    if (this.detalleName === 'Real' || this.detalleName === 'AcReal') {
+  onClickDetalleSegundoNivel(i: number, value: number, name: string, mes: string = '') {    
+    if(name === 'SumaDeptosTercerNivel'){
+      this.showSumaDepartamentosPrimerNivel = false;
+      this.showSumaDepartamentosSegundoNivel = true;
+      this.descripcionSumaDeptoTercerNivel = this.detalleResultadosMensual[i].descripcion;
+      this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].numeroCuenta, mes);     
+      this.controlarSpinner(true, 3000);
+
+    } else if (this.detalleName === 'Real' || this.detalleName === 'AcReal') {
+      // validar que solo entre cuando viene de real (excluir Ppto y Variacion)
       // Etiqueta de mes usada en breadcrumb
       if (mes !== '') {
         this.detalleNameSegundoNivel = `(${name})`;
       } else {
         this.detalleNameSegundoNivel = '';
       }
-
+      this.controlarSpinner(true, 3000);
       //this.showResultados = false;
       this.showDetallePrimerNivel = false;
       this.showDetalleSegundoNivel = true;
@@ -2032,7 +2102,7 @@ getReporteSumaDepartamentos() : void{
       this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].descripcion;
       this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].numeroCuenta, mes);
       this.showOriginal=2;
-    }
+    } 
   }
 
    // ocultamos todos los resultados cuando no hay compañia seleccionada
@@ -2083,8 +2153,7 @@ hideResultados(): void{
   }
 
   hideDetalleUnidadesTercerNivel(): void {
-    console.log('hideDetalleUnidadesTercerNivel');
-    //this.controlarSpinner(true, 5000);
+    this.controlarSpinner(true, 3000);
     this.showUnidades = false;
     this.showDetalleUnidadesSegundoNivel = true;
     this.showDetalleUnidadesTercerNivel = false;
@@ -2095,6 +2164,16 @@ hideResultados(): void{
     this.showResultados = true;
     this.showDetalleSegundoNivel = false;
     this.showDetallePrimerNivel = false;
+  }
+  hideDetalleSumaDeptoPrimerNivel(): void {
+    this.showSumaDepartamentosHeader = true;
+    this.showSumaDepartamentosPrimerNivel = false;
+    this.showSumaDepartamentosSegundoNivel = false;
+  }
+  hideDetalleSumaDeptoSegundoNivel(): void {
+    this.showSumaDepartamentosPrimerNivel = true;
+    this.showSumaDepartamentosHeader = false;
+    this.showSumaDepartamentosSegundoNivel = false;
   }
 
   hideDetalleSegundoNivel(): void {
@@ -2141,6 +2220,9 @@ hideResultados(): void{
         this.departamentos.forEach(d => {
           d.Selected = !selected;
         })
+    } else {
+      this.resultadoSumaDepartamentos = [];
+      this.sumaDepartamentosAReal = [];
     }
 
     this.departamentos.forEach(d => {

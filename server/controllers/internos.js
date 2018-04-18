@@ -113,7 +113,7 @@ internos.prototype.get_estadoresultadosnv2 = function (req, res, next) {
     { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
     { name: 'PeriodoMes', value: periodoMes, type: self.model.types.INT },
     { name: 'PeriodoYear', value: periodoYear, type: self.model.types.INT },
-    { name: 'IdDepartamento', value: idDepartamento, type: self.model.types.INT },
+    { name: 'IdDepartamento', value: idDepartamento, type: self.model.types.STRING },
     { name: 'idSucursalSecuencia', value: idSucursalSecuencia, type: self.model.types.INT },
     { name: 'idEstadoResultadosI', value: idEstadoResultadosI, type: self.model.types.INT },
     { name: 'idOrden', value: idOrden, type: self.model.types.INT },
@@ -121,10 +121,6 @@ internos.prototype.get_estadoresultadosnv2 = function (req, res, next) {
   ];
 
   this.model.query('Contabilidad.ObtieneDetalleEstadoDeResultadosSegundoNivel', params, function (error, result) {
-    console.log('Parametros: ' + params);
-    if (result.length > 0) {
-      // console.log("Estado de Resultados " + result[0]);
-    }
     self.view.expositor(res, {
       error: error,
       result: result,
@@ -150,7 +146,7 @@ internos.prototype.get_estadoresultadospresupuestonv2 = function (req, res, next
     { name: 'idCompania', value: idCompania, type: self.model.types.INT },
     { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
     { name: 'PeriodoYear', value: periodoYear, type: self.model.types.INT },
-    { name: 'IdDepartamento', value: idDepartamento, type: self.model.types.INT },
+    { name: 'IdDepartamento', value: idDepartamento, type: self.model.types.STRING },
     { name: 'IdEstadoDeResultado', value: idEstadoResultadosI, type: self.model.types.INT },
     { name: 'idOrden', value: idOrden, type: self.model.types.INT }
   ];
@@ -1156,7 +1152,7 @@ internos.prototype.get_estadoderesultadosvariacionsegundonivel = function (req, 
     { name: 'PeriodoMes',           value: PeriodoMes, type: self.model.types.INT },
     { name: 'PeriodoYear',          value: PeriodoYear, type: self.model.types.INT },
     { name: 'idEstadoResultadosI',  value: idEstadoResultadosI, type: self.model.types.INT },
-    { name: 'IdDepartamento',       value: IdDepartamento, type: self.model.types.INT },
+    { name: 'IdDepartamento',       value: IdDepartamento, type: self.model.types.STRING },
     { name: 'IdSucursal',           value: IdSucursal, type: self.model.types.INT },
     { name: 'idSucursalSecuencia',  value: idSucursalSecuencia, type: self.model.types.INT },
     { name: 'EsAnul',               value: EsAnul, type: self.model.types.INT }
@@ -1263,8 +1259,7 @@ internos.prototype.get_detalleDepartamentosEspeciales = function (req, res, next
     { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
     { name: 'periodoYear', value: periodoAnio, type: self.model.types.INT }
   ];
-  console.log('paramssss');
-  console.log(params);
+
   this.model.query('Unidad.ObtenerDetalleDepartamentosEspeciales', params, function (error, result) {
     self.view.expositor(res, {
       error: error,
