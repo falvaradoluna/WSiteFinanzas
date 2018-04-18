@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { routerTransition } from '../../../router.animations';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'wsf-repoexternos',
   templateUrl: './repoexternos.component.html',
@@ -18,5 +19,6 @@ export class RepoexternosComponent implements OnInit {
 
   createExcel(): void{
 	  console.log( "Hola createExcel" );
+
   }
 }
