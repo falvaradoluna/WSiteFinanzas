@@ -14,10 +14,9 @@ export class RepoexternosComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-	  this.createExcel();
   }
 
-  createExcel(){
+  createExcel(): void{
 	  console.log( "Hola createExcel" );
   }
 }
