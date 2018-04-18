@@ -485,16 +485,15 @@ private changeCursorDefault(): void {
     delete (this.sumaDepartamentosAReal);
   }
 //////
-  sumaDepartamentos(): void {      
-      if (this.selectedDepartamentosStr && this.selectedDepartamentosStr !== '\'') {
-        this.controlarSpinner(true, 5000);
-        if(this.selectedTipoReporte === 1){
-          this.showSumaDepartamentosHeader = true;
-          this.showSumaDepartamentosPrimerNivel = false;
-          this.showSumaDepartamentosSegundoNivel = false;
-        }
-        this.getSumaDepartamentos();
-      } 
+  sumaDepartamentos(): void { 
+    this.showSumaDepartamentosPrimerNivel = false;
+    this.showSumaDepartamentosSegundoNivel = false;     
+    if (this.selectedDepartamentosStr && this.selectedDepartamentosStr !== '\'') {
+      this.controlarSpinner(true, 5000);
+      if(this.selectedTipoReporte === 1){
+      }
+      this.getSumaDepartamentos();
+    } 
 }
 //////////
   showSuma(): void {
@@ -975,8 +974,10 @@ getSumaDepartamentos(): void {
 switch(sTipoReporte){
     case '1':
        this.getReporteSumaDepartamentos();
+       this.showSumaDepartamentosHeader = true;
     break;
     default:
+      this.showSumaDepartamentosHeader = false;
       this.getSumaDepartamentosAcumuladoReal();
     break;
   }
@@ -1623,14 +1624,16 @@ getReporteSumaDepartamentos() : void{
     }
     else{
       delete (this.resultadoSumaDepartamentos);
-    //  this.showSumaDepartamentos=true;
+      this.showSumaDepartamentosPrimerNivel = false;
+      this.showSumaDepartamentosSegundoNivel = false;
+      
       switch (nv){
         case '1':
         this.showSumaDepartamentosHeader= true;
         this.showSumaDepartamentosAReal=false;
         break;
         case '2': case '3':      
-        this.showSumaDepartamentosHeader= false;
+        this.showSumaDepartamentosHeader= false;        
         this.showSumaDepartamentosAReal=true;
         delete(this.sumaDepartamentosAReal);
         break;
