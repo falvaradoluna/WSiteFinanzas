@@ -17,7 +17,8 @@ const routes: Routes = [
           { path: 'grid', loadChildren: './grid/grid.module#GridModule' },
           { path: 'components', loadChildren: './bs-component/bs-component.module#BsComponentModule' },
           { path: 'internos', loadChildren: '../modules/internos/internos.module#InternosModule' },
-          { path: 'blank-page', loadChildren: './blank-page/blank-page.module#BlankPageModule' }
+          { path: 'blank-page', loadChildren: './blank-page/blank-page.module#BlankPageModule' },
+          { path: 'externos', loadChildren: '../modules/externos/repoexternos/repoexternos.module#RepoexternosModule' }
         ]
     }
 ];
