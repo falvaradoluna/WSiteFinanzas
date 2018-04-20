@@ -1626,7 +1626,7 @@
               <ng-container *ngFor='let ar of estadoResultadosAcumuladoReal; let i = index;'>
                 <tr>
                   <td>{{ ar.descripcion }}</td>
-                  <td class="text-center" (click)="onClickEstadoResultadosAcumuladoReal(ar.idOrden, ar.idEstadoResultadosI)">{{ ar.enero | number:'1.2-2' }}</td>
+                  <td class="text-center" *ngIf="ar.idEstadoResultadosI != 66 && ar.idEstadoResultadosI != 67 && ar.idEstadoResultadosI != 68" (click)="onClickEstadoResultadosAcumuladoReal(ar.idOrden, ar.idEstadoResultadosI)">{{ ar.enero | number:'1.2-2' }}</td>
                   <td class="text-center" *ngIf='showPercents'>{{ ar.eneroPerc | number:'1.2-2' }}</td>
                   <td class="text-center">{{ ar.febrero | number:'1.2-2' }}</td>
                   <td class="text-center" *ngIf='showPercents'>{{ ar.febreroPerc | number:'1.2-2' }}</td>

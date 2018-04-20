@@ -213,6 +213,7 @@ export class InternosComponent implements OnInit {
   showSumaDepartamentosSegundoNivel=false;
   descripcionSumaDeptoSegundoNivel = '';
   descripcionSumaDeptoTercerNivel = '';
+  public productoCompania = 0;
 
   ngOnInit() {
     this.setDefaultDate();
@@ -227,7 +228,7 @@ export class InternosComponent implements OnInit {
      this.showFilters = !this.showFilters;
   }
 
-  toggleUnidades(): void {    
+  toggleUnidades(): void {   
     if (this.showUnidades === true || this.showDetalleUnidadesPrimerNivel === true || this.showDetalleUnidadesSegundoNivel===true 
       ||  this.showDetalleUnidadesTercerNivel ===true){
        this.showOriginalUN = 0;
@@ -444,9 +445,9 @@ export class InternosComponent implements OnInit {
     
     // Oculta la tabla de unidades
     // si se procesa por un departamento en especifico
-    if( this.selectedIdDepartamento == 16 || this.selectedIdDepartamento == 17){
-      this.showUnidades = false;
-    }    
+    //if( this.selectedIdDepartamento == 16 || this.selectedIdDepartamento == 17){
+      //this.showUnidades = false;
+    //}    
     // this.showReporteUnidades, this.showUnidadesDepartamento, this.showUnidadesDeptoNivel
     this.showUnidadesDepartamento = true
   }
@@ -1508,6 +1509,7 @@ getReporteSumaDepartamentos() : void{
       const a = this.companias.find(x => x.id === +newValue);
       if ( a !== undefined) {
         this.selectedNombreCompania = a.nombreComercial;
+        this.productoCompania = parseInt(a.idProducto);
       }
     }
     
@@ -1534,7 +1536,7 @@ getReporteSumaDepartamentos() : void{
           this.sumaDepartamentos();
         }
       }
-     
+
     this.hideResultados();
   }
   
@@ -1601,8 +1603,11 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeTipoReporte(newValue: number): void {
+    
+    console.log('destruye');
+    this.estadoResultadosAcumuladoReal = [];
     if(this.selectedCompania != 0){
-      this.activeSpinner = true;
+      this.controlarSpinner(true, 5000);
     }
     this.selectedTipoReporte = newValue;
     this.showOriginal=0;
@@ -1708,7 +1713,7 @@ getReporteSumaDepartamentos() : void{
   }
 
   getResultadosAcumuladoXIdER(idOrden: number, idEstado: number): void {
-
+    
     this._service.get_ResultadosAcumuladoXIdER({
       idCompania:           this.selectedCompania,
       IdSucursal:           this.selectedIdSucursal,
@@ -1720,6 +1725,7 @@ getReporteSumaDepartamentos() : void{
     })
       .subscribe(acumuladoRealNv2 => {
         this.acumuladoRealNv2 = acumuladoRealNv2;
+        this.controlarSpinner(false);
         this.fixedHeader('tableAcumuladoRealNv2');
       },
       error => this.errorMessage = <any>error);
@@ -1729,7 +1735,7 @@ getReporteSumaDepartamentos() : void{
       if ( idEstado == null ) {
         idEstado = 0;
       }
-
+      this.controlarSpinner(true, 4000);
       this.showEstadoResultadoAcumuladoReal = 2;
       this.getResultadosAcumuladoXIdER(idOrden, idEstado);
   }
@@ -1946,7 +1952,6 @@ private getXmlDepartamentosByValueER(){
   var xmlDepartamentos = [];
   var deptoElement: any;
   if(this.selectedIdDepartamento === 0){    
-    console.log(this.selectedDepartamentos);
     for ( let i = 0; i <= (this.selectedDepartamentos.length - 1); i++ ) {
       deptoElement = this.departamentos.find(x => x.idER === parseInt(this.selectedDepartamentos[i]));    
       if ( deptoElement !== undefined ) {
@@ -2133,7 +2138,11 @@ hideResultados(): void{
 
   hideDetalles(): void {
     this.showResultados = true;
-    this.showUnidades = true;
+    if(this.productoCompania === 3){
+      this.showUnidades = false;
+    } else {
+      this.showUnidades = true;
+    }
     this.showDetalleUnidadesPrimerNivel = false;
     this.showDetalleUnidadesSegundoNivel = false;
     this.showDetalleUnidadesTercerNivel = false;
@@ -2142,7 +2151,11 @@ hideResultados(): void{
   }
 
   hideDetalleUnidadesPrimerNivel(): void {
-    this.showUnidades = true;
+    if(this.productoCompania === 3){
+      this.showUnidades = false;
+    } else {
+      this.showUnidades = true;
+    }
     this.showDetalleUnidadesSegundoNivel = false;
     this.showDetalleUnidadesTercerNivel = false;
     this.showDetalleUnidadesPrimerNivel = false;
