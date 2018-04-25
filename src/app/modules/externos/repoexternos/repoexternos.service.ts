@@ -18,7 +18,7 @@ export class RepoexternosService {
     createExcel(): Observable<IResponse[]>{
         //Inicializamos un nuevo onjeto de tipo HttpParams
         let Params = new HttpParams();
-
+        console.log( 'Service createExcel.' );
         return this._http.get<IResponse[]>(this._urlcreateExcle, {params: Params})
         .catch(this.handleError);
     };
