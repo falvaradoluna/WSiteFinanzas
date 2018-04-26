@@ -1,5 +1,8 @@
 var externosView = require('../views/reference'),
     externosModel = require('../models/dataAccess');
+var json2xls = require('json2xls');
+var fs = require('fs');
+var app = require('express')
 
 var externos = function (conf) {
     this.conf = conf || {};
@@ -46,10 +49,39 @@ externos.prototype.get_createExcel = function (req, res, next) {
         { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
         { name: 'periodoMes', value: periodoMes, type: self.model.types.INT }
     ];
-    console.log( 'parametrosExcel', params );
-    self.view.expositor(res, {
-        result: {Success: true, Msg: 'Rifo', Name: params}
+
+    var json = {
+        foo: 'Con',
+        qux: 'IF',
+        poo: 123,
+        stux: new Date()
+    }
+    
+    var xls = json2xls(json);
+    var path = 'excel/';
+    var nameExcel = 'Externo' + periodoYear + '.xlsx'
+    var urlSave = path + nameExcel;
+    console.log( 'urlSave', urlSave );
+    fs.writeFileSync(urlSave, xls, 'binary', function(err){
+        if (err) {
+            return console.log(err);
+        }
+    
+        console.log("Se guardo!");
+        // if (err) {
+        //     console.log( 'error', err );
+        // }else{
+        //     console.log( 'en el ELSE' );
+        //     self.view.expositor(res, {
+        //         result: { Success: true, Msg: 'Se creo el excel con éxito.', Name: nameExcel }
+        //     });
+        // };
     });
+
+    // console.log( 'parametrosExcel', params );
+    // self.view.expositor(res, {
+    //     result: {Success: true, Msg: 'Rifo', Name: params}
+    // });
     //   this.model.query('Unidad.ObtenerUnidades', params, function (error, result) {
     //     // console.log('Parametros Unidades: ' + JSON.stringify(params));
     //     if (result.length > 0) {
