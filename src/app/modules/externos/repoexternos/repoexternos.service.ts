@@ -5,21 +5,39 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 
+//Importamos las interfaces
+import { ICompania } from '../../../models/catalog/compania';
+
 import { IResponse } from './models/response';
 
 @Injectable()
 export class RepoexternosService {
 
     //Url´s peticiones a Apis
-    private _urlcreateExcle = 'api/externos/createExcel';
+    private _urlcreateExcel = 'api/externos/createExcel';
+    private _urlCompanias = 'api/externos/companias';
 
     constructor(private _http: HttpClient) { }
 
-    createExcel(): Observable<IResponse[]>{
+    createExcel(params): Observable<IResponse[]> {
         //Inicializamos un nuevo onjeto de tipo HttpParams
         let Params = new HttpParams();
-        console.log( 'Service createExcel.' );
-        return this._http.get<IResponse[]>(this._urlcreateExcle, {params: Params})
+        Params = Params.append( 'idCompania', params.idCompania );
+        Params = Params.append( 'resporteId', params.resporteId );
+        Params = Params.append( 'periodoYear', params.periodoYear );
+        Params = Params.append( 'periodoMes', params.periodoMes );
+        console.log( 'service', params );
+        return this._http.get<IResponse[]>(this._urlcreateExcel, { params: Params })
+        .catch(this.handleError);
+    };
+
+    getCompanias(parameters): Observable<ICompania[]> {
+        // Initialize Params Object
+        let Params = new HttpParams();
+        // Begin assigning parameters
+        Params = Params.append('idusuario', parameters.idUsuario);
+
+        return this._http.get<ICompania[]>(this._urlCompanias, { params: Params })
         .catch(this.handleError);
     };
 

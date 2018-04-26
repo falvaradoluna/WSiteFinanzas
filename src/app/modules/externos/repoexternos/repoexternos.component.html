@@ -1,5 +1,52 @@
 <div [@routerTransition]>
-    <button (click) = 'createExcel()'>
+    <div class="card">
+        <div class="card-header bg-primary text-white text-center">
+            FILTROS
+            <button type="button" class="btn btn-primary text-white btn-sm btn-vm" (click)='toggleFilters()'>
+                <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
+            </button>
+        </div>
+        <div class="card-body" *ngIf='showFilters' @ngIfAnimation>
+            <form [formGroup]="form" (ngSubmit)="createExcel()">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <h6 class="text-muted">Compañía</h6>
+                        <select class="form-control form-control-sm" formControlName="selectCompania">
+                            <option value="0">Seleccione una Compañía</option>
+                            <option *ngFor = "let compania of companias;" [value]="compania.id" > {{ compania.razonSocial }} </option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <h6 class="text-muted">Periodo </h6>
+                        <select class="form-control form-control-sm" formControlName="selectPeriodo" 
+                            (ngModelChange)="onChangePeriodo($event)">
+                            <option value="0">Seleccione Periodo</option>
+                            <option value="1">Anual</option>
+                            <option value="2">Mensual</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <h6 class="text-muted">Año </h6>
+                        <select class="form-control form-control-sm" formControlName="selectAnio">
+                            <option value="0">Seleccione Año</option>
+                            <option *ngFor ="let anio of anios" [value]="anio.value">{{ anio.anio }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <h6 class="text-muted">Mes </h6>
+                        <select class="form-control form-control-sm" formControlName="selectMes">
+                            <option value="0">Seleccione Mes</option>
+                            <option *ngFor ="let mes of meses" [value]="mes.value">{{ mes.mes }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <button class="btn btn-primary text-semibold btn-sm btn-block" type="submit" >Generar Excel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- <button (click) = 'createExcel()'>
         Excel
-    </button>
+    </button> -->
 </div>
