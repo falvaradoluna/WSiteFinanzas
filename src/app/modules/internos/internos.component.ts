@@ -40,6 +40,7 @@ import { FechaActualizacionService } from '../../shared';
 import { FlujoeSituacionfComponent } from './flujoe-situacionf/flujoe-situacionf.component'
 import { ElementSchemaRegistry } from '@angular/compiler';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { isUndefined } from 'util';
 //import { ENETUNREACH } from 'constants';
 
 @Component({
@@ -557,42 +558,44 @@ private changeCursorDefault(): void {
       error => this.errorMessage = <any>error,
       () => {
         const total = this.resultadoUnidades.find(x => x.idOrigen === 0);
-        const totalCantidad = total.cantidad;
-        const totalPresupuesto = total.cantidadPresupuesto;
-        const totalCantidadAcumulado = total.cantidadAcumulado;
-        const totalPresupuestoAcumulado = total.cantidadPresupuestoAcumulado;
+        if ( !isUndefined(total) ) {
+          const totalCantidad = total.cantidad;
+          const totalPresupuesto = total.cantidadPresupuesto;
+          const totalCantidadAcumulado = total.cantidadAcumulado;
+          const totalPresupuestoAcumulado = total.cantidadPresupuestoAcumulado;
 
-        this.resultadoUnidades.forEach(ru => {
-          // Calcula porcentajes de cantidad real y presupuesto (mensual y acumulado)
-          if (ru.descripcion.trim() === 'Intercambios') {
-            // Intercambios no se toma en cuenta
-            ru.porcentaje = 0;
-            ru.presupuestoPorcentaje = 0;
-            ru.porcentajeAcumulado = 0;
-            ru.presupuestoPorcentajeAcumulado = 0;
-          } else {
-            ru.porcentaje = ru.cantidad / totalCantidad * 100;
-            ru.presupuestoPorcentaje = ru.cantidadPresupuesto / totalPresupuesto * 100;
-            ru.porcentajeAcumulado = ru.cantidadAcumulado / totalCantidadAcumulado * 100;
-            ru.presupuestoPorcentajeAcumulado = ru.cantidadPresupuestoAcumulado / totalPresupuestoAcumulado * 100;
-          }
+          this.resultadoUnidades.forEach(ru => {
+            // Calcula porcentajes de cantidad real y presupuesto (mensual y acumulado)
+            if (ru.descripcion.trim() === 'Intercambios') {
+              // Intercambios no se toma en cuenta
+              ru.porcentaje = 0;
+              ru.presupuestoPorcentaje = 0;
+              ru.porcentajeAcumulado = 0;
+              ru.presupuestoPorcentajeAcumulado = 0;
+            } else {
+              ru.porcentaje = ru.cantidad / totalCantidad * 100;
+              ru.presupuestoPorcentaje = ru.cantidadPresupuesto / totalPresupuesto * 100;
+              ru.porcentajeAcumulado = ru.cantidadAcumulado / totalCantidadAcumulado * 100;
+              ru.presupuestoPorcentajeAcumulado = ru.cantidadPresupuestoAcumulado / totalPresupuestoAcumulado * 100;
+            }
 
-          // Calcula porcentaje de variacion
-          if (ru.cantidadPresupuesto === 0) {
-            // Evitar division entre cero
-            ru.porcentajeVariacion = 100;
-          } else {
-            ru.porcentajeVariacion = ru.porcentaje - ru.presupuestoPorcentaje;
-          }
+            // Calcula porcentaje de variacion
+            if (ru.cantidadPresupuesto === 0) {
+              // Evitar division entre cero
+              ru.porcentajeVariacion = 100;
+            } else {
+              ru.porcentajeVariacion = ru.porcentaje - ru.presupuestoPorcentaje;
+            }
 
-          // Calcula porcentaje de variacion acumulado
-          if (ru.cantidadPresupuestoAcumulado === 0) {
-            // Evitar division entre cero
-            ru.porcentajeVariacionAcumulado = 100;
-          } else {
-            ru.porcentajeVariacionAcumulado = ru.porcentajeAcumulado - ru.presupuestoPorcentajeAcumulado;
-          }
-        });
+            // Calcula porcentaje de variacion acumulado
+            if (ru.cantidadPresupuestoAcumulado === 0) {
+              // Evitar division entre cero
+              ru.porcentajeVariacionAcumulado = 100;
+            } else {
+              ru.porcentajeVariacionAcumulado = ru.porcentajeAcumulado - ru.presupuestoPorcentajeAcumulado;
+            }
+          });
+        }
       }
     );
   }
@@ -633,96 +636,98 @@ private changeCursorDefault(): void {
       () => {
 
         const ventas = this.estadoResultados.find(x => x.idEstadoResultadosI === 54);
-        const utilidadBrutaNeta = this.estadoResultados.find(x => x.descripcion === 'Utilidad Bruta Neta');
+        if ( !isUndefined(ventas) ) {
+          const utilidadBrutaNeta = this.estadoResultados.find(x => x.descripcion === 'Utilidad Bruta Neta');
 
-        this.estadoResultados.forEach(er => {
+          this.estadoResultados.forEach(er => {
 
-          this.getCalculoER(er, this.estadoResultados);
-         
-          ventas.cantidad = this.getIsNumber(ventas.cantidad) //ventas.cantidad >= 0 ? ventas.cantidad : 0;
-          ventas.cantidadAcumulado = this.getIsNumber(ventas.cantidadAcumulado);// ventas.cantidadAcumulado >= 0 ? ventas.cantidadAcumulado : 0;
-          ventas.cantidadPresupuesto= this.getIsNumber(ventas.cantidadPresupuesto);//ventas.cantidadPresupuesto >= 0 ? ventas.cantidadPresupuesto : 0;
-          ventas.cantidadPresupuestoAcumulado = this.getIsNumber(ventas.cantidadPresupuestoAcumulado);//ventas.cantidadPresupuestoAcumulado >= 0 ? ventas.cantidadPresupuestoAcumulado : 0;
-
-          utilidadBrutaNeta.cantidad = this.getIsNumber(utilidadBrutaNeta.cantidad);//utilidadBrutaNeta.cantidad >= 0  ? utilidadBrutaNeta.cantidad : 0;
-          utilidadBrutaNeta.cantidadPresupuesto = this.getIsNumber(utilidadBrutaNeta.cantidadPresupuesto);//utilidadBrutaNeta.cantidadPresupuesto >= 0 ? utilidadBrutaNeta.cantidadPresupuesto : 0;
-          utilidadBrutaNeta.cantidadAcumulado = this.getIsNumber(utilidadBrutaNeta.cantidadAcumulado);//utilidadBrutaNeta.cantidadAcumulado >= 0 ? utilidadBrutaNeta.cantidadAcumulado : 0;
-          utilidadBrutaNeta.cantidadPresupuestoAcumulado = this.getIsNumber(utilidadBrutaNeta.cantidadPresupuestoAcumulado);//utilidadBrutaNeta.cantidadPresupuestoAcumulado >= 0 ? utilidadBrutaNeta.cantidadPresupuestoAcumulado : 0;
+            this.getCalculoER(er, this.estadoResultados);
           
-          er.cantidad = this.getIsNumber(er.cantidad);//er.cantidad >= 0 ? er.cantidad :0;
-          er.cantidadAcumulado = this.getIsNumber(er.cantidadAcumulado);//er.cantidadAcumulado >= 0 ? er.cantidadAcumulado: 0;
-          er.cantidadPresupuesto = this.getIsNumber(er.cantidadPresupuesto);//er.cantidadPresupuesto >= 0 ? er.cantidadPresupuesto : 0;          
-          er.cantidadPresupuestoAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado);//er.cantidadPresupuestoAcumulado >= 0 ? er.cantidadPresupuestoAcumulado : 0;
+            ventas.cantidad = this.getIsNumber(ventas.cantidad) //ventas.cantidad >= 0 ? ventas.cantidad : 0;
+            ventas.cantidadAcumulado = this.getIsNumber(ventas.cantidadAcumulado);// ventas.cantidadAcumulado >= 0 ? ventas.cantidadAcumulado : 0;
+            ventas.cantidadPresupuesto= this.getIsNumber(ventas.cantidadPresupuesto);//ventas.cantidadPresupuesto >= 0 ? ventas.cantidadPresupuesto : 0;
+            ventas.cantidadPresupuestoAcumulado = this.getIsNumber(ventas.cantidadPresupuestoAcumulado);//ventas.cantidadPresupuestoAcumulado >= 0 ? ventas.cantidadPresupuestoAcumulado : 0;
 
-          // Calcula porcentaje real
-          switch (er.idEstadoResultadosI) {
-            case 54: { // ventas
-              er.porcentaje = 100;
-              er.porcentajeAcumulado = 100;
-              er.presupuestoPorcentaje = 100;
-              er.presupuestoPorcentajeAcumulado = 100;
-              break;
-            }
-            case 8: { // Costo de ventas
-              er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
-              er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
-              er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
-              er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
-              break;
-            }
-            case 40: { // Otros costos
-              er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
-              er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
-              er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
-              er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
-              break;
-            }
-            default: { // todos los demás van por utilidad bruta neta
-              er.porcentaje = this.getIsNumber(er.cantidad / utilidadBrutaNeta.cantidad * 100);
-              er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100);
-              er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / utilidadBrutaNeta.cantidadPresupuesto * 100);
-              er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / utilidadBrutaNeta.cantidadPresupuestoAcumulado * 100);
-              break;
-            }
-          }
+            utilidadBrutaNeta.cantidad = this.getIsNumber(utilidadBrutaNeta.cantidad);//utilidadBrutaNeta.cantidad >= 0  ? utilidadBrutaNeta.cantidad : 0;
+            utilidadBrutaNeta.cantidadPresupuesto = this.getIsNumber(utilidadBrutaNeta.cantidadPresupuesto);//utilidadBrutaNeta.cantidadPresupuesto >= 0 ? utilidadBrutaNeta.cantidadPresupuesto : 0;
+            utilidadBrutaNeta.cantidadAcumulado = this.getIsNumber(utilidadBrutaNeta.cantidadAcumulado);//utilidadBrutaNeta.cantidadAcumulado >= 0 ? utilidadBrutaNeta.cantidadAcumulado : 0;
+            utilidadBrutaNeta.cantidadPresupuestoAcumulado = this.getIsNumber(utilidadBrutaNeta.cantidadPresupuestoAcumulado);//utilidadBrutaNeta.cantidadPresupuestoAcumulado >= 0 ? utilidadBrutaNeta.cantidadPresupuestoAcumulado : 0;
+            
+            er.cantidad = this.getIsNumber(er.cantidad);//er.cantidad >= 0 ? er.cantidad :0;
+            er.cantidadAcumulado = this.getIsNumber(er.cantidadAcumulado);//er.cantidadAcumulado >= 0 ? er.cantidadAcumulado: 0;
+            er.cantidadPresupuesto = this.getIsNumber(er.cantidadPresupuesto);//er.cantidadPresupuesto >= 0 ? er.cantidadPresupuesto : 0;          
+            er.cantidadPresupuestoAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado);//er.cantidadPresupuestoAcumulado >= 0 ? er.cantidadPresupuestoAcumulado : 0;
 
-          switch (er.descripcion) {
-            case 'Utilidad bruta': {
-              er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
-              er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
-              er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
-              er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
-              break;
+            // Calcula porcentaje real
+            switch (er.idEstadoResultadosI) {
+              case 54: { // ventas
+                er.porcentaje = 100;
+                er.porcentajeAcumulado = 100;
+                er.presupuestoPorcentaje = 100;
+                er.presupuestoPorcentajeAcumulado = 100;
+                break;
+              }
+              case 8: { // Costo de ventas
+                er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
+                er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
+                er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
+                er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
+                break;
+              }
+              case 40: { // Otros costos
+                er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
+                er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
+                er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
+                er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
+                break;
+              }
+              default: { // todos los demás van por utilidad bruta neta
+                er.porcentaje = this.getIsNumber(er.cantidad / utilidadBrutaNeta.cantidad * 100);
+                er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / utilidadBrutaNeta.cantidadAcumulado * 100);
+                er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / utilidadBrutaNeta.cantidadPresupuesto * 100);
+                er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / utilidadBrutaNeta.cantidadPresupuestoAcumulado * 100);
+                break;
+              }
             }
-            case 'Utilidad Bruta Neta': {
-              er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
-              er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
-              er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
-              er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
-              break;
+
+            switch (er.descripcion) {
+              case 'Utilidad bruta': {
+                er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
+                er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
+                er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
+                er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
+                break;
+              }
+              case 'Utilidad Bruta Neta': {
+                er.porcentaje = this.getIsNumber(er.cantidad / ventas.cantidad * 100);
+                er.porcentajeAcumulado = this.getIsNumber(er.cantidadAcumulado / ventas.cantidadAcumulado * 100);
+                er.presupuestoPorcentaje = this.getIsNumber(er.cantidadPresupuesto / ventas.cantidadPresupuesto * 100);
+                er.presupuestoPorcentajeAcumulado = this.getIsNumber(er.cantidadPresupuestoAcumulado / ventas.cantidadPresupuestoAcumulado * 100);
+                break;
+              }
             }
-          }
 
-          // Calcula la variacion
-          er.variacion = this.getIsNumber(er.cantidad - er.cantidadPresupuesto);
-          er.variacionAcumulado = this.getIsNumber(er.cantidadAcumulado - er.cantidadPresupuestoAcumulado);
+            // Calcula la variacion
+            er.variacion = this.getIsNumber(er.cantidad - er.cantidadPresupuesto);
+            er.variacionAcumulado = this.getIsNumber(er.cantidadAcumulado - er.cantidadPresupuestoAcumulado);
 
-          // Calcula porcentaje de variacion
-          if (er.cantidadPresupuesto === 0) {
-            // Evitar division entre cero
-            er.porcentajeVariacion = 100;
-          } else {
-            er.porcentajeVariacion = this.getIsNumber(er.porcentaje - er.presupuestoPorcentaje);
-          }
+            // Calcula porcentaje de variacion
+            if (er.cantidadPresupuesto === 0) {
+              // Evitar division entre cero
+              er.porcentajeVariacion = 100;
+            } else {
+              er.porcentajeVariacion = this.getIsNumber(er.porcentaje - er.presupuestoPorcentaje);
+            }
 
-          // Calcula porcentaje de variacion acumulado
-          if (er.cantidadPresupuestoAcumulado === 0) {
-            // Evitar division entre cero
-            er.porcentajeVariacionAcumulado = 100;
-          } else {
-            er.porcentajeVariacionAcumulado = this.getIsNumber(er.porcentajeAcumulado - er.presupuestoPorcentajeAcumulado);
-          }
-        });
+            // Calcula porcentaje de variacion acumulado
+            if (er.cantidadPresupuestoAcumulado === 0) {
+              // Evitar division entre cero
+              er.porcentajeVariacionAcumulado = 100;
+            } else {
+              er.porcentajeVariacionAcumulado = this.getIsNumber(er.porcentajeAcumulado - er.presupuestoPorcentajeAcumulado);
+            }
+          });
+        }
       }
     );
   }
@@ -767,15 +772,17 @@ private changeCursorDefault(): void {
           if(erc.indexOf("idOrden") != -1){
                      
             var val =ResultadoCalculo.find(x=>x.idOrden === +erc.replace("idOrden",""));
-            val.cantidad = this.getIsNumber(val.cantidad); //val.cantidad >= 0 ? val.cantidad : 0;
-            val.cantidadAcumulado = this.getIsNumber(val.cantidadAcumulado); //val.cantidadAcumulado >= 0 ? val.cantidadAcumulado: 0;
-            val.cantidadPresupuesto = this.getIsNumber(val.cantidadPresupuesto); //val.cantidadPresupuesto >= 0 ? val.cantidadPresupuesto : 0;
-            val.cantidadPresupuestoAcumulado = this.getIsNumber(val.cantidadPresupuestoAcumulado); //val.cantidadPresupuestoAcumulado >= 0 ? val.cantidadPresupuestoAcumulado : 0;
-  
-            formulaOriginal =formulaOriginal.replace(erc, String(val.cantidad)).replace("diaMes",String(calc.numDiaMensual));
-            formulaOriginalAcumulado =formulaOriginalAcumulado.replace(erc, String(val.cantidadAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
-            formulaOriginalPresupuesto = formulaOriginalPresupuesto.replace(erc, String(val.cantidadPresupuesto)).replace("diaMes",String(calc.numDiaMensual));;
-            formulaOriginalPresupuestoAcumulado = formulaOriginalPresupuestoAcumulado.replace(erc, String(val.cantidadPresupuestoAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
+            if (!isUndefined(val) ) {
+              val.cantidad = this.getIsNumber(val.cantidad); //val.cantidad >= 0 ? val.cantidad : 0;
+              val.cantidadAcumulado = this.getIsNumber(val.cantidadAcumulado); //val.cantidadAcumulado >= 0 ? val.cantidadAcumulado: 0;
+              val.cantidadPresupuesto = this.getIsNumber(val.cantidadPresupuesto); //val.cantidadPresupuesto >= 0 ? val.cantidadPresupuesto : 0;
+              val.cantidadPresupuestoAcumulado = this.getIsNumber(val.cantidadPresupuestoAcumulado); //val.cantidadPresupuestoAcumulado >= 0 ? val.cantidadPresupuestoAcumulado : 0;
+    
+              formulaOriginal =formulaOriginal.replace(erc, String(val.cantidad)).replace("diaMes",String(calc.numDiaMensual));
+              formulaOriginalAcumulado =formulaOriginalAcumulado.replace(erc, String(val.cantidadAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
+              formulaOriginalPresupuesto = formulaOriginalPresupuesto.replace(erc, String(val.cantidadPresupuesto)).replace("diaMes",String(calc.numDiaMensual));;
+              formulaOriginalPresupuestoAcumulado = formulaOriginalPresupuestoAcumulado.replace(erc, String(val.cantidadPresupuestoAcumulado)).replace("diaMes",String(calc.numDiaAcumulado));
+            }
           }
         });
         var er = ResultadoCalculo.find(x=>x.idOrden === er.idOrden);
@@ -1294,40 +1301,42 @@ getReporteSumaDepartamentos() : void{
         () => {
           const totales = this.acumuladoReal.find(x => x.descripcion.trim() === 'Total Unidades');
 
-          // Ciclo de 12 meses
-          for (let mes = 1; mes <= 12; mes++) {
-            const nombreMes = this.toLongMonth(mes.toString());
+          if (!isUndefined(totales)) {
+            // Ciclo de 12 meses
+            for (let mes = 1; mes <= 12; mes++) {
+              const nombreMes = this.toLongMonth(mes.toString());
 
-            // Se calcula el total
-            const totalMensual = totales[nombreMes];
+              // Se calcula el total
+              const totalMensual = totales[nombreMes];
 
-            // Se calculan porcentajes del mes correspondiente
-            this.acumuladoReal.forEach(uap => {
-              if (uap.descripcion.trim() !== 'INTERCAMBIOS') {
-                if (totalMensual === 0) {
+              // Se calculan porcentajes del mes correspondiente
+              this.acumuladoReal.forEach(uap => {
+                if (uap.descripcion.trim() !== 'INTERCAMBIOS') {
+                  if (totalMensual === 0) {
+                    uap[nombreMes + 'Perc'] = 0;
+                    return;
+                  }
+                  uap[nombreMes + 'Perc'] = uap[nombreMes] / totalMensual * 100;
+                  uap.totalAnual = uap.enero + uap.febrero + uap.marzo + uap.abril + uap.mayo + uap.junio + uap.julio +
+                    uap.agosto + uap.septiembre + uap.octubre + uap.noviembre + uap.diciembre;
+                  uap.totalAnualPerc = 0;
+                } else {
                   uap[nombreMes + 'Perc'] = 0;
-                  return;
+                  uap.totalAnual = uap.enero + uap.febrero + uap.marzo + uap.abril + uap.mayo + uap.junio + uap.julio +
+                    uap.agosto + uap.septiembre + uap.octubre + uap.noviembre + uap.diciembre;
+                  uap.totalAnualPerc = 0;
                 }
-                uap[nombreMes + 'Perc'] = uap[nombreMes] / totalMensual * 100;
-                uap.totalAnual = uap.enero + uap.febrero + uap.marzo + uap.abril + uap.mayo + uap.junio + uap.julio +
-                  uap.agosto + uap.septiembre + uap.octubre + uap.noviembre + uap.diciembre;
-                uap.totalAnualPerc = 0;
-              } else {
-                uap[nombreMes + 'Perc'] = 0;
-                uap.totalAnual = uap.enero + uap.febrero + uap.marzo + uap.abril + uap.mayo + uap.junio + uap.julio +
-                  uap.agosto + uap.septiembre + uap.octubre + uap.noviembre + uap.diciembre;
-                uap.totalAnualPerc = 0;
-              }
-            });
-          }
+              });
+            }
 
-        // Se actualiza el total anual de todas las autoLineas
-        totales.totalAnual = this.calculaTotalMensual(this.acumuladoReal, 'totalAnual');
+          // Se actualiza el total anual de todas las autoLineas
+          totales.totalAnual = this.calculaTotalMensual(this.acumuladoReal, 'totalAnual');
 
-        // Se calculan los porcentajes de totales
-        this.acumuladoReal.forEach(dua => {
-          dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
-        });
+          // Se calculan los porcentajes de totales
+          this.acumuladoReal.forEach(dua => {
+            dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+          });
+        }
       });
   }
 
@@ -1397,28 +1406,29 @@ getReporteSumaDepartamentos() : void{
       error => this.errorMessage = <any>error,
       () => {
         const totales = this.unidadesAcumuladoPresupuesto.find(x => x.descripcion.trim() === 'Total Unidades');
+        if (!isUndefined(totales)) {
+          // Ciclo de 12 meses
+          for (let mes = 1; mes <= 12; mes++) {
+            const nombreMes = this.toLongMonth(mes.toString());
 
-        // Ciclo de 12 meses
-        for (let mes = 1; mes <= 12; mes++) {
-          const nombreMes = this.toLongMonth(mes.toString());
+            // Se calcula el total
+            const totalMensual = totales[nombreMes];
 
-          // Se calcula el total
-          const totalMensual = totales[nombreMes];
-
-          // Se calculan porcentajes del mes correspondiente
-          this.unidadesAcumuladoPresupuesto.forEach(uap => {
-            if (uap.descripcion.trim() !== 'INTERCAMBIOS') {
-              uap[nombreMes + 'Perc'] = uap[nombreMes] / totalMensual * 100;
-              uap.totalAnual = uap.enero + uap.febrero + uap.marzo + uap.abril + uap.mayo + uap.junio + uap.julio +
-                uap.agosto + uap.septiembre + uap.octubre + uap.noviembre + uap.diciembre;
-              uap.totalAnualPerc = 100;
-            } else {
-              uap[nombreMes + 'Perc'] = 0;
-              uap.totalAnual = uap.enero + uap.febrero + uap.marzo + uap.abril + uap.mayo + uap.junio + uap.julio +
-                uap.agosto + uap.septiembre + uap.octubre + uap.noviembre + uap.diciembre;
-              uap.totalAnualPerc = 0;
-            }
-          });
+            // Se calculan porcentajes del mes correspondiente
+            this.unidadesAcumuladoPresupuesto.forEach(uap => {
+              if (uap.descripcion.trim() !== 'INTERCAMBIOS') {
+                uap[nombreMes + 'Perc'] = uap[nombreMes] / totalMensual * 100;
+                uap.totalAnual = uap.enero + uap.febrero + uap.marzo + uap.abril + uap.mayo + uap.junio + uap.julio +
+                  uap.agosto + uap.septiembre + uap.octubre + uap.noviembre + uap.diciembre;
+                uap.totalAnualPerc = 100;
+              } else {
+                uap[nombreMes + 'Perc'] = 0;
+                uap.totalAnual = uap.enero + uap.febrero + uap.marzo + uap.abril + uap.mayo + uap.junio + uap.julio +
+                  uap.agosto + uap.septiembre + uap.octubre + uap.noviembre + uap.diciembre;
+                uap.totalAnualPerc = 0;
+              }
+            });
+          }
         }
       });
   }
@@ -1499,7 +1509,6 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeCompania(newValue: number): void {
-   // this.changeCursorWait();
     this.showOriginal=0;
     this.showOriginalUD=0;
     this.showOriginalUN=0;
@@ -1605,8 +1614,6 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeTipoReporte(newValue: number): void {
-    
-    console.log('destruye');
     this.estadoResultadosAcumuladoReal = [];
     if(this.selectedCompania != 0){
       this.controlarSpinner(true, 5000);
@@ -1911,7 +1918,7 @@ getReporteSumaDepartamentos() : void{
       this.showSumaDepartamentosHeader = false;   
       this.showSumaDepartamentosSegundoNivel = false;
       this.showSumaDepartamentosPrimerNivel = true; 
-      xmlDepartamento = this.getXmlDepartamentosByValueER();
+      xmlDepartamento = this.xmlSend;
       this.descripcionSumaDeptoSegundoNivel = this.resultadoSumaDepartamentos[i].descripcion + ' (' + name +  ')';
     } else {      
     this.showDetallePrimerNivel = true;
@@ -1936,7 +1943,7 @@ getReporteSumaDepartamentos() : void{
 private getXmlDepartamentos(){
   var xmlTotalDepartamento: any;
   var xmlDepartamentos = [];
-  if(this.selectedIdDepartamento === 0){
+  if(this.selectedIdDepartamento === 0) {
     for ( let i = 0; i <= (this.departamentos.length - 1); i++ ) {
       xmlDepartamentos.push('<departamento><id>' + this.departamentos[i].id + '</id></departamento>');
     }
@@ -1948,21 +1955,24 @@ private getXmlDepartamentos(){
 }
 
 // Realiza la conversión de idER a idPestaña de los departamentos seleccionados
-private getXmlDepartamentosByValueER(){
+/*private getXmlDepartamentosByValueER(){
+  console.log(this.xmlDepartamento);
+  console.log(this.xmlSend);
+  
   var xmlTotalDepartamento: any;
   var xmlDepartamentos = [];
-  var deptoElement: any;
+  var deptoElement: IDepartamento;
   if(this.selectedIdDepartamento === 0){    
     for ( let i = 0; i <= (this.selectedDepartamentos.length - 1); i++ ) {
       deptoElement = this.departamentos.find(x => x.id === parseInt(this.selectedDepartamentos[i]));    
       if ( deptoElement !== undefined ) {
-        xmlDepartamentos.push('<departamento><id>' + deptoElement.idPestana + '</id></departamento>');
+        xmlDepartamentos.push('<departamento><id>' + deptoElement.id + '</id></departamento>');
       }
     }
   } 
   xmlTotalDepartamento = '<departamentos>' + xmlDepartamentos.join('') + '</departamentos>';       
   return xmlTotalDepartamento;
-}
+}*/
 
   getDetalleResultadosVariacion(esAnual, xmlDepartamento: string): void {
     // Este servicio requiere el Id de la sucursal con un cero a la izquierda
@@ -2261,11 +2271,17 @@ hideResultados(): void{
   }
   // Se encarga de controlar el spinner
   controlarSpinner(estado: boolean, valueTime: number = 0) {
-    this.activeSpinner = estado;
+    
     if(estado){
       this._spinnerService.show(); 
-      setTimeout(() => { this._spinnerService.hide(); }, valueTime);
-    } else{ this._spinnerService.hide(); }
+      setTimeout(() => { 
+        this._spinnerService.hide(); 
+        this.activeSpinner = false;
+      }, valueTime);
+    } else { 
+      this._spinnerService.hide();  
+        this.activeSpinner = false;
+    }
   }
 }
 

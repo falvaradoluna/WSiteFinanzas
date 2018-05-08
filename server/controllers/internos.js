@@ -117,7 +117,6 @@ internos.prototype.get_estadoresultadosnv2 = function (req, res, next) {
     { name: 'idOrden', value: idOrden, type: self.model.types.INT },
     { name: 'EsAnual', value: esAnual, type: self.model.types.INT }
   ];
-  
   this.model.query('Contabilidad.ObtieneDetalleEstadoDeResultadosSegundoNivel', params, function (error, result) {
     self.view.expositor(res, {
       error: error,
@@ -316,7 +315,6 @@ internos.prototype.get_departamentos = function (req, res, next) {
 
   var params = [
     { name: 'idCompania', value: req.query.idCompania, type: self.model.types.INT },
-    //{ name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT },
     { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }
   ];
 
