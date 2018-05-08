@@ -40,7 +40,6 @@ import { FechaActualizacionService } from '../../shared';
 import { FlujoeSituacionfComponent } from './flujoe-situacionf/flujoe-situacionf.component'
 import { ElementSchemaRegistry } from '@angular/compiler';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { isUndefined } from 'util';
 //import { ENETUNREACH } from 'constants';
 
 @Component({
@@ -405,7 +404,7 @@ export class InternosComponent implements OnInit {
       return;
     }
     if(!this.activeSpinner && this.selectedCompania != 0){
-      this.controlarSpinner(true, 5000);
+      this.controlarSpinner(true, 4000);
     }
     
     const sTipoReporte = this.selectedTipoReporte.toString(); // Aunque se definio como number, la comparacion siempre lo toma como string
@@ -492,7 +491,7 @@ private changeCursorDefault(): void {
     this.showSumaDepartamentosPrimerNivel = false;
     this.showSumaDepartamentosSegundoNivel = false;     
     if (this.selectedDepartamentosStr && this.selectedDepartamentosStr !== '\'') {
-      this.controlarSpinner(true, 5000);
+      this.controlarSpinner(true, 4000);
       if(this.selectedTipoReporte === 1){
       }
       this.getSumaDepartamentos();
@@ -558,7 +557,7 @@ private changeCursorDefault(): void {
       error => this.errorMessage = <any>error,
       () => {
         const total = this.resultadoUnidades.find(x => x.idOrigen === 0);
-        if ( !isUndefined(total) ) {
+        if (typeof total !== "undefined") {
           const totalCantidad = total.cantidad;
           const totalPresupuesto = total.cantidadPresupuesto;
           const totalCantidadAcumulado = total.cantidadAcumulado;
@@ -636,7 +635,7 @@ private changeCursorDefault(): void {
       () => {
 
         const ventas = this.estadoResultados.find(x => x.idEstadoResultadosI === 54);
-        if ( !isUndefined(ventas) ) {
+        if (typeof ventas !== "undefined") {
           const utilidadBrutaNeta = this.estadoResultados.find(x => x.descripcion === 'Utilidad Bruta Neta');
 
           this.estadoResultados.forEach(er => {
@@ -772,7 +771,7 @@ private changeCursorDefault(): void {
           if(erc.indexOf("idOrden") != -1){
                      
             var val =ResultadoCalculo.find(x=>x.idOrden === +erc.replace("idOrden",""));
-            if (!isUndefined(val) ) {
+            if (typeof val !== "undefined") {
               val.cantidad = this.getIsNumber(val.cantidad); //val.cantidad >= 0 ? val.cantidad : 0;
               val.cantidadAcumulado = this.getIsNumber(val.cantidadAcumulado); //val.cantidadAcumulado >= 0 ? val.cantidadAcumulado: 0;
               val.cantidadPresupuesto = this.getIsNumber(val.cantidadPresupuesto); //val.cantidadPresupuesto >= 0 ? val.cantidadPresupuesto : 0;
@@ -1138,7 +1137,9 @@ getReporteSumaDepartamentos() : void{
       .subscribe(
         sucursales => { this.sucursales = sucursales; },
         error => { this.errorMessage = <any>error; },
-        () => { this.onChangeSucursal(0); }
+        () => { 
+          this.onChangeSucursal(0);           
+        }
         //() => { this.onChangeSucursal(-2); } TMC se cambia ya que el valor incial es cero
       );
   }
@@ -1301,7 +1302,7 @@ getReporteSumaDepartamentos() : void{
         () => {
           const totales = this.acumuladoReal.find(x => x.descripcion.trim() === 'Total Unidades');
 
-          if (!isUndefined(totales)) {
+          if (typeof totales !== "undefined") {
             // Ciclo de 12 meses
             for (let mes = 1; mes <= 12; mes++) {
               const nombreMes = this.toLongMonth(mes.toString());
@@ -1406,7 +1407,8 @@ getReporteSumaDepartamentos() : void{
       error => this.errorMessage = <any>error,
       () => {
         const totales = this.unidadesAcumuladoPresupuesto.find(x => x.descripcion.trim() === 'Total Unidades');
-        if (!isUndefined(totales)) {
+        
+        if (typeof totales !== "undefined") {
           // Ciclo de 12 meses
           for (let mes = 1; mes <= 12; mes++) {
             const nombreMes = this.toLongMonth(mes.toString());
@@ -1572,9 +1574,9 @@ getReporteSumaDepartamentos() : void{
     if ( this.selectedCompania != 0 ) {
       this.selectedIdSucursalSecuencia = this.sucursales.find(x => x.id === +selectedIndex).idSucursalSecuencia;
     }
-    //if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal) {
-      //this.getDepartamentos();
-    //}
+    if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal) {
+      this.procesar();
+    }
   }
 
   onChangeDepartamento(newValue): void {
@@ -2271,7 +2273,7 @@ hideResultados(): void{
   }
   // Se encarga de controlar el spinner
   controlarSpinner(estado: boolean, valueTime: number = 0) {
-    
+    this.activeSpinner = estado;
     if(estado){
       this._spinnerService.show(); 
       setTimeout(() => { 
