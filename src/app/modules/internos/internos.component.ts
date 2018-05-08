@@ -1560,8 +1560,9 @@ getReporteSumaDepartamentos() : void{
     this.selectedIdSucursal = selectedIndex;
     this.closeDetallesUnidades();
     this.closeDetalleUnidadesConcentrado();
-    this.selectedIdSucursalSecuencia = this.sucursales.find(x => x.id === +selectedIndex).idSucursalSecuencia;
-
+    if ( this.selectedCompania != 0 ) {
+      this.selectedIdSucursalSecuencia = this.sucursales.find(x => x.id === +selectedIndex).idSucursalSecuencia;
+    }
     //if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal) {
       //this.getDepartamentos();
     //}
