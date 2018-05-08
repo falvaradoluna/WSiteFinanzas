@@ -59,8 +59,8 @@
                   [(ngModel)]='selectedIdDepartamento'
                   (ngModelChange)='onChangeDepartamento($event)'>
                   <option *ngIf='departamentos.length > 0' value="0">Todos</option>
-                  <option *ngFor='let depto of departamentos' [value]='depto.idPestana'>
-                    {{ depto.pestanaNombre }}
+                  <option *ngFor='let depto of departamentos' [value]='depto.id'>
+                    {{ depto.descripcion }}
                   </option>
                 </select>
               </div>

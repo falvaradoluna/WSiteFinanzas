@@ -1,22 +1,66 @@
-<table class="table table-bordered">
-    <thead>
-      <tr>
-        <th class="bg-secondary text-white">NUM CUENTA</th>
-        <th class="bg-secondary text-white">DESCRIPCIÓN</th>
-        <th class="bg-secondary text-white">NATURALEZA</th>
-        <th class="bg-secondary text-white">SUCURSAL</th>
-        <th class="bg-secondary text-white">DEPARTAMENTO</th>
-        <th class="bg-secondary text-white"></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor='let cta of cuentas'>
-        <td>{{ cta.NUM_CUENTA }}</td>
-        <td>{{ cta.DESCRIPCION }}</td>
-        <td>{{ cta.NATURALEZA }}</td>
-        <td>{{ cta.SUCURSAL }}</td>
-        <td>{{ cta.DEPARTAMENTO }}</td>
-        <td><a routerLink='../edit'>Editar</a></td>
-      </tr>
-    </tbody>
-  </table>
+<div class="row animated fadeIn">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+
+        <div *ngIf="mostrarCuentas">
+          <div class="text-right">
+            <button (click)="mostrarFormulario(0, 1)" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
+              <i class="fa fa-plus"></i>
+              Crear Cuenta
+            </button>
+          </div>
+          <h5 class="card-title">Cuentas registradas</h5>
+          <div id="divTable" [style.height.px]="heightTable" class="form-group col-md-12">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th class="bg-secondary">
+                    <input type="checkbox" [checked]="selectAllCuentas" [checked]="selectAllCuentas" (change)="controlaAllCheck(0, selectAllCuentas = !selectAllCuentas)"
+                    />
+                  </th>
+                  <th class="bg-secondary text-white">Num. Cuenta</th>
+                  <th class="bg-secondary text-white">Descripción</th>
+                  <th class="bg-secondary text-white">Fecha Registro</th>
+                  <th class="bg-secondary text-white">Grupo Sat</th>
+                  <th colspan="3" class="bg-secondary text-white text-center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor='let cta of cuentas'>
+                  <td class="text-center">
+                    <input type="checkbox" [checked]="cta.enviarcuenta" [checked]="cta.enviarcuenta" (change)="controlaAllCheck(cta.id, cta.enviarcuenta = !cta.enviarcuenta)"
+                    />
+                  </td>
+                  <td class="text-center">{{ cta.numeroCuenta }}</td>
+                  <td class="text-left">{{ cta.Concepto }}</td>
+                  <td class="text-center">{{ cta.CreacionFecha }}</td>
+                  <td class="text-left">{{ cta.grupoSATCuentaContable }}</td>
+                  <td class="text-center">
+                    <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='mostrarFormulario(cta.id, 3, cta)'>Detalle</button>
+                  </td>
+                  <td class="text-center">
+                    <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='mostrarFormulario(cta.id, 2, cta)'>Editar</button>
+                  </td>
+                  <td class="text-center">
+                    <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='eliminarCuenta(cta.id, 1)'>Eliminar</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-right">
+            <button (click)="enviarCuentas()" type="button" class="btn waves-effect waves-light btn-rounded btn-primary">
+              <i class="fa fa-plus"></i>
+              Enviar Cuentas
+            </button>
+          </div>
+        </div>
+        <div *ngIf="mostrarFormCuenta">
+          <cta-cuentas-sin-clasificar-edit (mostrarCuentas)="mostrarCuentas=$event" (mostrarFormCuenta)="mostrarFormCuenta=$event"
+            (getCuentasContables)="getCuentasContables($event)" [operacionCuenta]="operacionCuenta" [cuentaContable]="cuentaContable">
+          </cta-cuentas-sin-clasificar-edit>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { routerTransition } from '../../router.animations';
 import { TreeviewItem, TreeviewConfig, TreeviewModule } from 'ngx-treeview';
 import { FormsModule, ReactiveFormsModule, NgModel } from '@angular/forms';
+import { DOCUMENT } from '@angular/platform-browser';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { trigger,
@@ -543,6 +544,7 @@ private changeCursorDefault(): void {
   }
 
   getResultadoUnidades(): void {
+    if(this.productoCompania !== 3) {
     this._service.getUnidades({
       idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
@@ -593,6 +595,7 @@ private changeCursorDefault(): void {
         });
       }
     );
+  }
   }
 
   calculaTotalMensual(items, prop) {
@@ -915,7 +918,7 @@ getSumaDepartamentosAcumuladoReal(): void {
     this.getDetalleUnidadesSeriesArNv4(UnidadDescripcion, idDepartamento, mesSelccionado);
   }
 
-  getDetalleUnidadesSeriesArNv4(UnidadDescripcion, idDepartamento, mesSelccionado): void {
+  getDetalleUnidadesSeriesArNv4(UnidadDescripcion, idDepartamento, mesSelccionado): void { 
     var xmlTipoUnidad: any;
     var xmlDepartamento: any;
     var xmlUnidadesDescripcion: any = [];
@@ -1137,7 +1140,7 @@ getReporteSumaDepartamentos() : void{
     const usuario = JSON.parse(localStorage.getItem('userLogged'));
     this._service.getDepartamentos({
        idCompania: this.selectedCompania,
-       idSucursal: this.selectedIdSucursal,
+       //idSucursal: this.selectedIdSucursal,
        idUsuario: usuario.id
     })
       .subscribe(
@@ -1559,17 +1562,16 @@ getReporteSumaDepartamentos() : void{
     this.closeDetalleUnidadesConcentrado();
     this.selectedIdSucursalSecuencia = this.sucursales.find(x => x.id === +selectedIndex).idSucursalSecuencia;
 
-    if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal) {
-      this.getDepartamentos();
-    }
+    //if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal) {
+      //this.getDepartamentos();
+    //}
   }
 
   onChangeDepartamento(newValue): void {
-    //console.log("NewValue", newValue);
     this.selectedIdDepartamento = newValue;
-   // console.log( "selectedIdDepartamento", this.selectedIdDepartamento );
-    if (this.departamentos.find(x => x.idPestana === +newValue)) {
-      this.selectedIdDepartamentoEr = this.departamentos.find(x => x.idPestana === +newValue).idER || 0;
+    if (this.departamentos.find(x => x.id === +newValue)) {
+      // this.selectedIdDepartamentoEr = this.departamentos.find(x => x.idPestana === +newValue).idER || 0;
+      this.selectedIdDepartamentoEr = newValue;
     } else {
       this.selectedIdDepartamentoEr = 0;
     }
@@ -1598,7 +1600,6 @@ getReporteSumaDepartamentos() : void{
       }
 
       this.xmlSend = '<departamentos>' + this.xmlDepartamento.join('') + '</departamentos>';
-     // console.log( 'xmlSend', this.xmlSend );
     }
   }
 
@@ -1932,12 +1933,11 @@ getReporteSumaDepartamentos() : void{
 
 // Obtiene el xml de los departamentos
 private getXmlDepartamentos(){
-  console.log(this.selectedIdDepartamento);
   var xmlTotalDepartamento: any;
   var xmlDepartamentos = [];
   if(this.selectedIdDepartamento === 0){
     for ( let i = 0; i <= (this.departamentos.length - 1); i++ ) {
-      xmlDepartamentos.push('<departamento><id>' + this.departamentos[i].idPestana + '</id></departamento>');
+      xmlDepartamentos.push('<departamento><id>' + this.departamentos[i].id + '</id></departamento>');
     }
   } else {    
     xmlDepartamentos.push('<departamento><id>' + this.selectedIdDepartamento + '</id></departamento>');
@@ -1953,14 +1953,13 @@ private getXmlDepartamentosByValueER(){
   var deptoElement: any;
   if(this.selectedIdDepartamento === 0){    
     for ( let i = 0; i <= (this.selectedDepartamentos.length - 1); i++ ) {
-      deptoElement = this.departamentos.find(x => x.idER === parseInt(this.selectedDepartamentos[i]));    
+      deptoElement = this.departamentos.find(x => x.id === parseInt(this.selectedDepartamentos[i]));    
       if ( deptoElement !== undefined ) {
         xmlDepartamentos.push('<departamento><id>' + deptoElement.idPestana + '</id></departamento>');
       }
     }
   } 
-  xmlTotalDepartamento = '<departamentos>' + xmlDepartamentos.join('') + '</departamentos>';
-  console.log(xmlTotalDepartamento);              
+  xmlTotalDepartamento = '<departamentos>' + xmlDepartamentos.join('') + '</departamentos>';       
   return xmlTotalDepartamento;
 }
 
@@ -2069,6 +2068,7 @@ private getXmlDepartamentosByValueER(){
       }
       return value / v;
     } else if (this.resultadoUnidades && +this.selectedIdDepartamento === 0) {
+      if(this.resultadoUnidades && this.resultadoUnidades.length > 0) {
       const u = this.resultadoUnidades.find(x => x.idOrigen === 0);
       switch (col) {
         case 1: v = u.cantidad;
@@ -2081,6 +2081,7 @@ private getXmlDepartamentosByValueER(){
           break;
       }
       return value / v;
+    } else return 0;
     } else {
       return 0;
     }
@@ -2168,7 +2169,7 @@ hideResultados(): void{
     this.showDetalleUnidadesPrimerNivel = true;
   }
 
-  hideDetalleUnidadesTercerNivel(): void {
+  hideDetalleUnidadesTercerNivel(): void {      
     this.controlarSpinner(true, 3000);
     this.showUnidades = false;
     this.showDetalleUnidadesSegundoNivel = true;
@@ -2244,9 +2245,9 @@ hideResultados(): void{
     this.departamentos.forEach(d => {
       d.Selected = selected;
       if (selected === true) {  
-      var iPos= this.selectedDepartamentos.lastIndexOf(`${d.idER}`);
+      var iPos= this.selectedDepartamentos.lastIndexOf(`${d.id}`);
       if(iPos<0){
-        this.selectedDepartamentos.push(`${d.idER}`);
+        this.selectedDepartamentos.push(`${d.id}`);
         }
       }
       else{
