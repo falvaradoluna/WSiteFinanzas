@@ -572,10 +572,10 @@ private changeCursorDefault(): void {
               ru.porcentajeAcumulado = 0;
               ru.presupuestoPorcentajeAcumulado = 0;
             } else {
-              ru.porcentaje = ru.cantidad / totalCantidad * 100;
-              ru.presupuestoPorcentaje = ru.cantidadPresupuesto / totalPresupuesto * 100;
-              ru.porcentajeAcumulado = ru.cantidadAcumulado / totalCantidadAcumulado * 100;
-              ru.presupuestoPorcentajeAcumulado = ru.cantidadPresupuestoAcumulado / totalPresupuestoAcumulado * 100;
+              ru.porcentaje = this.getIsNumber(ru.cantidad / totalCantidad * 100);
+              ru.presupuestoPorcentaje = this.getIsNumber(ru.cantidadPresupuesto / totalPresupuesto * 100);
+              ru.porcentajeAcumulado = this.getIsNumber(ru.cantidadAcumulado / totalCantidadAcumulado * 100);
+              ru.presupuestoPorcentajeAcumulado = this.getIsNumber(ru.cantidadPresupuestoAcumulado / totalPresupuestoAcumulado * 100);
             }
 
             // Calcula porcentaje de variacion
@@ -832,23 +832,23 @@ private changeCursorDefault(): void {
                 break;
               }
               case 'Utilidad bruta': {
-                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / ventas[nombreMes] * 100);
                 break;
               }
               case 'Utilidad Bruta Neta': {
-                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / ventas[nombreMes] * 100);
                 break;
               }
               case 'Costo de Ventas': {
-                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / ventas[nombreMes] * 100);
                 break;
               }
               case 'Otros Costos': {
-                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / ventas[nombreMes] * 100);
                 break;
               }
               default: {
-                er[nombreMes + 'Perc'] = er[nombreMes] / utilidadBrutaNeta[nombreMes] * 100;
+                er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / utilidadBrutaNeta[nombreMes] * 100);
                 break;
               }
             }
@@ -892,23 +892,23 @@ getSumaDepartamentosAcumuladoReal(): void {
               break;
             }
             case 'Utilidad bruta': {
-              er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+              er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / ventas[nombreMes] * 100);
               break;
             }
             case 'Utilidad Bruta Neta': {
-              er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+              er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / ventas[nombreMes] * 100);
               break;
             }
             case 'Costo de Ventas': {
-              er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+              er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / ventas[nombreMes] * 100);
               break;
             }
             case 'Otros Costos': {
-              er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+              er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / ventas[nombreMes] * 100);
               break;
             }
             default: {
-              er[nombreMes + 'Perc'] = er[nombreMes] / utilidadBrutaNeta[nombreMes] * 100;
+              er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / utilidadBrutaNeta[nombreMes] * 100);
               break;
             }
           }
@@ -1316,7 +1316,7 @@ getReporteSumaDepartamentos() : void{
                     uap[nombreMes + 'Perc'] = 0;
                     return;
                   }
-                  uap[nombreMes + 'Perc'] = uap[nombreMes] / totalMensual * 100;
+                  uap[nombreMes + 'Perc'] = this.getIsNumber(uap[nombreMes] / totalMensual * 100);
                   uap.totalAnual = uap.enero + uap.febrero + uap.marzo + uap.abril + uap.mayo + uap.junio + uap.julio +
                     uap.agosto + uap.septiembre + uap.octubre + uap.noviembre + uap.diciembre;
                   uap.totalAnualPerc = 0;
@@ -1334,7 +1334,7 @@ getReporteSumaDepartamentos() : void{
 
           // Se calculan los porcentajes de totales
           this.acumuladoReal.forEach(dua => {
-            dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+            dua.totalAnualPerc = this.getIsNumber(dua.totalAnual / totales.totalAnual * 100);
           });
         }
       });
@@ -1369,23 +1369,23 @@ getReporteSumaDepartamentos() : void{
                 break;
               }
               case 'Utilidad bruta': {
-                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / ventas[nombreMes] * 100);
                 break;
               }
               case 'Utilidad Bruta Neta': {
-                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / ventas[nombreMes] * 100);
                 break;
               }
               case 'Costo de Ventas': {
-                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / ventas[nombreMes] * 100);
                 break;
               }
               case 'Otros Costos': {
-                er[nombreMes + 'Perc'] = er[nombreMes] / ventas[nombreMes] * 100;
+                er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / ventas[nombreMes] * 100);
                 break;
               }
               default: {
-                er[nombreMes + 'Perc'] = er[nombreMes] / utilidadBrutaNeta[nombreMes] * 100;
+                er[nombreMes + 'Perc'] = this.getIsNumber(er[nombreMes] / utilidadBrutaNeta[nombreMes] * 100);
                 break;
               }
             }
@@ -1418,7 +1418,7 @@ getReporteSumaDepartamentos() : void{
             // Se calculan porcentajes del mes correspondiente
             this.unidadesAcumuladoPresupuesto.forEach(uap => {
               if (uap.descripcion.trim() !== 'INTERCAMBIOS') {
-                uap[nombreMes + 'Perc'] = uap[nombreMes] / totalMensual * 100;
+                uap[nombreMes + 'Perc'] = this.getIsNumber(uap[nombreMes] / totalMensual * 100);
                 uap.totalAnual = uap.enero + uap.febrero + uap.marzo + uap.abril + uap.mayo + uap.junio + uap.julio +
                   uap.agosto + uap.septiembre + uap.octubre + uap.noviembre + uap.diciembre;
                 uap.totalAnualPerc = 100;
@@ -1806,7 +1806,7 @@ getReporteSumaDepartamentos() : void{
 
           // // Se calculan porcentajes del mes correspondiente
           this.autoLineaAcumulado.forEach(dua => {
-            dua[nombreMes + 'Perc'] = dua[nombreMes] / totalMensual * 100;
+            dua[nombreMes + 'Perc'] = this.getIsNumber(dua[nombreMes] / totalMensual * 100);
             dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
                              dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
             dua.totalAnualPerc = 0;
@@ -1819,7 +1819,7 @@ getReporteSumaDepartamentos() : void{
 
         // // Se calculan los porcentajes de totales
         this.autoLineaAcumulado.forEach(dua => {
-          dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+          dua.totalAnualPerc = this.getIsNumber(dua.totalAnual / totales.totalAnual * 100);
         });
 
         // // Se agregan totales al objeto
@@ -1884,7 +1884,7 @@ getReporteSumaDepartamentos() : void{
 
           // Se calculan porcentajes del mes correspondiente
           this.tipoUnidadAcumulado.forEach(dua => {
-            dua[nombreMes + 'Perc'] = dua[nombreMes] / totalMensual * 100;
+            dua[nombreMes + 'Perc'] = this.getIsNumber(dua[nombreMes] / totalMensual * 100);
             dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
                              dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
             dua.totalAnualPerc = 0;
@@ -1896,7 +1896,7 @@ getReporteSumaDepartamentos() : void{
 
           // // Se calculan los porcentajes de totales
           this.tipoUnidadAcumulado.forEach(dua => {
-            dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+            dua.totalAnualPerc = this.getIsNumber(dua.totalAnual / totales.totalAnual * 100);
           });
 
           // // Se agregan totales al objeto
@@ -1995,7 +1995,7 @@ private getXmlDepartamentos(){
             // Calcula La variacion
             ac.variacion = ac.cantidad - ac.cantidadPrespuesto;
             // Calcula el porcentaje de la variacion si variacion es 0 el resultado es del % es 0
-            ac.percentVariacion = ((ac.variacion / ac.cantidadPrespuesto) * 100);
+            ac.percentVariacion = this.getIsNumber((ac.variacion / ac.cantidadPrespuesto) * 100);
 
             if (ac.percentVariacion === Infinity || ac.percentVariacion === -Infinity) {
               ac.percentVariacion = 0;
@@ -2013,7 +2013,7 @@ private getXmlDepartamentos(){
             ac.variacion = ac.cantidad - ac.cantidadPrespuesto;
 
             // Calcula el porcentaje de la variacion si variacion es 0 el resultado es del % es 0
-            ac.percentVariacion = ((ac.variacion / ac.cantidadPrespuesto) * 100);
+            ac.percentVariacion = this.getIsNumber((ac.variacion / ac.cantidadPrespuesto) * 100);
 
             if (ac.percentVariacion === Infinity || ac.percentVariacion === -Infinity) {
               ac.percentVariacion = 0;
