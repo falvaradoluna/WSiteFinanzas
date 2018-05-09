@@ -123,7 +123,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
         this.detalleUnidadesMensual.push(t);
 
         // Se calculan porcentajes
-        this.detalleUnidadesMensual.forEach(dum => dum.Perc = dum.cantidad / total * 100);
+        this.detalleUnidadesMensual.forEach(dum => dum.Perc = this.getIsNumber(dum.cantidad / total * 100));
       }
     );
   }
@@ -160,7 +160,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
           this.detalleUnidadesMensual.push(t);
 
           // Se calculan porcentajes
-          this.detalleUnidadesMensual.forEach(dum => dum.Perc = dum.cantidad / total * 100);
+          this.detalleUnidadesMensual.forEach(dum => dum.Perc = this.getIsNumber(dum.cantidad / total * 100));
         }
       );
   }
@@ -225,7 +225,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 
           // Se calculan porcentajes del mes correspondiente
           this.detalleUnidadesAcumulado.forEach(dua => {
-            dua[nombreMes + 'Perc'] = dua[nombreMes] / totalMensual * 100;
+            dua[nombreMes + 'Perc'] = this.getIsNumber(dua[nombreMes] / totalMensual * 100);
             if (!dua.totalAnual) {
               dua.totalAnual = 0;
             }
@@ -239,7 +239,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 
         // Se calculan los porcentajes de totales
         this.detalleUnidadesAcumulado.forEach(dua => {
-          dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+          dua.totalAnualPerc = this.getIsNumber(dua.totalAnual / totales.totalAnual * 100);
         });
 
         // Se agregan totales al objeto
@@ -274,7 +274,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
         this.detalleUnidadesMensual.push(t);
 
         // Se calculan porcentajes
-        this.detalleUnidadesMensual.forEach(dum => dum.Perc = dum.cantidad / total * 100);
+        this.detalleUnidadesMensual.forEach(dum => dum.Perc = this.getIsNumber(dum.cantidad / total * 100));
       }
     );
   }
@@ -337,7 +337,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 
           // Se calculan porcentajes del mes correspondiente
           this.detalleUnidadesAcumulado.forEach(dua => {
-            dua[nombreMes + 'Perc'] = dua[nombreMes] / totalMensual * 100;
+            dua[nombreMes + 'Perc'] = this.getIsNumber(dua[nombreMes] / totalMensual * 100);
             dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
                              dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
             dua.totalAnualPerc = 0;
@@ -349,7 +349,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 
         // Se calculan los porcentajes de totales
         this.detalleUnidadesAcumulado.forEach(dua => {
-          dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+          dua.totalAnualPerc = this.getIsNumber(dua.totalAnual / totales.totalAnual * 100);
         });
 
         // Se agregan totales al objeto
@@ -416,7 +416,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 
           // Se calculan porcentajes del mes correspondiente
           this.detalleUnidadesAcumulado.forEach(dua => {
-            dua[nombreMes + 'Perc'] = dua[nombreMes] / totalMensual * 100;
+            dua[nombreMes + 'Perc'] = this.getIsNumber(dua[nombreMes] / totalMensual * 100);
             dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
                              dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
             dua.totalAnualPerc = 0;
@@ -428,7 +428,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 
         // Se calculan los porcentajes de totales
         this.detalleUnidadesAcumulado.forEach(dua => {
-          dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+          dua.totalAnualPerc = this.getIsNumber(dua.totalAnual / totales.totalAnual * 100);
         });
 
         // Se agregan totales al objeto
@@ -501,6 +501,21 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
         this.detalleUnidadesSeries = detalleUnidadesSeries;
       },
       error => this.errorMessage = <any>error);
+  }
+
+// ==========================================
+//  Evalua el resultado de porcentaje de un numero
+// ==========================================
+   private getIsNumber(value: number ): number {
+    if (isNaN(value) || 
+        value.toString() === "-Infinity" || 
+        value.toString() === "Infinity" ||
+        value.toString() ==="-∞" ||
+        value.toString() ==="∞") {
+        return 0;
+      } else {  
+        return parseFloat(value.toString());
+      }
   }
 
 }
