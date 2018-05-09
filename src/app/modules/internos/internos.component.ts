@@ -1106,11 +1106,10 @@ getReporteSumaDepartamentos() : void{
           if (this.unidadesDepartamento.length === 1) {
             // Se actualizan valores de variacion y % variacion
             const d = this.unidadesDepartamento[0];
-            d.variacion = d.cantidad - d.cantidadPresupuesto;
-            d.porcentajeVariacion = d.variacion / d.cantidadPresupuesto * 100;
-
+            d.variacion = d.cantidad - d.cantidadPresupuesto;       
+            d.porcentajeVariacion = d.cantidadPresupuesto !== 0 ? d.variacion / d.cantidadPresupuesto * 100 : 0;
             d.variacionAcumulado = d.cantidadAcumulado - d.cantidadPresupuestoAcumulado;
-            d.porcentajeVariacionAcumulado = d.variacionAcumulado / d.cantidadPresupuestoAcumulado * 100;
+            d.porcentajeVariacionAcumulado = d.cantidadPresupuestoAcumulado !== 0 ? d.variacionAcumulado / d.cantidadPresupuestoAcumulado * 100 : 0;
           }
         }
         );

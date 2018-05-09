@@ -25,7 +25,8 @@
                 <input type="month" name="inputPeriodo" class="form-control form-control-sm"
                   min="1960-01"
                   [value]='periodo'
-                  (input)='onChangePeriodo($event.target.value)'>
+                  (blur)= 'onChangePeriodo($event.target.value)'
+                  >
               </div>
               <div class="form-group col-md-3">
                 <label for="inputTipoReporte">Estado de Resultados</label>
