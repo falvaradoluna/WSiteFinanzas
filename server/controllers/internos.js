@@ -234,23 +234,17 @@ internos.prototype.get_sumadepartamentos = function (req, res, next) {
 // Funcionalidad de la tabla UNIDADES por departamento
 internos.prototype.get_unidadesdepto = function (req, res, next) {
   var self = this;
-  var idCompania = req.query.idCompania;
-  var idSucursal = req.query.idSucursal;
-  var periodoMes = req.query.periodoMes;
-  var periodoYear = req.query.periodoYear;
-  var idPestana = req.query.idPestana;
-
-  // console.log('QueryString Unidades X Depto = ' + JSON.stringify(req.query));
-
+  
   var params = [
-    { name: 'idCompania', value: idCompania, type: self.model.types.INT },
-    { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
-    { name: 'periodoMes', value: periodoMes, type: self.model.types.INT },
-    { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
-    { name: 'idPestana', value: idPestana, type: self.model.types.INT }
+    { name: 'idDepartamento', value: req.query.idDepartamento, type: self.model.types.INT },
+    { name: 'idCompania', value: req.query.idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: req.query.idSucursal, type: self.model.types.INT },
+    { name: 'periodoYear', value: req.query.periodoYear, type: self.model.types.INT },
+    { name: 'periodoMes', value: req.query.periodoMes, type: self.model.types.INT }
   ];
-
-  this.model.query('Unidad.ObtenerUnidadesPorPestania', params, function (error, result) {
+  console.log('paramssss');
+  console.log(params);
+  this.model.query('Unidad.ObtenerUnidadesPorDepartamentoElemento', params, function (error, result) {
     if (result && result.length > 0) {
       // console.log("Unidades Depto " + result[0]);
     }

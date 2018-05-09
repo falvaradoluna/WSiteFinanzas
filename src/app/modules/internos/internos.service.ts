@@ -215,7 +215,7 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
-    Params = Params.append('idPestana', parameters.idPestana);
+    Params = Params.append('idDepartamento', parameters.idDepartamento);
 
     return this._http.get<IResultadoInternos[]>(this._urlUnidadesDepartamento, { params: Params })
       // .do(data => console.log('All:' + JSON.stringify(data)))
