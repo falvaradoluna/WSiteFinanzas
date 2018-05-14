@@ -1090,7 +1090,7 @@ getReporteSumaDepartamentos() : void{
 }
 
   getUnidadesDepartamento(): void {
-    if (this.selectedIdDepartamento !== 0) {
+    if (this.selectedIdDepartamento > 0) {
       this._service.getUnidadesDepartamento({
         idCompania: this.selectedCompania,
         idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,

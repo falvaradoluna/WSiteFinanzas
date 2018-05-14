@@ -1,5 +1,6 @@
 var LoginView = require('../views/reference'), LoginModel = require('../models/dataAccess');
-// 
+var fs = require('fs');
+var path = require('path');
 var _procesaExcel = require('../helpers/procesaExcel');
 
 var Administracion = function (conf) {
@@ -19,7 +20,23 @@ var Administracion = function (conf) {
 // ==========================================
 Administracion.prototype.get_cuentaContable = function (req, res, next) {
     var self = this;
-    this.model.query('[AdministracionCC].[ObtieneCuentasContablesAEnviarABPRO]', [], function (error, result) {
+    this.model.query('[AdministracionCC].[ObtieneCuentasContablesRegistradas]', [], function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result,
+        });
+    });
+};
+
+// ==========================================
+//  Recupera todas las cuentas contables
+// ==========================================
+Administracion.prototype.get_companiasCuentaContable = function (req, res, next) {
+    var self = this;
+    var params = [
+        { name: 'idCuentaContable', value: req.query.idCuentaContable, type: self.model.types.INT }
+    ];
+    this.model.query('[AdministracionCC].[ObtieneCompaniasCuentaContable]', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
             result: result,
@@ -51,17 +68,26 @@ Administracion.prototype.get_cuentaContableExecute = function (req, res, next) {
     } else if (req.query.idMovimiento == 4) {
         storeProcedure = '[AdministracionCC].[EnviaAProgramacionParaGuardarEnBPOR]';
     }
-
+    console.log('paramsss');
     this.model.post(storeProcedure, params, function (error, result, returnValue) {
-        var resultado = { respuesta: 1 };
-        if (typeof returnValue !== 'undefined') {
-            resultado = { respuesta: returnValue };
-        }
-        self.view.expositor(res, {
-            error: error,
-            result: resultado,
-        });
-
+        if (req.query.idMovimiento == 1) {
+            console.log('Resultado');
+            console.log(result);
+            console.log(returnValue);
+            self.view.expositor(res, {
+                error: error,
+                result: result,
+            });
+        } else {
+            var resultado = { respuesta: 1 };
+            if (typeof returnValue !== 'undefined') {
+                resultado = { respuesta: returnValue };
+            }
+            self.view.expositor(res, {
+                error: error,
+                result: resultado,
+            });
+        }      
     });
 };
 
@@ -83,7 +109,8 @@ Administracion.prototype.get_balanceConceptoNivel01 = function (req, res, next) 
 // ==========================================
 Administracion.prototype.get_balanceConceptoNivel02 = function (req, res, next) {
     var self = this;
-    this.model.query('Catalogo.ObtieneBalanceConceptoNivel02', [], function (error, result) {
+    var params = [{ name: 'idBalanceNivel01', value: req.query.idBalanceNivel01, type: self.model.types.INT }];
+    this.model.query('Catalogo.ObtieneBalanceConceptoNivel02', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
             result: result,
@@ -96,7 +123,11 @@ Administracion.prototype.get_balanceConceptoNivel02 = function (req, res, next) 
 // ==========================================
 Administracion.prototype.get_balanceConceptoNivel03 = function (req, res, next) {
     var self = this;
-    this.model.query('Catalogo.ObtieneBalanceConceptoNivel03', [], function (error, result) {
+    var params = [
+        { name: 'idBalanceNivel01', value: req.query.idBalanceNivel01, type: self.model.types.INT },
+        { name: 'idBalanceNivel02', value: req.query.idBalanceNivel01, type: self.model.types.INT }
+    ];
+    this.model.query('Catalogo.ObtieneBalanceConceptoNivel03', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
             result: result,
@@ -242,7 +273,18 @@ Administracion.prototype.get_situacionCuenta = function (req, res, next) {
 //  Procesa archivo excel y amlacena las cuentas, retorna cuentas no validas (primer validación)
 // ==========================================
 Administracion.prototype.get_procesaExcel = function (req, res, next) {
-    var resultadoXml = _procesaExcel.obtenerXmlCuentasExcel(req.query.nombreArchivo);
+    //_procesaExcel.generaExcel();
+    var nombreArchivo = 'cuentas2018.xlsx';
+    var path = `./server/uploads/${nombreArchivo}`;
+    fs.exists(path, existe => {
+        console.log(existe);
+        if (!existe) {
+            path = './assets/no-img.jpg';
+        }
+        res.sendfile(path);
+    });
+
+    var resultadoXml = _procesaExcel.obtenerXmlCuentasExcel(req.query.nombreArchivo, req.query.idCompania);
     var resultadoInsert = false;
     var mensaje = 'Se genero un error al procesar el excel';
     if (resultadoXml.ok) {
@@ -252,7 +294,7 @@ Administracion.prototype.get_procesaExcel = function (req, res, next) {
             { name: 'IdUsuario', value: req.query.idUsuario, type: self.model.types.INT },
             { name: 'xmlCta', value: resultadoXml.xmlcuentas, type: self.model.types.STRING },
             { name: 'idError', value: 0, type: self.model.types.INT }
-        ];        
+        ];
         this.model.post('[AdministracionCC].[ProcesaCuentaContableMasivo]', params, function (error, result, returnValue) {
             if ((typeof returnValue !== 'undefined' && returnValue === 0)) {
                 resultadoInsert = true;
@@ -267,5 +309,27 @@ Administracion.prototype.get_procesaExcel = function (req, res, next) {
         cuentasValidas: resultadoXml.cuentasValidas
     });
 };
+
+// ==========================================
+//  Funcionalidad para guardar una cuenta contable
+// ==========================================
+Administracion.prototype.get_valoresCuentaContable = function (req, res, next) {
+    var self = this;
+    var params = [
+        { name: 'NumCuenta', value: req.query.numCuenta, type: self.model.types.INT }
+    ];
+
+    console.log('paramsss');
+    console.log(params);
+    this.model.post('[AdministracionCC].[ObtieneValoresCuentaContable]', params, function (error, result, returnValue) {
+        self.view.expositor(res, {
+            error: error,
+            result: result,
+        });
+
+    });
+};
+
+
 
 module.exports = Administracion;

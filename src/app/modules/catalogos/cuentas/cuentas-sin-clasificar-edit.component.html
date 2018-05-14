@@ -4,302 +4,343 @@
       <div class="card-body">
         <h4>{{tituloFormCuenta}}</h4>
         <form #userUpdateForm="ngForm" (ngSubmit)="guardarCuenta()">
-          <div *ngIf="operacionCuenta !== 3" class="form-row">
-            <div class="form-group col-md-4">
-              <label for="lblTreview">Compañía:</label>
-              <div id="divDrop" class="dropdownTreeview">
-                <ngx-dropdown-treeview [buttonClass]="btn-outline-primary" [config]="config" [items]="items" (selectedChange)="onSelectedChange($event, true)">
-                </ngx-dropdown-treeview>
-                <p class="alert alert-danger" *ngIf="validaCompaniaCuentaEspecifico">
-                  Debe seleccionar una compañia.
+          <div *ngIf="!errorGuardarCuenta">
+            <div *ngIf="operacionCuenta !== 3" class="form-row">
+              <div class="form-group col-md-4">
+                <label for="lblTreview">Compañía:</label>
+                <div id="divDrop" class="dropdownTreeview">
+                  <ngx-dropdown-treeview [buttonClass]="btn-outline-primary" [config]="config" [items]="items" (selectedChange)="onSelectedChange($event, true)">
+                  </ngx-dropdown-treeview>
+                  <p class="alert-danger" *ngIf="validaCompaniaCuentaEspecifico">
+                    Debe seleccionar una compañia.
+                  </p>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblDescripcion">Descripción:</label>
+                <input type="text" class="form-control form-control-sm" #txtDescripcion="ngModel" name="txtDescripcion" [(ngModel)]="descripcionGeneral"
+                  placeholder="Ingrese una descripción">
+                <p class="alert-danger" *ngIf="validaDescripcionCompania">
+                  Debe agregar una descripción.
+                </p>
+              </div>
+              <div class="form-group col-md-1">
+                <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='agregarCompania()' style="margin-top: 30px;">
+                  <i class="fa fa-plus"></i>&nbsp;Agregar
+                </button>
+                <p class="alert-danger" *ngIf="validaCompaniaCuenta">
+                  Agregue una Compañía.
                 </p>
               </div>
             </div>
-            <div class="form-group col-md-4">
-              <label for="lblDescripcion">Descripción:</label>
-              <input type="text" class="form-control form-control-sm" #txtDescripcion="ngModel" name="txtDescripcion" [(ngModel)]="descripcionGeneral"
-                placeholder="Ingrese una descripción">
-              <p class="alert alert-danger" *ngIf="validaDescripcionCompania">
-                Debe agregar una descripción.
-              </p>
-            </div>
-            <div class="form-group col-md-1">
-              <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='agregarCompania()' style="margin-top: 30px;">
-                <i class="fa fa-plus"></i>&nbsp;Agregar
-              </button>
-              <p class="alert alert-danger" *ngIf="validaCompaniaCuenta">
-                Agregue una Compañía.
-              </p>
-            </div>
-          </div>
+            <div class="form-row">
+              <div id="divTable" [style.height.px]="heightTable" class="form-group col-md-12">
+                <table *ngIf="operacionCuenta !== 3" class="table table-sm table-bordered">
+                  <thead>
+                    <tr>
+                      <th class="bg-secondary text-white">Compania</th>
+                      <th class="bg-secondary text-white ">Descripción</th>
+                      <th colspan="2" class="bg-secondary text-white text-center">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor='let companiaCuenta of companiasCuentaContable'>
+                      <td>
+                        {{ companiaCuenta.razonSocial }}
+                      </td>
+                      <td>
+                        <div *ngIf="!companiaCuenta.editardescripcion">
+                          {{ companiaCuenta.descripcion }}
+                        </div>
+                        <input *ngIf="companiaCuenta.editardescripcion" type="text" class="form-control" ng-value="companiaCuenta.descripcion" #txtDescCompania="ngModel"
+                          name="txtDescCompania" [(ngModel)]="companiaCuenta.descripcion" placeholder="Ingrese una descripción">
+                        <!--(focusout)="onChangesDescripcion($result = $event.target.value, companiaCuenta.idCompania)"-->
+                      </td>
+                      <td>
+                        <button *ngIf="!companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='editarDescripcionCompania(companiaCuenta.idCompania, companiaCuenta.descripcion)'>Editar</button>
+                        <button *ngIf="companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='guardaEdicionDescripcion(companiaCuenta.descripcion, companiaCuenta.idCompania)'>
+                          Guardar</button>
+                      </td>
+                      <td>
+                        <button *ngIf="!companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='eliminarCompania(companiaCuenta.idCompania)'>Eliminar</button>
+                        <button *ngIf="companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='cancelarEdicion(companiaCuenta.idCompania)'>Cancelar</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
-          <div class="form-row">
-            <div id="divTable" [style.height.px]="heightTable" class="form-group col-md-12">
-              <table *ngIf="operacionCuenta !== 3" class="table table-sm table-bordered">
-                <thead>
-                  <tr>
-                    <th class="bg-secondary text-white">Compania</th>
-                    <th class="bg-secondary text-white ">Descripción</th>
-                    <th colspan="2" class="bg-secondary text-white text-center">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor='let companiaCuenta of companiasCuentaContable'>
-                    <td>
-                      {{ companiaCuenta.razonSocial }}
-                    </td>
-                    <td>
-                      <div *ngIf="!companiaCuenta.editardescripcion">
+                <table *ngIf="operacionCuenta === 3" class="table table-sm table-bordered">
+                  <thead>
+                    <tr>
+                      <th class="bg-secondary text-white">Compania</th>
+                      <th class="bg-secondary text-white ">Descripción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor='let companiaCuenta of companiasCuentaContable'>
+                      <td>
+                        {{ companiaCuenta.razonSocial }}
+                      </td>
+                      <td>
                         {{ companiaCuenta.descripcion }}
-                      </div>
-                      <input *ngIf="companiaCuenta.editardescripcion" type="text" class="form-control" ng-value="companiaCuenta.descripcion" #txtDescCompania="ngModel"
-                        name="txtDescCompania" [(ngModel)]="companiaCuenta.descripcion" placeholder="Ingrese una descripción">
-                      <!--(focusout)="onChangesDescripcion($result = $event.target.value, companiaCuenta.idCompania)"-->
-                    </td>
-                    <td>
-                      <button *ngIf="!companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='editarDescripcionCompania(companiaCuenta.idCompania, companiaCuenta.descripcion)'>Editar</button>
-                      <button *ngIf="companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='guardaEdicionDescripcion(companiaCuenta.descripcion, companiaCuenta.idCompania)'>
-                        Guardar</button>
-                    </td>
-                    <td>
-                      <button *ngIf="!companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='eliminarCompania(companiaCuenta.idCompania)'>Eliminar</button>
-                      <button *ngIf="companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='cancelarEdicion(companiaCuenta.idCompania)'>Cancelar</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group has-feedback col-md-4">
+                <label for="lblNoCuenta">No. Cuenta:</label>
+                <input type="text" class="form-control form-control-sm" placeholder="0000-0000-0000-0000" value="{{cuentaContable.numeroCuenta}}"
+                  #numeroCuenta="ngModel" name="numeroCuenta" required [(ngModel)]="cuentaContable.numeroCuenta" [textMask]="{mask: mask}"
+                  (blur)="onBlurMetodo($event.target.value, 'numCuenta')">
+                <p class="alert-danger" *ngIf="validaNumeroCuenta">
+                  Introduzca un numero de cuenta valido.
+                </p>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblNoCuenta">Descripción:</label>
+                <input type="text" class="form-control form-control-sm" placeholder="Descripción" required #Concepto="ngModel" name="Concepto"
+                  [(ngModel)]="cuentaContable.Concepto" (blur)="onBlurMetodo($event.target.value, 'descripcion')">
+                <p class="alert-danger" *ngIf="validaConcepto">
+                  Introduzca la descripción.
+                </p>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblNoCuenta">Naturaleza:</label>
+                <select class="form-control form-control-sm" required #idNaturaleza="ngModel" name="idNaturaleza" [(ngModel)]='cuentaContable.idNaturaleza'
+                  (ngModelChange)="onChangeValidador($event, 'naturaleza')">
+                  <option value="0">Seleccione una naturaleza</option>
+                  <option *ngFor='let cuenta of cuentaContableNaturaleza' [value]='cuenta.id'>
+                    {{ cuenta.naturaleza }}
+                  </option>
+                </select>
+                <p class="alert-danger" *ngIf="validaNaturaleza">
+                  Seleccione una naturaleza.
+                </p>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="lblCuentaDetalle">ACUMDET:</label>
+                <select class="form-control form-control-sm" name="inputCuentaDetalle" [(ngModel)]='cuentaContable.idCuentaDetalle' (ngModelChange)="onChangeValidador($event, 'cuentaDetalle')">
+                  <option value="0">Seleccione una opción</option>
+                  <option *ngFor='let detalleCuenta of cuentaContableDetalle' [value]='detalleCuenta.id'>
+                    {{ detalleCuenta.tipoDetalle }}
+                  </option>
+                </select>
+                <p class="alert-danger" *ngIf="validaCuentaDetalle">
+                  Seleccione un detalle.
+                </p>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblNotaDictamen">Nota Dictamen:</label>
+                <select class="form-control form-control-sm" name="inputNotasDictamen" [(ngModel)]='cuentaContable.idNotasDictamen' (ngModelChange)="onChangeValidador($event, 'notaDictamen')">
+                  <option value="0">Seleccione una nota</option>
+                  <option *ngFor='let notaDictamen of notasDictamen' [value]='notaDictamen.id'>
+                    {{ notaDictamen.notasDictamen }}
+                  </option>
+                </select>
+                <p class="alert-danger" *ngIf="validaNotaDictamen">
+                  Seleccione una nota dictamen.
+                </p>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblDictamen">Dictamen:</label>
+                <select class="form-control form-control-sm" name="inputDictamen" [(ngModel)]='cuentaContable.idDictamen' (ngModelChange)="onChangeValidador($event, 'dictamen')">
+                  <option value="0">Seleccione un dictamen</option>
+                  <option *ngFor='let dictamen of dictamenCuenta' [value]='dictamen.id'>
+                    {{ dictamen.dictamen }}
+                  </option>
+                </select>
+                <p class="alert-danger" *ngIf="validaDictamen">
+                  Seleccione un dictamen.
+                </p>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="lblGrupo1">Grupo 1:</label>
+                <select class="form-control form-control-sm" name="inputConceptoNivel01" [(ngModel)]='cuentaContable.idBalanceNivel01' (ngModelChange)="onChangeValidador($event, 'grupo1')">
+                  <option value="0">Seleccione un grupo</option>
+                  <option *ngFor='let balanceConcepto of balanceConceptoNivel01;let i= index;' [value]='balanceConcepto.id'>
+                    {{ balanceConcepto.titulo }}
+                  </option>
+                </select>
+                <p class="alert-danger" *ngIf="validaGrupo1">
+                  Seleccione un grupo.
+                </p>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblGrupo2">Grupo 2:</label>
+                <select class="form-control form-control-sm" name="inputConceptoNivel02" [(ngModel)]='cuentaContable.idBalanceNivel02' (ngModelChange)="onChangeValidador($event, 'grupo2')">
+                  <option value="0">Seleccione un grupo</option>
+                  <option *ngFor='let balanceConcepto of balanceConceptoNivel02' [value]='balanceConcepto.id'>
+                    {{ balanceConcepto.subTitulo }}
+                  </option>
+                </select>
+                <p class="alert-danger" *ngIf="validaGrupo2">
+                  Seleccione un grupo.
+                </p>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblGrupo3">Grupo 3:</label>
+                <select class="form-control form-control-sm" name="inputConceptoNivel03" [(ngModel)]='cuentaContable.idBalanceNivel03' (ngModelChange)="onChangeValidador($event, 'grupo3')">
+                  <option value="0">Seleccione un grupo</option>
+                  <option *ngFor='let balanceConcepto of balanceConceptoNivel03' [value]='balanceConcepto.id'>
+                    {{ balanceConcepto.subTitulo }}
+                  </option>
+                </select>
+                <p class="alert-danger" *ngIf="validaGrupo3">
+                  Seleccione un grupo.
+                </p>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="lblEFInterno">EF Interno:</label>
+                <select class="form-control form-control-sm" name="inputEstadoFinancieroInterno" [(ngModel)]='cuentaContable.idEFInterno'
+                  (ngModelChange)="onChangeValidador($event, 'EFInterno')">
+                  <option value="0">Seleccione un EF</option>
+                  <option *ngFor='let efInterno of estadoFinancieroInterno' [value]='efInterno.id'>
+                    {{ efInterno.EstadoFinancieroInterno }}
+                  </option>
+                </select>
+                <p class="alert-danger" *ngIf="validaEFInterno">
+                  Seleccione un estado financiero
+                </p>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblEFInterno">Nota Financiera:</label>
+                <select class="form-control form-control-sm" name="inputNotasFinancieras" [(ngModel)]='cuentaContable.idNotasFinancieras'
+                  (ngModelChange)="onChangeValidador($event, 'notaFinanciera')">
+                  <option value="0">Seleccione una nota</option>
+                  <option *ngFor='let notaFinanciera of notasFinancieras' [value]='notaFinanciera.id'>
+                    {{ notaFinanciera.notasFinancieras }}
+                  </option>
+                </select>
+                <p class="alert-danger" *ngIf="validaNotaFinanciera">
+                  Seleccione una nota.
+                </p>
+              </div>
+              <div class="form-group col-md-4">
+                <!--<label for="lblTipoBI">Tipo BI:</label>
+                <select class="form-control form-control-sm" name="inputERInternoConcepto" [(ngModel)]='cuentaContable.idEstadoResultadosI'
+                  (ngModelChange)="onChangeValidador($event, 'ERInterno')">
+                  <option value="0">Seleccione un tipo</option>
+                  <option *ngFor='let conceptoER of conceptoEstadoResultado' [value]='conceptoER.id'>
+                    {{ conceptoER.EstadoFinancieroInterno }}
+                  </option>
+                </select>
+                <p class="alert-danger" *ngIf="validaERInterno">
+                  Seleccione una opcion.
+                </p>-->
+                <label for="lblAfectaCC">Situación:</label>
+                <select class="form-control form-control-sm" name="inputidSituacion" [(ngModel)]='cuentaContable.idSituacion' (ngModelChange)="onChangeValidador($event, 'situacionCuenta')">
+                  <option value="0">Seleccione una opción</option>
+                  <option *ngFor='let situacion of cuentaContableSituacion' [value]='situacion.id'>
+                    {{ situacion.descripcion }}
+                  </option>
+                </select>
+                <p class="alert-danger" *ngIf="validaSituacionCuentaContable">
+                  Seleccione una opción.
+                </p>
 
-              <table *ngIf="operacionCuenta === 3" class="table table-sm table-bordered">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="lblDepartamento">Departamento:</label>
+                <select class="form-control form-control-sm" name="inputDepartamento" [(ngModel)]='cuentaContable.idDepartamento' (ngModelChange)="onChangeValidador($event, 'departamento')">
+                  <option value="0">Seleccione un departamento</option>
+                  <option *ngFor='let depto of departamentos' [value]='depto.id'>
+                    {{ depto.descripcion }}
+                  </option>
+                </select>
+                <p class="alert-danger" *ngIf="validaDepartamento">
+                  Seleccione un departamento.
+                </p>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblAfectaCC">Afecta CC:</label>
+                <select class="form-control form-control-sm" name="inputAfectaCuentaContable" [(ngModel)]='cuentaContable.idAfectaCuentaContable'
+                  (ngModelChange)="onChangeValidador($event, 'afectaCuentaContable')">
+                  <option value="-1">Seleccione un departamento</option>
+                  <option *ngFor='let afectaCuenta of afectaCuentaContable' [value]='afectaCuenta.id'>
+                    {{ afectaCuenta.afectaCuentaContable }}
+                  </option>
+                </select>
+                <p class="alert-danger" *ngIf="validaAfectaCuentaContable">
+                  Seleccione una opcion.
+                </p>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblAfectaCC">Grupo SAT:</label>
+                <input type="text" class="form-control form-control-sm" placeholder="Ingrese un grupo" required #grupoSATCuentaContable="ngModel"
+                  name="grupoSATCuentaContable" [(ngModel)]="cuentaContable.grupoSATCuentaContable" (blur)="onBlurMetodo($event.target.value, 'grupoSat')">
+                <p class="alert-danger" *ngIf="validaGrupoSATCuentaContable">
+                  Introduzca información.
+                </p>
+              </div>
+            </div>
+            <!--<div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="lblAfectaCC">Situación:</label>
+                <select class="form-control form-control-sm" name="inputidSituacion" [(ngModel)]='cuentaContable.idSituacion' (ngModelChange)="onChangeValidador($event, 'situacionCuenta')">
+                  <option value="0">Seleccione una opción</option>
+                  <option *ngFor='let situacion of cuentaContableSituacion' [value]='situacion.id'>
+                    {{ situacion.descripcion }}
+                  </option>
+                </select>
+                <p class="alert-danger" *ngIf="validaSituacionCuentaContable">
+                  Seleccione una opción.
+                </p>
+              </div>
+            </div>-->
+            <div class="form-row">
+              <div class="form-group col-md-2">
+                <label>&nbsp;</label>
+                <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='ocultarFormmulario(false, true)'>
+                  <i class="fa fa-arrow-left"></i>&nbsp;Regresar
+                </button>
+              </div>
+              <div class="form-group col-md-8"></div>
+              <div class="form-group col-md-2">
+                <label>&nbsp;</label>
+                <button *ngIf="operacionCuenta !== 3" type="submit" class="btn btn-primary btn-sm btn-block" id="submit">
+                  <i class="fa fa-save"></i>&nbsp;Guardar</button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="errorGuardarCuenta">
+            <div class="form-row">
+              <table class="table table-sm table-bordered">
                 <thead>
                   <tr>
-                    <th class="bg-secondary text-white">Compania</th>
-                    <th class="bg-secondary text-white ">Descripción</th>
+                    <th class="bg-secondary text-white">Numero</th>
+                    <th class="bg-secondary text-white">Descripción</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor='let companiaCuenta of companiasCuentaContable'>
-                    <td>
-                      {{ companiaCuenta.razonSocial }}
-                    </td>
-                    <td>
-                      {{ companiaCuenta.descripcion }}
-                    </td>
+                  <tr *ngFor='let error of detalleErrorCuenta'>
+                    <td>{{ error.numero }}</td>
+                    <td>{{ error.descripcion }}</td>
                   </tr>
                 </tbody>
               </table>
+              <label>Favor de corregir los errores.</label>
             </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="lblNoCuenta">No. Cuenta:</label>
-              <input type="text" class="form-control form-control-sm" placeholder="0000-0000-0000-0000" value="{{cuentaContable.numeroCuenta}}" #numeroCuenta="ngModel"
-                name="numeroCuenta" required [(ngModel)]="cuentaContable.numeroCuenta" (blur)="onBlurMetodo($event.target.value, 'numCuenta')"
-                > <!--(keyup)="onKeyCuenta($event.target.value, $event)"-->
-              <p class="alert alert-danger" *ngIf="validaNumeroCuenta">
-                Introduzca un numero de cuenta con formato 0000-0000-0000-0000.
-              </p>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="lblNoCuenta">Descripción:</label>
-              <input type="text" class="form-control form-control-sm" placeholder="Descripción" required #Concepto="ngModel" name="Concepto" [(ngModel)]="cuentaContable.Concepto"
-                (blur)="onBlurMetodo($event.target.value, 'descripcion')">
-              <p class="alert alert-danger" *ngIf="validaConcepto">
-                Introduzca la descripción.
-              </p>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="lblNoCuenta">Naturaleza:</label>
-              <select class="form-control form-control-sm" required #idNaturaleza="ngModel" name="idNaturaleza" [(ngModel)]='cuentaContable.idNaturaleza'
-                (ngModelChange)="onChangeValidador($event, 'naturaleza')">
-                <option value="0">Seleccione una naturaleza</option>
-                <option *ngFor='let cuenta of cuentaContableNaturaleza' [value]='cuenta.id'>
-                  {{ cuenta.naturaleza }}
-                </option>
-              </select>
-              <p class="alert alert-danger" *ngIf="validaNaturaleza">
-                Seleccione una naturaleza.
-              </p>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="lblCuentaDetalle">ACUMDET:</label>
-              <select class="form-control form-control-sm" name="inputCuentaDetalle" [(ngModel)]='cuentaContable.idCuentaDetalle' (ngModelChange)="onChangeValidador($event, 'cuentaDetalle')">
-                <option value="0">Seleccione una opción</option>
-                <option *ngFor='let detalleCuenta of cuentaContableDetalle' [value]='detalleCuenta.id'>
-                  {{ detalleCuenta.tipoDetalle }}
-                </option>
-              </select>
-              <p class="alert alert-danger" *ngIf="validaCuentaDetalle">
-                Seleccione un detalle.
-              </p>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="lblNotaDictamen">Nota Dictamen:</label>
-              <select class="form-control form-control-sm" name="inputNotasDictamen" [(ngModel)]='cuentaContable.idNotasDictamen' (ngModelChange)="onChangeValidador($event, 'notaDictamen')">
-                <option value="0">Seleccione una nota</option>
-                <option *ngFor='let notaDictamen of notasDictamen' [value]='notaDictamen.id'>
-                  {{ notaDictamen.notasDictamen }}
-                </option>
-              </select>
-              <p class="alert alert-danger" *ngIf="validaNotaDictamen">
-                Seleccione una nota dictamen.
-              </p>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="lblDictamen">Dictamen:</label>
-              <select class="form-control form-control-sm" name="inputDictamen" [(ngModel)]='cuentaContable.idDictamen' (ngModelChange)="onChangeValidador($event, 'dictamen')">
-                <option value="0">Seleccione un dictamen</option>
-                <option *ngFor='let dictamen of dictamenCuenta' [value]='dictamen.id'>
-                  {{ dictamen.dictamen }}
-                </option>
-              </select>
-              <p class="alert alert-danger" *ngIf="validaDictamen">
-                Seleccione un dictamen.
-              </p>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="lblGrupo1">Grupo 1:</label>
-              <select class="form-control form-control-sm" name="inputConceptoNivel01" [(ngModel)]='cuentaContable.idBalanceNivel01' (ngModelChange)="onChangeValidador($event, 'grupo1')">
-                <option value="0">Seleccione un grupo</option>
-                <option *ngFor='let balanceConcepto of balanceConceptoNivel01;let i= index;' [value]='balanceConcepto.id'>
-                  {{ balanceConcepto.titulo }}
-                </option>
-              </select>
-              <p class="alert alert-danger" *ngIf="validaGrupo1">
-                Seleccione un grupo.
-              </p>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="lblGrupo2">Grupo 2:</label>
-              <select class="form-control form-control-sm" name="inputConceptoNivel02" [(ngModel)]='cuentaContable.idBalanceNivel02' (ngModelChange)="onChangeValidador($event, 'grupo2')">
-                <option value="0">Seleccione un grupo</option>
-                <option *ngFor='let balanceConcepto of balanceConceptoNivel02' [value]='balanceConcepto.id'>
-                  {{ balanceConcepto.subTitulo }}
-                </option>
-              </select>
-              <p class="alert alert-danger" *ngIf="validaGrupo2">
-                Seleccione un grupo.
-              </p>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="lblGrupo3">Grupo 3:</label>
-              <select class="form-control form-control-sm" name="inputConceptoNivel03" [(ngModel)]='cuentaContable.idBalanceNivel03' (ngModelChange)="onChangeValidador($event, 'grupo3')">
-                <option value="0">Seleccione un grupo</option>
-                <option *ngFor='let balanceConcepto of balanceConceptoNivel03' [value]='balanceConcepto.id'>
-                  {{ balanceConcepto.subTitulo }}
-                </option>
-              </select>
-              <p class="alert alert-danger" *ngIf="validaGrupo3">
-                Seleccione un grupo.
-              </p>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="lblEFInterno">EF Interno:</label>
-              <select class="form-control form-control-sm" name="inputEstadoFinancieroInterno" [(ngModel)]='cuentaContable.idEFInterno' (ngModelChange)="onChangeValidador($event, 'EFInterno')">
-                <option value="0">Seleccione un EF</option>
-                <option *ngFor='let efInterno of estadoFinancieroInterno' [value]='efInterno.id'>
-                  {{ efInterno.EstadoFinancieroInterno }}
-                </option>
-              </select>
-              <p class="alert alert-danger" *ngIf="validaEFInterno">
-                Seleccione un estado financiero
-              </p>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="lblEFInterno">Nota Financiera:</label>
-              <select class="form-control form-control-sm" name="inputNotasFinancieras" [(ngModel)]='cuentaContable.idNotasFinancieras' (ngModelChange)="onChangeValidador($event, 'notaFinanciera')">
-                <option value="0">Seleccione una nota</option>
-                <option *ngFor='let notaFinanciera of notasFinancieras' [value]='notaFinanciera.id'>
-                  {{ notaFinanciera.notasFinancieras }}
-                </option>
-              </select>
-              <p class="alert alert-danger" *ngIf="validaNotaFinanciera">
-                Seleccione una nota.
-              </p>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="lblTipoBI">Tipo BI:</label>
-              <select class="form-control form-control-sm" name="inputERInternoConcepto" [(ngModel)]='cuentaContable.idEstadoResultadosI' (ngModelChange)="onChangeValidador($event, 'ERInterno')">
-                <option value="0">Seleccione un tipo</option>
-                <option *ngFor='let conceptoER of conceptoEstadoResultado' [value]='conceptoER.id'>
-                  {{ conceptoER.EstadoFinancieroInterno }}
-                </option>
-              </select>
-              <p class="alert alert-danger" *ngIf="validaERInterno">
-                Seleccione una opcion.
-              </p>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="lblDepartamento">Departamento:</label>
-              <select class="form-control form-control-sm" name="inputDepartamento" [(ngModel)]='cuentaContable.idDepartamento' (ngModelChange)="onChangeValidador($event, 'departamento')">
-                <option value="0">Seleccione un departamento</option>
-                <option *ngFor='let depto of departamentos' [value]='depto.idPestana'>
-                  {{ depto.pestanaNombre }}
-                </option>
-              </select>
-              <p class="alert alert-danger" *ngIf="validaDepartamento">
-                Seleccione un departamento.
-              </p>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="lblAfectaCC">Afecta CC:</label>
-              <select class="form-control form-control-sm" name="inputAfectaCuentaContable" [(ngModel)]='cuentaContable.idAfectaCuentaContable' (ngModelChange)="onChangeValidador($event, 'afectaCuentaContable')">
-                <option value="-1">Seleccione un departamento</option>
-                <option *ngFor='let afectaCuenta of afectaCuentaContable' [value]='afectaCuenta.id'>
-                  {{ afectaCuenta.afectaCuentaContable }}
-                </option>
-              </select>
-              <p class="alert alert-danger" *ngIf="validaAfectaCuentaContable">
-                Seleccione una opcion.
-              </p>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="lblAfectaCC">Grupo SAT:</label>
-              <input type="text" class="form-control form-control-sm" placeholder="Ingrese un grupo" required #grupoSATCuentaContable="ngModel" name="grupoSATCuentaContable"
-                [(ngModel)]="cuentaContable.grupoSATCuentaContable" (blur)="onBlurMetodo($event.target.value, 'grupoSat')">
-              <p class="alert alert-danger" *ngIf="validaGrupoSATCuentaContable">
-                Introduzca información.
-              </p>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="lblAfectaCC">Situación:</label>
-              <select class="form-control form-control-sm" name="inputidSituacion" [(ngModel)]='cuentaContable.idSituacion' (ngModelChange)="onChangeValidador($event, 'situacionCuenta')">
-                <option value="0">Seleccione una opción</option>
-                <option *ngFor='let situacion of cuentaContableSituacion' [value]='situacion.id'>
-                  {{ situacion.descripcion }}
-                </option>
-              </select>
-              <p class="alert alert-danger" *ngIf="validaSituacionCuentaContable">
-                Seleccione una opción.
-              </p>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-2">
-              <label>&nbsp;</label>
-              <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='ocultarFormmulario(false, true)'>
-                <i class="fa fa-arrow-left"></i>&nbsp;Regresar
-              </button>
-            </div>
-            <div class="form-group col-md-8"></div>
-            <div class="form-group col-md-2">
-              <label>&nbsp;</label>
-              <button *ngIf="operacionCuenta !== 3" type="submit" class="btn btn-primary btn-sm btn-block" id="submit">
-                <i class="fa fa-save"></i>&nbsp;Guardar</button>
+            <div class="form-row">
+              <div class="form-group col-md-2">
+                <label>&nbsp;</label>
+                <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='ocultarTablaErrores(false, true)'>
+                  <i class="fa fa-arrow-left"></i>&nbsp;Regresar
+                </button>
+              </div>
+              <div class="form-group col-md-8"></div>
+              <div class="form-group col-md-2">
+              </div>
             </div>
           </div>
         </form>

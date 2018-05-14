@@ -31,39 +31,39 @@ export class CuentasSinClasificarSelectComponent implements OnInit {
   public heightTable: number = 75;
 
   constructor(private _cuentaContableService: CuentaContableService, private _spinnerService: NgxSpinnerService) {
-    this.mostrarCuentas = true;
-    this.mostrarFormCuenta = false;
+    //this.mostrarFormCuenta = false;
   }
 
   ngOnInit() {
-    this.getCuentasContables();
+     this.getCuentasContables();
   }
 
   // Obtiene las cuentas
-  public getCuentasContables(): void {
+  private getCuentasContables() {
     this._cuentaContableService.getCuentasContables()
       .subscribe(
         cuentasContables => {
-          if (cuentasContables !== null && cuentasContables[0]['XML_F52E2B61-18A1-11d1-B105-00805F49916B'] !== "") {
-            let parseString = xml2js.parseString;
-            let resultado: any;
-            parseString(cuentasContables[0]['XML_F52E2B61-18A1-11d1-B105-00805F49916B'], function (err, result) {
-              resultado = result.CuentasContables.CuentaContable;
-            });
-            this.cuentas = resultado;
-            if(this.cuentas.length === 1) {
+          //if (cuentasContables !== null && cuentasContables[0]['XML_F52E2B61-18A1-11d1-B105-00805F49916B'] !== "") {
+          if (cuentasContables !== null) {
+            //let parseString = xml2js.parseString;
+            //let resultado: any;
+            //parseString(cuentasContables[0]['XML_F52E2B61-18A1-11d1-B105-00805F49916B'], function (err, result) {
+            //resultado = result.CuentasContables.CuentaContable;
+            //});
+            this.cuentas = cuentasContables;
+            if (this.cuentas.length === 1) {
               this.heightTable = 130;
-            } else if(this.cuentas.length === 2) {
+            } else if (this.cuentas.length === 2) {
               this.heightTable = 185;
-            } else if(this.cuentas.length === 3) {
+            } else if (this.cuentas.length === 3) {
               this.heightTable = 240;
-            } else if(this.cuentas.length === 4) {
+            } else if (this.cuentas.length === 4) {
               this.heightTable = 295;
-            } else if(this.cuentas.length === 5) {
+            } else if (this.cuentas.length === 5) {
               this.heightTable = 350;
-            } else if(this.cuentas.length === 6) {
+            } else if (this.cuentas.length === 6) {
               this.heightTable = 405;
-            } else if(this.cuentas.length > 6) {
+            } else if (this.cuentas.length > 6) {
               this.heightTable = 460;
             }
           } else {
@@ -155,6 +155,20 @@ export class CuentasSinClasificarSelectComponent implements OnInit {
     }
 
   }
+
+  onChangeEstatus(valorStatus): void {
+    switch (valorStatus) {
+      case '0':
+      this.mostrarCuentas = true;
+        this.getCuentasContables();
+        break;
+      case '1':
+        break;
+      case '2':
+        break;
+    }
+  }
+
 
   // retorna un json con la estructura para la alerta
   private obtenerSweetAlertContent(title, text, type) {

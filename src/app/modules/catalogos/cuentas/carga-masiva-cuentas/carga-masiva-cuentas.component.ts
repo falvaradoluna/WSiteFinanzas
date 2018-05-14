@@ -79,7 +79,8 @@ seleccionArchivo(archivo: File) {
           var nombreArchivo = resp['nombreArchivo'];
           this._cuentaContableService.procesaArchivoExcel({
             nombreArchivo: nombreArchivo,
-            idUsuario: usuario.id
+            idUsuario: usuario.id,
+            idCompania: this.selectedCompania
           }).subscribe(
             resultado => {
               if (resultado['ok']) {

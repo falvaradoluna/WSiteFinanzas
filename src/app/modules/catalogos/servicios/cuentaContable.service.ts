@@ -19,12 +19,14 @@ import { IEstadoFinancieroInterno } from '../../../models/administracion/estadoF
 import { ICuentaContableDetalle } from '../../../models/administracion/cuentaContableDetalle';
 import { IAfectaCuentaContable } from '../../../models/administracion/AfectaCuentaContable';
 import { ICuentaContableSituacion } from '../../../models/administracion/cuentaContableSituacion';
+import { CompaniaCuentaContable } from '../../../models/administracion/companiaCuentaContable';
 
 @Injectable()
 export class CuentaContableService {
 
     // Url´s de servicios
     private _urlObtenerCuentasContables = 'api/administracion/cuentaContable';
+    private _urlObtenerCompaniasCuentaContable = 'api/administracion/companiasCuentaContable';
     private _urlCuentaContableExecute = 'api/administracion/cuentaContableExecute';
     private _urlCompanias = 'api/internos/companias';
     private _urlDepartamentos = 'api/internos/departamentos';
@@ -42,6 +44,7 @@ export class CuentaContableService {
     private _urlObtenerafectaCuentaContable = 'api/administracion/afectaCuentaContable';
     private _urlObtenerSituacionCuenta = 'api/administracion/situacionCuenta';
     private _urlProcesaExcel = 'api/administracion/procesaExcel';
+    private _urlObtieneValoresCuentaContable = 'api/administracion/valoresCuentaContable';
 
 
     constructor(private _http: HttpClient) { }
@@ -53,7 +56,14 @@ export class CuentaContableService {
 
     // Obtiene el catalogo de compañias por usuario
     getCuentasContables(): Observable<CuentaContable[]> {
-        return this._http.get<string>(this._urlObtenerCuentasContables)
+        return this._http.get<CuentaContable[]>(this._urlObtenerCuentasContables)
+            .catch(this.handleError);
+    }
+     // Obtiene el catalogo de compañias por usuario
+     getCompaniasCuentaContable(parameters): Observable<CompaniaCuentaContable[]> {
+        let params = new HttpParams();
+        params = params.append('idCuentaContable', parameters.idCuentaContable);
+        return this._http.get<CompaniaCuentaContable[]>(this._urlObtenerCompaniasCuentaContable, { params: params })
             .catch(this.handleError);
     }
 
@@ -65,7 +75,7 @@ export class CuentaContableService {
         params = params.append('xmlCuenta', parameters.xmlCuenta);
 
         return this._http.get<any>(this._urlCuentaContableExecute, { params: params })
-            // .do(data => console.log('All:' + JSON.stringify(data)))
+            .do(data => console.log(data))
             .catch(this.handleError);
     }
 
@@ -94,14 +104,19 @@ export class CuentaContableService {
     }
 
     // Obtiene el catalogo de balance primer nivel 2
-    getBalanceConceptoNivel02(): Observable<IBalanceConceptoNivel02[]> {
-        return this._http.get<IBalanceConceptoNivel02[]>(this._urlBalanceConceptoNivel02)
+    getBalanceConceptoNivel02(parameters): Observable<IBalanceConceptoNivel02[]> {
+        let Params = new HttpParams();
+        Params = Params.append('idBalanceNivel01', parameters.idBalanceNivel01);
+        return this._http.get<IBalanceConceptoNivel02[]>(this._urlBalanceConceptoNivel02, { params: Params })
             .catch(this.handleError);
     }
 
     // Obtiene el catalogo de balance primer nivel 3
-    getBalanceConceptoNivel03(): Observable<IBalanceConceptoNivel03[]> {
-        return this._http.get<IBalanceConceptoNivel03[]>(this._urlBalanceConceptoNivel03)
+    getBalanceConceptoNivel03(parameters): Observable<IBalanceConceptoNivel03[]> {
+        let Params = new HttpParams();
+        Params = Params.append('idBalanceNivel01', parameters.idBalanceNivel01);
+        Params = Params.append('idBalanceNivel02', parameters.idBalanceNivel02);
+        return this._http.get<IBalanceConceptoNivel03[]>(this._urlBalanceConceptoNivel03, { params: Params })
             .catch(this.handleError);
     }
 
@@ -198,8 +213,18 @@ export class CuentaContableService {
         let params = new HttpParams();
         params = params.append('nombreArchivo', parameters.nombreArchivo);
         params = params.append('idUsuario', parameters.idUsuario);
-
+        params = params.append('idCompania', parameters.idCompania);
+        
         return this._http.get<any>(this._urlProcesaExcel, { params: params })
+            // .do(data => console.log('All:' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+    // Obtiene valores de cuenta contable
+    ObtieneValoresCuentaContable(parameters): Observable<any> {
+        let params = new HttpParams();
+        params = params.append('numCuenta', parameters.numCuenta);
+
+        return this._http.get<any>(this._urlObtieneValoresCuentaContable, { params: params })
             // .do(data => console.log('All:' + JSON.stringify(data)))
             .catch(this.handleError);
     }
