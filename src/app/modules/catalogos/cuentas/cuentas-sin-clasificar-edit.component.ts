@@ -61,7 +61,6 @@ export class CuentasSinClasificarEditComponent implements OnInit {
   public validaGrupo3: boolean = false;
   public validaEFInterno: boolean = false;
   public validaNotaFinanciera: boolean = false;
-  //public validaERInterno: boolean = false;
   public validaDepartamento: boolean = false;
   public validaCompaniaCuenta: boolean = false;
   public validaNumeroCuenta: boolean = false;
@@ -107,7 +106,7 @@ export class CuentasSinClasificarEditComponent implements OnInit {
 
   ngOnInit() {
     this.descripcionGeneral = '';
-    this.asignarTituloFormulario();
+    this.asignarTituloFormulario(true);
     this.getCompanias();
     this.getDepartamentos();
     this.getBalanceConceptoNivel01();
@@ -139,20 +138,6 @@ export class CuentasSinClasificarEditComponent implements OnInit {
         },
         error => this.errorMessage = <any>error
       );
-
-
-    /*for (var i = 0; i < this.cuentaContable.companias[0]['Compania'].length; i++) {
-      this.companiasCuentaContable.push(
-        {
-          idCompania: this.cuentaContable.companias[0]['Compania'][i].idCompania[0],
-          razonSocial: this.cuentaContable.companias[0]['Compania'][i].razonSocial[0],
-          descripcion: this.cuentaContable.companias[0]['Compania'][i].descripcion[0],
-          id: this.cuentaContable.companias[0]['Compania'][i].id[0],
-          numeroCuenta: this.cuentaContable.numeroCuenta,
-          editardescripcion: false
-        }
-      );
-    }*/
   }
 
   // ==========================================
@@ -168,8 +153,6 @@ export class CuentasSinClasificarEditComponent implements OnInit {
     this.cuentaContable.idDepartamento = 0;
     this.cuentaContable.idDictamen = 0;
     this.cuentaContable.idEFInterno = 0;
-    //this.cuentaContable.idEstadoFinancieroInterno = 0;
-    //this.cuentaContable.idEstadoResultados = 0;
     this.cuentaContable.idEstadoResultadosI = 0;
     this.cuentaContable.idEFInterno = 0;
     this.cuentaContable.idFlujoEfectivo = 0;
@@ -185,62 +168,34 @@ export class CuentasSinClasificarEditComponent implements OnInit {
   // ==========================================
   //  Asigna el titulo correspondiente al formulario
   // ==========================================
-  private asignarTituloFormulario() {
+  private asignarTituloFormulario(limpiar: boolean) {
     switch (this.operacionCuenta) {
       case 1:
         this.tituloFormCuenta = 'Crear nueva cuenta';
         this.textModal = 'registrada';
-        this.limpiarFormulario();
+        if (limpiar) {
+          this.limpiarFormulario();
+        }
         break;
       case 2:
         this.tituloFormCuenta = 'Modificar cuenta';
         this.textModal = 'actualizada';
-        //this.limpiarDatosCuenta();
-        this.getCompaniasCuentaContable();
+        if (limpiar) {
+          this.getCompaniasCuentaContable();
+        }
         break;
       case 3:
         this.tituloFormCuenta = 'Detalle de cuenta';
-        //this.limpiarDatosCuenta();
         this.getCompaniasCuentaContable();
         break;
     }
   }
 
   // ==========================================
-  //  Limpia la info de la cuenta
-  // ==========================================
-  /*private limpiarDatosCuenta() {
-    this.cuentaContable.numeroCuenta = this.cuentaContable.numeroCuenta[0];
-    this.cuentaContable.Concepto = this.cuentaContable.Concepto[0];
-    this.cuentaContable.idNaturaleza = this.cuentaContable.idNaturaleza[0];
-    this.cuentaContable.idCuentaDetalle = this.cuentaContable.idCuentaDetalle[0];
-    this.cuentaContable.idBalanceNivel01 = this.cuentaContable.idBalanceNivel01[0];
-    this.cuentaContable.idBalanceNivel02 = this.cuentaContable.idBalanceNivel02[0];
-    this.cuentaContable.idBalanceNivel03 = this.cuentaContable.idBalanceNivel03[0];
-    this.cuentaContable.idEstadoResultadosI = this.cuentaContable.idEstadoResultadosI[0];
-    this.cuentaContable.idDictamen = this.cuentaContable.idDictamen[0];
-    this.cuentaContable.idNotasDictamen = this.cuentaContable.idNotasDictamen[0];
-    this.cuentaContable.idNotasFinanciero = this.cuentaContable.idNotasFinanciero[0];
-    this.cuentaContable.idSituacion = this.cuentaContable.idSituacion[0];
-    this.cuentaContable.idDepartamento = this.cuentaContable.idDepartamento[0];
-    this.cuentaContable.idFlujoEfectivo = this.cuentaContable.idFlujoEfectivo[0];
-    this.cuentaContable.idNotasFinancieras = this.cuentaContable.idNotasFinancieras[0];
-    this.cuentaContable.idEstadoResultadosInternoConcepto = this.cuentaContable.idEstadoResultadosInternoConcepto[0];
-    this.cuentaContable.eFInterno = this.cuentaContable.eFInterno[0];
-    this.cuentaContable.idEFInterno = this.cuentaContable.idEFInterno[0];
-    this.cuentaContable.descripcion = this.cuentaContable.Concepto[0];
-    this.cuentaContable.idAfectaCuentaContable = this.cuentaContable.idAfectaCuentaContable[0];
-    this.cuentaContable.grupoSATCuentaContable = this.cuentaContable.grupoSATCuentaContable[0];
-  }*/
-
-  // ==========================================
   //  Evalua valor de evento de inputSelect
   // ==========================================
   onSelectedChange(event, validarSelect: boolean = false) {
     this.companiasSelected = event;
-    //if (validarSelect) {
-    //this.validaCompaniaCuentaEspecifico = this.companiasSelected.length == 0;
-    //}
     this.validaCompaniaCuentaEspecifico = false;
   }
 
@@ -481,6 +436,7 @@ export class CuentasSinClasificarEditComponent implements OnInit {
   }
 
   private evaluaRespuestaInsert(resultadoInsert) {
+    this.detalleErrorCuenta = [];
     let parseString = xml2js.parseString;
     let resultado: any;
     if (resultadoInsert[0][''] !== null) {
@@ -672,7 +628,7 @@ export class CuentasSinClasificarEditComponent implements OnInit {
   // ==========================================
   ocultarTablaErrores(): void {
     this.errorGuardarCuenta = false;
-    this.asignarTituloFormulario();
+    this.asignarTituloFormulario(false);
   }
 
   // ==========================================
@@ -818,9 +774,6 @@ export class CuentasSinClasificarEditComponent implements OnInit {
     this.validaAfectaCuentaContable = this.cuentaContable.idAfectaCuentaContable == -1;
     this.validaGrupoSATCuentaContable = (this.cuentaContable.grupoSATCuentaContable == undefined || this.cuentaContable.grupoSATCuentaContable == '');
     this.validaSituacionCuentaContable = this.cuentaContable.idSituacion == 0;
-    if (!this.validaNumeroCuenta) {
-      //this.validaCuentaContableBD();
-    }
     if (!this.validaNaturaleza && !this.validaCuentaDetalle && !this.validaNotaDictamen && !this.validaDictamen
       && !this.validaGrupo1 && !this.validaGrupo2 && !this.validaGrupo3 && !this.validaNotaFinanciera && !this.validaEFInterno
       && !this.validaDepartamento && !this.validaCompaniaCuenta && !this.validaNumeroCuenta && !this.validaConcepto

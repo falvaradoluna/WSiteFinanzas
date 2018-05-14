@@ -56,14 +56,14 @@
                           name="txtDescCompania" [(ngModel)]="companiaCuenta.descripcion" placeholder="Ingrese una descripción">
                         <!--(focusout)="onChangesDescripcion($result = $event.target.value, companiaCuenta.idCompania)"-->
                       </td>
-                      <td>
-                        <button *ngIf="!companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='editarDescripcionCompania(companiaCuenta.idCompania, companiaCuenta.descripcion)'>Editar</button>
-                        <button *ngIf="companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='guardaEdicionDescripcion(companiaCuenta.descripcion, companiaCuenta.idCompania)'>
+                      <td class="text-center">
+                        <button *ngIf="!companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-save" id="submit" (click)='editarDescripcionCompania(companiaCuenta.idCompania, companiaCuenta.descripcion)'>Editar</button>
+                        <button *ngIf="companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-save" id="submit" (click)='guardaEdicionDescripcion(companiaCuenta.descripcion, companiaCuenta.idCompania)'>
                           Guardar</button>
                       </td>
-                      <td>
-                        <button *ngIf="!companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='eliminarCompania(companiaCuenta.idCompania)'>Eliminar</button>
-                        <button *ngIf="companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='cancelarEdicion(companiaCuenta.idCompania)'>Cancelar</button>
+                      <td class="text-center">
+                        <button *ngIf="!companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-save" id="submit" (click)='eliminarCompania(companiaCuenta.idCompania)'>Eliminar</button>
+                        <button *ngIf="companiaCuenta.editardescripcion" type="button" class="btn btn-primary btn-sm btn-save" id="submit" (click)='cancelarEdicion(companiaCuenta.idCompania)'>Cancelar</button>
                       </td>
                     </tr>
                   </tbody>

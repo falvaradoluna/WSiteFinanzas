@@ -68,12 +68,10 @@ Administracion.prototype.get_cuentaContableExecute = function (req, res, next) {
     } else if (req.query.idMovimiento == 4) {
         storeProcedure = '[AdministracionCC].[EnviaAProgramacionParaGuardarEnBPOR]';
     }
-    console.log('paramsss');
     this.model.post(storeProcedure, params, function (error, result, returnValue) {
         if (req.query.idMovimiento == 1) {
             console.log('Resultado');
             console.log(result);
-            console.log(returnValue);
             self.view.expositor(res, {
                 error: error,
                 result: result,
@@ -87,7 +85,7 @@ Administracion.prototype.get_cuentaContableExecute = function (req, res, next) {
                 error: error,
                 result: resultado,
             });
-        }      
+        }
     });
 };
 
@@ -122,12 +120,14 @@ Administracion.prototype.get_balanceConceptoNivel02 = function (req, res, next) 
 //  Recupera todos los conceptos del balance nivel 2
 // ==========================================
 Administracion.prototype.get_balanceConceptoNivel03 = function (req, res, next) {
-    var self = this;
+    var self = this;    
     var params = [
         { name: 'idBalanceNivel01', value: req.query.idBalanceNivel01, type: self.model.types.INT },
-        { name: 'idBalanceNivel02', value: req.query.idBalanceNivel01, type: self.model.types.INT }
+        { name: 'idBalanceNivel02', value: req.query.idBalanceNivel02, type: self.model.types.INT }
     ];
+
     this.model.query('Catalogo.ObtieneBalanceConceptoNivel03', params, function (error, result) {
+        console.log(result);
         self.view.expositor(res, {
             error: error,
             result: result,
@@ -273,11 +273,9 @@ Administracion.prototype.get_situacionCuenta = function (req, res, next) {
 //  Procesa archivo excel y amlacena las cuentas, retorna cuentas no validas (primer validación)
 // ==========================================
 Administracion.prototype.get_procesaExcel = function (req, res, next) {
-    //_procesaExcel.generaExcel();
     var nombreArchivo = 'cuentas2018.xlsx';
     var path = `./server/uploads/${nombreArchivo}`;
     fs.exists(path, existe => {
-        console.log(existe);
         if (!existe) {
             path = './assets/no-img.jpg';
         }
@@ -311,7 +309,7 @@ Administracion.prototype.get_procesaExcel = function (req, res, next) {
 };
 
 // ==========================================
-//  Funcionalidad para guardar una cuenta contable
+//  Funcionalidad para validar una cuenta contable
 // ==========================================
 Administracion.prototype.get_valoresCuentaContable = function (req, res, next) {
     var self = this;
@@ -319,17 +317,49 @@ Administracion.prototype.get_valoresCuentaContable = function (req, res, next) {
         { name: 'NumCuenta', value: req.query.numCuenta, type: self.model.types.INT }
     ];
 
-    console.log('paramsss');
-    console.log(params);
     this.model.post('[AdministracionCC].[ObtieneValoresCuentaContable]', params, function (error, result, returnValue) {
         self.view.expositor(res, {
             error: error,
             result: result,
         });
-
     });
 };
 
+// ==========================================
+//  Funcionalidad para guardar una cuenta contable
+// ==========================================
+Administracion.prototype.get_cuentaContableLocal = function (req, res, next) {
+    var self = this;
+    var params = [
+        { name: 'CuentaContableNumero', value: req.query.numCuenta, type: self.model.types.STRING }
+    ];
+    this.model.post('[AdministracionCC].[ObtieneCuentaContableLocal]', params, function (error, result, returnValue) {
+        self.view.expositor(res, {
+            error: error,
+            result: result,
+        });
+    });
+};
 
+// ==========================================
+//  Funcionalidad para actualizar una cuenta contable local
+// ==========================================
+Administracion.prototype.get_cuentaContableEditar = function (req, res, next) {
+    var self = this;
+    var params = [
+        { name: 'IdUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+        { name: 'CuentaContableXml', value: req.query.xmlCuenta, type: self.model.types.STRING }
+    ];
+    this.model.post('[AdministracionCC].[ActualizaCuentaContableLocal]', params, function (error, result, returnValue) {
+        var resultado = { respuesta: 0 };
+        if (typeof result !== 'undefined' && typeof result[0].resultado !== 'undefined') {
+            resultado = { respuesta: result[0].resultado };
+        }
+        self.view.expositor(res, {
+            error: error,
+            result: resultado,
+        });
+    });
+};
 
 module.exports = Administracion;

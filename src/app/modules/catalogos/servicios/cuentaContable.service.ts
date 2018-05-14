@@ -45,7 +45,10 @@ export class CuentaContableService {
     private _urlObtenerSituacionCuenta = 'api/administracion/situacionCuenta';
     private _urlProcesaExcel = 'api/administracion/procesaExcel';
     private _urlObtieneValoresCuentaContable = 'api/administracion/valoresCuentaContable';
-
+    private _urlObtieneCuentaContableLocal = 'api/administracion/cuentaContableLocal';
+    private _urlObtieneDepartamentos = 'api/catalogos/departamentos';
+    private _urlCuentaContableEditar = 'api/administracion/cuentaContableEditar';
+    
 
     constructor(private _http: HttpClient) { }
 
@@ -59,8 +62,8 @@ export class CuentaContableService {
         return this._http.get<CuentaContable[]>(this._urlObtenerCuentasContables)
             .catch(this.handleError);
     }
-     // Obtiene el catalogo de compañias por usuario
-     getCompaniasCuentaContable(parameters): Observable<CompaniaCuentaContable[]> {
+    // Obtiene el catalogo de compañias por usuario
+    getCompaniasCuentaContable(parameters): Observable<CompaniaCuentaContable[]> {
         let params = new HttpParams();
         params = params.append('idCuentaContable', parameters.idCuentaContable);
         return this._http.get<CompaniaCuentaContable[]>(this._urlObtenerCompaniasCuentaContable, { params: params })
@@ -75,7 +78,7 @@ export class CuentaContableService {
         params = params.append('xmlCuenta', parameters.xmlCuenta);
 
         return this._http.get<any>(this._urlCuentaContableExecute, { params: params })
-            .do(data => console.log(data))
+            //.do(data => console.log(data))
             .catch(this.handleError);
     }
 
@@ -214,11 +217,12 @@ export class CuentaContableService {
         params = params.append('nombreArchivo', parameters.nombreArchivo);
         params = params.append('idUsuario', parameters.idUsuario);
         params = params.append('idCompania', parameters.idCompania);
-        
+
         return this._http.get<any>(this._urlProcesaExcel, { params: params })
             // .do(data => console.log('All:' + JSON.stringify(data)))
             .catch(this.handleError);
     }
+
     // Obtiene valores de cuenta contable
     ObtieneValoresCuentaContable(parameters): Observable<any> {
         let params = new HttpParams();
@@ -226,6 +230,34 @@ export class CuentaContableService {
 
         return this._http.get<any>(this._urlObtieneValoresCuentaContable, { params: params })
             // .do(data => console.log('All:' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+    // Obtiene una cuenta contable local
+    ObtieneCuentaContableLocal(parameters): Observable<CuentaContable> {
+        let params = new HttpParams();
+        params = params.append('numCuenta', parameters.numCuenta);
+
+        return this._http.get<CuentaContable>(this._urlObtieneCuentaContableLocal, { params: params })
+            // .do(data => console.log('All:' + JSON.stringify(data)))
+            .catch(this.handleError);
+    }
+
+    // ==========================================
+    //  Obtiene todos los departamentos
+    // ==========================================
+    getTodosDepartamentos(): Observable<IDepartamento[]> {
+        return this._http.get<IDepartamento[]>(this._urlObtieneDepartamentos)
+            .catch(this.handleError);
+    }
+
+      // Guarda, Actualiza y elimina una cuenta contable
+      CuentaContableEditar(parameters): Observable<any> {
+        let params = new HttpParams();
+        params = params.append('idUsuario', parameters.idUsuario);
+        params = params.append('xmlCuenta', parameters.xmlCuenta);
+
+        return this._http.get<any>(this._urlCuentaContableEditar, { params: params })
+            //.do(data => console.log(data))
             .catch(this.handleError);
     }
 

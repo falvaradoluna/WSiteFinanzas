@@ -2,5 +2,6 @@
      login: require('./controllers/login'),
      internos: require('./controllers/internos'),
      seguridad: require('./controllers/seguridad'),
-     administracion: require('./controllers/administracion')
+     administracion: require('./controllers/administracion'),
+     catalogos: require('./controllers/Catalogos')
  }
