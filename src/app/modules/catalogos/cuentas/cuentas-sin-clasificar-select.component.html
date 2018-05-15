@@ -60,16 +60,18 @@
                       </button>
                     </td>-->
                     <td class="text-center">
-                      <button type="button" class="btn btn-primary btn-sm btn-save" id="submit" (click)='mostrarFormulario(cta.id, 2, cta)'>
+                      <span class="fa fa-pencil" style="font-size: 25px" id="submit" (click)='mostrarFormulario(cta.id, 2, cta)' title="Editar"></span>
+                      <!-- <button type="button" class="btn btn-primary btn-sm btn-save" id="submit" (click)='mostrarFormulario(cta.id, 2, cta)'>
                         <i class="fa fa-pencil"></i>
                         Editar
-                      </button>
+                      </button> -->
                     </td>
                     <td class="text-center">
-                      <button type="button" class="btn btn-primary btn-sm btn-danger" id="submit" (click)='eliminarCuenta(cta.id, 1)'>
+                      <span class="fa fa-trash-o" style="font-size: 25px" id="submit" (click)='eliminarCuenta(cta.id, 1)' title="Eliminar"></span>
+                      <!-- <button type="button" class="btn btn-primary btn-sm btn-danger" id="submit" (click)='eliminarCuenta(cta.id, 1)'>
                         <i class="fa fa-trash-o"></i>
                         Eliminar
-                      </button>
+                      </button> -->
                     </td>
                   </tr>
                 </tbody>
