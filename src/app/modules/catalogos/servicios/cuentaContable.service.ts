@@ -29,7 +29,7 @@ export class CuentaContableService {
     private _urlObtenerCompaniasCuentaContable = 'api/administracion/companiasCuentaContable';
     private _urlCuentaContableExecute = 'api/administracion/cuentaContableExecute';
     private _urlCompanias = 'api/internos/companias';
-    private _urlDepartamentos = 'api/internos/departamentos';
+    private _urlDepartamentos = 'api/catalogos/departamentosPorCompanias';
     private _urlBalanceConceptoNivel01 = 'api/administracion/balanceConceptoNivel01';
     private _urlBalanceConceptoNivel02 = 'api/administracion/balanceConceptoNivel02';
     private _urlBalanceConceptoNivel03 = 'api/administracion/balanceConceptoNivel03';
@@ -90,11 +90,10 @@ export class CuentaContableService {
             .catch(this.handleError);
     }
 
-    // Obtiene el catalogo de departamentos por usuario/Compania/ Sucursal
+    // Obtiene el catalogo de departamentos por usuario/Companias
     getDepartamentos(parameters): Observable<IDepartamento[]> {
         let Params = new HttpParams();
-        Params = Params.append('idCompania', parameters.idCompania);
-        Params = Params.append('idSucursal', parameters.idSucursal);
+        Params = Params.append('idCompanias', parameters.idCompanias);
         Params = Params.append('idUsuario', parameters.idUsuario);
         return this._http.get<IDepartamento[]>(this._urlDepartamentos, { params: Params })
             .catch(this.handleError);

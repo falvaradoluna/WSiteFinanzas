@@ -79,6 +79,9 @@ export class EditarCuentaBproComponent implements OnInit {
     this.getAfectaCuentaContable();
   }
 
+  // ==========================================
+  //  Inicializa la cuenta
+  // ==========================================
   private inicializaCuenta() {
     this.cuentaContable = {
       Concepto: '',
@@ -256,8 +259,8 @@ export class EditarCuentaBproComponent implements OnInit {
         idBalanceNivel02: this.cuentaContable.idBalanceNivel02
       })
         .subscribe(
-          balanceConceptoNivel03 => { 
-            this.balanceConceptoNivel03 = balanceConceptoNivel03; 
+          balanceConceptoNivel03 => {
+            this.balanceConceptoNivel03 = balanceConceptoNivel03;
           },
           error => this.errorMessage = <any>error
         );
@@ -325,8 +328,8 @@ export class EditarCuentaBproComponent implements OnInit {
   onBlurMetodo(newValue: string, origen: string) {
     switch (origen) {
       //case 'grupoSat':
-        //this.validaGrupoSATCuentaContable = (this.cuentaContable.grupoSATCuentaContable == undefined || this.cuentaContable.grupoSATCuentaContable == '');
-        //break;
+      //this.validaGrupoSATCuentaContable = (this.cuentaContable.grupoSATCuentaContable == undefined || this.cuentaContable.grupoSATCuentaContable == '');
+      //break;
       case 'descripcion':
         this.validaConcepto = (this.cuentaContable.Concepto == undefined || this.cuentaContable.Concepto == '');
         break;

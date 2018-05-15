@@ -8,7 +8,7 @@
             <div class="form-group has-feedback col-md-4">
               <label for="lblNoCuenta">No. Cuenta:</label>
               <input type="text" class="form-control form-control-sm" placeholder="0000-0000-0000-0000" value="{{cuentaContable.numeroCuenta}}"
-                #numeroCuenta="ngModel" name="numeroCuenta" required [(ngModel)]="cuentaContable.numeroCuenta" [textMask]="{mask: mask}"
+                #numeroCuenta="ngModel" name="numeroCuenta" [(ngModel)]="cuentaContable.numeroCuenta" [textMask]="{mask: mask}"
                 [disabled]="cuentaEncontrada">
               <p class="alert-danger" *ngIf="validaNumeroCuenta">
                 Introduzca un numero de cuenta valido.
@@ -27,15 +27,17 @@
             <div class="form-row">
               <div class="form-group col-md-4">
                 <label for="lblNoCuenta">Descripción:</label>
-                <input type="text" class="form-control form-control-sm" placeholder="Descripción" required #Concepto="ngModel" name="Concepto"
-                  [(ngModel)]="cuentaContable.Concepto" (blur)="onBlurMetodo($event.target.value, 'descripcion')">
+                <input type="text" class="form-control form-control-sm" placeholder="Descripción" #Concepto="ngModel" name="Concepto"
+                  [(ngModel)]="cuentaContable.Concepto"
+                  [disabled]="cuentaEncontrada">
                 <p class="alert-danger" *ngIf="validaConcepto">
                   Introduzca la descripción.
                 </p>
               </div>
               <div class="form-group col-md-4">
                 <label for="lblNoCuenta">Naturaleza:</label>
-                <select class="form-control form-control-sm" required #idNaturaleza="ngModel" name="idNaturaleza" [(ngModel)]='cuentaContable.idNaturaleza'>
+                <select class="form-control form-control-sm" #idNaturaleza="ngModel" name="idNaturaleza" [(ngModel)]='cuentaContable.idNaturaleza'
+                [disabled]="cuentaEncontrada">
                   <option value="0">Seleccione una opción</option>
                   <option *ngFor='let cuenta of cuentaContableNaturaleza' [value]='cuenta.id' (ngModelChange)="onChangeValidador($event, 'naturaleza')">
                     {{ cuenta.naturaleza }}
@@ -47,7 +49,7 @@
               </div>
               <div class="form-group col-md-4">
                 <label for="lblAfectaCC">Grupo SAT:</label>
-                <input type="text" class="form-control form-control-sm" placeholder="Ingrese un grupo" required #grupoSATCuentaContable="ngModel"
+                <input type="text" class="form-control form-control-sm" placeholder="Ingrese un grupo" #grupoSATCuentaContable="ngModel"
                   name="grupoSATCuentaContable" [(ngModel)]="cuentaContable.grupoSATCuentaContable" (blur)="onBlurMetodo($event.target.value, 'grupoSat')">
                 <p class="alert-danger" *ngIf="validaGrupoSATCuentaContable">
                   Introduzca información.
