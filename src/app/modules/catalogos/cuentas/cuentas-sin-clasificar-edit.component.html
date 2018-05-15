@@ -99,7 +99,7 @@
                 <label for="lblNoCuenta">No. Cuenta:</label>
                 <input type="text" class="form-control form-control-sm" placeholder="0000-0000-0000-0000" value="{{cuentaContable.numeroCuenta}}"
                   #numeroCuenta="ngModel" name="numeroCuenta" required [(ngModel)]="cuentaContable.numeroCuenta" [textMask]="{mask: mask}"
-                  (blur)="onBlurMetodo($event.target.value, 'numCuenta')" [ngClass]="{ErrorControl: !cuentaContable.numeroCuenta}">
+                  [ngClass]="{ErrorControl: !cuentaContable.numeroCuenta}">
                 <!-- <p class="alert-danger" *ngIf="validaNumeroCuenta">
                   Introduzca un numero de cuenta valido.
                 </p> -->
@@ -107,7 +107,7 @@
               <div class="form-group col-md-4">
                 <label for="lblNoCuenta">Descripción:</label>
                 <input type="text" class="form-control form-control-sm" placeholder="Descripción" required #Concepto="ngModel" name="Concepto"
-                  [(ngModel)]="cuentaContable.Concepto" (blur)="onBlurMetodo($event.target.value, 'descripcion')" [ngClass]="{ErrorControl: !cuentaContable.Concepto}">
+                  [(ngModel)]="cuentaContable.Concepto" [ngClass]="{ErrorControl: !cuentaContable.Concepto}">
                 <!-- <p class="alert-danger" *ngIf="validaConcepto">
                   Introduzca la descripción.
                 </p> -->
@@ -316,7 +316,7 @@
               <div class="form-group col-md-4">
                 <label for="lblAfectaCC">Grupo SAT:</label>
                 <input type="text" class="form-control form-control-sm" placeholder="Ingrese un grupo" required #grupoSATCuentaContable="ngModel"
-                  name="grupoSATCuentaContable" [(ngModel)]="cuentaContable.grupoSATCuentaContable" (blur)="onBlurMetodo($event.target.value, 'grupoSat')" [ngClass]="{ErrorControl: !cuentaContable.grupoSATCuentaContable}">
+                  name="grupoSATCuentaContable" [(ngModel)]="cuentaContable.grupoSATCuentaContable" [ngClass]="{ErrorControl: !cuentaContable.grupoSATCuentaContable}">
                 <!-- <p class="alert-danger" *ngIf="validaGrupoSATCuentaContable">
                   Introduzca información.
                 </p> -->

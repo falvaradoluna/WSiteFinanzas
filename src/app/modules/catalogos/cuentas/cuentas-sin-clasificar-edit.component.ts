@@ -52,26 +52,12 @@ export class CuentasSinClasificarEditComponent implements OnInit {
   textModal: string;
 
   // Variables para validar formulario
-  
-  ///public validaNaturaleza: boolean = false;
-  //public validaCuentaDetalle: boolean = false;
-  //public validaNotaDictamen: boolean = false;
-  //public validaDictamen: boolean = false;
   public validaGrupo1: boolean = false;
   public validaGrupo2: boolean = false;
-  //public validaGrupo3: boolean = false;
-  //public validaEFInterno: boolean = false;
-  //public validaNotaFinanciera: boolean = false;
-  //public validaDepartamento: boolean = false;
   public validaCompaniaCuenta: boolean = false;
-  //public validaNumeroCuenta: boolean = false;
-  //public validaConcepto: boolean = false;
   public validaDescripcionCompania: boolean = false;
   public validaCompaniaCuentaEspecifico: boolean = false;
   public valorDescrCompania: string;
-  //public validaAfectaCuentaContable: boolean = false;
-  //public validaGrupoSATCuentaContable: boolean = false;
-  //public validaSituacionCuentaContable: boolean = false;
   public valorEFInterno: string;
   public tituloFormCuenta: string;
   public companiaCuentaCont = new CompaniaCuentaContable();
@@ -482,18 +468,6 @@ export class CuentasSinClasificarEditComponent implements OnInit {
   // ==========================================
   onChangeValidador(newValue: number, origen: string): void {
     switch (origen) {
-      /*case 'naturaleza':
-        this.validaNaturaleza = newValue == 0;
-        break;
-      case 'cuentaDetalle':
-        this.validaCuentaDetalle = newValue == 0;
-        break;
-      case 'notaDictamen':
-        this.validaNotaDictamen = newValue == 0;
-        break;
-      case 'dictamen':
-        this.validaDictamen = newValue == 0;
-        break;*/
       case 'grupo1':
         this.validaGrupo1 = newValue == 0;
         if (!this.validaGrupo1) {
@@ -506,45 +480,10 @@ export class CuentasSinClasificarEditComponent implements OnInit {
           this.getBalanceConceptoNivel03();
         }
         break;
-      //case 'grupo3':
-        //this.validaGrupo3 = newValue == 0;
-        //break;
       case 'EFInterno':
-        //this.validaEFInterno = newValue == 0;
         if (newValue > 0) {
           this.valorEFInterno = this.estadoFinancieroInterno.find(x => x.id == newValue).EstadoFinancieroInterno;
         }
-        break;
-      /*case 'notaFinanciera':
-        this.validaNotaFinanciera = newValue == 0;
-        break;
-      case 'departamento':
-        this.validaDepartamento = newValue == 0;
-        break;
-      case 'afectaCuentaContable':
-        this.validaAfectaCuentaContable = newValue == -1;
-        break;
-      case 'situacionCuenta':
-        this.validaSituacionCuentaContable = newValue == -1;
-        break;*/
-    }
-    //this.validaNaturaleza = newValue == 0;
-  }
-
-  // ==========================================
-  //  Evalua onblur de unputText
-  // ==========================================
-  onBlurMetodo(newValue: string, origen: string) {
-    switch (origen) {
-      case 'grupoSat':
-        //this.validaGrupoSATCuentaContable = (this.cuentaContable.grupoSATCuentaContable == undefined || this.cuentaContable.grupoSATCuentaContable == '');
-        break;
-      case 'descripcion':
-        //this.validaConcepto = (this.cuentaContable.Concepto == undefined || this.cuentaContable.Concepto == '');
-        break;
-      case 'numCuenta':
-        //this.validaNumeroCuenta = (this.cuentaContable.numeroCuenta == undefined || this.cuentaContable.numeroCuenta == '');
-        //this.validaNumeroCuenta = !this.validaNumeroCuenta ? this.validaEstructuraCuenta(newValue) : true;
         break;
     }
   }

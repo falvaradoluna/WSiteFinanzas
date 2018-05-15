@@ -70,8 +70,6 @@ Administracion.prototype.get_cuentaContableExecute = function (req, res, next) {
     }
     this.model.post(storeProcedure, params, function (error, result, returnValue) {
         if (req.query.idMovimiento == 1) {
-            console.log('Resultado');
-            console.log(result);
             self.view.expositor(res, {
                 error: error,
                 result: result,
@@ -127,7 +125,6 @@ Administracion.prototype.get_balanceConceptoNivel03 = function (req, res, next) 
     ];
 
     this.model.query('Catalogo.ObtieneBalanceConceptoNivel03', params, function (error, result) {
-        console.log(result);
         self.view.expositor(res, {
             error: error,
             result: result,
