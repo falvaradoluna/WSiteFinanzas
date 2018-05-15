@@ -314,7 +314,7 @@
                 </p> -->
               </div>
               <div class="form-group col-md-4">
-                <label for="lblAfectaCC">T:</label>
+                <label for="lblAfectaCC">Grupo SAT:</label>
                 <input type="text" class="form-control form-control-sm" placeholder="Ingrese un grupo" required #grupoSATCuentaContable="ngModel"
                   name="grupoSATCuentaContable" [(ngModel)]="cuentaContable.grupoSATCuentaContable" (blur)="onBlurMetodo($event.target.value, 'grupoSat')" [ngClass]="{ErrorControl: !cuentaContable.grupoSATCuentaContable}">
                 <!-- <p class="alert-danger" *ngIf="validaGrupoSATCuentaContable">
