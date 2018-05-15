@@ -9,10 +9,10 @@
               <label for="lblNoCuenta">No. Cuenta:</label>
               <input type="text" class="form-control form-control-sm" placeholder="0000-0000-0000-0000" value="{{cuentaContable.numeroCuenta}}"
                 #numeroCuenta="ngModel" name="numeroCuenta" [(ngModel)]="cuentaContable.numeroCuenta" [textMask]="{mask: mask}"
-                [disabled]="cuentaEncontrada">
-              <p class="alert-danger" *ngIf="validaNumeroCuenta">
+                [disabled]="cuentaEncontrada" [ngClass]="{ErrorControl: !cuentaContable.numeroCuenta}">
+              <!--<p class="alert-danger" *ngIf="validaNumeroCuenta">
                 Introduzca un numero de cuenta valido.
-              </p>
+              </p>-->
             </div>
             <div class="form-group col-md-1">
               <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='buscarCuentaContable()' style="margin-top: 30px;">
@@ -50,7 +50,7 @@
               <div class="form-group col-md-4">
                 <label for="lblAfectaCC">Grupo SAT:</label>
                 <input type="text" class="form-control form-control-sm" placeholder="Ingrese un grupo" #grupoSATCuentaContable="ngModel"
-                  name="grupoSATCuentaContable" [(ngModel)]="cuentaContable.grupoSATCuentaContable" (blur)="onBlurMetodo($event.target.value, 'grupoSat')">
+                  name="grupoSATCuentaContable" [(ngModel)]="cuentaContable.grupoSATCuentaContable" >
                 <p class="alert-danger" *ngIf="validaGrupoSATCuentaContable">
                   Introduzca información.
                 </p>
