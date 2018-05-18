@@ -120,7 +120,7 @@ Administracion.prototype.get_balanceConceptoNivel02 = function (req, res, next) 
 //  Recupera todos los conceptos del balance nivel 2
 // ==========================================
 Administracion.prototype.get_balanceConceptoNivel03 = function (req, res, next) {
-    var self = this;    
+    var self = this;
     var params = [
         { name: 'idBalanceNivel01', value: req.query.idBalanceNivel01, type: self.model.types.INT },
         { name: 'idBalanceNivel02', value: req.query.idBalanceNivel02, type: self.model.types.INT }
@@ -358,6 +358,19 @@ Administracion.prototype.get_cuentaContableEditar = function (req, res, next) {
         self.view.expositor(res, {
             error: error,
             result: resultado,
+        });
+    });
+};
+
+// ==========================================
+//  Recupera una lista de CuentaContableSAT
+// ==========================================
+Administracion.prototype.get_cuentaContableSAT = function (req, res, next) {
+    var self = this;
+    this.model.query('[Catalogo].[ObtieneCuentaContableSAT]', [], function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result,
         });
     });
 };

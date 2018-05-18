@@ -20,6 +20,7 @@ import { ICuentaContableDetalle } from '../../../models/administracion/cuentaCon
 import { IAfectaCuentaContable } from '../../../models/administracion/AfectaCuentaContable';
 import { ICuentaContableSituacion } from '../../../models/administracion/cuentaContableSituacion';
 import { CompaniaCuentaContable } from '../../../models/administracion/companiaCuentaContable';
+import { ICuentaContableSAT } from '../../../models/administracion/cuentaContableSAT';
 
 @Injectable()
 export class CuentaContableService {
@@ -48,7 +49,7 @@ export class CuentaContableService {
     private _urlObtieneCuentaContableLocal = 'api/administracion/cuentaContableLocal';
     private _urlObtieneDepartamentos = 'api/catalogos/departamentos';
     private _urlCuentaContableEditar = 'api/administracion/cuentaContableEditar';
-    
+    private _urlObtenerCuentaContableSAT = 'api/administracion/cuentaContableSAT';    
 
     constructor(private _http: HttpClient) { }
 
@@ -185,7 +186,11 @@ export class CuentaContableService {
             .catch(this.handleError);
     }
 
-
+// Obtiene el catalogo de CuentaContableSAT
+obtenerCuentaContableSat(): Observable<ICuentaContableSAT[]> {
+    return this._http.get<ICuentaContableSAT[]>(this._urlObtenerCuentaContableSAT)
+        .catch(this.handleError);
+}
 
 
     // Se encarga de subir el archivo de excel

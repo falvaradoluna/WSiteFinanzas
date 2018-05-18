@@ -25,5 +25,43 @@ Catalogos.prototype.get_departamentos = function (req, res, next) {
     });
 };
 
+// ==========================================
+//  Funcionalidad que llena el select de compañias
+// ==========================================
+Catalogos.prototype.get_companias = function (req, res, next) {
+    var self = this;
+    var idUsuario = req.query.idusuario;
+  
+    var params = [
+      { name: 'IdUsuario', value: idUsuario, type: self.model.types.INT }
+    ];
+  
+    this.model.query('Catalogo.ObtenerCompaniaPorUsuario', params, function (error, result) {
+      self.view.expositor(res, {
+        error: error,
+        result: result,
+      });
+    });
+  };
+
+// ==========================================
+//  Recupera todos los departamentos por companias (XML)
+// ==========================================
+Catalogos.prototype.get_departamentosPorCompanias = function (req, res, next) {
+    var self = this;
+
+    var params = [
+        { name: 'idCompania', value: req.query.idCompanias, type: self.model.types.STRING },
+        { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }
+    ];
+
+    this.model.query('[Interno].[ObtenerDepartamentoxCompanias]', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result,
+        });
+    });
+};
+
 
 module.exports = Catalogos;
