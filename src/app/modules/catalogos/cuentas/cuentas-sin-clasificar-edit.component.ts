@@ -125,7 +125,6 @@ export class CuentasSinClasificarEditComponent implements OnInit {
       .subscribe(
         companiasCuenta => {
           this.companiasCuentaContable = companiasCuenta;
-          console.log(this.companiasCuentaContable);
           this.heightTable = this.companiasCuentaContable.length === 1 ? 115 : 165;
         },
         error => this.errorMessage = <any>error
@@ -722,47 +721,4 @@ export class CuentasSinClasificarEditComponent implements OnInit {
       || this.cuentaContable.idSituacion == 0
     );
   }
-
-  // ==========================================
-  //  Actualiza la información de la cuenta
-  // ==========================================
-  private validaCuentaContableBD() {
-    this.controlaSpinner(true, 3000);
-    this._cuentaContableService.ObtieneValoresCuentaContable({
-      numCuenta: this.cuentaContable.numeroCuenta
-    })
-      .subscribe(
-        resultado => {
-          this.validaCaracteresCuenta(resultado);
-          this.controlaSpinner(false);
-        },
-        error => this.errorMessage = <any>error
-      );
-  }
-
-
-  private validaCaracteresCuenta(resultado): boolean {
-    var txtError: string[] = [];
-    if (!this.validaNumeroCuenta) {
-      if (!this.validaDepartamento) {
-        if (this.cuentaContable.idDepartamento != parseInt(this.cuentaContable.numeroCuenta.substring(5, 9))) {
-          txtError.push('No es valido el departamento de la cuenta');
-        }
-      } if (this.cuentaContable.idBalanceNivel01 != resultado[0].grupo1) {
-        txtError.push('No es valido el grupo 1 de la cuenta');
-      }
-      if (this.cuentaContable.idBalanceNivel02 != resultado[0].grupo2) {
-        txtError.push('No es valido el grupo 2 de la cuenta');
-      }
-
-      if (txtError.length > 0) {
-        swal('Errores en numero de cuenta', txtError.join(', '), 'error');
-        return true;
-      }
-      return false;
-    }
-  }
-
-
-
 }
