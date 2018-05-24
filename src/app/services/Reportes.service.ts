@@ -26,11 +26,13 @@ import { ISeries } from '../models/reports/series';
 
 
 import { IResultadoEstadoDeResultadosCalculo } from '../models/reports/formulaEstadoResultado';
+import { Iexterno } from '../models/reports/externo';
+
 
 
 @Injectable()
 export class ReportesService {
-
+  
   private _urlUnidades = 'api/internos/internos';
   private _urlEstadoResultados = 'api/internos/estadoresultados';
   private _urlEstadoDeResultadosCalculo = 'api/internos/estadodeResultadoscalculo';
@@ -66,8 +68,10 @@ export class ReportesService {
   private _urlDetalleUnidadesSeriesAr = 'api/internos/detalleunidadesseriesar';
   private _urlEstadoDeResultadosVariacionSegundoNivel = 'api/internos/estadoderesultadosvariacionsegundonivel';
   private _urlTipoReporte = 'api/internos/tipoReporte';
+  private _urlReportInterno = 'api/reportes/reportMonth';
 
-  constructor(private _http: HttpClient) { }
+  constructor(private _http: HttpClient) { 
+  }
 
   getUnidades(parameters): Observable<IResultadoInternos[]> {
     let Params = new HttpParams();
@@ -556,5 +560,29 @@ export class ReportesService {
     return this._http.get<ITipoReporte[]>(this._urlTipoReporte, { params: Params })
       .catch(this.handleError);
   }
+ 
 
+  getReportMonth(parameters): Observable<Iexterno[]> {
+    let Params = new HttpParams();
+
+    // Params = Params.append('idHoja', parameters.idHoja);
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+
+    // return this._http.get<Iexterno[]>(this._urlReportInterno, { params: Params })
+    //   .catch(this.handleError);
+
+      // return this._http.get<Iexterno[]>("http://localhost:6248/api/report/excelExterno",{params: Params})
+      // .catch(this.handleError);
+// ,{
+      //   idCompania:parameters.idCompania,
+      //   periodoYear: parameters.periodoYear,
+      //   periodoMes: parameters.periodoMes
+      // }
+//return this._http.post("http://192.168.20.92/WSF/api/report/excelExterno?idCompania="+ parameters.idCompania+ "&periodoYear="+parameters.periodoYear 
+      return this._http.get<Iexterno[]>("http://192.168.20.92/WSF/api/report/excelExterno?idCompania="+ parameters.idCompania+ "&periodoYear=" + parameters.periodoYear + "&periodoMes=" + parameters.periodoMes ,{})
+      .catch(this.handleError);
+
+  }
 }
