@@ -551,7 +551,6 @@ export class ReportesService {
     Params = Params.append('periodoMes', parameters.periodoMes);
 
     let urlApi: String = environment.api;
-    console.log(urlApi);
     return this._http.get<Iexterno[]>(urlApi + this._urlReportInterno + "?idCompania="+ parameters.idCompania+ "&periodoYear=" + parameters.periodoYear + "&periodoMes=" + parameters.periodoMes ,{})
     .catch(this.handleError); 
   }

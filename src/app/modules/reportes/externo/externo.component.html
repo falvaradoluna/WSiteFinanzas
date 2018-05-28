@@ -29,7 +29,7 @@
                       </select>
                 </div>
               </div>
-              <div class="form-group col-md-2">
+              <div class="form-group col-md-2" [hidden]="selectedTipoReporte.toString() === '0'">
                   <label for="inputPeriodoYear">Año</label>
                   <div [ngClass]="{ErrorControl: selectedPeriodoYear.toString() === '0'}">
                     <select value="0"  name="inputPeriodoYear" class="form-control" [(ngModel)]="selectedPeriodoYear">
@@ -40,11 +40,11 @@
                       </select>
                   </div>
               </div>
-              <div class="form-group col-md-2" >
+              <div class="form-group col-md-2" [hidden]="selectedTipoReporte.toString() === '0' || selectedTipoReporte.toString() === '1'">
                 <label for="inputPeriodoMes">Mes</label>
                 <div [ngClass]="{ErrorControl: selectedPeriodoMes.toString() === '0'}">
                     <select value="0"  name="inputPeriodoMes" class="form-control" [(ngModel)]="selectedPeriodoMes">
-                        <option value="0">Seleccione</option>
+                      <option value="0">Seleccione</option>
                       <option value="1">Enero</option>
                       <option value="2">Febrero</option>
                       <option value="3">Marzo</option>

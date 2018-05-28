@@ -10,11 +10,7 @@ import { trigger,
   group,
   state,
   animateChild } from '@angular/animations';
-
-
 import * as XLSX from 'xlsx';
-// import 'script-loader!../../../node_modules/xlsx/dist/xlsx.full.min.js';
-
 import { ReportesService } from '../../../services/Reportes.service'
 import { ICompania } from '../../../models/catalog/compania';
 import {
@@ -29,7 +25,7 @@ import {
 import xml2js from 'xml2js';
 import { Iexterno } from '../../../models/reports/externo';
 import { NgxSpinnerService } from 'ngx-spinner';
-
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'wsf-externo',
@@ -62,10 +58,10 @@ export class ExternoComponent implements OnInit {
   companias: ICompania[];
   tipoReportes: any[];
   years = [];
-  selectedCompania = 0;
-  selectedTipoReporte = 0;
-  selectedPeriodoYear = 0;
-  selectedPeriodoMes = 0;
+  selectedCompania = "0";
+  selectedTipoReporte = "0";
+  selectedPeriodoYear = "0";
+  selectedPeriodoMes = "0";
   
   constructor(private _reportesService : ReportesService, private _spinnerService: NgxSpinnerService) {   }
   externo : Iexterno[] =[]
@@ -77,20 +73,31 @@ export class ExternoComponent implements OnInit {
   }
 
   procesar(): void  {
-    if (this.selectedCompania <= 0)
+    if (this.selectedCompania === "0")
       return;
     
-    if (this.selectedTipoReporte <= 0)
+    if (this.selectedTipoReporte === "0")
       return;
-    else
-    {
-      if(this.selectedPeriodoYear <= 0)
+    if(this.selectedTipoReporte === "1") {
+       if(this.selectedPeriodoYear === "0")
         return;
-      if(this.selectedTipoReporte === 2) { //Mensual
-        if(this.selectedPeriodoMes <= 0)
-          return;
-      }
+      swal({
+        imageUrl: "assets/images/construccion.jpg",
+        imageHeight: 200,
+        imageWidth: 400,
+        imageAlt: 'A tall image'
+      })
+      return ;
+     
+    }else if(this.selectedTipoReporte === "2") {
+      if(this.selectedPeriodoYear === "0")
+        return;
+      if(this.selectedPeriodoMes === "0")
+        return;
     }
+
+
+  
   this._spinnerService.show();
   var reportDataSource = [];
   
@@ -146,10 +153,10 @@ export class ExternoComponent implements OnInit {
 
   getTipoReporte(): void{
     this.tipoReportes = [
-                        {id:1,Nombre:"Anual"},
-                        {id:2,Nombre:"Mensual"},
+                        {id: "1",Nombre:"Anual"},
+                        {id: "2",Nombre:"Mensual"},
                        ]
-                       this.selectedTipoReporte=0;
+                       this.selectedTipoReporte = "0";
   }
 
   getPeriodoYear() : void{
@@ -183,7 +190,7 @@ export class ExternoComponent implements OnInit {
     });
     return jsonReport;
   }
-  public exportAsExcelFile(json: any[], excelFileName: string): void {
+  private exportAsExcelFile(json: any[], excelFileName: string): void {
     var sheetNames =[];
     var dataSorucesheet ={}
    json.forEach(function(data){
