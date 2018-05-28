@@ -27,6 +27,7 @@ import { ISeries } from '../models/reports/series';
 
 import { IResultadoEstadoDeResultadosCalculo } from '../models/reports/formulaEstadoResultado';
 import { Iexterno } from '../models/reports/externo';
+import { environment } from '../../environments/environment';
 
 
 
@@ -68,7 +69,7 @@ export class ReportesService {
   private _urlDetalleUnidadesSeriesAr = 'api/internos/detalleunidadesseriesar';
   private _urlEstadoDeResultadosVariacionSegundoNivel = 'api/internos/estadoderesultadosvariacionsegundonivel';
   private _urlTipoReporte = 'api/internos/tipoReporte';
-  private _urlReportInterno = 'api/reportes/reportMonth';
+  private _urlReportInterno = 'WSF/api/report/excelExterno';
 
   constructor(private _http: HttpClient) { 
   }
@@ -545,24 +546,13 @@ export class ReportesService {
   getReportMonth(parameters): Observable<Iexterno[]> {
     let Params = new HttpParams();
 
-    // Params = Params.append('idHoja', parameters.idHoja);
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
 
-    // return this._http.get<Iexterno[]>(this._urlReportInterno, { params: Params })
-    //   .catch(this.handleError);
-
-      // return this._http.get<Iexterno[]>("http://localhost:6248/api/report/excelExterno",{params: Params})
-      // .catch(this.handleError);
-// ,{
-      //   idCompania:parameters.idCompania,
-      //   periodoYear: parameters.periodoYear,
-      //   periodoMes: parameters.periodoMes
-      // }
-//return this._http.post("http://192.168.20.92/WSF/api/report/excelExterno?idCompania="+ parameters.idCompania+ "&periodoYear="+parameters.periodoYear 
-      return this._http.get<Iexterno[]>("http://192.168.20.92/WSF/api/report/excelExterno?idCompania="+ parameters.idCompania+ "&periodoYear=" + parameters.periodoYear + "&periodoMes=" + parameters.periodoMes ,{})
-      .catch(this.handleError);
-
+    let urlApi: String = environment.api;
+    console.log(urlApi);
+    return this._http.get<Iexterno[]>(urlApi + this._urlReportInterno + "?idCompania="+ parameters.idCompania+ "&periodoYear=" + parameters.periodoYear + "&periodoMes=" + parameters.periodoMes ,{})
+    .catch(this.handleError); 
   }
 }
