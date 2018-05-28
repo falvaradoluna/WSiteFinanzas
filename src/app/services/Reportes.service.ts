@@ -333,26 +333,6 @@ export class ReportesService {
    });
   }
 
-  getDetalleUnidadesSeries(parameters): Observable<ISeries[]> {
-    let Params = new HttpParams();
-    let url = 'api/internos/detalleunidadesseries';
-
-    Params = Params.append('idCompania', parameters.idCompania);
-    Params = Params.append('idSucursal', parameters.idSucursal);
-    Params = Params.append('idOrigen', parameters.idOrigen);
-    Params = Params.append('idPestana', parameters.idPestana);
-    Params = Params.append('periodoYear', parameters.periodoYear);
-    Params = Params.append('periodoMes', parameters.periodoMes);
-    Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
-
-    if (parameters.isUnidadesDepto) {
-      url = 'api/internos/detalleunidadesdepartamentoseries';
-    }
-
-    return this._http.get<ISeries[]>(url, { params: Params })
-      .catch(this.handleError);
-  }
-
   getDetalleUnidadesAcumulado(parameters): Observable<IDetalleUnidadesAcumulado[]> {
     let Params = new HttpParams();
     let url = this._urlDetalleUnidadesAcumulado;

@@ -1466,7 +1466,7 @@ getReporteSumaDepartamentos() : void{
   getUnidadesAcumuladoRealDepartamento(): void {
     this._service.getUnidadesAcumuladoRealDepartamento({
       idPestana: +this.selectedIdDepartamento,
-      idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
+      idCompania: this.selectedCompania,
       idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
       periodoYear: +this.anio
     })
