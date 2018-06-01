@@ -2,12 +2,14 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChange, OnChanges
 import { IDetalleUnidadesMensual } from '../../models/reports/detalle-unidades-mensual';
 import { IDetalleUnidadesAcumulado } from '../../models/reports/detalle-unidades-acumulado';
 import { ITipoUnidad } from '../../models/reports/tipo-unidad';
+import { ISeries } from '../../models/reports/series';
 
 import { ColumnSortedEvent } from '../../shared/index';
 import { InternosService } from './internos.service';
 import { Observable } from 'rxjs/Observable';
 import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 import { Subscription } from 'rxjs/Subscription';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -46,12 +48,16 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 
   dumSubscription: Subscription;
   duaSubscription: Subscription;
+  public isNivel4: boolean = false;
+  detalleUnidadesSeries: ISeries[] = [];
 
-  constructor(private _service: InternosService) { }
+  constructor(private _service: InternosService, private _spinnerService: NgxSpinnerService) { 
+    this._spinnerService.show(); 
+    setTimeout(() => { this._spinnerService.hide(); }, 1000);
+  }
 
   ngOnInit() {
     this.fixedHeaderId.emit('idDetalleUnidadesAcumulado');
-
     if (this.isUnidadesDepto) {
       if (this.idDetalleUnidades === 1) { // Mensual
         this.getUnidadesDepartamentoNv2();
@@ -77,15 +83,19 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     const changeProp = changes['showPercents'];
-    this.showPercents = <boolean>changeProp.currentValue;
+    if(changeProp !== undefined){
+      this.showPercents = <boolean>changeProp.currentValue;
+    }
   }
 
   ngOnDestroy() {
     if (this.idDetalleUnidades === 1) { // Mensual
-      this.dumSubscription.unsubscribe();
+        this.dumSubscription.unsubscribe();
     } else if (this.idDetalleUnidades === 2) { // Acumulado
-      this.duaSubscription.unsubscribe();
-    }
+        this.duaSubscription.unsubscribe();
+    }    
+    this.isNivel4 = false;
+    this.detalleUnidadesSeries = [];
   }
 
   getDetalleUnidadesMensual(): void {
@@ -113,40 +123,47 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
         this.detalleUnidadesMensual.push(t);
 
         // Se calculan porcentajes
-        this.detalleUnidadesMensual.forEach(dum => dum.Perc = dum.cantidad / total * 100);
+        this.detalleUnidadesMensual.forEach(dum => dum.Perc = this.getIsNumber(dum.cantidad / total * 100));
       }
     );
   }
 
   getUnidadesDepartamentoNv2(): void {
-    this.dumSubscription = this._service.getDetalleUnidadesMensual({
-      idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
-      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
-      periodoYear: +this.anio,
-      periodoMes: +this.mes,
-      idOrigen: this.selectedIdDepartamento, // Nuevas, usadas, etc.
-      isUnidadesDepto: this.isUnidadesDepto
-    }).subscribe(
-      dum => { this.detalleUnidadesMensual = dum; },
-      error => { console.log(error); },
-      () => {
-        // Se calcula el total y se inserta en el objeto
-        const total: number = this.calculaTotalMensual(this.detalleUnidadesMensual, 'cantidad');
-        const t: IDetalleUnidadesMensual = {
-          'idAutoLinea': -1,
-          'autoLinea': 'Total',
-          'cantidad': total,
-          'CantidadSelected': false,
-          'Perc': 100,
-          'departamento': '',
-          'departamentoOri': ''
-        };
-        this.detalleUnidadesMensual.push(t);
+    if( this.selectedIdDepartamento == 16 || this.selectedIdDepartamento == 17 ){
+      this.isNivel4 = true;
+      this.getDetalleDepartamentosEspeciales();
+    } else {
+      this.isNivel4 = false;
+      this.detalleUnidadesSeries = [];
+      this.dumSubscription = this._service.getDetalleUnidadesMensual({
+        idCompania: this.selectedIdSucursal > 0 ?  0 : this.selectedCompania,
+        idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+        periodoYear: +this.anio,
+        periodoMes: +this.mes,
+        idOrigen: this.selectedIdDepartamento, // Nuevas, usadas, etc.
+        isUnidadesDepto: this.isUnidadesDepto
+      }).subscribe(
+        dum => { this.detalleUnidadesMensual = dum; },
+        error => { console.log(error); },
+        () => {
+          // Se calcula el total y se inserta en el objeto
+          const total: number = this.calculaTotalMensual(this.detalleUnidadesMensual, 'cantidad');
+          const t: IDetalleUnidadesMensual = {
+            'idAutoLinea': -1,
+            'autoLinea': 'Total',
+            'cantidad': total,
+            'CantidadSelected': false,
+            'Perc': 100,
+            'departamento': '',
+            'departamentoOri': ''
+          };
+          this.detalleUnidadesMensual.push(t);
 
-        // Se calculan porcentajes
-        this.detalleUnidadesMensual.forEach(dum => dum.Perc = dum.cantidad / total * 100);
-      }
-    );
+          // Se calculan porcentajes
+          this.detalleUnidadesMensual.forEach(dum => dum.Perc = this.getIsNumber(dum.cantidad / total * 100));
+        }
+      );
+  }
   }
 
   getUnidadesDepartamentoNv2Acumulado(): void {
@@ -208,7 +225,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 
           // Se calculan porcentajes del mes correspondiente
           this.detalleUnidadesAcumulado.forEach(dua => {
-            dua[nombreMes + 'Perc'] = dua[nombreMes] / totalMensual * 100;
+            dua[nombreMes + 'Perc'] = this.getIsNumber(dua[nombreMes] / totalMensual * 100);
             if (!dua.totalAnual) {
               dua.totalAnual = 0;
             }
@@ -222,7 +239,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 
         // Se calculan los porcentajes de totales
         this.detalleUnidadesAcumulado.forEach(dua => {
-          dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+          dua.totalAnualPerc = this.getIsNumber(dua.totalAnual / totales.totalAnual * 100);
         });
 
         // Se agregan totales al objeto
@@ -257,7 +274,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
         this.detalleUnidadesMensual.push(t);
 
         // Se calculan porcentajes
-        this.detalleUnidadesMensual.forEach(dum => dum.Perc = dum.cantidad / total * 100);
+        this.detalleUnidadesMensual.forEach(dum => dum.Perc = this.getIsNumber(dum.cantidad / total * 100));
       }
     );
   }
@@ -320,7 +337,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 
           // Se calculan porcentajes del mes correspondiente
           this.detalleUnidadesAcumulado.forEach(dua => {
-            dua[nombreMes + 'Perc'] = dua[nombreMes] / totalMensual * 100;
+            dua[nombreMes + 'Perc'] = this.getIsNumber(dua[nombreMes] / totalMensual * 100);
             dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
                              dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
             dua.totalAnualPerc = 0;
@@ -332,7 +349,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 
         // Se calculan los porcentajes de totales
         this.detalleUnidadesAcumulado.forEach(dua => {
-          dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+          dua.totalAnualPerc = this.getIsNumber(dua.totalAnual / totales.totalAnual * 100);
         });
 
         // Se agregan totales al objeto
@@ -399,7 +416,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 
           // Se calculan porcentajes del mes correspondiente
           this.detalleUnidadesAcumulado.forEach(dua => {
-            dua[nombreMes + 'Perc'] = dua[nombreMes] / totalMensual * 100;
+            dua[nombreMes + 'Perc'] = this.getIsNumber(dua[nombreMes] / totalMensual * 100);
             dua.totalAnual = dua.enero + dua.febrero + dua.marzo + dua.abril + dua.mayo + dua.junio + dua.julio +
                              dua.agosto + dua.septiembre + dua.octubre + dua.noviembre + dua.diciembre;
             dua.totalAnualPerc = 0;
@@ -411,7 +428,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 
         // Se calculan los porcentajes de totales
         this.detalleUnidadesAcumulado.forEach(dua => {
-          dua.totalAnualPerc = dua.totalAnual / totales.totalAnual * 100;
+          dua.totalAnualPerc = this.getIsNumber(dua.totalAnual / totales.totalAnual * 100);
         });
 
         // Se agregan totales al objeto
@@ -470,4 +487,35 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
       }
     });
   }
+
+  private getDetalleDepartamentosEspeciales() {
+
+    this.dumSubscription = this._service.getDetalleDepartamentosEspeciales({
+      idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      idOrigen: 2,//this.idOrigen,
+      periodoAnio: +this.anio,
+      periodoMes: +this.mes
+    })
+      .subscribe(detalleUnidadesSeries => {
+        this.detalleUnidadesSeries = detalleUnidadesSeries;
+      },
+      error => this.errorMessage = <any>error);
+  }
+
+// ==========================================
+//  Evalua el resultado de porcentaje de un numero
+// ==========================================
+   private getIsNumber(value: number ): number {
+    if (isNaN(value) || 
+        value.toString() === "-Infinity" || 
+        value.toString() === "Infinity" ||
+        value.toString() ==="-∞" ||
+        value.toString() ==="∞") {
+        return 0;
+      } else {  
+        return parseFloat(value.toString());
+      }
+  }
+
 }

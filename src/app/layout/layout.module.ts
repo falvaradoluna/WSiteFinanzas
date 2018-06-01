@@ -8,13 +8,15 @@ import { LayoutComponent } from './layout.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
 import { SeguridadService } from '../services/seguridad.service';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
     imports: [
         CommonModule,
         LayoutRoutingModule,
         TranslateModule,
-        NgbDropdownModule.forRoot()
+        NgbDropdownModule.forRoot(),
+        NgxSpinnerModule
     ],
     declarations: [LayoutComponent, SidebarComponent, HeaderComponent],
     providers: [SeguridadService]

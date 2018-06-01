@@ -87,7 +87,7 @@ DataAccess.prototype.post = function (stored,params, callback) {
         }
         request.execute(stored, function (err, recordsets, returnValue) {
             if (recordsets != null) {
-                callback(err, recordsets[0]);
+                callback(err, recordsets[0], returnValue);
             } else {
                 console.log('Error al realizacion la insercción: ' + params + ' mensaje: ' + err);
             }

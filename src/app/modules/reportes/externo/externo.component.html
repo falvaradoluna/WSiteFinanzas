@@ -1,0 +1,75 @@
+<div [@routerTransition]>
+    <div class="col-md-12">
+        <div class="card">
+          <div class="card-header bg-primary text-white text-center">
+            Estados Financieros Externos
+          </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="row">
+              <div class="form-group col-md-6">
+                <label for="inputCompania">Compañía</label>
+                <div [ngClass]="{ErrorControl: selectedCompania.toString() === '0'}">
+                    <select value="0" name="inputCompania" class="form-control" [(ngModel)]="selectedCompania">
+                        <option value="0">Seleccione Compañía</option>
+                        <option *ngFor="let compania of companias" [value]="compania.id">
+                          {{ compania.razonSocial }}
+                        </option>
+                      </select>
+                </div>
+              </div>
+              <div class="form-group col-md-2">
+                <label for="inputTipo">Tipo</label>
+                <div [ngClass]="{ErrorControl: selectedTipoReporte.toString() === '0'}">
+                    <select value="0"  name="inputTipo" class="form-control" [(ngModel)]="selectedTipoReporte" (change)="onChangeTipoReporte(this)">
+                        <option value="0">Seleccione</option>
+                        <option *ngFor="let tipoReporte of tipoReportes" [value]="tipoReporte.id">{{tipoReporte.Nombre}}</option>
+                      </select>
+                </div>
+              </div>
+              <div class="form-group col-md-2" [hidden]="selectedTipoReporte.toString() === '0'">
+                  <label for="inputPeriodoYear">Año</label>
+                  <div [ngClass]="{ErrorControl: selectedPeriodoYear.toString() === '0'}">
+                    <select value="0"  name="inputPeriodoYear" class="form-control" [(ngModel)]="selectedPeriodoYear">
+                        <option value="0">Seleccione</option>
+                        <option *ngFor="let year of years" [value]="year.id">
+                          {{year.Nombre}}
+                        </option>
+                      </select>
+                  </div>
+              </div>
+              <div class="form-group col-md-2" [hidden]="selectedTipoReporte.toString() === '0' || selectedTipoReporte.toString() === '1'">
+                <label for="inputPeriodoMes">Mes</label>
+                <div [ngClass]="{ErrorControl: selectedPeriodoMes.toString() === '0'}">
+                    <select value="0"  name="inputPeriodoMes" class="form-control" [(ngModel)]="selectedPeriodoMes">
+                      <option value="0">Seleccione</option>
+                      <option value="1">Enero</option>
+                      <option value="2">Febrero</option>
+                      <option value="3">Marzo</option>
+                      <option value="4">Abril</option>
+                      <option value="5">Mayo</option>
+                      <option value="6">Junio</option>
+                      <option value="7">Julio</option>
+                      <option value="8">Agosto</option>
+                      <option value="9">Septiembre</option>
+                      <option value="10">Octubre</option>
+                      <option value="11">Noviembre</option>
+                      <option value="12">Diciembre</option>
+                    </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group col-md-10">
+                <!-- <input type="text" class="form-control" /> -->
+              </div>
+              <div class="form-group col-md-2">
+                <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)="procesar()">Procesar</button>
+                <!-- <a download="custom-filename.xlsx" [attr.href]="urlFile" target="_blank">text</a> -->
+              </div>
+            </div>
+          </form>
+    </div>
+</div>

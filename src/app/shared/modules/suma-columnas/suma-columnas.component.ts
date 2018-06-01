@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class SumaColumnasComponent implements OnInit, OnDestroy {
 
-  private suma = 0;
+  public suma = 0;
   private subscription: Subscription;
 
   constructor(private sumaColumnasService: SumaColumnasService) { }
