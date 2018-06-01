@@ -309,7 +309,8 @@ internos.prototype.get_departamentos = function (req, res, next) {
 
   var params = [
     { name: 'idCompania', value: req.query.idCompania, type: self.model.types.INT },
-    { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }
+    { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+    { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT }
   ];
 
   this.model.query('[Interno].[ObtenerDepartamentoxCompania]', params, function (error, result) {

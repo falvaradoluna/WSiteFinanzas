@@ -254,7 +254,7 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
   getDepartamentos(parameters): Observable<IDepartamento[]> {
      let Params = new HttpParams();
      Params = Params.append('idCompania', parameters.idCompania);
-     //Params = Params.append('idSucursal', parameters.idSucursal);
+     Params = Params.append('idSucursal', parameters.idSucursal);
      Params = Params.append('idUsuario', parameters.idUsuario);
 
     return this._http.get<IDepartamento[]>(this._urlDepartamentos, { params: Params })

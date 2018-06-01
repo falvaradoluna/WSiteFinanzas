@@ -441,7 +441,9 @@ export class InternosComponent implements OnInit {
 
       // Actualizar info de breadcrumb
       const a = this.companias.find(x => x.id === +this.selectedCompania);
-      this.selectedNombreCompania = a.nombreComercial;
+      if (typeof a !== "undefined") {
+        this.selectedNombreCompania = a.nombreComercial;
+      }
     }
     
     // Oculta la tabla de unidades
@@ -1144,17 +1146,19 @@ getReporteSumaDepartamentos() : void{
   }
 
   getDepartamentos(): void {
-    const usuario = JSON.parse(localStorage.getItem('userLogged'));
-    this._service.getDepartamentos({
-       idCompania: this.selectedCompania,
-       //idSucursal: this.selectedIdSucursal,
-       idUsuario: usuario.id
-    })
-      .subscribe(
-        departamentos => { this.departamentos = departamentos; },
-        error => this.errorMessage = <any>error,
-        () => this.procesar()
-      );
+    if(this.selectedCompania != 0 && typeof this.selectedIdSucursal !== "undefined") {
+      const usuario = JSON.parse(localStorage.getItem('userLogged'));
+      this._service.getDepartamentos({
+        idCompania: this.selectedCompania,
+        idSucursal: this.selectedIdSucursal,
+        idUsuario: usuario.id
+      })
+        .subscribe(
+          departamentos => { this.departamentos = departamentos; },
+          error => this.errorMessage = <any>error,
+          () => this.procesar()
+        );
+    }
   }
 
   setTipoReporte(): void {
@@ -1536,19 +1540,16 @@ getReporteSumaDepartamentos() : void{
     this._fechaActualizacionService.onChangeFecha(null);
    }
 
-   if (this.selectedCompania !== 0 && this.selectedTipoReporte <=3) {     
-      // Llenar dropdown de sucursales
-      this.getSucursales();
-      this.selectedIdSucursal = 0;
-    
-    }
-   //if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal!==-2) {
-    if ( this.selectedCompania != 0) {
-        this.getDepartamentos();
-        if(this.showSumaDepartamentos==true){
-          this.sumaDepartamentos();
-        }
+   if (this.selectedCompania !== 0) {     
+      if (this.periodo) {
+        this.procesar();
       }
+      if(this.selectedTipoReporte <=3) {
+        // Llenar dropdown de sucursales
+        this.getSucursales();
+        this.selectedIdSucursal = 0;
+      }    
+    }    
 
     this.hideResultados();
   }
@@ -1571,11 +1572,24 @@ getReporteSumaDepartamentos() : void{
     this.closeDetallesUnidades();
     this.closeDetalleUnidadesConcentrado();
     if ( this.selectedCompania != 0 ) {
-      this.selectedIdSucursalSecuencia = this.sucursales.find(x => x.id === +selectedIndex).idSucursalSecuencia;
+      var sucursalSec = this.sucursales.find(x => x.id === +selectedIndex);
+      if (typeof sucursalSec !== "undefined") {
+        this.selectedIdSucursalSecuencia = sucursalSec.idSucursalSecuencia;
+      }
     }
-    if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal) {
-      this.procesar();
+    
+    if(this.selectedCompania !== 0 && typeof this.selectedIdSucursal !== "undefined") {
+      this.getDepartamentos();
+      if (this.periodo) {       
+        //if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal!==-2) {
+        if(this.showSumaDepartamentos==true) {
+          this.sumaDepartamentos();
+        }
+        this.procesar();
+      }
     }
+
+
   }
 
   onChangeDepartamento(newValue): void {
@@ -2082,15 +2096,17 @@ private getXmlDepartamentos(){
     } else if (this.resultadoUnidades && +this.selectedIdDepartamento === 0) {
       if(this.resultadoUnidades && this.resultadoUnidades.length > 0) {
       const u = this.resultadoUnidades.find(x => x.idOrigen === 0);
-      switch (col) {
-        case 1: v = u.cantidad;
-          break;
-        case 3: v = u.cantidadPresupuesto;
-          break;
-        case 7: v = u.cantidadAcumulado;
-          break;
-        case 9: v = u.cantidadPresupuestoAcumulado;
-          break;
+      if (typeof u !== "undefined") {
+        switch (col) {
+          case 1: v = u.cantidad;
+            break;
+          case 3: v = u.cantidadPresupuesto;
+            break;
+          case 7: v = u.cantidadAcumulado;
+            break;
+          case 9: v = u.cantidadPresupuestoAcumulado;
+            break;
+        }
       }
       return value / v;
     } else return 0;
