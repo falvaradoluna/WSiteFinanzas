@@ -75,7 +75,6 @@ export class ExternoComponent implements OnInit {
   procesar(): void  {
     if (this.selectedCompania === "0")
       return;
-    
     if (this.selectedTipoReporte === "0")
       return;
     if(this.selectedTipoReporte === "1") {
@@ -104,8 +103,14 @@ export class ExternoComponent implements OnInit {
   this._reportesService.getReportMonth(this.getParameters(4))
   .subscribe(externos => 
                 {
-                  window.open(String(externos),"_blank");
-                  this._spinnerService.hide();
+                  var error = new String(externos);
+                  if (error.indexOf("Error") != -1) {
+                    swal("Error al generar el reporte", String(externos) , "error");
+
+                  }else {
+                    window.open(String(externos),"_blank");
+                    this._spinnerService.hide();
+                  }
                 },error => this.errorMessage = <any>error
              );
 
