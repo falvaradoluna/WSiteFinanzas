@@ -113,7 +113,6 @@ export class ExternoComponent implements OnInit {
                   }
                 },error => this.errorMessage = <any>error
              );
-
   // this._reportesService.getReportMonth(this.getParameters(2))
   // .subscribe(externos => 
   //               {
@@ -191,7 +190,7 @@ export class ExternoComponent implements OnInit {
     });
     return jsonReport;
   }
-  
+
   private exportAsExcelFile(json: any[], excelFileName: string): void {
     var sheetNames =[];
     var dataSorucesheet ={}
