@@ -34,7 +34,7 @@ var LoginView = require('../views/reference'),
                 submenu: []
               };
       
-              arraySubmenus = result.filter(menu => menu.idPadre === arrayPadre[menuPosition].idMenu,);
+              arraySubmenus = result.filter(menu => menu.idPadre === arrayPadre[menuPosition].idMenu);
               if (arraySubmenus.length > 0) {
                 for (var positionSub = 0; positionSub < arraySubmenus.length; positionSub++) {
                   menu.submenu.push({ titulo: arraySubmenus[positionSub].menu, url: arraySubmenus[positionSub].url, icono: arraySubmenus[positionSub].icoMenu });

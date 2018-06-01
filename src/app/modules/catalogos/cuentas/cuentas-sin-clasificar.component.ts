@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../../../router.animations';
-
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'wsf-cuentas-sin-clasificar',

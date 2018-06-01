@@ -1,0 +1,79 @@
+<div class="row animated fadeIn">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h3>Guardar cuentas con archivo excel</h3>
+        <!--<div class="text-center">-->
+        <div class="form-row">
+          <div class="form-group col-md-4">
+              <label for="inputCompania">Compañía</label>
+              <select name="inputCompania" class="form-control form-control-sm" [(ngModel)]="selectedCompania" (ngModelChange)="onChangeCompania($event)">
+                <option value="0">Seleccione Compañía</option>
+                <option *ngFor="let compania of companias" [value]="compania.id">
+                  {{ compania.razonSocial }}
+                </option>
+              </select>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="lblFile">Seleccione un archivo:</label>
+            <input type="file" class="form-control  form-control-sm" (change)="seleccionArchivo($event.target.files[0])" placeholder="Seleccione archivo.."
+              accept=".xls,.xlsx" #fileInput>
+          </div>
+          <div class="form-group col-md-2 text-center">
+            <button type="button" class="btn btn-primary btn-sm btn-blocko form-control-sm" (click)="subirArchivo()" style="margin-top: 35px;">
+              <i class="fa fa-upload"></i>&nbsp; Procesar
+            </button>
+          </div>
+        </div>
+        <div *ngIf="cuentas.length > 0" class="form-row">
+          <h4>Lista de cuentas con errores</h4>
+          <div id="divTable" [style.height.px]="heightTable" class="form-group col-md-12">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th class="bg-secondary text-white">NUMCTA</th>
+                  <th class="bg-secondary text-white">DESCRIPCIÓN</th>
+                  <!--<th class="bg-secondary text-white">NATURALEZA</th>
+                  <th class="bg-secondary text-white">ACUMDET</th>
+                  <th class="bg-secondary text-white">GPO1</th>
+                  <th class="bg-secondary text-white">GPO2</th>
+                  <th class="bg-secondary text-white">GPO3</th>
+                  <th class="bg-secondary text-white">DEPTO</th>
+                  <th class="bg-secondary text-white">DICTAMEN</th>
+                  <th class="bg-secondary text-white">EFINTERNO</th>
+                  <th class="bg-secondary text-white">NOTASDIC</th>
+                  <th class="bg-secondary text-white">NOTASFIN</th>
+                  <th class="bg-secondary text-white">TipoBI</th>
+                  <th class="bg-secondary text-white">AFECTACC</th>
+                  <th class="bg-secondary text-white">GRUPOSAT</th>
+                  <th class="bg-secondary text-white">SITUACION</th>-->
+                  <th class="bg-secondary text-white">ERROR</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor='let cta of cuentas'>
+                  <td class="text-center">{{ cta.NUMCTA }}</td>
+                  <td class="text-left">{{ cta.DESCRIPCION }}</td>
+                  <!--<td class="text-center">{{ cta.NATURALEZA }}</td>
+                  <td class="text-left">{{ cta.ACUMDET }}</td>
+                  <td class="text-left">{{ cta.GPO1 }}</td>
+                  <td class="text-left">{{ cta.GPO2 }}</td>
+                  <td class="text-left">{{ cta.GPO3 }}</td>
+                  <td class="text-left">{{ cta.DEPTO }}</td>
+                  <td class="text-left">{{ cta.DICTAMEN }}</td>
+                  <td class="text-left">{{ cta.EFINTERNO }}</td>
+                  <td class="text-left">{{ cta.NOTASDIC }}</td>
+                  <td class="text-left">{{ cta.NOTASFIN }}</td>
+                  <td class="text-left">{{ cta.TipoBI }}</td>
+                  <td class="text-left">{{ cta.AFECTACC }}</td>
+                  <td class="text-left">{{ cta.GRUPOSAT }}</td>
+                  <td class="text-left">{{ cta.SITUACION }}</td>-->
+                  <td class="text-left">{{ cta.ERROR }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

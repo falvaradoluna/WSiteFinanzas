@@ -1,7 +1,10 @@
 export interface IDepartamento {
-  idPestana: number;
+  /*idPestana: number;
   pestanaNombre: string;
   pestanaOrdenId: number;
   Selected: boolean;
-  idER: number;
+  idER: number;*/
+  id: number;
+  descripcion: string;
+  Selected: boolean;
 }

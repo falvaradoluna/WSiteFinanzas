@@ -1,14 +1,14 @@
 <div class="row">
   <div class="col-md-12 mt-2">
     <div class="card">
-      <div  *ngIf="selectedTipoReporte === '4'" class="card-header bg-primary text-white text-center">
+      <div  *ngIf="selectedTipoReporte.toString() === '4'" class="card-header bg-primary text-white text-center">
         FLUJO DE EFECTIVO REAL
       </div>
-      <div  *ngIf="selectedTipoReporte === '5'" class="card-header bg-primary text-white text-center">
+      <div  *ngIf="selectedTipoReporte.toString() === '5'" class="card-header bg-primary text-white text-center">
         ESTADO DE SITUACION FINANCIERA
       </div>
       <div class="scrolltable">
-        <table id="tableEfectivo" class="table table-lg table-bordered table-hover-td table-responsive" *ngIf="selectedTipoReporte === '4'">
+        <table id="tableEfectivo" class="table table-lg table-bordered table-hover-td table-responsive" *ngIf="selectedTipoReporte.toString() === '4'">
           <thead>
             <tr>
               <th class="bg-secondary text-white">Concepto</th>
@@ -46,7 +46,7 @@
             </ng-container>
           </tbody>
         </table>
-        <table id="tableEstado" class="table table-lg table-bordered table-hover-td table-responsive" *ngIf="selectedTipoReporte === '5'">
+        <table id="tableEstado" class="table table-lg table-bordered table-hover-td table-responsive" *ngIf="selectedTipoReporte.toString() === '5'">
           <thead> 
             <tr>
               <th class="bg-secondary text-white">Concepto</th>

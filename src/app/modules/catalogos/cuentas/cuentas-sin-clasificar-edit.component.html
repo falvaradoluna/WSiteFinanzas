@@ -1,106 +1,304 @@
-<div class="card-body">
-  <h5>Crear Nueva Cuenta</h5>
+<div class="row animated fadeIn">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4>{{tituloFormCuenta}}</h4>
+        <form #userUpdateForm="ngForm" (ngSubmit)="guardarCuenta()">
+          <div *ngIf="!errorGuardarCuenta">
+            <div *ngIf="operacionCuenta !== 3" class="form-row">
+              <div class="form-group col-md-4">
+                <label for="lblTreview">Compañía:</label>
+                <div id="divDrop" class="dropdownTreeview" ng-class="{ErrorControl: validaCompaniaCuentaEspecifico }">
+                  <ngx-dropdown-treeview [buttonClass]="btn-outline-primary" [config]="config" [items]="items" (selectedChange)="onSelectedChange($event, true)">
+                  </ngx-dropdown-treeview>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblDescripcion">Descripción:</label>
+                <input type="text" class="form-control form-control-sm" ng-maxlength="300" name="txtDescripcion" [(ngModel)]="descripcionGeneral"
+                  placeholder="Ingrese una descripción" [ngClass]="{ErrorControl: !descripcionGeneral}">
+              </div>
+              <div class="form-group col-md-1">
+                <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='agregarCompania()' style="margin-top: 30px;">
+                  <i class="fa fa-plus"></i>&nbsp;Agregar
+                </button>
+                <p class="alert-danger" *ngIf="validaCompaniaCuenta">
+                  Agregue una Compañía.
+                </p>
+              </div>
+            </div>
+            <div class="form-row">
+              <div id="divTable" [style.height.px]="heightTable" class="form-group col-md-12">
+                <table *ngIf="operacionCuenta !== 3" class="table table-sm table-bordered">
+                  <thead>
+                    <tr>
+                      <th class="bg-secondary text-white">Compania</th>
+                      <th class="bg-secondary text-white ">Descripción</th>
+                      <th class="bg-secondary text-white text-center"></th>
+                      <th class="bg-secondary text-white text-center"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor='let companiaCuenta of companiasCuentaContable'>
+                      <td>
+                        {{ companiaCuenta.razonSocial }}
+                      </td>
+                      <td>
+                        <div *ngIf="!companiaCuenta.editardescripcion">
+                          {{ companiaCuenta.descripcion }}
+                        </div>
+                        <input *ngIf="companiaCuenta.editardescripcion" type="text" class="form-control" ng-value="companiaCuenta.descripcion" #txtDescCompania="ngModel"
+                          name="txtDescCompania" [(ngModel)]="companiaCuenta.descripcion" placeholder="Ingrese una descripción">
+                      </td>
+                      <td class="text-center">
+                        <span *ngIf="!companiaCuenta.editardescripcion" class="fa fa-pencil" style="font-size: 25px" id="submit" (click)='editarDescripcionCompania(companiaCuenta.idCompania, companiaCuenta.descripcion)'
+                          title="Editar"></span>
+                        <span *ngIf="companiaCuenta.editardescripcion" class="fa fa-save" style="font-size: 25px" id="submit" (click)='guardaEdicionDescripcion(companiaCuenta.descripcion, companiaCuenta.idCompania)'
+                          title="Guardar"></span>                        
+                      </td>
+                      <td class="text-center">
+                        <span class="fa fa-trash-o" style="font-size: 25px" *ngIf="!companiaCuenta.editardescripcion" id="submit" (click)='eliminarCompania(companiaCuenta.idCompania)'
+                          title="Eliminar"></span>
+                        <span class="fa fa-times-circle-o" style="font-size: 25px" *ngIf="companiaCuenta.editardescripcion" id="submit" (click)='cancelarEdicion(companiaCuenta.idCompania)'
+                          title="Cancelar"></span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
 
-  <form>
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <label>Agencias / Sucursales</label>
-        <ngx-dropdown-treeview
-            [buttonClass]="buttonClass"
-            [config]="config"
-            [items]="items"
-            (selectedChange)="onSelectedChange($event)">
-        </ngx-dropdown-treeview>
-      </div>
-      <div class="form-group col-md-4">
-        <label>Departamento</label>
-        <select name="" class="form-control">
-          <option value="0">UNIDADES NVAS. AUTOS</option>
-        </select>
-      </div>
-      <div class="form-group col-md-4">
-        <label>No. Cuenta</label>
-        <input type="text" class="form-control" placeholder="0000-0000-0000-0000">
+                <table *ngIf="operacionCuenta === 3" class="table table-sm table-bordered">
+                  <thead>
+                    <tr>
+                      <th class="bg-secondary text-white">Compania</th>
+                      <th class="bg-secondary text-white ">Descripción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor='let companiaCuenta of companiasCuentaContable'>
+                      <td>
+                        {{ companiaCuenta.razonSocial }}
+                      </td>
+                      <td>
+                        {{ companiaCuenta.descripcion }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group has-feedback col-md-4">
+                <label for="lblNoCuenta">No. Cuenta:</label>
+                <input type="text" class="form-control form-control-sm" placeholder="0000-0000-0000-0000" value="{{cuentaContable.numeroCuenta}}"
+                  #numeroCuenta="ngModel" name="numeroCuenta" required [(ngModel)]="cuentaContable.numeroCuenta" [textMask]="{mask: mask}"
+                  [ngClass]="{ErrorControl: !cuentaContable.numeroCuenta}">
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblNoCuenta">Descripción:</label>
+                <input type="text" class="form-control form-control-sm" placeholder="Descripción" required #Concepto="ngModel" name="Concepto"
+                  [(ngModel)]="cuentaContable.Concepto" [ngClass]="{ErrorControl: !cuentaContable.Concepto}">
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblNoCuenta">Naturaleza:</label>
+                <div [ngClass]="{ErrorControl: (+cuentaContable.idNaturaleza === 0 || cuentaContable.idNaturaleza === '0')}">
+                  <select class="form-control form-control-sm" required #idNaturaleza="ngModel" name="idNaturaleza" [(ngModel)]='cuentaContable.idNaturaleza'>
+                    <option value="0">Seleccione una naturaleza</option>
+                    <option *ngFor='let cuenta of cuentaContableNaturaleza' [value]='cuenta.id'>
+                      {{ cuenta.naturaleza }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="lblCuentaDetalle">ACUMDET:</label>
+                <div [ngClass]="{ErrorControl: (+cuentaContable.idCuentaDetalle === 0 || cuentaContable.idCuentaDetalle === '0')}">
+                  <select class="form-control form-control-sm" name="inputCuentaDetalle" [(ngModel)]='cuentaContable.idCuentaDetalle' >
+                    <option value="0">Seleccione una opción</option>
+                    <option *ngFor='let detalleCuenta of cuentaContableDetalle' [value]='detalleCuenta.id'>
+                      {{ detalleCuenta.tipoDetalle }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblNotaDictamen">Nota Dictamen:</label>
+                <div [ngClass]="{ErrorControl: (+cuentaContable.idNotasDictamen === 0 || cuentaContable.idNotasDictamen === '0')}">
+                  <select class="form-control form-control-sm" name="inputNotasDictamen" [(ngModel)]='cuentaContable.idNotasDictamen' >
+                    <option value="0">Seleccione una nota</option>
+                    <option *ngFor='let notaDictamen of notasDictamen' [value]='notaDictamen.id'>
+                      {{ notaDictamen.notasDictamen }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblDictamen">Dictamen:</label>
+                <div [ngClass]="{ErrorControl: (+cuentaContable.idDictamen === 0 || cuentaContable.idDictamen === '0')}">
+                  <select class="form-control form-control-sm" name="inputDictamen" [(ngModel)]='cuentaContable.idDictamen' >
+                    <option value="0">Seleccione un dictamen</option>
+                    <option *ngFor='let dictamen of dictamenCuenta' [value]='dictamen.id'>
+                      {{ dictamen.dictamen }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="lblGrupo1">Grupo 1:</label>
+                <div [ngClass]="{ErrorControl: (+cuentaContable.idBalanceNivel01 === 0 || cuentaContable.idBalanceNivel01 === '0')}">
+                  <select class="form-control form-control-sm" name="inputConceptoNivel01" [(ngModel)]='cuentaContable.idBalanceNivel01' (ngModelChange)="onChangeValidador($event, 'grupo1')">
+                    <option value="0">Seleccione un grupo</option>
+                    <option *ngFor='let balanceConcepto of balanceConceptoNivel01;let i= index;' [value]='balanceConcepto.id'>
+                      {{ balanceConcepto.titulo }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblGrupo2">Grupo 2:</label>
+                <div [ngClass]="{ErrorControl: (+cuentaContable.idBalanceNivel02 === 0 || cuentaContable.idBalanceNivel02 === '0')}">
+                  <select class="form-control form-control-sm" name="inputConceptoNivel02" [(ngModel)]='cuentaContable.idBalanceNivel02' (ngModelChange)="onChangeValidador($event, 'grupo2')">
+                    <option value="0">Seleccione un grupo</option>
+                    <option *ngFor='let balanceConcepto of balanceConceptoNivel02' [value]='balanceConcepto.id'>
+                      {{ balanceConcepto.subTitulo }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblGrupo3">Grupo 3:</label>
+                <div [ngClass]="{ErrorControl: (+cuentaContable.idBalanceNivel03 === 0 || cuentaContable.idBalanceNivel03 === '0')}">
+                  <select class="form-control form-control-sm" name="inputConceptoNivel03" [(ngModel)]='cuentaContable.idBalanceNivel03' >
+                    <option value="0">Seleccione un grupo</option>
+                    <option *ngFor='let balanceConcepto of balanceConceptoNivel03' [value]='balanceConcepto.id'>
+                      {{ balanceConcepto.subTitulo }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="lblEFInterno">EF Interno:</label>
+                <div [ngClass]="{ErrorControl: (+cuentaContable.idEFInterno === 0 || cuentaContable.idEFInterno === '0')}">
+                  <select class="form-control form-control-sm" name="inputEstadoFinancieroInterno" [(ngModel)]='cuentaContable.idEFInterno'
+                    (ngModelChange)="onChangeValidador($event, 'EFInterno')">
+                    <option value="0">Seleccione un EF</option>
+                    <option *ngFor='let efInterno of estadoFinancieroInterno' [value]='efInterno.id'>
+                      {{ efInterno.EstadoFinancieroInterno }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblEFInterno">Nota Financiera:</label>
+                <div [ngClass]="{ErrorControl: (+cuentaContable.idNotasFinancieras === 0 || cuentaContable.idNotasFinancieras === '0')}">
+                  <select class="form-control form-control-sm" name="inputNotasFinancieras" [(ngModel)]='cuentaContable.idNotasFinancieras'>
+                    <option value="0">Seleccione una nota</option>
+                    <option *ngFor='let notaFinanciera of notasFinancieras' [value]='notaFinanciera.id'>
+                      {{ notaFinanciera.notasFinancieras }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblAfectaCC">Situación:</label>
+                <div [ngClass]="{ErrorControl: (+cuentaContable.idSituacion === 0 || cuentaContable.idSituacion === '0')}">
+                  <select class="form-control form-control-sm" name="inputidSituacion" [(ngModel)]='cuentaContable.idSituacion' >
+                    <option value="0">Seleccione una opción</option>
+                    <option *ngFor='let situacion of cuentaContableSituacion' [value]='situacion.id'>
+                      {{ situacion.descripcion }}
+                    </option>
+                  </select>
+                </div>
+
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="lblDepartamento">Departamento:</label>
+                <div [ngClass]="{ErrorControl: (+cuentaContable.idDepartamento === 0 || cuentaContable.idDepartamento === '0')}">
+                  <select class="form-control form-control-sm" name="inputDepartamento" [(ngModel)]='cuentaContable.idDepartamento' >
+                    <option value="0">Seleccione un departamento</option>
+                    <option *ngFor='let depto of departamentos' [value]='depto.id'>
+                      {{ depto.descripcion }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblAfectaCC">Afecta CC:</label>
+                <div [ngClass]="{ErrorControl: (+cuentaContable.idAfectaCuentaContable === -1 || cuentaContable.idAfectaCuentaContable === '-1')}">
+                  <select class="form-control form-control-sm" name="inputAfectaCuentaContable" [(ngModel)]='cuentaContable.idAfectaCuentaContable'
+                    >
+                    <option value="-1">Seleccione un departamento</option>
+                    <option *ngFor='let afectaCuenta of afectaCuentaContable' [value]='afectaCuenta.id'>
+                      {{ afectaCuenta.afectaCuentaContable }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="lblAfectaCC">Cuenta SAT:</label>
+                <select class="form-control form-control-sm" name="grupoSATCuentaContable" [(ngModel)]='cuentaContable.grupoSATCuentaContable'
+                  [ngClass]="{ErrorControl: cuentaContable.grupoSATCuentaContable === '0'}">
+                  <option value="0">Seleccione una opcion</option>
+                  <option *ngFor='let cuentaSat of cuentaContableSAT' [value]='cuentaSat.codigoAgrupador'>
+                    {{ cuentaSat.descripcion }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-2">
+                <label>&nbsp;</label>
+                <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='ocultarFormmulario(false, true)'>
+                  <i class="fa fa-arrow-left"></i>&nbsp;Regresar
+                </button>
+              </div>
+              <div class="form-group col-md-8"></div>
+              <div class="form-group col-md-2">
+                <label>&nbsp;</label>
+                <button *ngIf="operacionCuenta !== 3" type="submit" class="btn btn-primary btn-sm btn-block" id="submit">
+                  <i class="fa fa-save"></i>&nbsp;Guardar</button>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="errorGuardarCuenta">
+            <div class="form-row">
+              <table class="table table-sm table-bordered">
+                <thead>
+                  <tr>
+                    <th class="bg-secondary text-white">Numero</th>
+                    <th class="bg-secondary text-white">Descripción</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor='let error of detalleErrorCuenta'>
+                    <td>{{ error.numero }}</td>
+                    <td>{{ error.descripcion }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <label>Favor de corregir los errores.</label>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-2">
+                <label>&nbsp;</label>
+                <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)='ocultarTablaErrores(false, true)'>
+                  <i class="fa fa-arrow-left"></i>&nbsp;Regresar
+                </button>
+              </div>
+              <div class="form-group col-md-8"></div>
+              <div class="form-group col-md-2">
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
-
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <label>Descripción</label>
-        <input type="text" class="form-control" placeholder="Descripción">
-      </div>
-      <div class="form-group col-md-4">
-        <label>Naturaleza</label>
-        <input type="text" class="form-control" placeholder="Naturaleza">
-      </div>
-      <div class="form-group col-md-4">
-        <label>ACUMDET</label>
-        <input type="text" class="form-control" placeholder="ACUMDET">
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <label>GPO 1</label>
-        <select name="" class="form-control">
-          <option value="0">GPO 1</option>
-        </select>
-      </div>
-
-      <div class="form-group col-md-4">
-        <label>GPO 2</label>
-        <select name="" class="form-control">
-          <option value="0">GPO 2</option>
-        </select>
-      </div>
-
-      <div class="form-group col-md-4">
-        <label>GPO 3</label>
-        <select name="" class="form-control">
-          <option value="0">GPO 3</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <label>Notas Dic</label>
-        <select name="" class="form-control">
-          <option value="0">Notas Dic</option>
-        </select>
-      </div>
-
-      <div class="form-group col-md-4">
-        <label>Dictamen</label>
-        <select name="" class="form-control">
-          <option value="0">Dictamen</option>
-        </select>
-      </div>
-
-      <div class="form-group col-md-4">
-        <label>EF Interno</label>
-        <select name="" class="form-control">
-          <option value="0">EF Interno</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group col-md-4">
-          <label>Notas Fin</label>
-          <select name="" class="form-control">
-            <option value="0">Notas Fin</option>
-          </select>
-        </div>
-
-        <div class="form-group col-md-4">
-          <label>Tipo BI</label>
-          <select name="" class="form-control">
-            <option value="0">Tipo BI</option>
-          </select>
-        </div>
-      </div>
-  </form>
-
-  <a routerLink='../select'>regresar</a>
+  </div>
 </div>

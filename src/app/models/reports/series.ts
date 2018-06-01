@@ -18,4 +18,5 @@ export interface ISeries {
   incentivo: number;
   costoTotal: number;
   utilidad: number;
+  cantidad: number;
 }
