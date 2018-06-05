@@ -105,6 +105,7 @@ export class ExternoComponent implements OnInit {
                 {
                   var error = new String(externos);
                   if (error.indexOf("Error") != -1) {
+                    this._spinnerService.hide();
                     swal("Error al generar el reporte", String(externos) , "error");
 
                   }else {
