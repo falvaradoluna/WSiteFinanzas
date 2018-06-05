@@ -105,6 +105,7 @@ export class ExternoComponent implements OnInit {
                 {
                   var error = new String(externos);
                   if (error.indexOf("Error") != -1) {
+                    this._spinnerService.hide();
                     swal("Error al generar el reporte", String(externos) , "error");
 
                   }else {
@@ -113,7 +114,6 @@ export class ExternoComponent implements OnInit {
                   }
                 },error => this.errorMessage = <any>error
              );
-
   // this._reportesService.getReportMonth(this.getParameters(2))
   // .subscribe(externos => 
   //               {
@@ -142,10 +142,6 @@ export class ExternoComponent implements OnInit {
   //            );
   }
 
-  onChangeTipoReporte(e): void{
-    //this.selectedTipoReporte = ;
-  }
-  
   getCompanias(): void {
     const usuario = JSON.parse(localStorage.getItem('userLogged'));
     this._reportesService.getCompanias({ idUsuario: usuario.id })
@@ -168,11 +164,11 @@ export class ExternoComponent implements OnInit {
 
     var yearActual = (new Date()).getFullYear();
   
-    for (let index = yearActual; index >= 2000; index--) {
+    for (let index = yearActual; index >= 2010; index--) {
       
       var obj = {
-                    "id" : index,    //your artist variable
-                    "Nombre" : index   //your title variable
+                    "id" : index,
+                    "Nombre" : index
                 };
       this.years.push(obj);
     } 
@@ -195,6 +191,7 @@ export class ExternoComponent implements OnInit {
     });
     return jsonReport;
   }
+
   private exportAsExcelFile(json: any[], excelFileName: string): void {
     var sheetNames =[];
     var dataSorucesheet ={}
