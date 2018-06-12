@@ -1139,7 +1139,9 @@ getReporteSumaDepartamentos() : void{
         sucursales => { this.sucursales = sucursales; },
         error => { this.errorMessage = <any>error; },
         () => { 
-          this.onChangeSucursal(0);           
+          if (typeof this.sucursales !== "undefined" && this.sucursales.length > 0) {
+              this.onChangeSucursal(this.sucursales[0].id);           
+          }
         }
         //() => { this.onChangeSucursal(-2); } TMC se cambia ya que el valor incial es cero
       );
