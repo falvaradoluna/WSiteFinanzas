@@ -719,18 +719,18 @@
                   <td class=''>{{ acm.titulo || "Concepto" }}</td>
                   <td class=''>{{ acm.numeroCuenta || acm.Numcta }}</td>
                   <td class=''>{{ acm.descripcion || "descripcion" }}</td>
-                  <td class='' [suma-columnas]='acm.enero'>{{ acm.enero }}</td>
-                  <td class='' [suma-columnas]='acm.febrero'>{{ acm.febrero }}</td>
-                  <td class='' [suma-columnas]='acm.marzo'>{{ acm.marzo }}</td>
-                  <td class='' [suma-columnas]='acm.abril'>{{ acm.abril }}</td>
-                  <td class='' [suma-columnas]='acm.mayo'>{{ acm.mayo }}</td>
-                  <td class='' [suma-columnas]='acm.junio'>{{ acm.junio }}</td>
-                  <td class='' [suma-columnas]='acm.julio'>{{ acm.julio }}</td>
-                  <td class='' [suma-columnas]='acm.agosto'>{{ acm.agosto }}</td>
-                  <td class='' [suma-columnas]='acm.septiembre'>{{ acm.septiembre }}</td>
-                  <td class='' [suma-columnas]='acm.octubre'>{{ acm.octubre }}</td>
-                  <td class='' [suma-columnas]='acm.noviembre'>{{ acm.noviembre }}</td>
-                  <td class='' [suma-columnas]='acm.diciembre'>{{ acm.diciembre }}</td>
+                  <td class='' [suma-columnas]='acm.enero'>{{ acm.enero | number:'1.2-2' }}</td>
+                  <td class='' [suma-columnas]='acm.febrero'>{{ acm.febrero | number:'1.2-2' }}</td>
+                  <td class='' [suma-columnas]='acm.marzo'>{{ acm.marzo | number:'1.2-2' }}</td>
+                  <td class='' [suma-columnas]='acm.abril'>{{ acm.abril | number:'1.2-2' }}</td>
+                  <td class='' [suma-columnas]='acm.mayo'>{{ acm.mayo | number:'1.2-2' }}</td>
+                  <td class='' [suma-columnas]='acm.junio'>{{ acm.junio | number:'1.2-2' }}</td>
+                  <td class='' [suma-columnas]='acm.julio'>{{ acm.julio | number:'1.2-2' }}</td>
+                  <td class='' [suma-columnas]='acm.agosto'>{{ acm.agosto | number:'1.2-2' }}</td>
+                  <td class='' [suma-columnas]='acm.septiembre'>{{ acm.septiembre | number:'1.2-2' }}</td>
+                  <td class='' [suma-columnas]='acm.octubre'>{{ acm.octubre | number:'1.2-2' }}</td>
+                  <td class='' [suma-columnas]='acm.noviembre'>{{ acm.noviembre | number:'1.2-2' }}</td>
+                  <td class='' [suma-columnas]='acm.diciembre'>{{ acm.diciembre | number:'1.2-2' }}</td>
                   <td class='text-right' [suma-columnas]='acm.cantidad'>{{ acm.cantidad | number:'1.2-2' }}</td>
                   <td class='text-right' [suma-columnas]='acm.cantidadPrespuesto'>{{ acm.cantidadPrespuesto | number:'1.2-2' }}</td>
                   <td class='text-right' [suma-columnas]='acm.variacion'>{{ acm.variacion | number:'1.2-2' }}</td>
@@ -1037,18 +1037,18 @@
                       <td class=''>{{ acm.titulo || "Concepto" }}</td>
                       <td class=''>{{ acm.numeroCuenta || acm.Numcta }}</td>
                       <td class=''>{{ acm.descripcion || "descripcion" }}</td>
-                      <td class='' >{{ acm.enero }}</td>
-                      <td class='' >{{ acm.febrero }}</td>
-                      <td class='' >{{ acm.marzo }}</td>
-                      <td class='' >{{ acm.abril }}</td>
-                      <td class='' >{{ acm.mayo }}</td>
-                      <td class='' >{{ acm.junio }}</td>
-                      <td class='' >{{ acm.julio }}</td>
-                      <td class='' >{{ acm.agosto }}</td>
-                      <td class='' >{{ acm.septiembre }}</td>
-                      <td class='' >{{ acm.octubre }}</td>
-                      <td class='' >{{ acm.noviembre }}</td>
-                      <td class='' >{{ acm.diciembre }}</td>
+                      <td class='' >{{ acm.enero | number:'1.2-2' }}</td>
+                      <td class='' >{{ acm.febrero | number:'1.2-2' }}</td>
+                      <td class='' >{{ acm.marzo | number:'1.2-2' }}</td>
+                      <td class='' >{{ acm.abril | number:'1.2-2' }}</td>
+                      <td class='' >{{ acm.mayo | number:'1.2-2' }}</td>
+                      <td class='' >{{ acm.junio | number:'1.2-2' }}</td>
+                      <td class='' >{{ acm.julio | number:'1.2-2' }}</td>
+                      <td class='' >{{ acm.agosto | number:'1.2-2' }}</td>
+                      <td class='' >{{ acm.septiembre | number:'1.2-2' }}</td>
+                      <td class='' >{{ acm.octubre | number:'1.2-2' }}</td>
+                      <td class='' >{{ acm.noviembre | number:'1.2-2' }}</td>
+                      <td class='' >{{ acm.diciembre | number:'1.2-2' }}</td>
                       <td class='text-right' >{{ acm.cantidad | number:'1.2-2' }}</td>
                       <td class='text-right' >{{ acm.cantidadPrespuesto | number:'1.2-2' }}</td>
                       <td class='text-right' >{{ acm.variacion | number:'1.2-2' }}</td>
