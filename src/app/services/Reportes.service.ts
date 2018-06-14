@@ -543,15 +543,10 @@ export class ReportesService {
   }
  
 
-  getReportMonth(parameters): Observable<Iexterno[]> {
-    let Params = new HttpParams();
-
-    Params = Params.append('idCompania', parameters.idCompania);
-    Params = Params.append('periodoYear', parameters.periodoYear);
-    Params = Params.append('periodoMes', parameters.periodoMes);
+  getReportExternal(parameters): Observable<Iexterno[]> {
 
     let urlApi: String = environment.api;
-    return this._http.get<Iexterno[]>(urlApi + this._urlReportInterno + "?idCompania="+ parameters.idCompania+ "&periodoYear=" + parameters.periodoYear + "&periodoMes=" + parameters.periodoMes ,{})
+    return this._http.get<Iexterno[]>(urlApi + this._urlReportInterno + "?idCompania=" + parameters.idCompania + "&periodoYear=" + parameters.periodoYear + "&periodoMes=" + parameters.periodoMes + "&tipoReporte=" + parameters.tipoReporte,{})
     .catch(this.handleError); 
   }
 }

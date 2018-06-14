@@ -100,7 +100,7 @@ export class ExternoComponent implements OnInit {
   this._spinnerService.show();
   var reportDataSource = [];
   
-  this._reportesService.getReportMonth(this.getParameters(4))
+  this._reportesService.getReportExternal(this.getParameters(4))
   .subscribe(externos => 
                 {
                   var error = new String(externos);
@@ -179,7 +179,8 @@ export class ExternoComponent implements OnInit {
       idHoja: idHoja,
       idCompania: this.selectedCompania,
       periodoYear: this.selectedPeriodoYear,
-      periodoMes: this.selectedPeriodoMes
+      periodoMes: this.selectedPeriodoMes,
+      tipoReporte: this.selectedTipoReporte
     }
   }
 

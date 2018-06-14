@@ -23,7 +23,7 @@
               <div class="form-group col-md-2">
                 <label for="inputTipo">Tipo</label>
                 <div [ngClass]="{ErrorControl: selectedTipoReporte.toString() === '0'}">
-                    <select value="0"  name="inputTipo" class="form-control" [(ngModel)]="selectedTipoReporte" (change)="onChangeTipoReporte(this)">
+                    <select value="0"  name="inputTipo" class="form-control" [(ngModel)]="selectedTipoReporte" >
                         <option value="0">Seleccione</option>
                         <option *ngFor="let tipoReporte of tipoReportes" [value]="tipoReporte.id">{{tipoReporte.Nombre}}</option>
                       </select>
