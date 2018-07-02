@@ -42,7 +42,8 @@ DataAccess.prototype.query = function (stored, params, callback) {
                 callback(null, recordsets[0]);
             }).catch(function(err) {
                 callback(err);
-                console.log('Error al realizar la operacion, mensaje: ' + err);
+                 this.connection.close();
+                throw new Error(err);
             });
     });
 };
