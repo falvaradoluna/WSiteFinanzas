@@ -80,14 +80,6 @@ export class ExternoComponent implements OnInit {
     if(this.selectedTipoReporte === "1") {
        if(this.selectedPeriodoYear === "0")
         return;
-      swal({
-        imageUrl: "assets/images/construccion.jpg",
-        imageHeight: 200,
-        imageWidth: 400,
-        imageAlt: 'A tall image'
-      })
-      return ;
-     
     }else if(this.selectedTipoReporte === "2") {
       if(this.selectedPeriodoYear === "0")
         return;
