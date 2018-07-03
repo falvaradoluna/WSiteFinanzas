@@ -2376,6 +2376,7 @@ hideResultados(): void{
     this.unidadesAcumuladoPresupuesto = [];
     this.unidadesAcumuladoPresupuestoDepartamento = [];
 
+
     this.showUnidadesDeptoNivel = 1;  
     const sTipoReporte = this.selectedTipoReporte.toString(); // Aunque se definio como number, la comparacion siempre lo toma como string
     const sCompania = this.selectedCompania.toString();
@@ -2400,7 +2401,8 @@ hideResultados(): void{
       this.showAcumuladoPresupuesto = true;
     } else if (sCompania !== '0') {    
       if(!this.showSumaDepartamentos) {
-      this.showDetallePrimerNivel = false;
+      this.showDetallePrimerNivel = false;   
+      this.showDetalleSegundoNivel = false;      
       this.showResultados = true;
       this.showUnidades = true;
       } else {        
