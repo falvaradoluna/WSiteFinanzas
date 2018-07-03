@@ -917,7 +917,7 @@ internos.prototype.get_unidadesacumuladopresupuestodepartamento = function (req,
 
   var params = [
     { name: 'idCompania', value: idCompania, type: self.model.types.INT },
-    { name: 'ddSucursal', value: idSucursal, type: self.model.types.INT },
+    { name: 'idSucursal', value: idSucursal, type: self.model.types.INT },
     { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
     { name: 'idDepartamento', value: idPestana, type: self.model.types.INT }
   ];
