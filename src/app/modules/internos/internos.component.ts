@@ -609,6 +609,8 @@ private changeCursorDefault(): void {
         }
       }
     );
+  } else {    
+    this.getEstadoResultados();
   }
   }
 
