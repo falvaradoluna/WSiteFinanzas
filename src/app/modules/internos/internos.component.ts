@@ -3,6 +3,7 @@ import { routerTransition } from '../../router.animations';
 import { TreeviewItem, TreeviewConfig, TreeviewModule } from 'ngx-treeview';
 import { FormsModule, ReactiveFormsModule, NgModel } from '@angular/forms';
 import { DOCUMENT } from '@angular/platform-browser';
+import swal from 'sweetalert2';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { trigger,
@@ -72,7 +73,7 @@ export class InternosComponent implements OnInit {
   errorMessage: any;
 
   constructor(private _service: InternosService, private _fechaActualizacionService: FechaActualizacionService, private _spinnerService: NgxSpinnerService) {
-    this.controlarSpinner(true, 2000);
+    
    }
 
   showFilters = true;
@@ -215,7 +216,8 @@ export class InternosComponent implements OnInit {
   descripcionSumaDeptoSegundoNivel = '';
   descripcionSumaDeptoTercerNivel = '';
   public productoCompania = 0;
-
+  tituloAlert: string = 'Administrador de Reportes';
+  descripcionAlert: string = 'Se está actualizando la información, favor de intentarlo más tarde.';
   ngOnInit() {
     this.setDefaultDate();
     //TextTrackCueList
@@ -403,7 +405,7 @@ export class InternosComponent implements OnInit {
     if (this.showSumaDepartamentos== true){
       return;
     }
-    if(!this.activeSpinner && this.selectedCompania != 0){
+    if(this.selectedCompania != 0){
       this.controlarSpinner(true, 5000);
     }
     
@@ -416,6 +418,13 @@ export class InternosComponent implements OnInit {
       this.showAcumuladoReal = false;
       this.showAcumuladoPresupuesto = false;
       this.showAcumuladoReal = false;
+      
+      this.hideReporteUnidades();
+      this.showAcumuladoReal = false;
+      this.showAcumuladoPresupuesto= false;
+
+
+
       this.controlarSpinner(false);
       //this.FlujoeSituacionfComponent.getEfectivoSituacion();
     } else if (sTipoReporte === '2' && sCompania !== '0') { // Acumulado real
@@ -426,16 +435,14 @@ export class InternosComponent implements OnInit {
       this.showUnidadesAcumuladoReal = 1;
       this.showEstadoResultadoAcumuladoReal = 1;
       this.getAcumuladoReal();
-      this.getUnidadesAcumuladoRealDepartamento();
-      this.getEstadoResultadosAcumuladoReal();
+      
+      //this.getEstadoResultadosAcumuladoReal();
     } else if (sTipoReporte === '3' && sCompania !== '0') { // Acumulado presupuesto
       this.showReporteUnidades = false;
       this.showEfectivoSituacion = false;
       this.showAcumuladoReal = false;
       this.showAcumuladoPresupuesto = true;
       this.getUnidadesAcumuladoPresupuesto();
-      this.getUnidadesAcumuladoPresupuestoDepartamento();
-      this.getResultadosPresupuesto();
     } else if (sCompania !== '0') {
       this.showUnidadesInit();
 
@@ -479,9 +486,7 @@ private changeCursorDefault(): void {
     this.showAcumuladoPresupuesto = false;
     
     if(this.selectedCompania!=0){  // solo se ejecutan cuando seseleciona una empresa del catalogo
-      this.getResultadoUnidades();
-      this.getEstadoResultados();
-      this.getUnidadesDepartamento();
+      this.getResultadoUnidades();      
     } else {
       this.controlarSpinner(false);
     }
@@ -555,8 +560,13 @@ private changeCursorDefault(): void {
     })
       .subscribe(resultadoUnidades => {
         this.resultadoUnidades = resultadoUnidades;
+        this.getEstadoResultados();
       },
-      error => this.errorMessage = <any>error,
+      error => {
+        this.errorMessage = <any>error;
+        this.controlarSpinner(false);
+        swal(this.tituloAlert, this.descripcionAlert, 'info');
+      },
       () => {
         const total = this.resultadoUnidades.find(x => x.idOrigen === 0);
         if (typeof total !== "undefined") {
@@ -599,6 +609,8 @@ private changeCursorDefault(): void {
         }
       }
     );
+  } else {    
+    this.getEstadoResultados();
   }
   }
 
@@ -628,11 +640,14 @@ private changeCursorDefault(): void {
       idDepartamento: this.selectedIdDepartamentoEr,
       idSucursalSecuencia: this.selectedIdSucursalSecuencia
     }).subscribe(estadoResultados => {
-        this.estadoResultados = estadoResultados;        
-        this.controlarSpinner(false);
+        this.estadoResultados = estadoResultados; 
+        this.getUnidadesDepartamento();   
+        this.controlarSpinner(false);    
       },
       error => { 
-        this.errorMessage = <any>error; 
+        this.errorMessage = <any>error;  
+        this.controlarSpinner(false);
+        swal(this.tituloAlert, this.descripcionAlert, 'info');
       },
       () => {
 
@@ -816,6 +831,8 @@ private changeCursorDefault(): void {
       },
       error => { 
         this.errorMessage = <any>error; 
+        this.controlarSpinner(false);
+        swal(this.tituloAlert, this.descripcionAlert, 'info');
       },
       () => {
         // Ciclo de 12 meses
@@ -874,7 +891,9 @@ getSumaDepartamentosAcumuladoReal(): void {
       this.controlarSpinner(false);
     },
     error => { 
-      this.errorMessage = <any>error;       
+      this.errorMessage = <any>error;   
+      this.controlarSpinner(false);    
+      swal(this.tituloAlert, this.descripcionAlert, 'info');
     },
     () => {
       var totalAnual=0;
@@ -1009,7 +1028,9 @@ getReporteSumaDepartamentos() : void{
       this.controlarSpinner(false);
     },
     error => { 
-      this.errorMessage = <any>error;
+      //this.errorMessage = <any>error;
+      this.controlarSpinner(false);
+      swal(this.tituloAlert, this.descripcionAlert, 'info');
      },
     () => {
 
@@ -1102,8 +1123,13 @@ getReporteSumaDepartamentos() : void{
       })
         .subscribe(unidadesDepartamento => {
           this.unidadesDepartamento = unidadesDepartamento;
+          this.controlarSpinner(false);        
         },
-        error => { this.errorMessage = <any>error; },
+        error => { 
+          this.errorMessage = <any>error; 
+          this.controlarSpinner(false);
+          swal(this.tituloAlert, this.descripcionAlert, 'info');
+        },
         () => {
           if (this.unidadesDepartamento.length === 1) {
             // Se actualizan valores de variacion y % variacion
@@ -1157,8 +1183,7 @@ getReporteSumaDepartamentos() : void{
       })
         .subscribe(
           departamentos => { this.departamentos = departamentos; },
-          error => this.errorMessage = <any>error,
-          () => this.procesar()
+          error => this.errorMessage = <any>error
         );
     }
   }
@@ -1209,6 +1234,8 @@ getReporteSumaDepartamentos() : void{
       },
       error => {
         this.errorMessage = <any>error;
+        this.controlarSpinner(false);
+        swal(this.tituloAlert, this.descripcionAlert, 'info')
         this.detalleResultadosMensual = [];
       },
       // Si la lista tiene más de 10 resultados se necesita ajustar
@@ -1248,6 +1275,8 @@ getReporteSumaDepartamentos() : void{
       },
       error => {
         this.errorMessage = <any>error;
+        this.controlarSpinner(false);
+        swal(this.tituloAlert, this.descripcionAlert, 'info');
         this.detalleResultadosMensual = [];
       },
       // Si la lista tiene más de 10 resultados se necesita ajustar
@@ -1283,9 +1312,14 @@ getReporteSumaDepartamentos() : void{
       numCta: numCta
     })
       .subscribe(
-        detalleResultadosCuentas => { this.detalleResultadosCuentas = detalleResultadosCuentas; this.controlarSpinner(false); },
+        detalleResultadosCuentas => { 
+          this.detalleResultadosCuentas = detalleResultadosCuentas; 
+          this.controlarSpinner(false); 
+        },
         error => {
           this.errorMessage = <any>error;
+          this.controlarSpinner(false); 
+          swal(this.tituloAlert, this.descripcionAlert, 'info');
           this.detalleResultadosCuentas = [];
         },
         // Si la lista tiene más de 10 resultados se necesita ajustar el ancho de tabla para que quepa el scroll
@@ -1302,8 +1336,13 @@ getReporteSumaDepartamentos() : void{
       .subscribe(acumuladoReal => {
         this.acumuladoReal = acumuladoReal;
         this.fixedHeader('tableAcumuladoReal');
+        this.getUnidadesAcumuladoRealDepartamento();
       },
-        error => { this.errorMessage = <any>error; },
+        error => { 
+          this.errorMessage = <any>error; 
+          this.controlarSpinner(false);
+          swal(this.tituloAlert, this.descripcionAlert, 'info');
+        },
         () => {
           const totales = this.acumuladoReal.find(x => x.descripcion.trim() === 'Total Unidades');
 
@@ -1359,6 +1398,8 @@ getReporteSumaDepartamentos() : void{
       },
       error => { 
         this.errorMessage = <any>error;
+        this.controlarSpinner(false);
+        swal(this.tituloAlert, this.descripcionAlert, 'info');
       },
       () => {
          // Ciclo de 12 meses
@@ -1408,8 +1449,13 @@ getReporteSumaDepartamentos() : void{
     })
       .subscribe(unidadesAcumuladoPresupuesto => {
         this.unidadesAcumuladoPresupuesto = unidadesAcumuladoPresupuesto;
+        this.getUnidadesAcumuladoPresupuestoDepartamento();
       },
-      error => this.errorMessage = <any>error,
+      error => {
+        this.errorMessage = <any>error;
+        this.controlarSpinner(false);
+        swal(this.tituloAlert, this.descripcionAlert, 'info');
+      },
       () => {
         const totales = this.unidadesAcumuladoPresupuesto.find(x => x.descripcion.trim() === 'Total Unidades');
         
@@ -1449,8 +1495,13 @@ getReporteSumaDepartamentos() : void{
     })
       .subscribe(unidadesAcumuladoPresupuestoDepartamento => {
         this.unidadesAcumuladoPresupuestoDepartamento = unidadesAcumuladoPresupuestoDepartamento;
+        this.getResultadosPresupuesto();
       },
-      error => this.errorMessage = <any>error,
+      error => {
+        this.errorMessage = <any>error;
+        this.controlarSpinner(false);
+        swal(this.tituloAlert, this.descripcionAlert, 'info');
+      },
       () => {
         // Ciclo de 12 meses
         for (let mes = 1; mes <= 12; mes++) {
@@ -1478,8 +1529,13 @@ getReporteSumaDepartamentos() : void{
     })
       .subscribe(unidadesAcumuladoRealDepartamento => {
         this.acumuladoRealDepartamento = unidadesAcumuladoRealDepartamento;
+        this.getEstadoResultadosAcumuladoReal();
       },
-      error => this.errorMessage = <any>error,
+      error => {
+        this.errorMessage = <any>error;
+        this.controlarSpinner(false);
+        swal(this.tituloAlert, this.descripcionAlert, 'info');
+      },
       () => {
         // Ciclo de 12 meses
         for (let mes = 1; mes <= 12; mes++) {
@@ -1502,6 +1558,7 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangePeriodo(selectedDate): void {
+    this.reniniciarValores();
     if (selectedDate) {
       const mesStr = selectedDate.substring(5, 7);
       const fullYearStr = selectedDate.substring(0, 4);
@@ -1516,6 +1573,7 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeCompania(newValue: number): void {
+    this.reniniciarValores();
     this.showOriginal=0;
     this.showOriginalUD=0;
     this.showOriginalUN=0;
@@ -1524,7 +1582,6 @@ getReporteSumaDepartamentos() : void{
       this.selectedIdSucursal=-2;
       this.selectedTipoReporte=1;
     }else {
-      this.controlarSpinner(true, 5000);
       const a = this.companias.find(x => x.id === +newValue);
       if ( a !== undefined) {
         this.selectedNombreCompania = a.nombreComercial;
@@ -1543,9 +1600,6 @@ getReporteSumaDepartamentos() : void{
    }
 
    if (this.selectedCompania !== 0) {     
-      if (this.periodo) {
-        this.procesar();
-      }
       if(this.selectedTipoReporte <=3) {
         // Llenar dropdown de sucursales
         this.getSucursales();
@@ -1566,10 +1620,8 @@ getReporteSumaDepartamentos() : void{
     this.showUnidadesDeptoNivel=1;
   }
 
-  onChangeSucursal(selectedIndex): void {
-    if(!this.activeSpinner && this.selectedCompania != 0){
-      this.controlarSpinner(true, 5000);
-    }
+  onChangeSucursal(selectedIndex): void {    
+    this.reniniciarValores();
     this.selectedIdSucursal = selectedIndex;
     this.closeDetallesUnidades();
     this.closeDetalleUnidadesConcentrado();
@@ -1582,19 +1634,19 @@ getReporteSumaDepartamentos() : void{
     
     if(this.selectedCompania !== 0 && typeof this.selectedIdSucursal !== "undefined") {
       this.getDepartamentos();
-      if (this.periodo) {       
+      //if (this.periodo) {       
         //if (this.periodo && this.selectedCompania !== 0 && this.selectedIdSucursal!==-2) {
-        if(this.showSumaDepartamentos==true) {
-          this.sumaDepartamentos();
-        }
-        this.procesar();
-      }
+        //if(this.showSumaDepartamentos==true) {
+          //this.sumaDepartamentos();
+        //}
+      //}
     }
 
 
   }
 
   onChangeDepartamento(newValue): void {
+    this.reniniciarValores();
     this.selectedIdDepartamento = newValue;
     if (this.departamentos.find(x => x.id === +newValue)) {
       // this.selectedIdDepartamentoEr = this.departamentos.find(x => x.idPestana === +newValue).idER || 0;
@@ -1631,10 +1683,8 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeTipoReporte(newValue: number): void {
+    this.reniniciarValores();
     this.estadoResultadosAcumuladoReal = [];
-    if(this.selectedCompania != 0){
-      this.controlarSpinner(true, 5000);
-    }
     this.selectedTipoReporte = newValue;
     this.showOriginal=0;
     this. showOriginalUD=0;
@@ -1754,7 +1804,12 @@ getReporteSumaDepartamentos() : void{
         this.controlarSpinner(false);
         this.fixedHeader('tableAcumuladoRealNv2');
       },
-      error => this.errorMessage = <any>error);
+      error => { 
+        this.errorMessage = <any>error 
+        this.controlarSpinner(false);
+        swal(this.tituloAlert, this.descripcionAlert, 'info')
+      } 
+    );
   }
 
   onClickEstadoResultadosAcumuladoReal(idOrden: number, idEstado: number) {
@@ -2041,7 +2096,9 @@ private getXmlDepartamentos(){
       this.fixedHeader('detalleResultadosAcumulado');
       },
       error => {
-        this.errorMessage = <any>error;
+        this.errorMessage = <any>error;    
+        this.controlarSpinner(false);
+        swal(this.tituloAlert, this.descripcionAlert, 'info');
         this.acumuladoVariacion = [];
       },
       // Si la lista tiene más de 10 resultados se necesita ajustar
@@ -2118,12 +2175,12 @@ private getXmlDepartamentos(){
   }
 
   onClickDetalleSegundoNivel(i: number, value: number, name: string, mes: string = '') {    
+    this.controlarSpinner(true, 5000);
     if(name === 'SumaDeptosTercerNivel'){
       this.showSumaDepartamentosPrimerNivel = false;
       this.showSumaDepartamentosSegundoNivel = true;
       this.descripcionSumaDeptoTercerNivel = this.detalleResultadosMensual[i].descripcion;
-      this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].numeroCuenta, mes);     
-      this.controlarSpinner(true, 5000);
+      this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].numeroCuenta, mes);           
 
     } else if (this.detalleName === 'Real' || this.detalleName === 'AcReal') {
       // validar que solo entre cuando viene de real (excluir Ppto y Variacion)
@@ -2133,7 +2190,6 @@ private getXmlDepartamentos(){
       } else {
         this.detalleNameSegundoNivel = '';
       }
-      this.controlarSpinner(true, 5000);
       //this.showResultados = false;
       this.showDetallePrimerNivel = false;
       this.showDetalleSegundoNivel = true;
@@ -2200,7 +2256,6 @@ hideResultados(): void{
   }
 
   hideDetalleUnidadesTercerNivel(): void {      
-    this.controlarSpinner(true, 5000);
     this.showUnidades = false;
     this.showDetalleUnidadesSegundoNivel = true;
     this.showDetalleUnidadesTercerNivel = false;
@@ -2293,14 +2348,75 @@ hideResultados(): void{
     this.activeSpinner = estado;
     if(estado){
       this._spinnerService.show(); 
-      setTimeout(() => { 
-        this._spinnerService.hide(); 
-        this.activeSpinner = false;
-      }, valueTime);
+      //setTimeout(() => { 
+        //this._spinnerService.hide(); 
+        //this.activeSpinner = false;
+      //}, valueTime);
     } else { 
       this._spinnerService.hide();  
         this.activeSpinner = false;
     }
+  }
+
+  reniniciarValores()
+  {
+    this.resultadoUnidades = [];
+    this.unidadesDepartamento = [];
+    this.estadoResultados =[];
+    this.detalleResultadosMensual = [];
+    this.acumuladoVariacion = [];
+    this.detalleResultadosCuentas = [];
+    this.resultadoSumaDepartamentos = [];
+    this.sumaDepartamentosAReal = [];
+    this.acumuladoReal = [];
+    this.autoLineaAcumulado = [];
+    this.tipoUnidadAcumulado = [];
+    this.resultadosSeriesArNv4 = [];
+    this.acumuladoRealDepartamento = [];
+    this.estadoResultadosAcumuladoReal = [];
+    this.acumuladoRealNv2 = [];
+    this.unidadesAcumuladoPresupuesto = [];
+    this.unidadesAcumuladoPresupuestoDepartamento = [];
+
+
+    this.showUnidadesDeptoNivel = 1;  
+    const sTipoReporte = this.selectedTipoReporte.toString(); // Aunque se definio como number, la comparacion siempre lo toma como string
+    const sCompania = this.selectedCompania.toString();
+    if ((sTipoReporte === '4' || sTipoReporte === '5') && sCompania !== '0') {
+      this.showReporteUnidades = false;
+      this.showEfectivoSituacion = true;
+      this.showAcumuladoReal = false;
+      this.showAcumuladoPresupuesto = false;
+      this.showAcumuladoReal = false;
+    } else if (sTipoReporte === '2' && sCompania !== '0') { // Acumulado real
+      this.showReporteUnidades = false;
+      this.showEfectivoSituacion = false;
+      this.showAcumuladoReal = true;
+      this.showAcumuladoPresupuesto = false;
+      this.showUnidadesAcumuladoReal = 1;
+      this.showEstadoResultadoAcumuladoReal = 1;
+      
+    } else if (sTipoReporte === '3' && sCompania !== '0') { // Acumulado presupuesto
+      this.showReporteUnidades = false;
+      this.showEfectivoSituacion = false;
+      this.showAcumuladoReal = false;
+      this.showAcumuladoPresupuesto = true;
+    } else if (sCompania !== '0') {    
+      if(!this.showSumaDepartamentos) {
+      this.showDetallePrimerNivel = false;   
+      this.showDetalleSegundoNivel = false;      
+      this.showResultados = true;
+      this.showUnidades = true;
+      } else {        
+        this.showResultados = false;
+        this.showUnidades = false;
+      }
+      const a = this.companias.find(x => x.id === +this.selectedCompania);
+      if (typeof a !== "undefined") {
+        this.selectedNombreCompania = a.nombreComercial;
+      }
+    }
+    this.showUnidadesDepartamento = true
   }
 }
 
