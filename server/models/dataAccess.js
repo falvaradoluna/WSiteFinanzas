@@ -43,7 +43,6 @@ DataAccess.prototype.query = function (stored, params, callback) {
                 callback(null, recordsets[0]);
             }).catch(function(err) {
                 callback(err);
-                 this.connection.close();
                 throw new Error(err);
             });
     });
