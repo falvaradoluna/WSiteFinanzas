@@ -54,7 +54,7 @@
           </tbody>
         </table>
       </div> 
-  <div *ngIf='!isNivel4' class="col-md-6">
+  <div *ngIf='!isNivel4 && (selectedIdDepartamento != 738 && selectedIdDepartamento != 742 && selectedIdDepartamento != 16)' class="col-md-6">
     <table class="table table-sm table-bordered table-hover-td" sortable-table (sorted)="onSorted($event, detalleUnidadesMensual)">
       <thead>
         <tr>
@@ -75,6 +75,128 @@
       </tbody>
     </table>
   </div>
+  
+  <div *ngIf='idDetalleUnidades === 1 && (selectedIdDepartamento != 738 && selectedIdDepartamento == 742 || selectedIdDepartamento == 16)' class="scrolltable">
+    <div class="scrolltable">
+      <table class="table table-sm table-bordered table-responsive table-double-scroll" id="idDetalleUnidadesTipo" sortable-table (sorted)="onSorted($event, detalleUnidadesTipo)">
+        <thead>
+          <tr>
+            <th class="bg-secondary text-white">Factura</th>
+            <th class="bg-secondary text-white">Fecha Factura</th>
+            <th class="bg-secondary text-white">Status</th>
+            <th class="bg-secondary text-white">Orden</th>
+            <th class="bg-secondary text-white">FechaOrden</th>
+            <th class="bg-secondary text-white min-width-120">TipoOrden</th>
+            <th class="bg-secondary text-white min-width-130">Id Cliente Orden</th>
+            <th class="bg-secondary text-white min-width-130">Id Cliente Factura</th>
+            <th class="bg-secondary text-white min-width-220">Nombre</th>
+            <th class="bg-secondary text-white min-width-120">RFC</th>
+            <th class="bg-secondary text-white">QTYSurt</th>
+            <th class="bg-secondary text-white">Tiempo</th>
+            <th class="bg-secondary text-white">CostoMO</th>
+            <th class="bg-secondary text-white">CostoRE</th>
+            <th class="bg-secondary text-white">CostoTT</th>
+            <th class="bg-secondary text-white">CostoOT</th>
+            <th class="bg-secondary text-white">CostoTOT</th>
+            <th class="bg-secondary text-white">VentaMO</th>
+            <th class="bg-secondary text-white">VentaRE</th>
+            <th class="bg-secondary text-white">VentaTT</th>
+            <th class="bg-secondary text-white">VentaOT</th>
+            <th class="bg-secondary text-white">VentaDescto</th>
+            <th class="bg-secondary text-white">VentaSubtotal</th>
+            <th class="bg-secondary text-white">VentaIVA</th>
+            <th class="bg-secondary text-white">VentaTOT</th>
+            <th class="bg-secondary text-white">Utilidad</th>
+            <th class="bg-secondary text-white min-width-220">Asesor</th>
+            <th class="bg-secondary text-white min-width-120">FechaPromesa</th>
+            <th class="bg-secondary text-white min-width-120">MotivoCancel</th>
+            <th class="bg-secondary text-white min-width-120">Catalogo</th>
+            <th class="bg-secondary text-white min-width-120">Serie</th>
+            <th class="bg-secondary text-white min-width-120">Marca</th>
+            <th class="bg-secondary text-white">Año</th>
+            <th class="bg-secondary text-white min-width-120">Modelo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let d of detalleUnidadesTipoOtros; let i = index;'>
+            <td>{{ d.factura }}</td>
+            <td>{{ d.fechaFactura }}</td>
+            <td>{{ d.status }}</td>
+            <td>{{ d.orden }}</td>
+            <td>{{ d.fechaOrden }}</td>
+            <td>{{ d.tipoOrden }}</td>
+            <td>{{ d.idClienteOrden }}</td>
+            <td>{{ d.idClienteFactura }}</td>
+            <td>{{ d.nombre }}</td>
+            <td>{{ d.rfc }}</td>
+            <td>{{ d.qtySurt | number:'1.2-2' }}</td>
+            <td>{{ d.tiempo }}</td>
+            <td>{{ d.costoMO | number:'1.2-2' }}</td>
+            <td>{{ d.costoRE | number:'1.2-2' }}</td>
+            <td>{{ d.costoTT | number:'1.2-2' }}</td>
+            <td>{{ d.costoOT | number:'1.2-2' }}</td>
+            <td>{{ d.costoTOT | number:'1.2-2' }}</td>
+            <td>{{ d.ventaMO | number:'1.2-2' }}</td>
+            <td>{{ d.ventaRE | number:'1.2-2' }}</td>
+            <td>{{ d.ventaTT | number:'1.2-2' }}</td>
+            <td>{{ d.ventaOT | number:'1.2-2' }}</td>
+            <td>{{ d.ventaDescto | number:'1.2-2' }}</td>
+            <td>{{ d.ventaSubtotal | number:'1.2-2' }}</td>
+            <td>{{ d.ventaIVA | number:'1.2-2' }}</td>
+            <td>{{ d.ventaTOT | number:'1.2-2' }}</td>
+            <td>{{ d.utilidad | number:'1.2-2' }}</td>
+            <td>{{ d.asesor }}</td>
+            <td>{{ d.fechaPromesa }}</td>
+            <td>{{ d.motivoCancel }}</td>
+            <td>{{ d.catalogo }}</td>
+            <td>{{ d.serie }}</td>
+            <td>{{ d.marca }}</td>
+            <td>{{ d.anio }}</td>
+            <td>{{ d.modelo }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div *ngIf='idDetalleUnidades === 1 && selectedIdDepartamento == 738' class="scrolltable">
+    <div class="scrolltable">
+      <table class="table table-sm table-bordered table-responsive table-double-scroll" id="idDetalleUnidadesTipo" sortable-table (sorted)="onSorted($event, detalleUnidadesTipo)">
+        <thead>
+          <tr>
+            <th class="bg-secondary text-white">Código</th>
+            <th class="bg-secondary text-white min-width-250">Descripción</th>
+            <th class="bg-secondary text-white min-width-200">Vendedor</th>
+            <th class="bg-secondary text-white">Cantidad</th>
+            <th class="bg-secondary text-white">Precio</th>
+            <th class="bg-secondary text-white">Costo</th>
+            <th class="bg-secondary text-white min-width-120">Precio Total</th>
+            <th class="bg-secondary text-white min-width-130">costo Total</th>
+            <th class="bg-secondary text-white min-width-130">I.V.A</th>
+            <th class="bg-secondary text-white min-width-120">Total</th>
+            <th class="bg-secondary text-white min-width-120">Utilidad</th>
+            <th class="bg-secondary text-white min-width-250">Movimiento</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let d of detalleUnidadesRefacciones; let i = index;'>
+            <td>{{ d.codigo }}</td>
+            <td>{{ d.descripcion }}</td>
+            <td>{{ d.vendedor }}</td>
+            <td>{{ d.cantidad }}</td>
+            <td>{{ d.precio }}</td>
+            <td>{{ d.costo }}</td>
+            <td>{{ d.precioTotal }}</td>  
+            <td>{{ d.costoTotal }}</td>
+            <td>{{ d.iva }}</td>
+            <td>{{ d.total }}</td>
+            <td>{{ d.utilidad }}</td>
+            <td>{{ d.movimiento }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
 
 <table id="idDetalleUnidadesAcumulado" *ngIf='idDetalleUnidades === 2' class="table table-sm table-bordered table-responsive table-hover-td table-double-scroll"

@@ -26,6 +26,8 @@ import { IResultadoEstadoDeResultadosCalculo } from '../../models/reports/formul
 import { IEfectivoSituacion } from './efectivo-y-situacion-financiera';
 import { IEstadoSituacion } from './estado-Situacion-Financiera';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { ITipoUnidadOtros } from '../../models/reports/tipo-unidad-otros';
+import { ITipoUnidadRefacciones } from '../../models/reports/tipo-unidad-refacciones';
 
 
 
@@ -266,16 +268,19 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     // Initialize Params Object
     let Params = new HttpParams();
     let url = this._urlDetalleUnidadesMensual;
-
     // Begin assigning parameters
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('idSucursal', parameters.idSucursal);
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('idOrigen', parameters.idOrigen);
-
+    console.log(parameters.idOrigen);
     if (parameters.isUnidadesDepto) {
-      url = 'api/internos/unidadesdepartamentonv2';
+      if(parameters.idOrigen == 742 || parameters.idOrigen == 16) {
+        url = 'api/internos/unidadesdepartamentonv2Otros';
+      } else {
+        url = 'api/internos/unidadesdepartamentonv2';
+      }
     }
 
     return this._http.get<IDetalleUnidadesMensual[]>(url, { params: Params })
@@ -319,6 +324,47 @@ getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumul
     return this._http.get<ITipoUnidad[]>(url, { params: Params })
       .catch(this.handleError);
   }
+
+// ==========================================
+// Obtiene el detalle Nivel 2 HP y Servicios
+// ==========================================
+  getDetalleUnidadesTipoOtros(parameters): Observable<ITipoUnidadOtros[]> {
+    // Initialize Params Object
+    let Params = new HttpParams();
+
+    let url = 'api/internos/detalleunidadestipoOtros';
+
+    // Begin assigning parameters
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('idSucursal', parameters.idSucursal);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    Params = Params.append('idDepartamento', parameters.idDepartamento);
+
+    return this._http.get<ITipoUnidadOtros[]>(url, { params: Params })
+      .catch(this.handleError);
+  }
+
+  // ==========================================
+//  Obtiene el detalle Nivel 2 Refacciones
+// ==========================================
+getDetalleUnidadesRefacciones(parameters): Observable<ITipoUnidadRefacciones[]> {
+  // Initialize Params Object
+  let Params = new HttpParams();
+
+  let url = 'api/internos/detalleunidadesRefacciones';
+
+  // Begin assigning parameters
+  Params = Params.append('idCompania', parameters.idCompania);
+  Params = Params.append('idSucursal', parameters.idSucursal);
+  Params = Params.append('periodoYear', parameters.periodoYear);
+  Params = Params.append('periodoMes', parameters.periodoMes);
+  Params = Params.append('idDepartamento', parameters.idDepartamento);
+
+  return this._http.get<ITipoUnidadRefacciones[]>(url, { params: Params })
+    .catch(this.handleError);
+}
+
 
   getDetalleUnidadesTipoFlotillas(parameters): Observable<ITipoUnidad[]> {
     // Initialize Params Object

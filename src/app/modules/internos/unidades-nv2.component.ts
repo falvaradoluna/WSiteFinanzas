@@ -10,6 +10,8 @@ import { Observable } from 'rxjs/Observable';
 import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 import { Subscription } from 'rxjs/Subscription';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ITipoUnidadOtros } from '../../models/reports/tipo-unidad-otros';
+import { ITipoUnidadRefacciones } from '../../models/reports/tipo-unidad-refacciones';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -50,6 +52,8 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
   duaSubscription: Subscription;
   public isNivel4: boolean = false;
   detalleUnidadesSeries: ISeries[] = [];
+  detalleUnidadesTipoOtros: ITipoUnidadOtros[];
+  detalleUnidadesRefacciones: ITipoUnidadRefacciones[];
 
   constructor(private _service: InternosService, private _spinnerService: NgxSpinnerService) { 
     this._spinnerService.show(); 
@@ -60,7 +64,14 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
     this.fixedHeaderId.emit('idDetalleUnidadesAcumulado');
     if (this.isUnidadesDepto) {
       if (this.idDetalleUnidades === 1) { // Mensual
-        this.getUnidadesDepartamentoNv2();
+        if(this.selectedIdDepartamento == 742 || this.selectedIdDepartamento == 16) {
+          this.getDetalleUnidadesTipoOtros();
+        } else if(this.selectedIdDepartamento == 738) {
+          this.getDetalleUnidadesRefacciones();
+        }
+         else {
+          this.getUnidadesDepartamentoNv2();
+        }
       } else if (this.idDetalleUnidades === 2) { // Acumulado
         this.getUnidadesDepartamentoNv2Acumulado();
       }
@@ -517,5 +528,52 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
         return parseFloat(value.toString());
       }
   }
+
+// ==========================================
+//  Obtiene el detalle Nivel 2 HP y Servicios
+// ==========================================
+  getDetalleUnidadesTipoOtros(): void {  
+  this.dumSubscription = this._service.getDetalleUnidadesTipoOtros({
+      idCompania: this.selectedCompania,
+      idSucursal: this.selectedIdSucursal,
+      periodoYear: +this.anio,
+      periodoMes: +this.mes,
+      idDepartamento: this.selectedIdDepartamento
+    })
+      .subscribe(
+      dut => { 
+        this.detalleUnidadesTipoOtros = dut; 
+        this._spinnerService.hide(); 
+      },
+      error => { console.log(JSON.stringify(error)); },
+      () => {
+      }
+      );
+  }
+
+// ==========================================
+//  Obtiene el detalle Nivel 2 Refacciones
+// ==========================================
+getDetalleUnidadesRefacciones(): void {  
+  this.dumSubscription = this._service.getDetalleUnidadesRefacciones({
+      idCompania: this.selectedCompania,
+      idSucursal: this.selectedIdSucursal,
+      periodoYear: +this.anio,
+      periodoMes: +this.mes,
+      idDepartamento: this.selectedIdDepartamento
+    })
+      .subscribe(
+      dut => { 
+        this.detalleUnidadesRefacciones = dut; 
+        this._spinnerService.hide(); 
+      },
+      error => { console.log(JSON.stringify(error)); },
+      () => {
+      }
+      );
+  }
+
+
+  
 
 }
