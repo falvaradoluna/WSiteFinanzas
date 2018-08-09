@@ -10,6 +10,7 @@ import { Observable } from 'rxjs/Observable';
 import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 import { Subscription } from 'rxjs/Subscription';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ITipoUnidadRefaccionesMovimiento } from '../../models/reports/ITipoUnidadRefaccionesMovimiento';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -50,6 +51,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
   duaSubscription: Subscription;
   public isNivel4: boolean = false;
   detalleUnidadesSeries: ISeries[] = [];
+  detalleUnidadRefaccionesMovimiento: ITipoUnidadRefaccionesMovimiento[] = [];
 
   constructor(private _service: InternosService, private _spinnerService: NgxSpinnerService) { 
     this._spinnerService.show(); 
@@ -60,7 +62,14 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
     this.fixedHeaderId.emit('idDetalleUnidadesAcumulado');
     if (this.isUnidadesDepto) {
       if (this.idDetalleUnidades === 1) { // Mensual
-        this.getUnidadesDepartamentoNv2();
+        if(this.selectedIdDepartamento == 742 || this.selectedIdDepartamento == 16) {
+          this.getDetalleUnidadesServicioHyP();
+        } else if(this.selectedIdDepartamento == 738) {
+          this.getDetalleUnidadesRefacciones(); 
+        }
+         else {
+          this.getUnidadesDepartamentoNv2();
+        }
       } else if (this.idDetalleUnidades === 2) { // Acumulado
         this.getUnidadesDepartamentoNv2Acumulado();
       }
@@ -458,7 +467,6 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
   }
 
   onClickDetalleUnidadesMensual(idAutoLinea: number, carLine: string, mes: string = '', idDepartamento: string = '') {
-  
       if (this.isUnidadesDepto) {
         this.showUnidadesDepartamentoByLevel.emit(3);
       } else {
@@ -516,6 +524,58 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
       } else {  
         return parseFloat(value.toString());
       }
+  }
+
+// ==========================================
+//  Obtiene el detalle Nivel 2 HP y Servicios
+// ==========================================
+getDetalleUnidadesServicioHyP(): void {  
+  this.dumSubscription = this._service.getDetalleunidadesServicioHyPTotales({
+      idCompania: this.selectedCompania,
+      idSucursal: this.selectedIdSucursal,
+      periodoYear: +this.anio,
+      periodoMes: +this.mes,
+      idDepartamento: this.selectedIdDepartamento
+    })
+      .subscribe(
+      dut => { 
+        this.detalleUnidadRefaccionesMovimiento = dut; 
+        this._spinnerService.hide(); 
+      },
+      error => { console.log(JSON.stringify(error)); },
+      () => {
+        let totalCantidad = this.detalleUnidadRefaccionesMovimiento.find(x => x.idOrden === -1).cantidad;
+        this.detalleUnidadRefaccionesMovimiento.forEach(item => {
+          item.porcentaje = totalCantidad > 0 ? this.getIsNumber((item.cantidad / totalCantidad) * 100) : 0;
+        });
+      }
+      );
+  }
+
+// ==========================================
+//  Obtiene el detalle Nivel 2 Refacciones
+// ==========================================
+getDetalleUnidadesRefacciones(): void {  
+  this.dumSubscription = this._service.getDetalleUnidadesRefaccionesMovimiento({
+      idCompania: this.selectedCompania,
+      idSucursal: this.selectedIdSucursal,
+      periodoYear: +this.anio,
+      periodoMes: +this.mes,
+      idDepartamento: this.selectedIdDepartamento
+    })
+      .subscribe(
+      dut => { 
+        this.detalleUnidadRefaccionesMovimiento = dut; 
+        this._spinnerService.hide(); 
+      },
+      error => { console.log(JSON.stringify(error)); },
+      () => {
+        let totalCantidad = this.detalleUnidadRefaccionesMovimiento.find(x => x.idOrden === -1).cantidad;
+        this.detalleUnidadRefaccionesMovimiento.forEach(item => {
+          item.porcentaje = totalCantidad > 0 ? this.getIsNumber((item.cantidad / totalCantidad) * 100) : 0;
+        });
+      }
+    );  
   }
 
 }

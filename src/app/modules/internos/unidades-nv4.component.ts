@@ -5,6 +5,7 @@ import { InternosService } from './internos.service';
 import { Observable } from 'rxjs/Observable';
 import { ColumnSortedEvent } from '../../shared/index';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ITipoUnidadOtros } from '../../models/reports/tipo-unidad-otros';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -34,6 +35,10 @@ export class UnidadesNv4Component implements OnInit {
 
   //detalleUnidadesSeries: Observable<ISeries[]>;
   detalleUnidadesSeries: ISeries[] = [];
+  detalleUnidadesServicioHyP: ITipoUnidadOtros[] = [];
+  idDepartamento: number = 0;
+  idCarline: number = 0;
+  idOrdenTipo: number = 0;
 
   constructor(private _service: InternosService, private _spinnerService: NgxSpinnerService) { }
 
@@ -41,23 +46,16 @@ export class UnidadesNv4Component implements OnInit {
     //this.detalleUnidadesSeries = this.getDetalleUnidadesSeries();
     this._spinnerService.show(); 
     setTimeout(() => { this._spinnerService.hide(); }, 5000);
-    this.getDetalleUnidadesSeries()
-    //console.log( "detalleUnidadesSeries", this.detalleUnidadesSeries );
+    if( typeof this.idReporte !== "undefined" && (this.idReporte == '16' || this.idReporte == '742'))
+    {
+      this.idDepartamento = parseInt(this.idReporte);      
+      this.idCarline = parseInt(this.mesAcumuladoNv3);
+      this.idOrdenTipo = parseInt(this.tipoAuto);   
+      this.getDetalleUnidadesServicioHyP();
+    } else {
+      this.getDetalleUnidadesSeries()
+    }
   }
-
-  // getDetalleUnidadesSeries(): Observable<ISeries[]> {
-  //   return this._service.getDetalleUnidadesSeries({
-  //     idCompania: this.selectedIdSucursal > 0 ? 0 : this.selectedCompania,
-  //     idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
-  //     idOrigen: this.idOrigen,
-  //     idPestana: this.selectedIdDepartamento,
-  //     periodoYear: +this.anio,
-  //     periodoMes: +this.mes,
-  //     unidadDescripcion: this.tipoAuto,
-  //     isUnidadesDepto: this.isUnidadesDepto,
-  //     idDepartamento: this.idReporte,
-  //   });
-  // }
 
   getDetalleUnidadesSeries(): void {
 
@@ -80,12 +78,30 @@ export class UnidadesNv4Component implements OnInit {
       error => this.errorMessage = <any>error);
   }
 
+// ==========================================
+//  Obtiene el detalle Nivel 4 HP y Servicios (Detalle)
+// ==========================================
+  getDetalleUnidadesServicioHyP(): void {
+    this._service.getDetalleUnidadesServicioHyP({
+      idCompania: this.selectedCompania,
+      idSucursal: this.selectedIdSucursal > 0 ? this.selectedIdSucursal : 0,
+      periodoYear: +this.anio,
+      periodoMes: +this.mes,
+      idDepartamento: this.idDepartamento,
+      idCarline: this.idCarline,
+      ordenTipoId: this.idOrdenTipo
+    })
+      .subscribe(detalleUnidadesSeries => {
+        this.detalleUnidadesServicioHyP = detalleUnidadesSeries;
+        this._spinnerService.hide();
+      },
+      error => this.errorMessage = <any>error);
+  }
+
   //LAGP
   // Ordenamiento de tabla
   onSorted(event: ColumnSortedEvent, obj: Object[]) {
     // Se pasa como referencia el objeto que se quiere ordenar
-    // console.log( "event", event );
-    // console.log( "obj", obj );
     obj.sort(function (a, b) {
       if (event.sortDirection === 'asc') {
         return a[event.sortColumn] - b[event.sortColumn];

@@ -1758,22 +1758,23 @@ getReporteSumaDepartamentos() : void{
   }
 
   onClickUnidadesAcumuladoReal(i: number, value: number, name: string, idDetalleUnidades: number) {
+    if(typeof this.resultadoUnidades !== "undefined" && this.resultadoUnidades.length > 0) {
+      const concepto = this.resultadoUnidades[i].descripcion;
+      const idOrigen = this.resultadoUnidades[i].idOrigen;
 
-    const concepto = this.resultadoUnidades[i].descripcion;
-    const idOrigen = this.resultadoUnidades[i].idOrigen;
+      if (concepto !== 'Total Unidades') {
+        this.showUnidadesAcumuladoReal = 2;
+        this.detalleUnidadesName = name;
+        this.detalleUnidadesValue = value;
+        this.idDetalleUnidades = idDetalleUnidades;
+        this.idOrigen = idOrigen;
 
-    if (concepto !== 'Total Unidades') {
-      this.showUnidadesAcumuladoReal = 2;
-      this.detalleUnidadesName = name;
-      this.detalleUnidadesValue = value;
-      this.idDetalleUnidades = idDetalleUnidades;
-      this.idOrigen = idOrigen;
-
-      // QUITAR UNA
-      this.detalleUnidadesConcepto = concepto; // <-----QUITAR despues de refactorizar
-      this.unidadesConcepto = concepto;
-      this.getDetalleUnidadesAcumuladoReal();
-    }
+        // QUITAR UNA
+        this.detalleUnidadesConcepto = concepto; // <-----QUITAR despues de refactorizar
+        this.unidadesConcepto = concepto;
+        this.getDetalleUnidadesAcumuladoReal();
+      }
+   }
   }
 
   onClickUnidadesAcumuladoRealNv2(idAutoLinea: number, carLine: string) {

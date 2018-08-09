@@ -6,6 +6,9 @@ import { InternosService } from './internos.service';
 import { Observable } from 'rxjs/Observable';
 import { ColumnSortedEvent } from '../../shared/index';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ITipoUnidadOtros } from '../../models/reports/tipo-unidad-otros';
+import { ITipoUnidadRefacciones } from '../../models/reports/tipo-unidad-refacciones';
+import { ITipoUnidadRefaccionesMovimiento } from '../../models/reports/ITipoUnidadRefaccionesMovimiento';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -48,6 +51,9 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
   @Output() showUnidadesDepartamentoByLevel = new EventEmitter<number>();
 
   detalleUnidadesTipo: ITipoUnidad[];
+  detalleUnidadesTipoOtros: ITipoUnidadOtros[];
+  detalleUnidadesRefacciones: ITipoUnidadRefacciones[];
+  detalleUnidadesRefaccionesMov: ITipoUnidadRefaccionesMovimiento[];
 
   constructor(private _service: InternosService, private _spinnerService: NgxSpinnerService) {
    }
@@ -58,7 +64,13 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
     this.fixedHeaderId.emit('idDetalleUnidadesTipo');
     if (this.isUnidadesDepto) {
       if (this.idDetalleUnidades === 1) { // Mensual
-        this.getDetalleUnidadesTipo(this.carLine, this.idDepartamento, this.mes);
+        if(this.selectedIdDepartamento == 742 || this.selectedIdDepartamento == 16) {
+          this.getDetalleUnidadesServicioHyPCarLine();
+        } else if(this.selectedIdDepartamento == 738) {
+          this.getDetalleUnidadesRefacciones();
+        } else {        
+          this.getDetalleUnidadesTipo(this.carLine, this.idDepartamento, this.mes);
+        }
       } else if (this.idDetalleUnidades === 2) { // Acumulado
         this.getDetalleUnidadesTipoAcumulado(this.carLine, this.idDepartamento, this.mes);      }
     } else {
@@ -430,8 +442,24 @@ export class UnidadesNv3Component implements OnInit, OnChanges {
       this.detalleUnidadesConceptoTercerNivel.emit(tipoUnidad);
       this.idReporte.emit(xmlDepartamentoCanalTotal);
       this.mesAcumuladoNv3.emit(mes);
-      // this.fixedHeader('detalleUnidadesSeries');
   }
+
+  onClickDetalleUnidadesServicioHyP(idOrden: number, idOrdenTipo: number, movimiento: string) { 
+      if (this.isUnidadesDepto) {
+        this.showUnidadesDepartamentoByLevel.emit(4);
+      } else {
+        this.showUnidades.emit(false);
+        this.showDetalleUnidadesPrimerNivel.emit(false);
+        this.showDetalleUnidadesSegundoNivel.emit(false);
+        this.showDetalleUnidadesTercerNivel.emit(true);
+      }
+      this.detalleUnidadesNameTercerNivel.emit('');
+      this.detalleUnidadesValueTercerNivel.emit('' + idOrdenTipo);
+      this.detalleUnidadesConceptoTercerNivel.emit(movimiento);
+      this.idReporte.emit('' + this.selectedIdDepartamento);
+      this.mesAcumuladoNv3.emit('' + idOrden);
+  }
+
 
 private getXmlUnidadDescripcion(unidadDescripcion){    
     return '<unidadDescripcion><descripcion>' + unidadDescripcion + '</descripcion></unidadDescripcion>';
@@ -512,5 +540,54 @@ private getXmlCanalVenta(idCanalVenta){
         return b[event.sortColumn] - a[event.sortColumn];
       }
     });
+  }
+
+// ==========================================
+//  Obtiene el detalle Nivel 2 Refacciones
+// ==========================================
+getDetalleUnidadesRefacciones(): void {  
+  this._service.getDetalleUnidadesRefacciones({
+      idCompania: this.selectedCompania,
+      idSucursal: this.selectedIdSucursal,
+      periodoYear: +this.anio,
+      periodoMes: +this.mes,
+      idDepartamento: this.selectedIdDepartamento,
+      movimientoId: this.idAutoLinea
+    })
+      .subscribe(
+      dut => { 
+        this.detalleUnidadesRefacciones = dut; 
+        this._spinnerService.hide(); 
+      },
+      error => { console.log(JSON.stringify(error)); },
+      () => {
+      }
+      );
+  }
+  // ==========================================
+//  Obtiene el detalle Nivel 2 Refacciones
+// ==========================================
+getDetalleUnidadesServicioHyPCarLine(): void {  
+  this._service.getDetalleunidadesServicioHyPCarLine({
+      idCompania: this.selectedCompania,
+      idSucursal: this.selectedIdSucursal,
+      periodoYear: +this.anio,
+      periodoMes: +this.mes,
+      idDepartamento: this.selectedIdDepartamento,
+      ordenTipoId: this.idAutoLinea
+    })
+      .subscribe(
+      dut => { 
+        this.detalleUnidadesRefaccionesMov = dut; 
+        this._spinnerService.hide(); 
+      },
+      error => { console.log(JSON.stringify(error)); },
+      () => {
+        let totalCantidad = this.detalleUnidadesRefaccionesMov.find(x => x.idOrden === -1).cantidad;
+        this.detalleUnidadesRefaccionesMov.forEach(item => {
+          item.porcentaje = totalCantidad > 0 ? this.getIsNumber((item.cantidad / totalCantidad) * 100) : 0;
+        });
+      }
+      );
   }
 }

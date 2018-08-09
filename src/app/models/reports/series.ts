@@ -19,4 +19,6 @@ export interface ISeries {
   costoTotal: number;
   utilidad: number;
   cantidad: number;
+  facturaFecha: Date;
+  unidadDescripcion: string;
 }

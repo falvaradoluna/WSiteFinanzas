@@ -54,7 +54,7 @@
           </tbody>
         </table>
       </div> 
-  <div *ngIf='!isNivel4' class="col-md-6">
+  <div *ngIf='!isNivel4 && (selectedIdDepartamento != 738 && selectedIdDepartamento != 742 && selectedIdDepartamento != 16)' class="col-md-6">
     <table class="table table-sm table-bordered table-hover-td" sortable-table (sorted)="onSorted($event, detalleUnidadesMensual)">
       <thead>
         <tr>
@@ -75,6 +75,46 @@
       </tbody>
     </table>
   </div>
+  
+  <div *ngIf='idDetalleUnidades === 1 && selectedIdDepartamento == 738' class="scrolltable">
+    <table class="table table-sm table-bordered table-hover-td" sortable-table (sorted)="onSorted($event, detalleUnidadesMensual)">
+      <thead>
+        <tr>
+          <!-- Flotillas tiene una columna extra (Depto) -->
+          <th class="bg-orange bg-secondary text-white">Movimiento</th>
+          <th class="bg-orange bg-secondary text-white text-center">cantidad</th>
+          <th class="bg-orange bg-secondary text-white text-center">%</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor='let d of detalleUnidadRefaccionesMovimiento; let i = index;' (dblclick)='onClickDetalleUnidadesMensual(d.idOrden, d.movimiento, "", "")'>
+          <td>{{ d.movimiento }}</td>
+          <td class="text-center" [suma-columnas]='d.cantidad'>{{ d.cantidad }}</td>
+          <td class="text-center" [suma-columnas]='d.cantidad'>{{ d.porcentaje | number:'1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf='idDetalleUnidades === 1 && (selectedIdDepartamento == 742 || selectedIdDepartamento == 16)' class="scrolltable">
+    <table class="table table-sm table-bordered table-hover-td" sortable-table (sorted)="onSorted($event, detalleUnidadesMensual)">
+      <thead>
+        <tr>
+          <!-- Flotillas tiene una columna extra (Depto) -->
+          <th class="bg-secondary text-white min-width-200">Tipo de Orden</th>
+          <th class="bg-secondary text-white text-center">cantidad</th>
+          <th class="bg-secondary text-white text-center">%</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor='let d of detalleUnidadRefaccionesMovimiento; let i = index;' (dblclick)='onClickDetalleUnidadesMensual(d.idOrden, d.movimiento, "", "")'>
+          <td>{{ d.movimiento }}</td>
+          <td class="text-center" [suma-columnas]='d.cantidad'>{{ d.cantidad }}</td>
+          <td class="text-center" [suma-columnas]='d.cantidad'>{{ d.porcentaje | number:'1.2-2' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
 </div>
 
 <table id="idDetalleUnidadesAcumulado" *ngIf='idDetalleUnidades === 2' class="table table-sm table-bordered table-responsive table-hover-td table-double-scroll"
