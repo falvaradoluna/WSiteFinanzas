@@ -10,8 +10,7 @@ import { Observable } from 'rxjs/Observable';
 import { OnDestroy } from '@angular/core/src/metadata/lifecycle_hooks';
 import { Subscription } from 'rxjs/Subscription';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ITipoUnidadOtros } from '../../models/reports/tipo-unidad-otros';
-import { ITipoUnidadRefacciones } from '../../models/reports/tipo-unidad-refacciones';
+import { ITipoUnidadRefaccionesMovimiento } from '../../models/reports/ITipoUnidadRefaccionesMovimiento';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -52,8 +51,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
   duaSubscription: Subscription;
   public isNivel4: boolean = false;
   detalleUnidadesSeries: ISeries[] = [];
-  detalleUnidadesTipoOtros: ITipoUnidadOtros[];
-  detalleUnidadesRefacciones: ITipoUnidadRefacciones[];
+  detalleUnidadRefaccionesMovimiento: ITipoUnidadRefaccionesMovimiento[] = [];
 
   constructor(private _service: InternosService, private _spinnerService: NgxSpinnerService) { 
     this._spinnerService.show(); 
@@ -65,9 +63,9 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
     if (this.isUnidadesDepto) {
       if (this.idDetalleUnidades === 1) { // Mensual
         if(this.selectedIdDepartamento == 742 || this.selectedIdDepartamento == 16) {
-          this.getDetalleUnidadesTipoOtros();
+          this.getDetalleUnidadesServicioHyP();
         } else if(this.selectedIdDepartamento == 738) {
-          this.getDetalleUnidadesRefacciones();
+          this.getDetalleUnidadesRefacciones(); 
         }
          else {
           this.getUnidadesDepartamentoNv2();
@@ -469,7 +467,6 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
   }
 
   onClickDetalleUnidadesMensual(idAutoLinea: number, carLine: string, mes: string = '', idDepartamento: string = '') {
-  
       if (this.isUnidadesDepto) {
         this.showUnidadesDepartamentoByLevel.emit(3);
       } else {
@@ -532,8 +529,8 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 // ==========================================
 //  Obtiene el detalle Nivel 2 HP y Servicios
 // ==========================================
-  getDetalleUnidadesTipoOtros(): void {  
-  this.dumSubscription = this._service.getDetalleUnidadesTipoOtros({
+getDetalleUnidadesServicioHyP(): void {  
+  this.dumSubscription = this._service.getDetalleunidadesServicioHyPTotales({
       idCompania: this.selectedCompania,
       idSucursal: this.selectedIdSucursal,
       periodoYear: +this.anio,
@@ -542,11 +539,15 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
     })
       .subscribe(
       dut => { 
-        this.detalleUnidadesTipoOtros = dut; 
+        this.detalleUnidadRefaccionesMovimiento = dut; 
         this._spinnerService.hide(); 
       },
       error => { console.log(JSON.stringify(error)); },
       () => {
+        let totalCantidad = this.detalleUnidadRefaccionesMovimiento.find(x => x.idOrden === -1).cantidad;
+        this.detalleUnidadRefaccionesMovimiento.forEach(item => {
+          item.porcentaje = totalCantidad > 0 ? this.getIsNumber((item.cantidad / totalCantidad) * 100) : 0;
+        });
       }
       );
   }
@@ -555,7 +556,7 @@ export class UnidadesNv2Component implements OnInit, OnDestroy, OnChanges {
 //  Obtiene el detalle Nivel 2 Refacciones
 // ==========================================
 getDetalleUnidadesRefacciones(): void {  
-  this.dumSubscription = this._service.getDetalleUnidadesRefacciones({
+  this.dumSubscription = this._service.getDetalleUnidadesRefaccionesMovimiento({
       idCompania: this.selectedCompania,
       idSucursal: this.selectedIdSucursal,
       periodoYear: +this.anio,
@@ -564,16 +565,17 @@ getDetalleUnidadesRefacciones(): void {
     })
       .subscribe(
       dut => { 
-        this.detalleUnidadesRefacciones = dut; 
+        this.detalleUnidadRefaccionesMovimiento = dut; 
         this._spinnerService.hide(); 
       },
       error => { console.log(JSON.stringify(error)); },
       () => {
+        let totalCantidad = this.detalleUnidadRefaccionesMovimiento.find(x => x.idOrden === -1).cantidad;
+        this.detalleUnidadRefaccionesMovimiento.forEach(item => {
+          item.porcentaje = totalCantidad > 0 ? this.getIsNumber((item.cantidad / totalCantidad) * 100) : 0;
+        });
       }
-      );
+    );  
   }
-
-
-  
 
 }

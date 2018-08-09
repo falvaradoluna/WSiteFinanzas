@@ -431,7 +431,33 @@ internos.prototype.get_detalleunidadestipo = function (req, res, next) {
 
 // /api/internos/detalleunidadestipo
 // Funcionalidad para tipo de Unidades HP y Servicio
-internos.prototype.get_detalleunidadestipoOtros = function (req, res, next) {
+internos.prototype.get_detalleunidadesServicioHyP = function (req, res, next) {
+  var self = this;
+
+
+  var params = [
+    { name: 'IdCompania', value: req.query.idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: req.query.idSucursal, type: self.model.types.INT },
+    { name: 'periodoMes', value: req.query.periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: req.query.periodoYear, type: self.model.types.INT },
+    { name: 'idDepartamento', value: req.query.idDepartamento, type: self.model.types.INT },
+    { name: 'idCarline', value: req.query.idCarline, type: self.model.types.INT },
+    { name: 'ordenTipoId', value: req.query.ordenTipoId, type: self.model.types.INT }
+    
+  ];
+  
+  this.model.query('[LibroVenta].[ObtenerUnidadesServicioPorDepto]', params, function (error, result) {
+
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/detalleunidadestipo
+// Funcionalidad para tipo de Unidades HP y Servicio
+internos.prototype.get_detalleunidadesServicioHyPTotales = function (req, res, next) {
   var self = this;
 
 
@@ -443,7 +469,55 @@ internos.prototype.get_detalleunidadestipoOtros = function (req, res, next) {
     { name: 'idDepartamento', value: req.query.idDepartamento, type: self.model.types.INT }
   ];
   
-  this.model.query('[LibroVenta].[ObtenerUnidadesServicioPorDepto]', params, function (error, result) {
+  this.model.query('[LibroVenta].[ObtenerUnidadesServicioPorDeptoTotal]', params, function (error, result) {
+    // console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/detalleunidadestipo
+// Funcionalidad para tipo de Unidades HP y Servicio
+internos.prototype.get_detalleunidadesServicioHyPCarLine = function (req, res, next) {
+  var self = this;
+
+
+  var params = [
+    { name: 'IdCompania', value: req.query.idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: req.query.idSucursal, type: self.model.types.INT },
+    { name: 'periodoMes', value: req.query.periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: req.query.periodoYear, type: self.model.types.INT },
+    { name: 'idDepartamento', value: req.query.idDepartamento, type: self.model.types.INT },
+    { name: 'ordenTipoId', value: req.query.ordenTipoId, type: self.model.types.INT }
+  ];
+  
+  this.model.query('[LibroVenta].[ObtenerUnidadesServicioPorDeptoCarLine]', params, function (error, result) {
+    // console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/detalleunidadestipo
+// Funcionalidad para tipo de Unidades HP y Servicio
+internos.prototype.get_detalleunidadesServicioHyPCarLine = function (req, res, next) {
+  var self = this;
+
+
+  var params = [
+    { name: 'IdCompania', value: req.query.idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: req.query.idSucursal, type: self.model.types.INT },
+    { name: 'periodoMes', value: req.query.periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: req.query.periodoYear, type: self.model.types.INT },
+    { name: 'idDepartamento', value: req.query.idDepartamento, type: self.model.types.INT },
+    { name: 'ordenTipoId', value: req.query.ordenTipoId, type: self.model.types.INT }
+  ];
+  
+  this.model.query('[LibroVenta].[ObtenerUnidadesServicioPorDeptoCarLine]', params, function (error, result) {
     // console.log(params);
     self.view.expositor(res, {
       error: error,
@@ -462,10 +536,34 @@ internos.prototype.get_detalleunidadesRefacciones = function (req, res, next) {
     { name: 'IdCompania', value: req.query.idCompania, type: self.model.types.INT },
     { name: 'IdSucursal', value: req.query.idSucursal, type: self.model.types.INT },
     { name: 'periodoMes', value: req.query.periodoMes, type: self.model.types.INT },
-    { name: 'periodoYear', value: req.query.periodoYear, type: self.model.types.INT }
+    { name: 'periodoYear', value: req.query.periodoYear, type: self.model.types.INT },
+    { name: 'movimientoId', value: req.query.movimientoId, type: self.model.types.INT }
+    
   ];
   
   this.model.query('[LibroVenta].[ObtenerUnidadesRefacciones]', params, function (error, result) {
+    // console.log(params);
+    self.view.expositor(res, {
+      error: error,
+      result: result,
+    });
+  });
+};
+
+// /api/internos/detalleunidadestipo
+// Funcionalidad para tipo de Unidades HP y Servicio
+internos.prototype.get_detalleunidadesRefaccionesMovimiento = function (req, res, next) {
+  var self = this;
+
+
+  var params = [
+    { name: 'IdCompania', value: req.query.idCompania, type: self.model.types.INT },
+    { name: 'IdSucursal', value: req.query.idSucursal, type: self.model.types.INT },
+    { name: 'periodoMes', value: req.query.periodoMes, type: self.model.types.INT },
+    { name: 'periodoYear', value: req.query.periodoYear, type: self.model.types.INT }
+  ];
+  
+  this.model.query('[LibroVenta].[ObtenerUnidadesRefaccionesMovimiento]', params, function (error, result) {
     // console.log(params);
     self.view.expositor(res, {
       error: error,
@@ -738,7 +836,8 @@ internos.prototype.get_unidadesdepartamentoacumuladonv2 = function (req, res, ne
     { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
     { name: 'idPestania', value: idOrigen, type: self.model.types.INT }
   ];
-
+  console.log('parametrossss');
+  console.log(params);
   this.model.query('[Unidad].[ObtenerCantidadXDepartamentoXAutoLineaAcumulado]', params, function (error, result) {
     
     self.view.expositor(res, {
