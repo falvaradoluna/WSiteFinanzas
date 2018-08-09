@@ -836,8 +836,7 @@ internos.prototype.get_unidadesdepartamentoacumuladonv2 = function (req, res, ne
     { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
     { name: 'idPestania', value: idOrigen, type: self.model.types.INT }
   ];
-  console.log('parametrossss');
-  console.log(params);
+
   this.model.query('[Unidad].[ObtenerCantidadXDepartamentoXAutoLineaAcumulado]', params, function (error, result) {
     
     self.view.expositor(res, {
