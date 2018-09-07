@@ -175,8 +175,7 @@
 }
 
 .table-responsive {  display: table !important; }
-.scrolltable{ overflow: auto;
-  height: 475px;
-  min-height: 500px;}
+.scrolltable{ overflow-x: auto;}
+.scrollGrid{ overflow: auto; height: 475px; min-height: 500px;}
 .table-fixed[_ngcontent-c4] tbody[_ngcontent-c4] {width: 100% !important;}
 .table-fixed[_ngcontent-c4] {width: 100% !important;}
