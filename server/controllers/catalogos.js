@@ -1,6 +1,6 @@
 var LoginView = require('../views/reference'), LoginModel = require('../models/dataAccess');
 
-var Catalogos = function (conf) {
+var catalogos = function (conf) {
     this.conf = conf || {};
     this.view = new LoginView();
     this.model = new LoginModel({
@@ -15,7 +15,7 @@ var Catalogos = function (conf) {
 // ==========================================
 //  Recupera todos los departamentos
 // ==========================================
-Catalogos.prototype.get_departamentos = function (req, res, next) {
+catalogos.prototype.get_departamentos = function (req, res, next) {
     var self = this;
     this.model.query('[Catalogo].[ObtenerDepartamento]', [], function (error, result) {
         self.view.expositor(res, {
@@ -28,7 +28,7 @@ Catalogos.prototype.get_departamentos = function (req, res, next) {
 // ==========================================
 //  Funcionalidad que llena el select de compañias
 // ==========================================
-Catalogos.prototype.get_companias = function (req, res, next) {
+catalogos.prototype.get_companias = function (req, res, next) {
     var self = this;
     var idUsuario = req.query.idusuario;
   
@@ -47,7 +47,7 @@ Catalogos.prototype.get_companias = function (req, res, next) {
 // ==========================================
 //  Recupera todos los departamentos por companias (XML)
 // ==========================================
-Catalogos.prototype.get_departamentosPorCompanias = function (req, res, next) {
+catalogos.prototype.get_departamentosPorCompanias = function (req, res, next) {
     var self = this;
 
     var params = [
@@ -64,4 +64,16 @@ Catalogos.prototype.get_departamentosPorCompanias = function (req, res, next) {
 };
 
 
-module.exports = Catalogos;
+catalogos.prototype.get_Marca = function (req, res, next) {
+    var self = this;
+
+    this.model.query('[Catalogo].[ObtieneMarca]', [], function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result,
+        });
+    });
+};
+
+
+module.exports = catalogos;
