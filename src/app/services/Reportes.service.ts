@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
@@ -23,13 +23,11 @@ import { ITipoUnidad } from '../models/reports/tipo-unidad';
 import { IAcumuladoReal } from '../models/reports/acumuladoreal';
 import { IAutoLineaAcumulado } from '../models/reports/auto-linea-acumulado';
 import { ISeries } from '../models/reports/series';
-
-
 import { IResultadoEstadoDeResultadosCalculo } from '../models/reports/formulaEstadoResultado';
 import { Iexterno } from '../models/reports/externo';
 import { environment } from '../../environments/environment';
-
-
+import { IReportePlantaConfigSheet } from '../models/reports/reportePlantaConfigExcel'
+import { IPlantilla } from '../models/reports/reportePlantillaPlanta'
 
 @Injectable()
 export class ReportesService {
@@ -51,13 +49,13 @@ export class ReportesService {
   private _urlUnidadesAcumuladoRealDepartamento = 'api/internos/unidadesacumuladorealdepartamento';
   private _urlDetalleUnidadesMensual = 'api/internos/detalleunidadesmensual';
   private _urlDetalleUnidadesMensualFlotillas = 'api/internos/detalleunidadesmensualflotillas';
-  private _urlDetalleUnidadesTipo = 'api/internos/detalleunidadestipo';
+  // private _urlDetalleUnidadesTipo = 'api/internos/detalleunidadestipo';
   private _urlDetalleUnidadesTipoFlotillas = 'api/internos/detalleunidadestipoflotillas';
-  private _urlDetalleUnidadesTipoAcumulado = 'api/internos/detalleunidadestipoacumulado';
+  // private _urlDetalleUnidadesTipoAcumulado = 'api/internos/detalleunidadestipoacumulado';
   private _urlEstadoSituacion = 'api/internos/estadosituaciofinanciera';
-  private _urlDetalleUnidadesSeries = 'api/internos/detalleunidadesseries';
+  // private _urlDetalleUnidadesSeries = 'api/internos/detalleunidadesseries';
   private _urlDetalleUnidadesAcumulado = 'api/internos/detalleunidadesacumulado';
-  private _urlDetalleResultadosMensual = 'api/internos/detalleresultadosmensual';
+  // private _urlDetalleResultadosMensual = 'api/internos/detalleresultadosmensual';
   private _urlDetalleResultadosCuentas = 'api/internos/detalleresultadoscuentas';
   private _urlDetalleUnidadesTipoAcumuladoFlotillas = 'api/internos/detalleunidadestipoacumuladoflotillas';
   private _urlDetalleUnidadesAcumuladoFlotillas = 'api/internos/detalleunidadesacumuladoflotillas';
@@ -70,6 +68,12 @@ export class ReportesService {
   private _urlEstadoDeResultadosVariacionSegundoNivel = 'api/internos/estadoderesultadosvariacionsegundonivel';
   private _urlTipoReporte = 'api/internos/tipoReporte';
   private _urlReportInterno = 'WSF/api/report/excelExterno';
+  private _urlEtiquetasExcel = 'api/reportes/saveConfigurationTemplate';
+  private _urlsaveFile = 'api/reportes/saveFile';
+  private _urlSaveTemplateDB = 'api/reportes/saveTemplateDB';
+  private _urlGetConfigTemplate = 'api/report/PlantReporttemplate';
+  private _urlTemplateForBrand = 'api/reportes/TemplateForBrand';
+  
 
   constructor(private _http: HttpClient) { 
   }
@@ -169,7 +173,6 @@ export class ReportesService {
       .catch(this.handleError);
   }
 
-
   getSumaDepartamentosAcumuladoReal(parameters): Observable<IDetalleUnidadesAcumulado[]> { // Se reutiliza la interfaz de detalle Unidades Acumulado
     let Params = new HttpParams();  
 
@@ -184,7 +187,6 @@ export class ReportesService {
     return this._http.get<IAcumuladoReal[]>(this._urlSumaDepartamentos, { params: Params })
       .catch(this.handleError);
   }
-
 
   getUnidadesDepartamento(parameters): Observable<IResultadoInternos[]> { // Se reutiliza la interfaz de unidades
     let Params = new HttpParams();
@@ -541,7 +543,6 @@ export class ReportesService {
     return this._http.get<ITipoReporte[]>(this._urlTipoReporte, { params: Params })
       .catch(this.handleError);
   }
- 
 
   getReportExternal(parameters): Observable<Iexterno[]> {
 
@@ -549,4 +550,86 @@ export class ReportesService {
     return this._http.get<Iexterno[]>(urlApi + this._urlReportInterno + "?idCompania=" + parameters.idCompania + "&periodoYear=" + parameters.periodoYear + "&periodoMes=" + parameters.periodoMes + "&tipoReporte=" + parameters.tipoReporte,{})
     .catch(this.handleError); 
   }
+
+  saveFile(fileToUpload: File, parameters) {
+    
+    let Params = new HttpParams();
+
+    Params = Params.append('idMarca', parameters.idMarca);
+    Params = Params.append('nombrePlatilla', parameters.nombrePlatilla);
+    Params = Params.append('usuarioID', parameters.usuarioID);
+
+     return this._http.get<any>(this._urlSaveTemplateDB, { params: Params }).map(resp=>{
+
+      var ext = fileToUpload.name.substr(fileToUpload.name.lastIndexOf('.'));
+      var nameFile = resp[0].id +  ext;
+       return new Promise((resolve, reject) => {
+        let formData = new FormData();
+        let xhr = new XMLHttpRequest();
+        formData.append('archivo', fileToUpload, nameFile);
+        formData.append("filepath", environment.filepath + nameFile)
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    resolve(JSON.parse(xhr.response));
+                } else {
+                    reject(xhr.response);
+                }
+            }
+        };
+        
+        xhr.open('post', this._urlsaveFile, true);
+        xhr.send(formData);
+      });
+     });
+  }
+  
+  getReportPlant(idMarca: string): Observable<IReportePlantaConfigSheet> {
+
+    let urlApi: String = environment.api;
+    let Params = new HttpParams();
+    Params = Params.append('idMarca', idMarca as string);
+    return this._http.post<IReportePlantaConfigSheet>(urlApi + this._urlGetConfigTemplate,Params)
+    .catch(this.handleError); 
+  }
+
+  getTemplateForBrand(idMarca: string){
+    
+    let Params = new HttpParams();
+    Params = Params.append('idMarca', idMarca);
+    return this._http.get<IPlantilla>(this._urlTemplateForBrand,{ params: Params })
+    .catch(this.handleError); 
+    
+  }
+  
+  getSaveConfigurationTemplate(parameters): Observable<any[]> {
+    let Params = new HttpParams();
+    Params = Params.append('xmlTemplate', parameters.xmlTemplate);
+    return this._http.get<any[]>(this._urlEtiquetasExcel, { params: Params })
+    .catch(this.handleError); 
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+ 
+
+  createExcel(): Observable<any[]> {
+
+    // let urlApi: String = environment.api;
+    return this._http.get<any[]>("http://localhost:56569/api/report/createExcel",{})
+    .catch(this.handleError); 
+  }
+
+  
 }

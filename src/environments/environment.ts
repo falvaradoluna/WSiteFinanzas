@@ -5,5 +5,7 @@
 
 export const environment = {
   production: false,
-  api: 'http://192.168.20.92/'
+  api: 'http://localhost:56569/',
+  filepath : '\\\\192.168.20.92\\Compartida\\TemplateWSF\\'
+
 };

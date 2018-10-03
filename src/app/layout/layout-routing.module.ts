@@ -9,6 +9,7 @@ const routes: Routes = [
         component: LayoutComponent,
         children: [
           { path: '', redirectTo: 'blank-page' },
+          { path: 'configuracionDePlantilla',loadChildren:'../modules/reportes/reportesDePlanta/configuracion-plantilla/configuracion-plantilla.module#ConfiguracionDePlantillaModule'},
           { path: 'externo',loadChildren:'../modules/reportes/externo/externo.module#ExternoModule'},
           { path: 'cuentas', loadChildren: '../modules/catalogos/cuentas/cuentas.module#CuentasModule' },
           { path: 'cuentas', loadChildren: '../modules/catalogos/cuentas/cuentas.module#CuentasModule' },
