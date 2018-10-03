@@ -1,0 +1,130 @@
+
+<div>
+  <div class="col-md-12">
+      <div class="card">
+        <div class="card-header bg-primary text-white text-center">
+          Configuracion de plantilla
+        </div>
+      </div>
+  </div>
+  <div class="card-body">
+      <form>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0" >
+                        Platilla
+                    </h5>
+                </div>
+                <div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="inputCompania">Marca</label>
+                            </div>
+                            <div class="col-md-4"></div>
+                            <div class="form-group col-md-2"></div>
+                            <div class="form-group col-md-2"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <div [ngClass]="{ErrorControl: selectedBrand.toString() === '0'}">
+                                    <select name="inputMarca" class="form-control form-control-sm" [(ngModel)]="selectedBrand" (change)="onFileChanged(null)">
+                                        <option value="0">--Seleccione--</option>
+                                        <option *ngFor="let brand of brands" [value]="brand.id">
+                                        {{ brand.descripcion }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4"></div>
+                            <div class="form-group col-md-2"></div>
+                            <div class="form-group col-md-2"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingTwo">
+                                <h5 class="mb-0">
+                                    Carga
+                                </h5>
+                            </div>
+                            <div>
+                                <div class="card-body col-md-12">
+                                    <form method="POST" action="#" enctype="multipart/form-data">
+                                        <div class="input-group input-file" name="Fichier1">
+                                            <input type="text" name="name"  class="form-control" [ngClass]="{ErrorControl: !nameTemplate }" [(ngModel)]="nameTemplate" placeholder='Seleccione plantilla...' [readonly]="true"/>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default btn-choose"   (click)="fileInput.click()" [disabled]="selectedBrand == 0">Select</button>
+                                            </span>
+                                            <div class="form-group col-md-2">
+                                                <button type="button" class="btn btn-primary btn-sm btn-block"  id="submit" (click)='saveFile()' [disabled]="selectedBrand == 0">Guardar</button>
+                                            </div>
+                                        </div>
+                                        <input id="fileUpload" style="display:none" type="file" name="fileUpload" (change)="onFileChanged($event.target.files[0])"  #fileInput accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    Configuración
+                                </h5>
+                            </div>
+                            <div class="collapse show">
+                                <div class="card-body">
+                                    <div class="form-row">
+                                        <div class="col-md-4">
+                                            <label for="inputCompania">Hoja</label>
+                                        </div>
+                                        <div class="form-group col-md-4"></div>
+                                        <div class="form-group col-md-2"></div>
+                                        <div class="form-group col-md-2"></div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-4">
+                                            <select name="inputCompania" class="form-control form-control-sm" [(ngModel)]="selectedHoja" (change)="this.changeTemplateWords();" >
+                                                <option value="0">--Seleccione--</option>
+                                                <option *ngFor="let sheet of sheets" [value]="sheet.id">
+                                                {{ sheet.sheet }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-4"></div>
+                                        <div class="form-group col-md-2">
+                                                <!-- <button type="button" class="btn btn-primary btn-sm btn-block"  id="submit" (click)='consult()' [disabled]="selectedBrand == 0">Consultar</button> -->
+                                        </div>
+                                        <div class="form-group col-md-2">
+                                                <button type="button" class="btn btn-primary btn-sm btn-block"  id="submit" (click)='saveConfigurationTemplate()' [disabled]="selectedBrand == 0 || selectedHoja == 0">Guardar</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            <table class="table row-border hover">
+                                            <!-- <table datatable class="table row-border hover"> -->
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">#</th>
+                                                        <th  class="text-center" scope="col">Nombre Etiqueta</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let rowTemplate of rowsTemplate; let i = index;">
+                                                        <td> {{ i + 1 }}</td>
+                                                        <td>{{rowTemplate.nameColumn}}</td>
+                                                        <td class="col-md-6">    
+                                                            <input class="form-control" type="text" [(ngModel)]="modelEtiqueta[rowTemplate.nameColumn][0].ValorEtiqueta" [ngClass]="{ErrorControl: !modelEtiqueta[rowTemplate.nameColumn][0].ValorEtiqueta }" name={{rowTemplate.nameColumn}} />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      </form>
+  </div>
+</div>

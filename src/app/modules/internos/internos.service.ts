@@ -509,7 +509,7 @@ getDetalleUnidadesRefaccionesMovimiento(parameters): Observable<ITipoUnidadRefac
     Params = Params.append('idPestana', parameters.idPestana);
     Params = Params.append('periodoYear', parameters.periodoYear);
     Params = Params.append('periodoMes', parameters.periodoMes);
-    Params = Params.append('unidadDescripcion', parameters.unidadDescripcion);
+    Params = Params.append('unidadDescripcion', this.getReplaceSignosNoURl(parameters.unidadDescripcion));
     
     if(parameters.idOrigen !== 3){
       Params = Params.append('idCanalVenta', parameters.idDepartamento);
@@ -797,4 +797,7 @@ getDetalleUnidadesRefaccionesMovimiento(parameters): Observable<ITipoUnidadRefac
       .catch(this.handleError);
   }
 
+  private getReplaceSignosNoURl(cadena : string) : string {
+    return cadena.replace('+','mas');
+  }
 }

@@ -1292,9 +1292,11 @@ internos.prototype.get_detalleunidadesSinDepartamento = function (req, res, next
   var idOrigen = req.query.idOrigen;
   var periodoYear = req.query.periodoYear;
   var periodoMes = req.query.periodoMes;
-  var unidadDescripcion = req.query.unidadDescripcion;
+  var unidadDescripcion = replaceString(req.query.unidadDescripcion);
   var idCanalVenta = req.query.idCanalVenta;
-
+  
+  console.log(unidadDescripcion);
+  
   var params = [
     { name: 'IdCompania', value: idCompania, type: self.model.types.INT },
     { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
@@ -1364,5 +1366,8 @@ internos.prototype.get_unidadesdepartamentonv2Otros = function (req, res, next) 
   });
 };
 
+function replaceString(cadena){
+  return cadena.toString().replace('mas','+');
+}
 module.exports = internos;
 
