@@ -375,4 +375,82 @@ Administracion.prototype.get_cuentaContableSAT = function (req, res, next) {
     });
 };
 
+// ==========================================
+//  Recupera una lista de companias
+// ==========================================
+Administracion.prototype.get_tipoDiferencia = function (req, res, next) {
+    var self = this;
+
+    this.model.query('[ProcesoMonitoreo].[ObtenerTipoDiferencia]', {}, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result,
+        });
+    });
+};
+
+// ==========================================
+//  Recupera una lista de companias
+// ==========================================
+Administracion.prototype.get_companiasInternoVsExterno = function (req, res, next) {
+    var self = this;
+    var params = [
+        { name: 'idTipo', value: req.query.idTipo, type: self.model.types.INT }
+    ];
+    this.model.query('[ProcesoMonitoreo].[ObtenerCompaniasInternoVsExterno]', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result,
+        });
+    });
+};
+
+// ==========================================
+//  Funcionalidad para obtener los rubros con diferencias
+// ==========================================
+Administracion.prototype.get_rubroPorCompania = function (req, res, next) {
+    var self = this;
+    var params = [
+        { name: 'idCompania', value: req.query.idCompania, type: self.model.types.INT }
+    ];
+    this.model.query('[ProcesoMonitoreo].[ObtenerRubrosInternoVsExterno]', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result,
+        });
+    });
+};
+
+// ==========================================
+//  Funcionalidad para obtener las cuentas faltantes con movimientos
+// ==========================================
+Administracion.prototype.get_cuentasFaltantePorCompania = function (req, res, next) {
+    var self = this;
+    var params = [
+        { name: 'idCompania', value: req.query.idCompania, type: self.model.types.INT }
+    ];
+    this.model.query('[ProcesoMonitoreo].[ObtenerCuentaFaltantePorCompania]', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result,
+        });
+    });
+};
+
+// ==========================================
+//  Funcionalidad para obtener los rubros con diferencias
+// ==========================================
+Administracion.prototype.get_aniosMesActivoVsPasivo = function (req, res, next) {
+    var self = this;
+    var params = [
+        { name: 'idCompania', value: req.query.idCompania, type: self.model.types.INT }
+    ];
+    this.model.query('[ProcesoMonitoreo].[ObtenerAnioMesActivoVsPasivo]', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result,
+        });
+    });
+};
+
 module.exports = Administracion;

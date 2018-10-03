@@ -1,0 +1,107 @@
+<div class="row animated fadeIn">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+          <h4>Monitor de diferencias (Interno, Externo, Cuentas)</h4>
+          <div class="form-row">
+              <div class="form-group has-feedback col-md-3">
+                  <label for="lblCompania">Diferencia de:</label>
+                  <select class="form-control form-control-sm" name="idDiferencia" [(ngModel)]='selectedTipo' (ngModelChange)="onChangeTipo($event)">
+                      <option value="0">Seleccione una opcion</option>
+                      <option *ngFor='let tipo of tipos' [value]='tipo.id' >
+                          {{ tipo.descripcion }}
+                      </option>
+                  </select>                  
+              </div>
+              <div class="form-group has-feedback col-md-1">
+
+              </div>
+              <div class="form-group has-feedback col-md-6">
+                  <label for="lblCompania">Compañia:</label>
+                  <select class="form-control form-control-sm" name="idCompania" [(ngModel)]='selectedCompania' (ngModelChange)="onChangeCompania($event)">
+                      <option value="0">Seleccione una Compañía</option>
+                      <option *ngFor='let compania of companias' [value]='compania.id' >
+                          {{ compania.nombreComercial }}
+                      </option>
+                  </select>                  
+              </div>
+          </div>
+          <div *ngIf="selectedTipo == 1" class="form-row">
+              <div class="form-group has-feedback col-md-12">
+                <!--<div class="property-table"> -->
+                  <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th class="bg-primary text-white ancho-columna-numero">Año</th>
+                          <th class="bg-primary text-white ancho-columna-numero">Mes</th>
+                          <th class="bg-primary text-white ancho-columna-rubro">Rubro</th>
+                          <th class="bg-primary text-white ancho-columna-cuenta">Num. Cuenta</th>
+                          <th class="bg-primary text-white ancho-columna-monto">Movimiento</th>
+                          <th class="bg-primary text-white ancho-columna-monto">Balanza</th>
+                          <th class="bg-primary text-white ancho-columna-monto">+/- Diferencia</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor='let rubro of rubros'>
+                          <td class="text-left">{{ rubro.periodoYear }}</td>
+                          <td class="text-left">{{ rubro.periodoMes }}</td>
+                          <td class="text-left">{{ rubro.titulo }}</td>
+                          <td class="text-left">{{ rubro.cuentaBalanza }}</td>
+                          <td class="text-left">{{ rubro.movimientoMonto }}</td>
+                          <td class="text-left">{{ rubro.balanzaMonto }}</td>
+                          <td class="text-left">{{ rubro.diferencia }}</td>
+                        </tr>
+                      </tbody>
+                  </table>
+                <!--</div>-->
+              </div>
+          </div>
+          <div *ngIf="selectedTipo == 2" class="form-row">
+              <div class="form-group has-feedback col-md-12">
+                  <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th class="bg-primary text-white ancho-columna-numero">Año</th>
+                          <th class="bg-primary text-white ancho-columna-numero">Mes</th>
+                          <th class="bg-primary text-white ancho-columna-monto">Monto Activo</th>
+                          <th class="bg-primary text-white ancho-columna-monto">Monto Pasivo</th>
+                          <th class="bg-primary text-white ancho-columna-monto">+/- Diferencia</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor='let rubro of rubros'>
+                          <td class="text-left">{{ rubro.periodoYear }}</td>
+                          <td class="text-left">{{ rubro.periodoMes }}</td>
+                          <td class="text-left">{{ rubro.movimientoMonto }}</td>
+                          <td class="text-left">{{ rubro.balanzaMonto }}</td>
+                          <td class="text-left">{{ rubro.diferencia }}</td>
+                        </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+
+          <div *ngIf="selectedTipo == 3" class="form-row">
+              <div class="form-group has-feedback col-md-6">
+                <table class="table table-bordered ">
+                    <thead>
+                      <tr>
+                        <th class="bg-primary text-white ancho-columna-numero">Año</th>
+                        <th class="bg-primary text-white ancho-columna-numero">Mes</th>
+                        <th class="bg-primary text-white ancho-columna-cuenta">Num. Cuenta</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor='let cuenta of cuentas'>
+                        <td class="text-left">{{ cuenta.periodoYear }}</td>
+                        <td class="text-left">{{ cuenta.periodoMes }}</td>
+                        <td class="text-left">{{ cuenta.cuentaBalanza }}</td>
+                      </tr>
+                    </tbody>
+                </table>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

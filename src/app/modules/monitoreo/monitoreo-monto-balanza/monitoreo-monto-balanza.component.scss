@@ -1,0 +1,43 @@
+    .table, .card-footer { 
+        font-size: 0.75rem !important;
+    }
+    .form-control-sm {
+        line-height: 1.4;
+    }
+    
+    .card-body {
+        padding: 0.55rem 1.15rem;
+    }
+    
+    .card-header {
+        padding: 0.15rem 1.15rem;
+    }
+    
+    .table {
+        margin-bottom: 0;
+    }
+    .ancho-columna-numero {
+        width: 5%
+    }
+    .ancho-columna-monto {
+        width: 9.66%;
+    }
+    .ancho-columna-cuenta {
+        width: 20%
+    }
+    .ancho-columna-rubro {
+        width: 30%
+    }
+.table-responsive {  
+    display: table !important; 
+}
+.scrolltable { 
+    overflow-x: auto;
+}
+.property-table {
+    overflow-y:scroll;    
+    font-size: 0.75rem !important;
+    height:200px;
+}
+
+
