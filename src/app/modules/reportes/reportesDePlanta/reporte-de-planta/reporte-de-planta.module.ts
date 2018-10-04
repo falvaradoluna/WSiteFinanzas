@@ -6,29 +6,26 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {ReactiveFormsModule} from "@angular/forms";
 import { ReportesService } from '../../../../services/Reportes.service'
 import { CatalogoService } from '../../../../services/catalogo.service'
-import { ConfiguracionPlantillaComponent } from './configuracion-plantilla.component';
-import { ConfiguracionPlantillaRoutingModule } from './configuracion-plantilla-routing.module';
+import { ReporteDePlantaComponent } from './reporte-de-planta.component';
+import { ReporteDePlantaRoutingModule } from './reporte-de-planta-routing.module';
 import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
   imports: [
     CommonModule,
-    ConfiguracionPlantillaRoutingModule,
+    ReporteDePlantaRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     NgbModule.forRoot(),
     DataTablesModule
   ],
   declarations: [
-                  ConfiguracionPlantillaComponent
+                  ReporteDePlantaComponent
                 ],
   providers:    [
                   ReportesService,
                   CatalogoService
                 ]
 })
-export class ConfiguracionDePlantillaModule { 
-
-
-  
+export class ReporteDePlantaModule {   
 }
