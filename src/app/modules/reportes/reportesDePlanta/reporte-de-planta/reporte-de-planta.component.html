@@ -1,3 +1,65 @@
-<p>
-  reporte-de-planta works!
-</p>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header bg-primary text-white text-center">
+        Reporte de planta
+      </div>
+      <div class="card-body">
+        <form>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <label for="inputCompania">Marca</label>
+            </div>
+            <div class="col-md-4">
+              <label for="input">Mes</label>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="input">Año</label>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-4">
+              <div [ngClass]="{ErrorControl: selectedCompany.toString() === '0'}">
+                <select name="inputCompania" class="form-control" [(ngModel)]="selectedCompany" (change)="onFileChanged(null)">
+                    <option value="0">--Seleccione--</option>
+                    <option *ngFor="let company of companies" [value]="company.id">
+                    {{ company.razonSocial }}
+                    </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group col-md-4">
+                <select value="0"  name="inputPeriodoMes" class="form-control" [(ngModel)]="selectedPeriodoMes">
+                    <option value="0">Seleccione</option>
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                  </select>
+            </div>
+            <div class="form-group col-md-4">
+                <select value="0" name="inputPeriodYear" class="form-control" [(ngModel)]="selectedPeriodoYear">
+                    <option value="0">--Seleccione--</option>
+                    <option  *ngFor="let periodoYear of periodosYear" [value]="periodoYear.id">{{periodoYear.id}}</option>
+                  </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-10"></div>
+            <div class="form-group col-md-2">
+              <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)="createExcel()">Exportar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,9 +1,8 @@
-
 <div>
   <div class="col-md-12">
       <div class="card">
         <div class="card-header bg-primary text-white text-center">
-          Configuracion de plantilla
+          Configuración de plantilla
         </div>
       </div>
   </div>
@@ -12,14 +11,14 @@
             <div class="card">
                 <div class="card-header" id="headingTwo">
                     <h5 class="mb-0" >
-                        Platilla
+                        Plantilla
                     </h5>
                 </div>
                 <div>
                     <div class="card-body">
                         <div class="form-row">
                             <div class="form-group col-md-4">
-                                <label for="inputCompania">Marca</label>
+                                <label for="inputCompania">Compañia</label>
                             </div>
                             <div class="col-md-4"></div>
                             <div class="form-group col-md-2"></div>
@@ -27,11 +26,11 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-4">
-                                <div [ngClass]="{ErrorControl: selectedBrand.toString() === '0'}">
-                                    <select name="inputMarca" class="form-control form-control-sm" [(ngModel)]="selectedBrand" (change)="onFileChanged(null)">
+                                <div [ngClass]="{ErrorControl: selectedCompany.toString() === '0'}">
+                                    <select name="inputCompania" class="form-control" [(ngModel)]="selectedCompany" (change)="onFileChanged(null)">
                                         <option value="0">--Seleccione--</option>
-                                        <option *ngFor="let brand of brands" [value]="brand.id">
-                                        {{ brand.descripcion }}
+                                        <option *ngFor="let company of companies" [value]="company.id">
+                                        {{ company.razonSocial }}
                                         </option>
                                     </select>
                                 </div>
@@ -73,7 +72,7 @@
                                 <div class="card-body">
                                     <div class="form-row">
                                         <div class="col-md-4">
-                                            <label for="inputCompania">Hoja</label>
+                                            <label for="inputHoja">Hoja</label>
                                         </div>
                                         <div class="form-group col-md-4"></div>
                                         <div class="form-group col-md-2"></div>
@@ -81,7 +80,7 @@
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-md-4">
-                                            <select name="inputCompania" class="form-control form-control-sm" [(ngModel)]="selectedHoja" (change)="this.changeTemplateWords();" >
+                                            <select name="inputCompania" class="form-control" [(ngModel)]="selectedHoja" (change)="this.changeSheet();" [ngClass]="{ErrorControl: selectedHoja == 0}">
                                                 <option value="0">--Seleccione--</option>
                                                 <option *ngFor="let sheet of sheets" [value]="sheet.id">
                                                 {{ sheet.sheet }}
@@ -93,18 +92,19 @@
                                                 <!-- <button type="button" class="btn btn-primary btn-sm btn-block"  id="submit" (click)='consult()' [disabled]="selectedBrand == 0">Consultar</button> -->
                                         </div>
                                         <div class="form-group col-md-2">
-                                                <button type="button" class="btn btn-primary btn-sm btn-block"  id="submit" (click)='saveConfigurationTemplate()' [disabled]="selectedBrand == 0 || selectedHoja == 0">Guardar</button>
+                                            <button type="button" class="btn btn-primary btn-sm btn-block"  id="submit" (click)='saveConfigurationTemplate()' [disabled]="selectedBrand == 0 || selectedHoja == 0">Guardar</button>
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="col-md-12">
-                                            <table class="table row-border hover">
+                                            <table class="table table-bordered">
                                             <!-- <table datatable class="table row-border hover"> -->
                                                 <thead>
                                                     <tr>
                                                         <th class="text-center">#</th>
                                                         <th  class="text-center" scope="col">Nombre Etiqueta</th>
-                                                        <th></th>
+                                                        <th class="text-center" scope="col">Valor Etiqueta</th>
+                                                        <th class="text-center" scope="col">Configuración</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -113,6 +113,11 @@
                                                         <td>{{rowTemplate.nameColumn}}</td>
                                                         <td class="col-md-6">    
                                                             <input class="form-control" type="text" [(ngModel)]="modelEtiqueta[rowTemplate.nameColumn][0].ValorEtiqueta" [ngClass]="{ErrorControl: !modelEtiqueta[rowTemplate.nameColumn][0].ValorEtiqueta }" name={{rowTemplate.nameColumn}} />
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <div style="cursor:pointer;" [ngStyle]="{'color': modelEtiqueta[rowTemplate.nameColumn][0].etiquetaDetalle ? 'green' : 'red' }" class="k-button k-button-icontext k-grid-" (click)="showModal(modalDetails,rowTemplate)">
+                                                                <span class="fa fa-3x fa-arrow-circle-right text-default"></span>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -128,3 +133,103 @@
       </form>
   </div>
 </div>
+
+<ng-template #modalDetails let-c="close" let-d="dismiss">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card mb-12">
+                <div class="card-header text-center">
+                    {{this.plantillaDetalle.ValorEtiqueta}}
+                    <!-- <input type="hidden" formControlName="processingOrder" [ngModel]="i + 1"> -->
+
+                </div>
+                <!-- Large modal -->
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <!-- <div class="row">
+                            <div class="col-md-3">
+                                <label for="inputValorReporte">Valor etiqueta sugerido</label> 
+                            </div>
+                            <div class="col-md-3">
+                                <label for="inputTipo">Tipo</label> 
+                            </div>
+                            <div class="col-md-3" [hidden]="!(plantillaDetalle.idSeccionReporte == 2 || plantillaDetalle.idSeccionReporte == 4)">
+                                <label for="inputTipo">Departamento</label> 
+                            </div>
+                            <div class="col-md-3" [hidden]="!(plantillaDetalle.idSeccionReporte == 4)">
+                                <label for="inputTipo">Clasificación</label> 
+                            </div>
+                            <div class="col-md-3" [hidden]="!(plantillaDetalle.idSeccionReporte > 1)">
+                                <label for="inputValorReporte">Ubicación del text</label> 
+                            </div>
+                        </div>  -->
+                        <div class="row">
+                            <div class="col-md-3">
+                                    <label for="inputValorReporte">Valor etiqueta sugerido</label> 
+                                <input type="text" name="valorReporte" class="form-control" [(ngModel)]="plantillaDetalle.valorEtiquetaDetalle" [ngClass]="{ErrorControl: !plantillaDetalle.valorEtiquetaDetalle}">
+                            </div>
+                            <div class="col-md-3">
+                                    <label for="inputTipo">Tipo</label> 
+                                <select name="inputClasificacion" class="form-control" [(ngModel)]="plantillaDetalle.idSeccionReporte" [ngClass]="{ErrorControl: plantillaDetalle.idSeccionReporte.toString() === '0'}">
+                                    <option value="0">--Seleccione--</option>
+                                    <option *ngFor="let tipoReporte of tipoReportes" [value]="tipoReporte.id">{{tipoReporte.Nombre}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3" [hidden]="!(plantillaDetalle.idSeccionReporte == 4 || plantillaDetalle.idSeccionReporte == 3)">
+                                <label for="inputTipoPeriodo">Tipo de periodo</label> 
+                                <select name="inputClasificacion" class="form-control" [(ngModel)]="plantillaDetalle.idTipoPeriodo" [ngClass]="{ErrorControl: plantillaDetalle.idTipoPeriodo.toString() === '0'}">
+                                    <option value="0">--Seleccione--</option>
+                                    <option *ngFor="let tipoPerido of periodType" [value]="tipoPerido.id">{{tipoPerido.Nombre}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3" [hidden]="!(plantillaDetalle.idSeccionReporte == 2 || plantillaDetalle.idSeccionReporte == 4)">
+                                <label for="inputTipo">Departamento</label> 
+                                <select name="inputDepartamentoUnidad" class="form-control" [(ngModel)]="plantillaDetalle.idOrigen" [ngClass]="{ErrorControl: plantillaDetalle.idOrigen.toString() === '0'}">
+                                    <option value="0">--Seleccione--</option>
+                                    <option *ngFor="let departmensUnit of departmentsUnit" [value]="departmensUnit.idOrigen">{{departmensUnit.descripcion}}</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3" [hidden]="!(plantillaDetalle.idSeccionReporte == 3)">
+                                <label for="inputTipo">Departamento</label> 
+                                <select name="inputDepartamento" class="form-control" [(ngModel)]="plantillaDetalle.idDepartamento" [ngClass]="{ErrorControl: plantillaDetalle.idDepartamento.toString() === '0'}">
+                                    <option value="0">--Seleccione--</option>
+                                    <option *ngFor="let departamento of departamentos" [value]="departamento.id">{{departamento.descripcion}}</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3" [hidden]="!(plantillaDetalle.idSeccionReporte == 4)">
+                                <label for="inputTipo">Clasificación</label> 
+                                <select name="inputDepartamentoUnidad" class="form-control" [(ngModel)]="plantillaDetalle.idClasificacionPlanta" [ngClass]="{ErrorControl: plantillaDetalle.idClasificacionPlanta.toString() === '0'}">
+                                    <option value="0">--Seleccione--</option>
+                                    <option *ngFor="let clasificacion of reporteClasificacion" [value]="clasificacion.id">{{clasificacion.clasificacion}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3" [hidden]="!(plantillaDetalle.idSeccionReporte == 3)">
+                                <label for="inputValorReporte">Concepto estado de resultado</label> 
+                                <select name="inputUbicacion" class="form-control" [(ngModel)]="plantillaDetalle.idEstadoResultadosI" [ngClass]="{ErrorControl: plantillaDetalle.idEstadoResultadosI.toString() === '0'}">
+                                    <option value="0">--Seleccione--</option>
+                                    <option *ngFor="let concepto of conceptOfResults" [value]="concepto.idEstadoResultadosI">{{concepto.titulo}}</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3" [hidden]="!(plantillaDetalle.idSeccionReporte > 1)">
+                                <label for="inputValorReporte">Ubicación del text</label> 
+                                <select name="inputUbicacion" class="form-control" [(ngModel)]="plantillaDetalle.idAlieacionText" [ngClass]="{ErrorControl: plantillaDetalle.idAlieacionText.toString() === '0'}">
+                                    <option value="0">--Seleccione--</option>
+                                    <option *ngFor="let reporteTextAlign of reportePlantaTextAlign" [value]="reporteTextAlign.id">{{reporteTextAlign.alieacionTexto}}</option>
+                                </select>
+                            </div> 
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="form-group btn btn-primary btn-sm btn-block"  id="submit" (click)='saveDetailsConfigurationTemplate()'>Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

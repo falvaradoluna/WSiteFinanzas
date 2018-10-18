@@ -28,6 +28,11 @@ import { Iexterno } from '../models/reports/externo';
 import { environment } from '../../environments/environment';
 import { IReportePlantaConfigSheet } from '../models/reports/reportePlantaConfigExcel'
 import { IPlantilla } from '../models/reports/reportePlantillaPlanta'
+import { IReportePlantaTextAlign } from '../models/reports/reportePlantaTextAlign';
+import { IPlantillaDetalle } from '../models/reports/reportePlantillaPlantaDetalle';
+import { IClasificacion } from '../models/reports/reportePlantaClasificacion';
+import { IConceptoEstadoResultado } from '../models/reports/ConceptoEstadoDeResultado';
+// import { IConceptoEstadoResultado } from '../models/administracion/conceptoEstadoResultado';
 
 @Injectable()
 export class ReportesService {
@@ -73,7 +78,11 @@ export class ReportesService {
   private _urlSaveTemplateDB = 'api/reportes/saveTemplateDB';
   private _urlGetConfigTemplate = 'api/report/PlantReporttemplate';
   private _urlTemplateForBrand = 'api/reportes/TemplateForBrand';
-  
+  private _urlAlineacionTextReportePlanta = 'api/reportes/alineacionTextReportePlanta';
+  private _urlExcelLabelDetail = 'api/reportes/excelLabelDetail';
+  private _urlClasificacion = 'api/reportes/clasificacion';
+  private _urlConceptoEstadoResultado = 'api/reportes/estadoResultadosConcepto';
+  private _urlDepartamentoxCompaniayUsuario = 'api/reportes/departamentoxCompaniayUsuario';
 
   constructor(private _http: HttpClient) { 
   }
@@ -555,7 +564,7 @@ export class ReportesService {
     
     let Params = new HttpParams();
 
-    Params = Params.append('idMarca', parameters.idMarca);
+    Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('nombrePlatilla', parameters.nombrePlatilla);
     Params = Params.append('usuarioID', parameters.usuarioID);
 
@@ -563,11 +572,26 @@ export class ReportesService {
 
       var ext = fileToUpload.name.substr(fileToUpload.name.lastIndexOf('.'));
       var nameFile = resp[0].id +  ext;
-       return new Promise((resolve, reject) => {
+      var curdate = new Date();
+      var dateNow = curdate.getDay() + "-" + 
+                    curdate.getMonth() + "-" + 
+                    curdate.getFullYear() + "_" + 
+                    curdate.getHours() + "-" + 
+                    curdate.getMinutes() + "-" + 
+                    curdate.getSeconds()
+      
+      
+
+      var nameFileBack = resp[0].id + "-" + dateNow +  ext;
+      return new Promise((resolve, reject) => {
         let formData = new FormData();
         let xhr = new XMLHttpRequest();
         formData.append('archivo', fileToUpload, nameFile);
+        formData.append('dir', environment.filePathBack);
+        formData.append('filePathBack', environment.filePathBack + nameFileBack);
         formData.append("filepath", environment.filepath + nameFile)
+
+
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
@@ -584,19 +608,19 @@ export class ReportesService {
      });
   }
   
-  getReportPlant(idMarca: string): Observable<IReportePlantaConfigSheet> {
+  getReportPlant(idCompania: string): Observable<IReportePlantaConfigSheet> {
 
     let urlApi: String = environment.api;
     let Params = new HttpParams();
-    Params = Params.append('idMarca', idMarca as string);
+    Params = Params.append('idCompania', idCompania);
     return this._http.post<IReportePlantaConfigSheet>(urlApi + this._urlGetConfigTemplate,Params)
     .catch(this.handleError); 
   }
 
-  getTemplateForBrand(idMarca: string){
+  getTemplateForBrand(idCompania: string){
     
     let Params = new HttpParams();
-    Params = Params.append('idMarca', idMarca);
+    Params = Params.append('idCompania', idCompania);
     return this._http.get<IPlantilla>(this._urlTemplateForBrand,{ params: Params })
     .catch(this.handleError); 
     
@@ -604,32 +628,58 @@ export class ReportesService {
   
   getSaveConfigurationTemplate(parameters): Observable<any[]> {
     let Params = new HttpParams();
+    
+    Params = Params.append('idHoja', parameters.idHoja);
+    Params = Params.append('idPlantilla', parameters.idPlantilla);
     Params = Params.append('xmlTemplate', parameters.xmlTemplate);
     return this._http.get<any[]>(this._urlEtiquetasExcel, { params: Params })
     .catch(this.handleError); 
   }
 
+  createExcel(parameters): Observable<any[]> {
 
-
-
-
-
-
-
-
-
-
-
-  
-
- 
-
-  createExcel(): Observable<any[]> {
-
+    let urlApi: String = environment.api;
+    // let Params = new HttpParams();
+    // Params = Params.append('idCompania', idCompania as string);
     // let urlApi: String = environment.api;
-    return this._http.get<any[]>("http://localhost:56569/api/report/createExcel",{})
+    let Params = new HttpParams();
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    return this._http.post<any[]>(urlApi + "api/report/createExcel",Params)
     .catch(this.handleError); 
   }
 
-  
+  getAlineacionTextReportePlanta(): Observable<IReportePlantaTextAlign[]> {
+
+    return this._http.get<IReportePlantaTextAlign[]>(this._urlAlineacionTextReportePlanta,{})
+      .catch(this.handleError);
+  }
+
+  getExcelLabelDetail(parameters): Observable<IPlantillaDetalle[]> {
+    let Params = new HttpParams();
+    
+    Params = Params.append('idEtiqueta', parameters.idEtiqueta);
+    return this._http.get<IPlantillaDetalle[]>(this._urlExcelLabelDetail, { params: Params })
+    .catch(this.handleError); 
+  }
+
+  getClasificacion(): Observable<IClasificacion[]> {
+    return this._http.get<IClasificacion[]>(this._urlClasificacion, { })
+    .catch(this.handleError); 
+  }
+
+  getEstadoResultadosConcepto(): Observable<IConceptoEstadoResultado[]> {
+    return this._http.get<IConceptoEstadoResultado[]>(this._urlConceptoEstadoResultado, { })
+    .catch(this.handleError); 
+  }
+
+  getDepartamentoxCompaniayUsuario(parameters): Observable<IDepartamento[]> {
+    let Params = new HttpParams();
+    
+    Params = Params.append('idUsuario', parameters.idUsuario);
+    Params = Params.append('idCompania', parameters.idCompania);
+    return this._http.get<IDepartamento[]>(this._urlDepartamentoxCompaniayUsuario, { params: Params })
+    .catch(this.handleError); 
+  }
 }
