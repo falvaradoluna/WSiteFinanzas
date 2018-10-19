@@ -112,7 +112,7 @@
                                                         <td> {{ i + 1 }}</td>
                                                         <td>{{rowTemplate.nameColumn}}</td>
                                                         <td class="col-md-6">    
-                                                            <input class="form-control" type="text" [(ngModel)]="modelEtiqueta[rowTemplate.nameColumn][0].ValorEtiqueta" [ngClass]="{ErrorControl: !modelEtiqueta[rowTemplate.nameColumn][0].ValorEtiqueta }" name={{rowTemplate.nameColumn}} />
+                                                            <input class="form-control" type="text" [(ngModel)]="modelEtiqueta[rowTemplate.nameColumn][0].etiqueta" [ngClass]="{ErrorControl: !modelEtiqueta[rowTemplate.nameColumn][0].etiqueta }" name={{rowTemplate.nameColumn}} />
                                                         </td>
                                                         <td class="text-center">
                                                             <div style="cursor:pointer;" [ngStyle]="{'color': modelEtiqueta[rowTemplate.nameColumn][0].etiquetaDetalle ? 'green' : 'red' }" class="k-button k-button-icontext k-grid-" (click)="showModal(modalDetails,rowTemplate)">

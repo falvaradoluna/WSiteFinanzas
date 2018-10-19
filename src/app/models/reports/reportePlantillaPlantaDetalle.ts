@@ -1,7 +1,7 @@
 export interface IPlantillaDetalle {
     idEtiqueta: Number;
     etiqueta: string;
-    ValorEtiqueta:string;
+    ValorEtiqueta: string;
     valorEtiquetaDetalle: string;
     idSeccionReporte: Number;
     idOrigen: Number;

@@ -30,7 +30,7 @@ export class ConfiguracionPlantillaComponent implements OnInit {
   dataSheet: Array<IData> =[];
   reportePlantaTextAlign: IReportePlantaTextAlign[]=[];
   plantillaDetalle = {} as IPlantillaDetalle;
-  selectedPlantillaDetalle:any = [];
+  selectedPlantillaDetalle:any[] = [];
   companies:ICompania[] = [];
   modelEtiqueta: any= [];//any = {}
   selectedHoja = 0;
@@ -214,12 +214,40 @@ export class ConfiguracionPlantillaComponent implements OnInit {
   saveDetailsConfigurationTemplate(): void{
     if(!(this.isValid()))
     return;
+    this.modelEtiqueta[this.plantillaDetalle.etiqueta][0].etiquetaDetalle = false;
+    //Informacion BD    
+    if(this.dataDetails.length > 0) {
+        var details = this.dataDetails.find(x=> x.etiqueta == this.plantillaDetalle.etiqueta)
+        if(details != undefined) {
+          details.ValorEtiqueta = this.plantillaDetalle.ValorEtiqueta;
+          details.valorEtiquetaDetalle = this.plantillaDetalle.valorEtiquetaDetalle;
+          details.idSeccionReporte = this.plantillaDetalle.idSeccionReporte;
+          details.idOrigen = this.plantillaDetalle.idOrigen;
+          details.idDepartamento = this.plantillaDetalle.idDepartamento;
+          details.idEstadoResultadosI = this.plantillaDetalle.idEstadoResultadosI;
+          details.idClasificacionPlanta = this.plantillaDetalle.idClasificacionPlanta;
+          details.idAlieacionText = this.plantillaDetalle.idAlieacionText;
+          details.idTipoPeriodo = this.plantillaDetalle.idTipoPeriodo;
+        } else {
+          this.dataDetails.push({
 
-    this.modelEtiqueta[this.plantillaDetalle.ValorEtiqueta][0].etiquetaDetalle = false;
-    if(!(this.plantillaDetalle.idEtiqueta > 0)) {
-      let select = this.selectedPlantillaDetalle.find(x=>x.ValorEtiqueta == this.plantillaDetalle.ValorEtiqueta)   
+                                  idEtiqueta: this.plantillaDetalle.idEtiqueta,
+                                  etiqueta: this.plantillaDetalle.etiqueta,
+                                  ValorEtiqueta: this.plantillaDetalle.ValorEtiqueta,
+                                  valorEtiquetaDetalle: this.plantillaDetalle.valorEtiquetaDetalle,
+                                  idSeccionReporte: this.plantillaDetalle.idSeccionReporte,
+                                  idOrigen: this.plantillaDetalle.idOrigen,
+                                  idDepartamento: this.plantillaDetalle.idDepartamento,
+                                  idEstadoResultadosI: this.plantillaDetalle.idEstadoResultadosI,
+                                  idClasificacionPlanta: this.plantillaDetalle.idClasificacionPlanta,
+                                  idAlieacionText: this.plantillaDetalle.idAlieacionText,
+                                  idTipoPeriodo: this.plantillaDetalle.idTipoPeriodo
+                              });
+        }
+    }else { //local
+      
+      let select = this.selectedPlantillaDetalle.find(x=>x.etiqueta == this.plantillaDetalle.etiqueta);
       if(select != undefined){
-        select.idEtiqueta = this.plantillaDetalle.idEtiqueta;
         select.ValorEtiqueta = this.plantillaDetalle.ValorEtiqueta;
         select.valorEtiquetaDetalle = this.plantillaDetalle.valorEtiquetaDetalle;
         select.idSeccionReporte = this.plantillaDetalle.idSeccionReporte;
@@ -228,38 +256,53 @@ export class ConfiguracionPlantillaComponent implements OnInit {
         select.idEstadoResultadosI = this.plantillaDetalle.idEstadoResultadosI;
         select.idClasificacionPlanta = this.plantillaDetalle.idClasificacionPlanta;
         select.idAlieacionText = this.plantillaDetalle.idAlieacionText;
-      }else
-        this.selectedPlantillaDetalle.push(this.plantillaDetalle);
-      // this.plantillaDetalle = {} as IPlantillaDetalle
-    } else {
-      var details = this.dataDetails.find(x=> x.idEtiqueta == this.plantillaDetalle.idEtiqueta)
-      details.valorEtiquetaDetalle = this.plantillaDetalle.valorEtiquetaDetalle;
-      details.idAlieacionText = this.plantillaDetalle.idAlieacionText;
-      details.idOrigen = this.plantillaDetalle.idOrigen;
-      details.idSeccionReporte = this.plantillaDetalle.idSeccionReporte;
-      details.idEstadoResultadosI = this.plantillaDetalle.idEstadoResultadosI;
-      details.idDepartamento = this.plantillaDetalle.idDepartamento;
-     }
-     this.modelEtiqueta[this.plantillaDetalle.ValorEtiqueta][0].etiquetaDetalle = true;
+        select.idTipoPeriodo = this.plantillaDetalle.idTipoPeriodo;
+      } else {
+        var obj = {}
+        obj = 
+        {
+          "etiqueta" : this.plantillaDetalle.etiqueta,
+          "valorEtiquetaDetalle": this.plantillaDetalle.valorEtiquetaDetalle,
+          "idSeccionReporte": this.plantillaDetalle.idSeccionReporte,
+          "idDepartamento": this.plantillaDetalle.idDepartamento,
+          "idOrigen": this.plantillaDetalle.idOrigen,
+          "idEstadoResultadosI": this.plantillaDetalle.idEstadoResultadosI,
+          "idClasificacionPlanta": this.plantillaDetalle.idClasificacionPlanta,
+          "idAlieacionText": this.plantillaDetalle.idAlieacionText,
+          "idTipoPeriodo": this.plantillaDetalle.idTipoPeriodo
+        }
+        this.selectedPlantillaDetalle.push(obj);
+      }
+    }
+    
+    this.modelEtiqueta[this.plantillaDetalle.etiqueta][0].etiquetaDetalle = true;
     this. modalReference.close();
   } 
   //#endregion
   
   //#region M E T O D O S
   showModal(modalDetails,rowTemplate): void{
-
-  let details = this.dataDetails.find(x=> x.idEtiqueta == this.modelEtiqueta[rowTemplate.nameColumn][0].id);
+    this.defaultDetailsExcel(rowTemplate);
+    let details = this.dataDetails.find(x=> x.idEtiqueta == this.modelEtiqueta[rowTemplate.nameColumn][0].id);
     if(details != undefined){ //se verifica el valor de la BD
-        this.plantillaDetalle.ValorEtiqueta = details.ValorEtiqueta
-        this.loadInfo(details);
+        if(details.idEtiqueta == 0){
+          let detailsForLabel = this.dataDetails.find(x=> x.etiqueta == rowTemplate.nameColumn);
+          if(detailsForLabel != undefined) {
+            this.plantillaDetalle.ValorEtiqueta = detailsForLabel.etiqueta
+            this.loadInfo(detailsForLabel);
+          }
+        } else {
+          this.plantillaDetalle.ValorEtiqueta = details.etiqueta
+          this.loadInfo(details);
+        }
     } else { // valor local
-      let configurationLabel = this.selectedPlantillaDetalle.find(x=> x.ValorEtiqueta == rowTemplate.nameColumn);
+      let configurationLabel = this.selectedPlantillaDetalle.find(x=> x.etiqueta == rowTemplate.nameColumn);
       if(configurationLabel != undefined) {
         configurationLabel.idEtiqueta = this.modelEtiqueta[rowTemplate.nameColumn][0].id;
-        configurationLabel.ValorEtiqueta = rowTemplate.nameColumn;
+        configurationLabel.etiqueta = rowTemplate.nameColumn;
         this.loadInfo(configurationLabel);
-      }else // valor de cero
-        this.defaultDetailsExcel(rowTemplate);
+      }//else // valor de cero
+        
     }
     this.modalReference =  this._modal.open(modalDetails);
   }
@@ -267,7 +310,6 @@ export class ConfiguracionPlantillaComponent implements OnInit {
   private loadTemplateWords(): void  {
     
     this._reportesService.getReportPlant(String(this.selectedCompany)).subscribe(confTemplate  => {
-      // this.confTemplate = confTemplate
       if(confTemplate != null){
         this.sheets = confTemplate.sheet;
         this.dataSheet = confTemplate.data,
@@ -284,7 +326,8 @@ export class ConfiguracionPlantillaComponent implements OnInit {
 
   private loadInfo(dataSource): void{
     this.plantillaDetalle.idEtiqueta = dataSource.idEtiqueta;
-    this.plantillaDetalle.ValorEtiqueta = dataSource.ValorEtiqueta;
+    if(dataSource.ValorEtiqueta != undefined)
+      this.plantillaDetalle.ValorEtiqueta = dataSource.ValorEtiqueta;
     this.plantillaDetalle.valorEtiquetaDetalle = dataSource.valorEtiquetaDetalle;
 
     this.plantillaDetalle.idSeccionReporte = dataSource.idSeccionReporte;
@@ -293,7 +336,7 @@ export class ConfiguracionPlantillaComponent implements OnInit {
     this.plantillaDetalle.idEstadoResultadosI = dataSource.idEstadoResultadosI;
     this.plantillaDetalle.idClasificacionPlanta = dataSource.idClasificacionPlanta;
     this.plantillaDetalle.idAlieacionText = dataSource.idAlieacionText;
-    this.plantillaDetalle.idTipoPeriodo = dataSource.idTipoPeriodo;;
+    this.plantillaDetalle.idTipoPeriodo = dataSource.idTipoPeriodo;
   }
 
   private getDataTemplate(): void{
@@ -301,8 +344,12 @@ export class ConfiguracionPlantillaComponent implements OnInit {
     this.modelEtiqueta = [];
     this.dataSheet.filter(sheet=> sheet.idHoja == this.selectedHoja).forEach(row =>{
       if(row.Etiqueta != "" && this.rowsTemplate.findIndex(x=> x.nameColumn == row.Etiqueta) == -1) {
+          if(row.Etiqueta == 'EtiquetaNumeroDeConcesionarioDosPuntos')
+          {
+            var rr =10;
+          }
           this.rowsTemplate.push({nameColumn : row.Etiqueta})
-          this.modelEtiqueta[row.Etiqueta] = [{"ValorEtiqueta":row.ValorEtiqueta, "idHoja": row.idHoja, "id": row.id, "etiquetaDetalle" : row.etiquetaDetalle }];
+          this.modelEtiqueta[row.Etiqueta] = [{"etiqueta":row.ValorEtiqueta, "idHoja": row.idHoja, "id": row.id, "etiquetaDetalle" : row.etiquetaDetalle }];
         }
     })
   }
@@ -316,7 +363,8 @@ export class ConfiguracionPlantillaComponent implements OnInit {
 
   private defaultDetailsExcel(rowTemplate): void {
     this.plantillaDetalle.idEtiqueta = this.modelEtiqueta[rowTemplate.nameColumn][0].id;
-    this.plantillaDetalle.ValorEtiqueta = rowTemplate.nameColumn;
+    //this.plantillaDetalle.ValorEtiqueta = rowTemplate.nameColumn;
+    this.plantillaDetalle.etiqueta = rowTemplate.nameColumn;
     this.plantillaDetalle.valorEtiquetaDetalle = '@Valor' +  String(rowTemplate.nameColumn).replace("DosPuntos","");
 
     this.plantillaDetalle.idSeccionReporte = 0;
@@ -331,7 +379,7 @@ export class ConfiguracionPlantillaComponent implements OnInit {
   
   //#region F U N C I O N E S
   private getXML(): String {
-    let selectForm = this.selectedPlantillaDetalle;
+    let selectForm = this.selectedPlantillaDetalle.length > 0?this.selectedPlantillaDetalle : this.dataDetails;
     let valueCompleted = true;
     let detailsValueCompleted = true;
     var templateExcel = "<template>"
@@ -339,7 +387,7 @@ export class ConfiguracionPlantillaComponent implements OnInit {
       if(column != "length"){
 
 
-      if(!this.modelEtiqueta[column][0].ValorEtiqueta || !valueCompleted)
+      if(!this.modelEtiqueta[column][0].etiqueta || !valueCompleted)
         valueCompleted  = false;
 
 
@@ -348,9 +396,9 @@ export class ConfiguracionPlantillaComponent implements OnInit {
       templateExcel += "<idHoja>" + this.modelEtiqueta[column][0].idHoja + "</idHoja>";
       templateExcel += "<idPlantilla>" + this.dataSheet[0].idPlantilla+ "</idPlantilla>";
       templateExcel += "<etiqueta>" + column + "</etiqueta>";
-      templateExcel += "<valor>" + this.modelEtiqueta[column][0].ValorEtiqueta + "</valor>";
+      templateExcel += "<valor>" + this.modelEtiqueta[column][0].etiqueta + "</valor>";
 
-      let details = selectForm.find(x=> x.ValorEtiqueta == column); 
+      let details = selectForm.find(x=> x.etiqueta == column); 
 
 
       if (details != undefined) {
