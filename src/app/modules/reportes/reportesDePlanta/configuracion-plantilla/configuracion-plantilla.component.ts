@@ -50,6 +50,9 @@ export class ConfiguracionPlantillaComponent implements OnInit {
   conceptOfResults: IConceptoEstadoResultado[]=[];
   departamentos:IDepartamento[] =[]
 
+  dropdownList = [];
+  selectedItems = [];
+  dropdownSettings = {};
   //#region C O N T R U C T O R
   constructor(private _reportesService: ReportesService, 
     private _catalogoService: CatalogoService,
@@ -67,6 +70,26 @@ export class ConfiguracionPlantillaComponent implements OnInit {
     this.loadPeriodType();
     this.loadConceptOfResults();
     // this.loadDepartment();
+    //this.dropdownList = [
+    //   { item_id: 1, item_text: 'Mumbai' },
+    //   { item_id: 2, item_text: 'Bangaluru' },
+    //   { item_id: 3, item_text: 'Pune' },
+    //   { item_id: 4, item_text: 'Navsari' },
+    //   { item_id: 5, item_text: 'New Delhi' }
+    // ];
+    // this.selectedItems = [
+    //   { item_id: 3, item_text: 'Pune' },
+    //   { item_id: 4, item_text: 'Navsari' }
+    // ];
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
   }
 
   loadCompany() :void {
@@ -126,6 +149,11 @@ export class ConfiguracionPlantillaComponent implements OnInit {
         idUsuario: usuario.id
       }).subscribe(departamentos => { 
         this.departamentos = departamentos; 
+        departamentos.forEach(x=> {
+          
+
+          this.dropdownList.push({ item_id: x.id, item_text:x.descripcion });
+        })
       }, error => this.errorMessage = <any>error);
   }
 
@@ -324,11 +352,29 @@ export class ConfiguracionPlantillaComponent implements OnInit {
    },error => this.errorMessage = <any>error);
   }  
 
+  onItemSelect (item:any) {
+    console.log(item);
+  }
+  onSelectAll (items: any) {
+    console.log(items);
+  }
+
   private loadInfo(dataSource): void{
     this.plantillaDetalle.idEtiqueta = dataSource.idEtiqueta;
     if(dataSource.ValorEtiqueta != undefined)
       this.plantillaDetalle.ValorEtiqueta = dataSource.ValorEtiqueta;
     this.plantillaDetalle.valorEtiquetaDetalle = dataSource.valorEtiquetaDetalle;
+
+    var seletectDepa = this.departamentos.find(x=> x.id == dataSource.idDepartamento);
+    if(seletectDepa != undefined) {
+      this.selectedItems = [ {item_id:seletectDepa.id,item_text: seletectDepa.descripcion} ]
+    } else {
+      this.selectedItems = [];
+    }
+   // this.selectedItems = [
+    //   { item_id: 3, item_text: 'Pune' },
+    //   { item_id: 4, item_text: 'Navsari' }
+    // ];
 
     this.plantillaDetalle.idSeccionReporte = dataSource.idSeccionReporte;
     this.plantillaDetalle.idOrigen = dataSource.idOrigen;
