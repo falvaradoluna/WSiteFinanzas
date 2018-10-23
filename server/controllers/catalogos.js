@@ -75,5 +75,14 @@ catalogos.prototype.get_Marca = function (req, res, next) {
     });
 };
 
+catalogos.prototype.get_DepartamentoUnidad = function (req, res, next) {
+    var self = this;
 
+    this.model.query('[Catalogo].[ObtieneDepartamentoUnidad]', [], function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result,
+        });
+    });
+};
 module.exports = catalogos;

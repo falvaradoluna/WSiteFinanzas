@@ -8,3 +8,9 @@ export interface IDepartamento {
   descripcion: string;
   Selected: boolean;
 }
+
+
+export interface IDepartamentoMultiSelected {
+  item_id: number;
+  item_text: string;
+}

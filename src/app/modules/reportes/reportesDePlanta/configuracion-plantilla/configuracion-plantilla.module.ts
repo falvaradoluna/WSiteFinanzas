@@ -9,6 +9,8 @@ import { CatalogoService } from '../../../../services/catalogo.service'
 import { ConfiguracionPlantillaComponent } from './configuracion-plantilla.component';
 import { ConfiguracionPlantillaRoutingModule } from './configuracion-plantilla-routing.module';
 import { DataTablesModule } from 'angular-datatables';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
 
 @NgModule({
   imports: [
@@ -17,7 +19,8 @@ import { DataTablesModule } from 'angular-datatables';
     FormsModule,
     ReactiveFormsModule,
     NgbModule.forRoot(),
-    DataTablesModule
+    DataTablesModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   declarations: [
                   ConfiguracionPlantillaComponent

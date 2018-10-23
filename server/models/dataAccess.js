@@ -19,7 +19,8 @@ var DataAccess = function(config) {
         DECIMAL: sql.Decimal(18, 5),
         STRING: sql.VarChar(8000),
         DATE: sql.DateTime,
-        BIT: sql.bit
+        BIT: sql.bit,
+        XML: sql.Xml
     }
     this.connection = new sql.Connection(connectionString);
 };
