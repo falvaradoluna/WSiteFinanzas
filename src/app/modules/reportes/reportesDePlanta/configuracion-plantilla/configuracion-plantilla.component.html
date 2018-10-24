@@ -51,10 +51,10 @@
                                         <div class="input-group input-file" name="Fichier1">
                                             <input type="text" name="name"  class="form-control" [ngClass]="{ErrorControl: !nameTemplate }" [(ngModel)]="nameTemplate" placeholder='Seleccione plantilla...' [readonly]="true"/>
                                             <span class="input-group-btn">
-                                                <button class="btn btn-default btn-choose"   (click)="fileInput.click()" [disabled]="selectedBrand == 0">Select</button>
+                                                <button class="btn btn-default btn-choose"   (click)="fileInput.click()" [disabled]="selectedCompany == 0">Select</button>
                                             </span>
                                             <div class="form-group col-md-2">
-                                                <button type="button" class="btn btn-primary btn-sm btn-block"  id="submit" (click)='saveFile()' [disabled]="selectedBrand == 0">Guardar</button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-block"  id="submit" (click)='saveFile()' [disabled]="selectedCompany == 0">Guardar</button>
                                             </div>
                                         </div>
                                         <input id="fileUpload" style="display:none" type="file" name="fileUpload" (change)="onFileChanged($event.target.files[0])"  #fileInput accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
@@ -89,10 +89,10 @@
                                         </div>
                                         <div class="form-group col-md-4"></div>
                                         <div class="form-group col-md-2">
-                                                <!-- <button type="button" class="btn btn-primary btn-sm btn-block"  id="submit" (click)='consult()' [disabled]="selectedBrand == 0">Consultar</button> -->
+                                                <!-- <button type="button" class="btn btn-primary btn-sm btn-block"  id="submit" (click)='consult()' [disabled]="selectedCompany == 0">Consultar</button> -->
                                         </div>
                                         <div class="form-group col-md-2">
-                                            <button type="button" class="btn btn-primary btn-sm btn-block"  id="submit" (click)='saveConfigurationTemplate()' [disabled]="selectedBrand == 0 || selectedHoja == 0">Guardar</button>
+                                            <button type="button" class="btn btn-primary btn-sm btn-block"  id="submit" (click)='saveConfigurationTemplate()' [disabled]="selectedCompany == 0 || selectedHoja == 0">Guardar</button>
                                         </div>
                                     </div>
                                     <div class="form-row">
