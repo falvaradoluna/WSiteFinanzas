@@ -8,7 +8,7 @@
         <form>
           <div class="form-row">
             <div class="form-group col-md-4">
-              <label for="inputCompania">Marca</label>
+              <label for="inputCompania">Compañia</label>
             </div>
             <div class="col-md-4">
               <label for="input">Mes</label>
@@ -20,7 +20,7 @@
           <div class="form-row">
             <div class="form-group col-md-4">
               <div [ngClass]="{ErrorControl: selectedCompany.toString() === '0'}">
-                <select name="inputCompania" class="form-control" [(ngModel)]="selectedCompany" (change)="onFileChanged(null)">
+                <select name="inputCompania" class="form-control" [(ngModel)]="selectedCompany">
                     <option value="0">--Seleccione--</option>
                     <option *ngFor="let company of companies" [value]="company.id">
                     {{ company.razonSocial }}

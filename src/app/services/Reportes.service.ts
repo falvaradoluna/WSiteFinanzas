@@ -76,7 +76,7 @@ export class ReportesService {
   private _urlEtiquetasExcel = 'api/reportes/saveConfigurationTemplate';
   private _urlsaveFile = 'api/reportes/saveFile';
   private _urlSaveTemplateDB = 'api/reportes/saveTemplateDB';
-  private _urlGetConfigTemplate = 'api/report/PlantReporttemplate';
+  private _urlGetConfigTemplate = 'WSF/api/report/PlantReporttemplate';
   private _urlTemplateForBrand = 'api/reportes/TemplateForBrand';
   private _urlAlineacionTextReportePlanta = 'api/reportes/alineacionTextReportePlanta';
   private _urlExcelLabelDetail = 'api/reportes/excelLabelDetail';
@@ -646,7 +646,7 @@ export class ReportesService {
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('periodoYear', parameters.periodoYear);
-    return this._http.post<any[]>(urlApi + "api/report/createExcel",Params)
+    return this._http.post<any[]>(urlApi + "WSF/api/report/createExcel",Params)
     .catch(this.handleError); 
   }
 
