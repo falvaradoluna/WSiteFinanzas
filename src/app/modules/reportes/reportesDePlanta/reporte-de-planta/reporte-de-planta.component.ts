@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ReportesService } from '../../../../services/Reportes.service'
-import { CatalogoService } from '../../../../services/catalogo.service'
-import { IMarca } from '../../../../models/catalog/marca';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ICompania } from '../../../../models/catalog/compania';
 
 @Component({
@@ -17,7 +16,7 @@ export class ReporteDePlantaComponent implements OnInit {
   companies:ICompania[] = [];
   periodosYear:any[] = [];
   constructor(private _reportesService: ReportesService,
-              private _catalogoService: CatalogoService) { }
+              private _spinnerService: NgxSpinnerService) { }
 
   ngOnInit() {
     this.loadCompany();
@@ -43,13 +42,15 @@ export class ReporteDePlantaComponent implements OnInit {
 
   createExcel(): void {
 
-
+    this._spinnerService.show();
     this._reportesService.createExcel({
       idCompania: this.selectedCompany,
       periodoMes: this.selectedPeriodoMes,
       periodoYear: this.selectedPeriodoYear
     })
-    .subscribe(x => {
+    .subscribe(reporte => {
+      window.open(String(reporte),"_blank");
+      this._spinnerService.hide();
       },error => {
       this.errorMessage = <any>error
     });
