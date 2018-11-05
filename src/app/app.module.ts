@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthGuard, SortService, FechaActualizacionService } from './shared';
  import { DataTablesModule } from 'angular-datatables';
+// import { NissanComponent } from './modules/reportes/reportesDePlanta/shared/nissan/nissan.component';
 // import { ReporteDePlantaComponent } from './modules/reportes/reportesDePlanta/reporte-de-planta/reporte-de-planta.component';
 
 // AoT requires an exported function for factories
@@ -36,7 +37,9 @@ export function createTranslateLoader(http: HttpClient) {
     //DataTablesModule.forRoot()
     
   ],
-  declarations: [AppComponent],
+  declarations: [AppComponent
+  //  , NissanComponent
+  ],
   providers: [AuthGuard, SortService, FechaActualizacionService],
   bootstrap: [AppComponent]
 })

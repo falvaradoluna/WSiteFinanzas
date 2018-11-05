@@ -7,6 +7,7 @@ export interface IDepartamento {
   id: number;
   descripcion: string;
   Selected: boolean;
+  idDepartamento: number;
 }
 
 
