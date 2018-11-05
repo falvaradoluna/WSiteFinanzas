@@ -10,7 +10,7 @@ import { ConfiguracionPlantillaComponent } from './configuracion-plantilla.compo
 import { ConfiguracionPlantillaRoutingModule } from './configuracion-plantilla-routing.module';
 import { DataTablesModule } from 'angular-datatables';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-
+import { NissanComponent } from '../shared/nissan/nissan.component';
 
 @NgModule({
   imports: [
@@ -23,7 +23,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
     NgMultiSelectDropDownModule.forRoot()
   ],
   declarations: [
-                  ConfiguracionPlantillaComponent
+                  ConfiguracionPlantillaComponent,
+                  NissanComponent
                 ],
   providers:    [
                   ReportesService,

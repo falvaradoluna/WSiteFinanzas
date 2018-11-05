@@ -76,13 +76,16 @@ export class ReportesService {
   private _urlEtiquetasExcel = 'api/reportes/saveConfigurationTemplate';
   private _urlsaveFile = 'api/reportes/saveFile';
   private _urlSaveTemplateDB = 'api/reportes/saveTemplateDB';
-  private _urlGetConfigTemplate = 'WSF/api/report/PlantReporttemplate';
   private _urlTemplateForBrand = 'api/reportes/TemplateForBrand';
   private _urlAlineacionTextReportePlanta = 'api/reportes/alineacionTextReportePlanta';
   private _urlExcelLabelDetail = 'api/reportes/excelLabelDetail';
   private _urlClasificacion = 'api/reportes/clasificacion';
   private _urlConceptoEstadoResultado = 'api/reportes/estadoResultadosConcepto';
   private _urlDepartamentoxCompaniayUsuario = 'api/reportes/departamentoxCompaniayUsuario';
+
+
+  // private _urlGetConfigTemplate = 'WSF/api/report/PlantReporttemplate';
+  private _urlGetConfigTemplate = 'api/report/PlantReporttemplate';
 
   constructor(private _http: HttpClient) { 
   }
@@ -628,10 +631,12 @@ export class ReportesService {
   
   getSaveConfigurationTemplate(parameters): Observable<any[]> {
     let Params = new HttpParams();
-    
     Params = Params.append('idHoja', parameters.idHoja);
     Params = Params.append('idPlantilla', parameters.idPlantilla);
     Params = Params.append('xmlTemplate', parameters.xmlTemplate);
+    Params = Params.append('xmlDepartamento', parameters.xmlDepartamento);
+    Params = Params.append('xmlEstadoResultado', parameters.xmlEstadoResultado);
+    
     return this._http.get<any[]>(this._urlEtiquetasExcel, { params: Params })
     .catch(this.handleError); 
   }
