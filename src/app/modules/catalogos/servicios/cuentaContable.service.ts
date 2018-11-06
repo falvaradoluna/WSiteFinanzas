@@ -49,7 +49,8 @@ export class CuentaContableService {
     private _urlObtieneCuentaContableLocal = 'api/administracion/cuentaContableLocal';
     private _urlObtieneDepartamentos = 'api/catalogos/departamentos';
     private _urlCuentaContableEditar = 'api/administracion/cuentaContableEditar';
-    private _urlObtenerCuentaContableSAT = 'api/administracion/cuentaContableSAT';    
+    private _urlObtenerCuentaContableSAT = 'api/administracion/cuentaContableSAT';   
+    private _urlObtenerDepartamentoPorCompanias = 'api/administracion/departamentoPorCompanias';    
 
     constructor(private _http: HttpClient) { }
 
@@ -95,9 +96,9 @@ export class CuentaContableService {
     getDepartamentos(parameters): Observable<IDepartamento[]> {
         let Params = new HttpParams();
         Params = Params.append('idCompania', parameters.idCompania);
-        Params = Params.append('idSucursal', parameters.idSucursal);
-        Params = Params.append('idUsuario', parameters.idUsuario);
-        return this._http.get<IDepartamento[]>(this._urlDepartamentos, { params: Params })
+        //Params = Params.append('idSucursal', parameters.idSucursal);
+        //Params = Params.append('idUsuario', parameters.idUsuario);
+        return this._http.get<IDepartamento[]>(this._urlObtenerDepartamentoPorCompanias, { params: Params })
             .catch(this.handleError);
     }
 
