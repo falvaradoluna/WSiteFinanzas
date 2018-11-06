@@ -453,4 +453,20 @@ Administracion.prototype.get_aniosMesActivoVsPasivo = function (req, res, next) 
     });
 };
 
+// ==========================================
+//  Funcionalidad para obtener los rubros con diferencias
+// ==========================================
+Administracion.prototype.get_departamentoPorCompanias = function (req, res, next) {
+    var self = this;
+    var params = [
+        { name: 'idCompania', value: req.query.idCompania, type: self.model.types.STRING }
+    ];
+    this.model.query('[Interno].[ObtenerDepartamentoxCompanias]', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result,
+        });
+    });
+};
+
 module.exports = Administracion;

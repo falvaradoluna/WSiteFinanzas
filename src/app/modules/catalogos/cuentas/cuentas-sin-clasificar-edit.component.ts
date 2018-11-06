@@ -65,6 +65,7 @@ export class CuentasSinClasificarEditComponent implements OnInit {
   public tituloFormCuenta: string;
   public companiaCuentaCont = new CompaniaCuentaContable();
   public errorGuardarCuenta: boolean = false;
+  public xmlCompanias: any = [];
 
   // propiedad para tamaño alto de grid 
   public heightTable = 55;
@@ -98,7 +99,6 @@ export class CuentasSinClasificarEditComponent implements OnInit {
     this.descripcionGeneral = '';
     this.asignarTituloFormulario(true);
     this.getCompanias();
-    this.getDepartamentos();
     this.getBalanceConceptoNivel01();
     this.getNotasDictamen();
     this.getNotasFinancieras();
@@ -223,6 +223,7 @@ export class CuentasSinClasificarEditComponent implements OnInit {
             this.reloadTreeview(idCompania);
           } else if (this.operacionCuenta == 2 || this.operacionCuenta == 3) {
             this.eliminarCompaniasSeleccionadas();
+            
           }
 
           this.cargaTreeview();
@@ -231,20 +232,30 @@ export class CuentasSinClasificarEditComponent implements OnInit {
         error => this.errorMessage = <any>error);
   }
 
+  getXmlCompaniasDepartamento(): void {
+    var xmlCompania: any = [];
+    for (var i = 0; i < this.companiasCuentaContable.length; i++) {
+      console.log();
+      xmlCompania.push('<Compania><id>' + this.companiasCuentaContable[i].idCompania + '</id></Compania>');
+    }    
+    this.xmlCompanias = '<Companias>' + xmlCompania.join('') + '</Companias>';
+  }
+
   // ==========================================
   //  Recupera los departamentos
   // ==========================================
   getDepartamentos(): void {
-    const usuario = JSON.parse(localStorage.getItem('userLogged'));
-    this._cuentaContableService.getDepartamentos({
-      idCompania: 2,
-      idSucursal: 0,
-      idUsuario: usuario.id
-    })
-      .subscribe(
-        departamentos => { this.departamentos = departamentos; },
-        error => this.errorMessage = <any>error
-      );
+    if(this.companiasCuentaContable.length > 0) {
+      this.getXmlCompaniasDepartamento();
+      console.log(this.xmlCompanias);
+      this._cuentaContableService.getDepartamentos({
+        idCompania: this.xmlCompanias
+      })
+        .subscribe(
+          departamentos => { this.departamentos = departamentos; },
+          error => this.errorMessage = <any>error
+        );
+    }
   }
 
   // ==========================================
@@ -533,7 +544,9 @@ export class CuentasSinClasificarEditComponent implements OnInit {
             editardescripcion: false
           }
         );
-      }
+      }      
+      
+      this.getDepartamentos();
       this.companiasSelected = [];
       this.descripcionGeneral = '';
       this.heightTable = this.companiasCuentaContable.length === 1 ? 115 : 165;
@@ -676,7 +689,8 @@ export class CuentasSinClasificarEditComponent implements OnInit {
   private eliminarCompaniasSeleccionadas() {
     for (var i = 0; i < this.companiasCuentaContable.length; i++) {
       this.companias.splice(this.companias.findIndex(x => x.id == this.companiasCuentaContable[i].idCompania), 1);
-    }
+    }    
+    this.getDepartamentos();
   }
 
   // ==========================================
