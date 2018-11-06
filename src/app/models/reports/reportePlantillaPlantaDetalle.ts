@@ -1,3 +1,6 @@
+import { IEstadoResultadosIReporte } from "./reportePlantaEstadoResultadosI";
+import { IDepartamentoReporte } from "./reportePlantaDepartamento";
+
 export interface IPlantillaDetalle {
     idEtiqueta: Number;
     etiqueta: string;
@@ -5,9 +8,13 @@ export interface IPlantillaDetalle {
     valorEtiquetaDetalle: string;
     idSeccionReporte: Number;
     idOrigen: Number;
-    idDepartamento: Number;
-    idEstadoResultadosI: Number;
+    idDepartamento: any[];
+    idEstadoResultadosI: any[];
     idClasificacionPlanta: Number;
     idAlieacionText: Number;
     idTipoPeriodo: Number;
+    idEstadoDePerdidaYGanancia: number;
+    otro: number;
+    // departamentoReporte: IDepartamentoReporte[];
+    // estadoResultadosIReporte: IEstadoResultadosIReporte[]
 }

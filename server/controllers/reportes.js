@@ -90,12 +90,16 @@ reportes.prototype.get_saveConfigurationTemplate = function (req, res, next) {
   var idHoja = req.query.idHoja;
   var idPlantilla = req.query.idPlantilla;
   var xmlTemplate = req.query.xmlTemplate;
+  var xmlDepartamento = req.query.xmlDepartamento;
+  var xmlEstadoResultado = req.query.xmlEstadoResultado;
   
   
   var params = [
             { name: 'idHoja', value: idHoja, type: self.model.types.INT },
             { name: 'idPlantilla', value: idPlantilla, type: self.model.types.INT },
-            { name: 'xmlTemplate', value: xmlTemplate, type: self.model.types.XML }
+            { name: 'xmlTemplate', value: xmlTemplate, type: self.model.types.XML },
+            { name: 'xmlDepartamento', value: xmlDepartamento, type: self.model.types.XML },
+            { name: 'xmlEstadoResultado', value: xmlEstadoResultado, type: self.model.types.XML }
           ];
   this.model.query('[Planta].[GuardaPlantillaReportePlanta]', params, function (error, result) {
     self.view.expositor(res, {error: error, result: result, });
