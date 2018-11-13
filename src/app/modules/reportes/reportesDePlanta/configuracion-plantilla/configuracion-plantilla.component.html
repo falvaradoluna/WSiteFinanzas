@@ -135,8 +135,8 @@
 </div>
 
 <ng-template #modalDetails let-c="close" let-d="dismiss">
-   <!-- <div [ngSwitch]="selectedCompany">
-        <div *ngSwitchCase="2"> -->
+   <div [ngSwitch]="selectedCompany">
+        <div *ngSwitchCase="2">
             <wsf-nissan 
                 [selectedCompany] = "selectedCompany"
                 [rowName] = "rowName"
@@ -151,6 +151,11 @@
                 [selectedPlantillaDetalle] = "selectedPlantillaDetalle"
             >
             </wsf-nissan>
-        <!-- </div>
-   </div> -->
+        </div>
+        <div *ngSwitchCase="39">
+            <wsf-honda>
+                
+            </wsf-honda>
+        </div>
+   </div>
 </ng-template>
