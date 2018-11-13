@@ -4,6 +4,7 @@ import { IEfectivoSituacion } from '../efectivo-y-situacion-financiera';
 import { IEstadoSituacion } from '../estado-Situacion-Financiera';
 //Servicio
 import { InternosService } from '../internos.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'int-flujoe-situacionf',
@@ -26,7 +27,7 @@ export class FlujoeSituacionfComponent implements OnInit, OnChanges {
   efectivoSituacion:  IEfectivoSituacion[];
   estadoSituacion:    IEstadoSituacion[] = [];
 
-  constructor(private _service: InternosService) { }
+  constructor(private _service: InternosService, private _spinnerService: NgxSpinnerService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     this.getEfectivoSituacion();
@@ -36,7 +37,7 @@ export class FlujoeSituacionfComponent implements OnInit, OnChanges {
   }
 
   getEfectivoSituacion(): void {
-
+    this._spinnerService.show(); 
     if (this.selectedTipoReporte.toString() === '4') {
       this._service.get_EfectivoSituacion({
         idTipoReporte: this.selectedTipoReporte,
@@ -46,6 +47,7 @@ export class FlujoeSituacionfComponent implements OnInit, OnChanges {
         .subscribe(efectivoSituacion => {
           this.efectivoSituacion = efectivoSituacion;
           this.fixedHeader.emit('tableEfectivo');
+          this._spinnerService.hide(); 
         },
         error => this.errorMessage.emit(error));
     }else if (this.selectedTipoReporte.toString() === '5') {
@@ -57,6 +59,7 @@ export class FlujoeSituacionfComponent implements OnInit, OnChanges {
         .subscribe(estadoSituacion => {
           this.estadoSituacion = estadoSituacion;
           this.fixedHeader.emit('tableEstado');
+          this._spinnerService.hide(); 
         },
         error => this.errorMessage.emit(error));
     }
