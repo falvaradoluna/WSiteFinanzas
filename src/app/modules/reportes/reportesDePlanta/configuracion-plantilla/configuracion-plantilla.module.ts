@@ -11,6 +11,7 @@ import { ConfiguracionPlantillaRoutingModule } from './configuracion-plantilla-r
 import { DataTablesModule } from 'angular-datatables';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { NissanComponent } from '../shared/nissan/nissan.component';
+import { HondaComponent } from '../shared/honda/honda.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { NissanComponent } from '../shared/nissan/nissan.component';
   declarations: [
                   ConfiguracionPlantillaComponent,
                   NissanComponent
+                  ,HondaComponent
                 ],
   providers:    [
                   ReportesService,
