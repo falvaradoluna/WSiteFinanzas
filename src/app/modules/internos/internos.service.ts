@@ -29,6 +29,7 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { ITipoUnidadOtros } from '../../models/reports/tipo-unidad-otros';
 import { ITipoUnidadRefacciones } from '../../models/reports/tipo-unidad-refacciones';
 import { ITipoUnidadRefaccionesMovimiento } from '../../models/reports/ITipoUnidadRefaccionesMovimiento';
+import { IEstadoSituacionCuenta } from './estado-Situacion-Financiera-Cuenta';
 
 
 
@@ -71,6 +72,7 @@ export class InternosService {
   private _urlEstadoDeResultadosVariacionSegundoNivel = 'api/internos/estadoderesultadosvariacionsegundonivel';
   private _urlTipoReporte = 'api/internos/tipoReporte';
   private _urlDetalleDepartamentosEspeciales = 'api/internos/detalleDepartamentosEspeciales';
+  private _urlEstadoSituacionCuenta = 'api/internos/estadosituaciofinancieraCuenta';
 
   constructor(private _http: HttpClient) { }
 
@@ -800,4 +802,18 @@ getDetalleUnidadesRefaccionesMovimiento(parameters): Observable<ITipoUnidadRefac
   private getReplaceSignosNoURl(cadena : string) : string {
     return cadena.replace('+','mas');
   }
+
+  get_EstadoSituacionCuenta(parameters): Observable<IEstadoSituacionCuenta[]> {
+    let Params = new HttpParams();
+    // Begin assigning parameters
+    Params = Params.append('idReporte', parameters.idTipoReporte);
+    Params = Params.append('idCompania', parameters.idCompania);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    Params = Params.append('idConcepto', parameters.idConcepto);
+
+    return this._http.get<IEstadoSituacionCuenta[]>(this._urlEstadoSituacionCuenta, { params: Params })
+      .catch(this.handleError);
+  }
+
 }

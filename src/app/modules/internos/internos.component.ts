@@ -460,6 +460,9 @@ export class InternosComponent implements OnInit {
     //}    
     // this.showReporteUnidades, this.showUnidadesDepartamento, this.showUnidadesDeptoNivel
     this.showUnidadesDepartamento = true
+
+
+
   }
 
 private changeCursorWait(): void {
@@ -2385,7 +2388,7 @@ hideResultados(): void{
     const sCompania = this.selectedCompania.toString();
     if ((sTipoReporte === '4' || sTipoReporte === '5') && sCompania !== '0') {
       this.showReporteUnidades = false;
-      this.showEfectivoSituacion = true;
+      this.showEfectivoSituacion = false;
       this.showAcumuladoReal = false;
       this.showAcumuladoPresupuesto = false;
       this.showAcumuladoReal = false;
