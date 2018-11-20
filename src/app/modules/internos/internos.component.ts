@@ -1561,11 +1561,10 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangePeriodo(selectedDate): void {
-    this.reniniciarValores();
     if (selectedDate) {
       const mesStr = selectedDate.substring(5, 7);
       const fullYearStr = selectedDate.substring(0, 4);
-
+      this.reniniciarValores('periodo', fullYearStr);
       this.mes = mesStr;
       this.anio = fullYearStr;
       this.getEstadoDeResultadosCalculo();
@@ -1576,7 +1575,7 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeCompania(newValue: number): void {
-    this.reniniciarValores();
+    this.reniniciarValores('compania');
     this.showOriginal=0;
     this.showOriginalUD=0;
     this.showOriginalUN=0;
@@ -1624,7 +1623,7 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeSucursal(selectedIndex): void {    
-    this.reniniciarValores();
+    this.reniniciarValores('sucursal');
     this.selectedIdSucursal = selectedIndex;
     this.closeDetallesUnidades();
     this.closeDetalleUnidadesConcentrado();
@@ -1649,7 +1648,7 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeDepartamento(newValue): void {
-    this.reniniciarValores();
+    this.reniniciarValores('departamento');
     this.selectedIdDepartamento = newValue;
     if (this.departamentos.find(x => x.id === +newValue)) {
       // this.selectedIdDepartamentoEr = this.departamentos.find(x => x.idPestana === +newValue).idER || 0;
@@ -1686,7 +1685,7 @@ getReporteSumaDepartamentos() : void{
   }
 
   onChangeTipoReporte(newValue: number): void {
-    this.reniniciarValores();
+    this.reniniciarValores('tipoReporte');
     this.estadoResultadosAcumuladoReal = [];
     this.selectedTipoReporte = newValue;
     this.showOriginal=0;
@@ -2178,30 +2177,33 @@ private getXmlDepartamentos(){
     }
   }
 
-  onClickDetalleSegundoNivel(i: number, value: number, name: string, mes: string = '') {    
-    this.controlarSpinner(true, 5000);
-    if(name === 'SumaDeptosTercerNivel'){
-      this.showSumaDepartamentosPrimerNivel = false;
-      this.showSumaDepartamentosSegundoNivel = true;
-      this.descripcionSumaDeptoTercerNivel = this.detalleResultadosMensual[i].descripcion;
-      this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].numeroCuenta, mes);           
+  onClickDetalleSegundoNivel(i: number, value: number, name: string, mes: string = '') { 
+    console.log(value, name, mes, this.detalleName);  
+    if(this.detalleName !== 'PPto') { 
+      this.controlarSpinner(true, 5000);
+      if(name === 'SumaDeptosTercerNivel'){
+        this.showSumaDepartamentosPrimerNivel = false;
+        this.showSumaDepartamentosSegundoNivel = true;
+        this.descripcionSumaDeptoTercerNivel = this.detalleResultadosMensual[i].descripcion;
+        this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].numeroCuenta, mes);           
 
-    } else if (this.detalleName === 'Real' || this.detalleName === 'AcReal') {
-      // validar que solo entre cuando viene de real (excluir Ppto y Variacion)
-      // Etiqueta de mes usada en breadcrumb
-      if (mes !== '') {
-        this.detalleNameSegundoNivel = `(${name})`;
-      } else {
-        this.detalleNameSegundoNivel = '';
+      } else if (this.detalleName === 'Real' || this.detalleName === 'AcReal') {
+        // validar que solo entre cuando viene de real (excluir Ppto y Variacion)
+        // Etiqueta de mes usada en breadcrumb
+        if (mes !== '') {
+          this.detalleNameSegundoNivel = `(${name})`;
+        } else {
+          this.detalleNameSegundoNivel = '';
+        }
+        //this.showResultados = false;
+        this.showDetallePrimerNivel = false;
+        this.showDetalleSegundoNivel = true;
+        this.detalleValueSegundoNivel = value;
+        this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].descripcion;
+        this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].numeroCuenta, mes);
+        this.showOriginal=2;
       }
-      //this.showResultados = false;
-      this.showDetallePrimerNivel = false;
-      this.showDetalleSegundoNivel = true;
-      this.detalleValueSegundoNivel = value;
-      this.detalleConceptoSegundoNivel = this.detalleResultadosMensual[i].descripcion;
-      this.getDetalleResultadosCuentas(this.detalleResultadosMensual[i].numeroCuenta, mes);
-      this.showOriginal=2;
-    } 
+    }
   }
 
    // ocultamos todos los resultados cuando no hay compañia seleccionada
@@ -2362,7 +2364,7 @@ hideResultados(): void{
     }
   }
 
-  reniniciarValores()
+  reniniciarValores(tipoEvento: string, valueEvento: string = '')
   {
     this.resultadoUnidades = [];
     this.unidadesDepartamento = [];
@@ -2388,7 +2390,9 @@ hideResultados(): void{
     const sCompania = this.selectedCompania.toString();
     if ((sTipoReporte === '4' || sTipoReporte === '5') && sCompania !== '0') {
       this.showReporteUnidades = false;
-      this.showEfectivoSituacion = false;
+      if(tipoEvento !== 'periodo' || valueEvento !== this.anio) {
+        this.showEfectivoSituacion = false;
+      }
       this.showAcumuladoReal = false;
       this.showAcumuladoPresupuesto = false;
       this.showAcumuladoReal = false;

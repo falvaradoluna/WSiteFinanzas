@@ -587,12 +587,13 @@
                   <th class="bg-secondary text-white"
                       [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">No. Cuenta</th>
                   <th class="bg-secondary text-white col-md-3">Descripción</th>
-                  <th *ngIf='idEstadoResultado !== 3' class="col-md-2 bg-secondary text-white" sortable-column='saldoMonto'>Saldo Mensual</th>
+                  <th *ngIf='idEstadoResultado !== 3 && detalleName !== "PPto"' class="col-md-2 bg-secondary text-white" sortable-column='saldoMonto'>Saldo Mensual</th>
+                  <th *ngIf='idEstadoResultado !== 3 && detalleName === "PPto"' class="col-md-3 bg-secondary text-white" sortable-column='saldoMonto'>Saldo Mensual</th>
                   <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Real</th>
                   <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Presupuesto</th>
                   <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white">Variacion</th>
-                  <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white"> Pct </th>
-                  <th class="col-md-1 bg-secondary text-white" sortable-column='saldoMonto'>&nbsp; &nbsp;</th>
+                  <th *ngIf='idEstadoResultado === 3' class="col-md-1 bg-secondary text-white"> Pct </th>                  
+                  <th *ngIf='detalleName !== "PPto"' class="col-md-1 bg-secondary text-white" sortable-column='saldoMonto'>&nbsp; &nbsp;</th>
                 </tr>
               </thead>
               <tbody>
@@ -601,17 +602,19 @@
                   <td class="col-md-3">{{ drm.titulo }}</td>
                   <td [ngClass]="idEstadoResultado !== 3 ? 'col-md-3' : 'col-md-2'">{{ drm.numeroCuenta || drm.Numcta }}</td>
                   <td class="col-md-3">{{ drm.descripcion || "descripcion" }}</td>
-                  <td *ngIf='idEstadoResultado !== 3' class="col-md-2 text-right" 
+                  <td *ngIf='idEstadoResultado !== 3 && detalleName !== "PPto"' class="col-md-2 text-right" 
+                      [suma-columnas]='drm.saldoMonto'>{{ drm.saldoMonto | number:'1.2-2' }}</td>                      
+                  <td *ngIf='idEstadoResultado !== 3 && detalleName === "PPto"' class="col-md-3 text-right" 
                       [suma-columnas]='drm.saldoMonto'>{{ drm.saldoMonto | number:'1.2-2' }}</td>
                   <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"
                       [suma-columnas]='drm.Real'>{{ drm.Real | number:'1.2-2' }}</td>
                   <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pspsto'>{{ drm.Pspsto | number:'1.2-2' }}</td>
                   <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Variacion'>{{ drm.Variacion | number:'1.2-2' }}</td>
                   <td *ngIf='idEstadoResultado === 3' class="col-md-1 text-right"   [suma-columnas]='drm.Pct'>{{ drm.Pct | number:'1.2-2' }}</td>
-                  <td *ngIf='idEstadoResultado !== 3' class="col-md-1 col-md-1 text-center">
+                  <td *ngIf='idEstadoResultado !== 3 && detalleName !== "PPto"' class="col-md-1 col-md-1 text-center">
                     <a href="javascript:void(0)" (click)="onClickDetalleSegundoNivel(i, drm.saldoMonto, 'Saldomes')">Detalle</a>
                   </td>
-                  <td *ngIf='idEstadoResultado === 3' class="col-md-1 col-md-1 text-center ">
+                  <td *ngIf='idEstadoResultado === 3 && detalleName !== "PPto"' class="col-md-1 col-md-1 text-center ">
                     <a href="javascript:void(0)" (click)="onClickDetalleSegundoNivel(i, drm.Real, 'Real')">Detalle</a>
                   </td>
                 </tr>
