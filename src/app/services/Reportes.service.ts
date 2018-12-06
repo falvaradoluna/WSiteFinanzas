@@ -84,8 +84,10 @@ export class ReportesService {
   private _urlDepartamentoxCompaniayUsuario = 'api/reportes/departamentoxCompaniayUsuario';
 
 
-  // private _urlGetConfigTemplate = 'WSF/api/report/PlantReporttemplate';
-  private _urlGetConfigTemplate = 'api/report/PlantReporttemplate';
+  private _urlGetConfigTemplate = 'WSF/api/report/PlantReporttemplate';
+  private _urlcreateExcel = 'WSF/api/report/createExcel';
+  // private _urlcreateExcel = 'api/report/createExcel';
+  // private _urlGetConfigTemplate = 'api/report/PlantReporttemplate';
 
   constructor(private _http: HttpClient) { 
   }
@@ -651,7 +653,8 @@ export class ReportesService {
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('periodoYear', parameters.periodoYear);
-    return this._http.post<any[]>(urlApi + "WSF/api/report/createExcel",Params)
+    return this._http.post<any[]>(urlApi + this._urlcreateExcel,Params)
+    // return this._http.post<any[]>("http://localhost:56569/api/report/createExcel",Params)
     .catch(this.handleError); 
   }
 

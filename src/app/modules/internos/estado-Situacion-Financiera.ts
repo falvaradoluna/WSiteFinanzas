@@ -15,4 +15,5 @@ export interface IEstadoSituacion {
     Nov:        number;
     Dic:        number;
     dicAnioAnt: number;
+    nombreCompania: string;
   }

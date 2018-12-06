@@ -1,13 +1,13 @@
 <div class="row">
   <div class="col-md-12 mt-2">
-    <div class="card">
+    <div class="card" wsf-suma-columnas>
       <div  *ngIf="selectedTipoReporte.toString() === '4'" class="card-header bg-primary text-white text-center">
         FLUJO DE EFECTIVO REAL
       </div>
       <div  *ngIf="selectedTipoReporte.toString() === '5'" class="card-header bg-primary text-white text-center">
         ESTADO DE SITUACION FINANCIERA
       </div>
-      <div class="scrolltable">
+      <div  *ngIf='showReporteNivel < 3' class="scrolltable">
         <table id="tableEfectivo" class="table table-lg table-bordered table-hover-td table-responsive" *ngIf="selectedTipoReporte.toString() === '4'">
           <thead>
             <tr>
@@ -30,18 +30,18 @@
             <ng-container *ngFor='let es of efectivoSituacion; let i = index;'>
               <tr>
                 <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold ng-tns-c4-0' : ''" >{{ es.concepto }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Ene | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Feb | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Mar | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Abr | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.May | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Jun | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Jul | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Ago | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Sep | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Oct | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Nov | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Dic | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, 0, 1, es.concepto, es.nombreCompania, 'Enero')" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Ene | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, 0, 2, es.concepto, es.nombreCompania, 'Febrero')" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Feb | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, 0, 3, es.concepto, es.nombreCompania, 'Marzo')" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Mar | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, 0, 4, es.concepto, es.nombreCompania, 'Abril')" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Abr | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, 0, 5, es.concepto, es.nombreCompania, 'Mayo')" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.May | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, 0, 6, es.concepto, es.nombreCompania, 'Junio')" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Jun | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, 0, 7, es.concepto, es.nombreCompania, 'Julio')" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Jul | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, 0, 8, es.concepto, es.nombreCompania, 'Agosto')" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Ago | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, 0, 9, es.concepto, es.nombreCompania, 'Septiembre')" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Sep | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, 0, 10, es.concepto, es.nombreCompania, 'Octubre')" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Oct | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, 0, 11, es.concepto, es.nombreCompania, 'Noviembre')" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Nov | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, 0, 12, es.concepto, es.nombreCompania, 'Diciembre')" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Dic | number:'1.2-2' }}</td>
               </tr>
             </ng-container>
           </tbody>
@@ -70,25 +70,59 @@
             <ng-container *ngFor='let es of estadoSituacion; let i = index;'>
               <tr>
                 <td  [ngClass]="es.concepto.includes('Total')? 'font-weight-bold ng-tns-c4-0' : ''" >{{ es.concepto }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right ng-tns-c4-0' : 'text-right'">{{ es.dicAnioAnt | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Ene | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Feb | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Mar | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Abr | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.May | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Jun | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Jul | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Ago | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Sep | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Oct | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Nov | number:'1.2-2' }}</td>
-                <td [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Dic | number:'1.2-2' }}</td>
-                
+                <td (click)="onClickCuentas(es.id, es.idConcepto, 13, es.concepto, es.nombreCompania, 'Diciembre Anterior', es.dicAnioAnt)" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right ng-tns-c4-0' : 'text-right'">{{ es.dicAnioAnt | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, es.idConcepto, 1, es.concepto, es.nombreCompania, 'Enero', es.Ene)" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Ene | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, es.idConcepto, 2, es.concepto, es.nombreCompania, 'Febrero', es.Feb)" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'">{{ es.Feb | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, es.idConcepto, 3, es.concepto, es.nombreCompania, 'Marzo', es.Mar)" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Mar | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, es.idConcepto, 4, es.concepto, es.nombreCompania, 'Abril', es.Abr)" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Abr | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, es.idConcepto, 5, es.concepto, es.nombreCompania, 'Mayo', es.May)" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.May | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, es.idConcepto, 6, es.concepto, es.nombreCompania, 'Junio', es.Jun)" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Jun | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, es.idConcepto, 7, es.concepto, es.nombreCompania, 'Julio', es.Jul)" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Jul | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, es.idConcepto, 8, es.concepto, es.nombreCompania, 'Agosto', es.Ago)" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Ago | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, es.idConcepto, 9, es.concepto, es.nombreCompania, 'Septiembre', es.Sep)" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Sep | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, es.idConcepto, 10, es.concepto, es.nombreCompania, 'Octubre', es.Oct)" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Oct | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, es.idConcepto, 11, es.concepto, es.nombreCompania, 'Noviembre', es.Nov)" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Nov | number:'1.2-2' }}</td>
+                <td (click)="onClickCuentas(es.id, es.idConcepto, 12, es.concepto, es.nombreCompania, 'Diciembre', es.Dic)" [ngClass]="es.concepto.includes('Total')? 'font-weight-bold text-right' : 'text-right'" >{{ es.Dic | number:'1.2-2' }}</td>
               </tr>
             </ng-container>
           </tbody>
         </table>
       </div>
+
+      <div *ngIf='showReporteNivel > 2' class="card-body scrolltable" wsf-close-button (onClose)='getReporteNivel(2)'>
+        <nav role="navigation">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="javascript:void(0)" (click)='getReporteNivel(2)'>{{ selectedNombreCompania }}</a>
+            </li>
+            <!--<li class="breadcrumb-item active">{{ selectedConcepto }}</li>-->
+            <li class="breadcrumb-item active">
+              {{ selectedConcepto}} ({{ nombreMes }})
+              <span class="badge badge-dark">{{ detalleValue | number:'1.2-2' }}</span>
+            </li>
+          </ol>
+        </nav>
+        <table id="tableDetalle" class="table table-sm table-bordered table-responsive table-double-scroll">
+          <thead> 
+            <tr>
+              <th class="bg-secondary text-white min-width-300">Concepto</th>
+              <th class="bg-secondary text-white min-width-135">No.Cuenta</th>
+              <th class="bg-secondary text-white min-width-300">Descripción</th>
+              <th class="bg-secondary text-white">Monto</th>          
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor='let cuenta of estadoSituacionCuentas; let i = index;'>
+              <tr>
+                <td class="col-width-concepto">{{ cuenta.concepto }}</td>
+                <td class="col-width-concepto">{{ cuenta.numeroCuenta }}</td>
+                <td class="col-width-concepto">{{ cuenta.descripcion }}</td>
+                <td class="text-right" [suma-columnas]='cuenta.monto'>{{ cuenta.monto | number:'1.2-2' }}</td>
+                
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
     </div>
   </div>
 </div>
