@@ -51,7 +51,7 @@ Administracion.prototype.get_cuentaContableExecute = function (req, res, next) {
     var self = this;
     var params = [
         { name: 'IdUsuario', value: req.query.idUsuario, type: self.model.types.INT },
-        { name: 'xmlCta', value: req.query.xmlCuenta, type: self.model.types.STRING }
+        { name: 'xmlCta', value: req.query.xmlCuenta, type: self.model.types.XML }
     ];
     if (req.query.idMovimiento != 4) {
         params.push({ name: 'idError', value: 0, type: self.model.types.INT });

@@ -79,7 +79,6 @@ export class ConfiguracionPlantillaComponent implements OnInit {
     }
      
     switch(+this.selectedCompany) { 
-      case 37: //NISSAN
       case 2: //NISSAN
           this.loadDepartmentUnit();
           this.loadDepartment();
