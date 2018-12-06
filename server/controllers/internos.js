@@ -1366,6 +1366,33 @@ internos.prototype.get_unidadesdepartamentonv2Otros = function (req, res, next) 
   });
 };
 
+// /api/internos/estadosituaciofinancieraCuenta
+internos.prototype.get_estadosituaciofinancieraCuenta = function (req, res, next) {
+  var self = this;
+
+  var params = [
+    { name: 'idCompania', value: req.query.idCompania, type: self.model.types.INT },
+    { name: 'periodoYear', value: req.query.periodoYear, type: self.model.types.INT },
+    { name: 'periodoMes', value: req.query.periodoMes, type: self.model.types.INT },
+    { name: 'idConcepto', value: req.query.idConcepto, type: self.model.types.INT }
+  ];
+  if(req.query.idReporte == 4) {
+    this.model.query('[Interno].[ObtenerFlujoEfectivoRealCuentas]', params, function (error, result) {
+      self.view.expositor(res, {
+        error: error,
+        result: result,
+      });
+    });
+  } else {
+    this.model.query('[Interno].[ObtenerEstadoSituacionFinancieraCuenta]', params, function (error, result) {
+      self.view.expositor(res, {
+        error: error,
+        result: result,
+      });
+    });
+  } 
+};
+
 function replaceString(cadena){
   return cadena.toString().replace('mas','+');
 }
