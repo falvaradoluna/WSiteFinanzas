@@ -218,6 +218,7 @@ export class InternosComponent implements OnInit {
   public productoCompania = 0;
   tituloAlert: string = 'Administrador de Reportes';
   descripcionAlert: string = 'Se está actualizando la información, favor de intentarlo más tarde.';
+  controlaScrollER : boolean = false;
   ngOnInit() {
     this.setDefaultDate();
     //TextTrackCueList
@@ -2425,6 +2426,13 @@ hideResultados(): void{
       }
     }
     this.showUnidadesDepartamento = true
+  }
+
+  // Controla los checkbox para marcar o desmarcar todos
+  controlaScrollCheck(estado: boolean): void {  
+    if(this.estadoResultados.length > 0) {
+      this.controlaScrollER = estado;
+    }
   }
 }
 
