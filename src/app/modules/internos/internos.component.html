@@ -1,5 +1,5 @@
 <div [@routerTransition]>
-  <div class="row">
+  <div class="row" *ngIf='mostrarFiltro'>
     <div class="col-md-12">
       <div class="card">
         <div class="card-header bg-primary text-white text-center">
@@ -97,14 +97,14 @@
     </div>
   </div>
   <!-- BEGIN Reporte UNIDADES -->
-  <div *ngIf='showReporteUnidades' class="row">
+  <div *ngIf='mostrarFiltro && showReporteUnidades' class="row">
     <div class="col-md-12 mt-2">
       <div class="card" wsf-suma-columnas>
         <div class="card-header bg-primary text-white text-center">
           UNIDADES
           <button type="button" class="btn btn-primary text-white btn-sm btn-vm" (click)='toggleUnidades()'>
             <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
-          </button>
+          </button>          
         </div>
         
         <!-- BEGIN Unidades Primer Nivel -->
@@ -270,7 +270,7 @@
   <!-- END Reporte UNIDADES -->
 
   <!-- BEGIN UNIDADES POR DEPARTAMENTO -->
-  <div *ngIf='showReporteUnidades' class="row">
+  <div *ngIf='mostrarFiltro && showReporteUnidades' class="row">
     <div class="col-md-12 mt-2">
       <div class="card" wsf-suma-columnas>
         <div class="card-header bg-primary text-white text-center">
@@ -449,7 +449,14 @@
             ESTADO DE RESULTADOS
             <button type="button" class="btn btn-primary text-white btn-sm btn-vm" (click)='toggleResultados()'>
               <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
-            </button>       
+            </button>   
+            <div style="float: right">
+                <button type="button" class="btn btn-primary text-white btn-sm btn-vm" id="submit"
+                  [ngbTooltip]="mostrarFiltro ? 'Ocultar Filtros/Unidades' : 'Ver Filtros/Unidades'" placement="bottom" container="body"
+                  (click)='controlaFiltros(mostrarFiltro = !mostrarFiltro)'>
+                  <i class="fa fa-filter"></i>                          
+                </button>
+              </div>              
         </div>
 
         <table *ngIf='showResultados && !showDetallePrimerNivel' class="table-fixed table table-sm table-bordered table-hover-td">
