@@ -4,14 +4,10 @@ import { HttpClient, HttpErrorResponse, HttpParams, HttpHeaders } from '@angular
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
-import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
-
 import { ICompania } from '../models/catalog/compania';
 import { ITipoReporte } from '../models/catalog/tipoReporte';
 import { ISucursal } from '../models/catalog/sucursal';
 import { IDepartamento } from '../models/catalog/departamento';
-
-
 import { IResultadoInternos } from '../models/reports/resultado-internos';
 import { IEfectivoSituacion } from '../models/reports/efectivo-y-situacion-financiera';
 import { IEstadoSituacion } from '../models/reports/estado-Situacion-Financiera';
@@ -32,6 +28,8 @@ import { IReportePlantaTextAlign } from '../models/reports/reportePlantaTextAlig
 import { IPlantillaDetalle } from '../models/reports/reportePlantillaPlantaDetalle';
 import { IClasificacion } from '../models/reports/reportePlantaClasificacion';
 import { IConceptoEstadoResultado } from '../models/reports/ConceptoEstadoDeResultado';
+import { IAutoLinea } from '../models/reports/autolinea';
+import { IAutoLineaDetalle } from '../models/reports/autoLineaDetalle';
 // import { IConceptoEstadoResultado } from '../models/administracion/conceptoEstadoResultado';
 
 @Injectable()
@@ -82,10 +80,16 @@ export class ReportesService {
   private _urlClasificacion = 'api/reportes/clasificacion';
   private _urlConceptoEstadoResultado = 'api/reportes/estadoResultadosConcepto';
   private _urlDepartamentoxCompaniayUsuario = 'api/reportes/departamentoxCompaniayUsuario';
-
-
-  // private _urlGetConfigTemplate = 'WSF/api/report/PlantReporttemplate';
-  private _urlGetConfigTemplate = 'api/report/PlantReporttemplate';
+  private _urlClasificacionAutolinea = 'api/reportes/clasificacionAutolinea';
+  private _urlClasificacionAutolineaDetalle = 'api/reportes/clasificacionAutolineaDetalle';
+  private _urlClasificacionAutolineaDetalleNoRegistrado = 'api/reportes/clasificacionAutolineaDetalleNoRegistrado';
+  private _urlClasificacionAutolineaHONDA = 'api/reportes/clasificacionAutolineaHONDA';
+  private _urlGurdarConfiguracionHonda = 'api/reportes/gurdarConfiguracionHonda';
+  
+  private _urlGetConfigTemplate = 'WSF/api/report/PlantReporttemplate';
+  private _urlcreateExcel = 'WSF/api/report/createExcel';
+  // private _urlcreateExcel = 'api/report/createExcel';
+  // private _urlGetConfigTemplate = 'api/report/PlantReporttemplate';
 
   constructor(private _http: HttpClient) { 
   }
@@ -451,11 +455,6 @@ export class ReportesService {
       .catch(this.handleError);
   }
 
-  private handleError(err: HttpErrorResponse) {
-    console.error(err.message);
-    return Observable.throw(err.message);
-  }
-
   getUnidadesAcumuladoPresupuesto(parameters): Observable<IDetalleUnidadesAcumulado[]> {
     let Params = new HttpParams();
 
@@ -651,7 +650,8 @@ export class ReportesService {
     Params = Params.append('idCompania', parameters.idCompania);
     Params = Params.append('periodoMes', parameters.periodoMes);
     Params = Params.append('periodoYear', parameters.periodoYear);
-    return this._http.post<any[]>(urlApi + "WSF/api/report/createExcel",Params)
+    return this._http.post<any[]>(urlApi + this._urlcreateExcel,Params)
+    // return this._http.post<any[]>("http://localhost:56569/api/report/createExcel",Params)
     .catch(this.handleError); 
   }
 
@@ -686,5 +686,47 @@ export class ReportesService {
     Params = Params.append('idCompania', parameters.idCompania);
     return this._http.get<IDepartamento[]>(this._urlDepartamentoxCompaniayUsuario, { params: Params })
     .catch(this.handleError); 
+  }
+
+  getClasificacionAutolinea(): Observable<IAutoLinea[]>  {
+    return this._http.get<IAutoLinea[]>(this._urlClasificacionAutolinea, {})
+    .catch(this.handleError); 
+  }
+
+  getClasificacionAutolineaDetalle(idAutoLineaPlanta): Observable<IAutoLineaDetalle[]>  { 
+    return this._http.get<IAutoLineaDetalle[]>(this._urlClasificacionAutolineaDetalle, {params: new HttpParams().append('idAutoLineaPlanta', idAutoLineaPlanta)})
+    .catch(this.handleError); 
+  }
+
+  getClasificacionAutolineaDetalleNoRegistrado(parameters): Observable<IAutoLinea[]>  { 
+    let Params = new HttpParams();
+    
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('idAutoLinea', parameters.idAutoLinea);
+    return this._http.get<IAutoLinea[]>(this._urlClasificacionAutolineaDetalleNoRegistrado, { params: Params })
+    .catch(this.handleError); 
+  }
+
+  getClasificacionAutolineaHONDA(parameters): Observable<IAutoLinea[]>  { 
+    let Params = new HttpParams();
+    Params = Params.append('idAutoLineaPlanta', parameters.idAutoLineaPlanta);
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('idAutoLinea', parameters.idAutoLinea);
+    return this._http.get<IAutoLinea[]>(this._urlClasificacionAutolineaHONDA, { params: Params })
+    .catch(this.handleError); 
+  }
+
+  getGurdarConfiguracionHonda(parameters): Observable<any[]>  { 
+    let Params = new HttpParams();
+    Params = Params.append('idAutoLineaPlanta', parameters.idAutoLineaPlanta);
+    Params = Params.append('xmlAutoLinea', parameters.xmlAutoLinea);
+
+    return this._http.get<any[]>(this._urlGurdarConfiguracionHonda, { params: Params })
+    .catch(this.handleError); 
+  }
+
+  private handleError(err: HttpErrorResponse) {
+    console.error(err.message);
+    return Observable.throw(err.message);
   }
 }

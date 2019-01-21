@@ -1,0 +1,35 @@
+<!-- <ng-template #modalDetails let-c="close" let-d="dismiss"> -->
+  <div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card mb-12">
+                <div class="card-header text-center">
+                    HONDA
+                </div>
+              <!-- Large modal -->
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="inputTipo">Tipo clasificación</label> 
+                                <!-- <select name="inputTypePeriodo" class="form-control" [(ngModel)]="periodTypes.id" [ngClass]="{ErrorControl: +periodTypes.id === 0}"> -->
+                                <select name="inputType" class="form-control" [(ngModel)]="plantillaDetalle.idSeccionReporte" [ngClass]="{ErrorControl: +plantillaDetalle.idSeccionReporte === 0}">
+                                  <option value="0">--Seleccione--</option>
+                                  <option *ngFor="let tipoReporte of tipoReportes" [value]="tipoReporte.id">{{tipoReporte.Nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-10"></div>
+                            <div class="col-md-2">
+                                <button type="button" class="form-group btn btn-primary btn-sm btn-block"  id="submit" (click)='saveDetailsConfigurationTemplate()'>Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- </ng-template> -->

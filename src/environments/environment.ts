@@ -5,7 +5,14 @@
 
 export const environment = {
   production: false,
-  api: 'http://localhost:56569/',
+  //api: 'http://localhost:56569/',
+  api: 'http://192.168.20.92/',
   filepath : '\\\\192.168.20.92\\\\Compartida\\\\TemplateWSF\\\\',
   filePathBack : '\\\\192.168.20.92\\Compartida\\TemplateWSF\\BackupTemplate\\'
 };
+// export const environment = {
+//   production: true,
+//   api: 'http://192.168.20.89/',
+//   filepath : '\\\\192.168.20.89\\\\ReportesWSF\\\\TemplateWSF\\\\',
+//   filePathBack : '\\\\192.168.20.89\\ReportesWSF\\TemplateWSF\\BackupTemplate\\'
+// };

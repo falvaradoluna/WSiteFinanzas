@@ -53,7 +53,10 @@
             </div>
           </div>
           <div class="form-row">
-            <div class="form-group col-md-10"></div>
+            <div class="form-group col-md-8"></div>
+            <div class="form-group col-md-2">
+                <button type="button"  *ngIf="selectedCompany == 39" [disabled] ="!(selectedPeriodoYear > 0)" class="btn btn-primary btn-sm btn-block" id="submit" (click)="showModal(modal)">Configuración</button>
+            </div>
             <div class="form-group col-md-2">
               <button type="button" class="btn btn-primary btn-sm btn-block" id="submit" (click)="createExcel()">Exportar</button>
             </div>
@@ -63,3 +66,17 @@
     </div>
   </div>
 </div>
+
+<ng-template #modal let-c="close" let-d="dismiss">
+    <div class="card">
+      <div class="card-header text-center">
+        Clasificación Honda
+      </div>
+      <div class="card-body">
+        <wsf-clasificacion-honda
+        [selectedPeriodoYear]="selectedPeriodoYear"
+        [modalReference] = "modalReference">
+        </wsf-clasificacion-honda>      
+      </div>
+    </div>
+ </ng-template>

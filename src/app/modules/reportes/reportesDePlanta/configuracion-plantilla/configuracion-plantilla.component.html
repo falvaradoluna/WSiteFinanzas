@@ -153,8 +153,12 @@
             </wsf-nissan>
         </div>
         <div *ngSwitchCase="39">
-            <wsf-honda>
-                
+            <wsf-honda
+                [modelEtiqueta] = "modelEtiqueta"
+                [modalReference] = "modalReference"
+                [selectedPlantillaDetalle] = "selectedPlantillaDetalle"
+                [dataDetails] ="dataDetails" 
+                [rowName] = "rowName">
             </wsf-honda>
         </div>
    </div>
