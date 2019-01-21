@@ -136,14 +136,11 @@ internos.prototype.get_estadoresultadospresupuestonv2 = function (req, res, next
     { name: 'idCompania', value: idCompania, type: self.model.types.INT },
     { name: 'IdSucursal', value: idSucursal, type: self.model.types.INT },
     { name: 'PeriodoYear', value: periodoYear, type: self.model.types.INT },
-    { name: 'IdDepartamento', value: idDepartamento, type: self.model.types.STRING },
     { name: 'IdEstadoDeResultado', value: idEstadoResultadosI, type: self.model.types.INT },
-    { name: 'idOrden', value: idOrden, type: self.model.types.INT }
+    { name: 'idOrden', value: idOrden, type: self.model.types.INT },
+    { name: 'IdDepartamento', value: idDepartamento, type: self.model.types.STRING }
   ];
-
-  this.model.query('Contabilidad.ObtieneEstadoDeResultadosAcumuladoPresupuestoSegundoNivel', params, function (error, result) {
-    // console.log('Parametros: ' + params);
-
+  this.model.query('[Contabilidad].[ObtieneEstadoDeResultadosAcumuladoPresupuestoSegundoNivel]', params, function (error, result) {
     self.view.expositor(res, {
       error: error,
       result: result,

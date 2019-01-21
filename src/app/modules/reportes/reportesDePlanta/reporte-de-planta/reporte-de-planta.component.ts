@@ -2,13 +2,19 @@ import { Component, OnInit } from '@angular/core';
 import { ReportesService } from '../../../../services/Reportes.service'
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ICompania } from '../../../../models/catalog/compania';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DualListComponent } from 'angular-dual-listbox';
+
+
 
 @Component({
+
   selector: 'wsf-reporte-de-planta',
   templateUrl: './reporte-de-planta.component.html',
   styleUrls: ['./reporte-de-planta.component.scss']
 })
 export class ReporteDePlantaComponent implements OnInit {
+  modalReference: NgbModalRef;
   errorMessage: any;
   selectedCompany = 0;
   selectedPeriodoMes = 0;
@@ -16,8 +22,9 @@ export class ReporteDePlantaComponent implements OnInit {
   companies:ICompania[] = [];
   periodosYear:any[] = [];
   constructor(private _reportesService: ReportesService,
-              private _spinnerService: NgxSpinnerService) { }
-
+			  private _spinnerService: NgxSpinnerService,
+        private _modal: NgbModal) { }
+        
   ngOnInit() {
     this.loadCompany();
     this.loadPeriodYear();
@@ -54,5 +61,9 @@ export class ReporteDePlantaComponent implements OnInit {
       },error => {
       this.errorMessage = <any>error
     });
+  }
+
+  showModal(modal): void{
+    this.modalReference =  this._modal.open(modal);
   }
 }
