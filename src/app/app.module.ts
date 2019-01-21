@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthGuard, SortService, FechaActualizacionService } from './shared';
  import { DataTablesModule } from 'angular-datatables';
+// import { ClasificacionHondaComponent } from './modules/reportes/reportesDePlanta/shared/honda/classification/clasificacion-honda/clasificacion-honda.component';
 // import { HondaComponent } from './modules/reportes/reportesDePlanta/shared/honda/honda.component';
 // import { NissanComponent } from './modules/reportes/reportesDePlanta/shared/nissan/nissan.component';
 // import { ReporteDePlantaComponent } from './modules/reportes/reportesDePlanta/reporte-de-planta/reporte-de-planta.component';
@@ -39,6 +40,7 @@ export function createTranslateLoader(http: HttpClient) {
     
   ],
   declarations: [AppComponent
+    //, ClasificacionHondaComponent
     //, HondaComponent
   //  , NissanComponent
   ],

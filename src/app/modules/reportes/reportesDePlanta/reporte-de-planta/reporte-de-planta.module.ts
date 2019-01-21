@@ -9,6 +9,9 @@ import { CatalogoService } from '../../../../services/catalogo.service'
 import { ReporteDePlantaComponent } from './reporte-de-planta.component';
 import { ReporteDePlantaRoutingModule } from './reporte-de-planta-routing.module';
 import { DataTablesModule } from 'angular-datatables';
+import { AngularDualListBoxModule } from 'angular-dual-listbox';
+import { ClasificacionHondaComponent } from '../shared/honda/clasificacion-honda/clasificacion-honda.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   imports: [
@@ -17,10 +20,13 @@ import { DataTablesModule } from 'angular-datatables';
     FormsModule,
     ReactiveFormsModule,
     NgbModule.forRoot(),
-    DataTablesModule
+    DataTablesModule,
+    AngularDualListBoxModule,
+    NgMultiSelectDropDownModule.forRoot()
   ],
   declarations: [
-                  ReporteDePlantaComponent
+                  ReporteDePlantaComponent,
+                  ClasificacionHondaComponent
                 ],
   providers:    [
                   ReportesService,

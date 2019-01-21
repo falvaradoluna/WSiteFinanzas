@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { IPlantillaDetalle } from '../../../../../models/reports/reportePlantillaPlantaDetalle';
+import { IPlantillaDetalle } from '../../../../../../models/reports/reportePlantillaPlantaDetalle';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { IPlanta } from '../planta';
+import { IPlanta } from '../../planta';
+
 
 @Component({
   selector: 'wsf-honda',

@@ -167,5 +167,40 @@ reportes.prototype.get_departamentoxCompaniayUsuario = function (req, res, next)
   });
 };
 
+reportes.prototype.get_clasificacionAutolinea = function (req, res, next) {
+  var self = this;
+  this.model.query('[Planta].[ObtieneClasificacionAutolinea]', [], function (error, result) {
+    self.view.expositor(res, {error: error, result: result, });
+  });
+};
+
+reportes.prototype.get_clasificacionAutolineaHONDA = function (req, res, next) {
+  var self = this;
+  var idAutoLineaPlanta = req.query.idAutoLineaPlanta;
+  var periodoYear = req.query.periodoYear;
+  var idAutoLinea = req.query.idAutoLinea;
+  var params = [
+                  { name: 'idAutoLineaPlanta', value: idAutoLineaPlanta, type: self.model.types.INT },
+                  { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+                  { name: 'idAutoLinea', value: idAutoLinea, type: self.model.types.INT }
+               ];
+  this.model.query('[Planta].[ObtieneClasificacionAutolineaHONDA]', params, function (error, result) {
+    self.view.expositor(res, {error: error, result: result, });
+  });
+};
+
+reportes.prototype.get_gurdarConfiguracionHonda = function (req, res, next) {
+  var self = this;
+  var idAutoLineaPlanta = req.query.idAutoLineaPlanta;
+  var xmlAutoLinea = req.query.xmlAutoLinea;
+  
+  var params = [
+                  { name: 'idAutoLineaPlanta', value: idAutoLineaPlanta, type: self.model.types.INT },
+                  { name: 'xmlAutoLinea', value: xmlAutoLinea, type: self.model.types.XML }
+               ];
+  this.model.query('[Planta].[GuardaConfiguracionAutoLinea]', params, function (error, result) {
+    self.view.expositor(res, {error: error, result: result, });
+  });
+};
 
 module.exports = reportes;
