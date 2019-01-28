@@ -6,19 +6,20 @@
       </div>
       <div class="card-body">
         <form>
+          <!-- <div class="form-row">
+            <div class="form-group col-md-4">
+              
+            </div>
+            <div class="col-md-4">
+              
+            </div>
+            <div class="form-group col-md-4">
+                
+            </div>
+          </div> -->
           <div class="form-row">
             <div class="form-group col-md-4">
               <label for="inputCompania">Compañia</label>
-            </div>
-            <div class="col-md-4">
-              <label for="input">Mes</label>
-            </div>
-            <div class="form-group col-md-4">
-                <label for="input">Año</label>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-4">
               <div [ngClass]="{ErrorControl: selectedCompany.toString() === '0'}">
                 <select name="inputCompania" class="form-control" [(ngModel)]="selectedCompany">
                     <option value="0">--Seleccione--</option>
@@ -29,6 +30,7 @@
               </div>
             </div>
             <div class="form-group col-md-4">
+                <label for="input">Mes</label>
                 <select value="0"  name="inputPeriodoMes" class="form-control" [(ngModel)]="selectedPeriodoMes">
                     <option value="0">Seleccione</option>
                     <option value="1">Enero</option>
@@ -46,6 +48,7 @@
                   </select>
             </div>
             <div class="form-group col-md-4">
+                <label for="input">Año</label>
                 <select value="0" name="inputPeriodYear" class="form-control" [(ngModel)]="selectedPeriodoYear">
                     <option value="0">--Seleccione--</option>
                     <option  *ngFor="let periodoYear of periodosYear" [value]="periodoYear.id">{{periodoYear.id}}</option>
@@ -70,11 +73,12 @@
 <ng-template #modal let-c="close" let-d="dismiss">
     <div class="card">
       <div class="card-header text-center">
-        Clasificación Honda
+        Clasificación de cuentas Honda
       </div>
       <div class="card-body">
         <wsf-clasificacion-honda
         [selectedPeriodoYear]="selectedPeriodoYear"
+        [selectedPeriodoMes]="selectedPeriodoMes"
         [modalReference] = "modalReference">
         </wsf-clasificacion-honda>      
       </div>

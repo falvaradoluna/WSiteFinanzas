@@ -30,6 +30,7 @@ import { IClasificacion } from '../models/reports/reportePlantaClasificacion';
 import { IConceptoEstadoResultado } from '../models/reports/ConceptoEstadoDeResultado';
 import { IAutoLinea } from '../models/reports/autolinea';
 import { IAutoLineaDetalle } from '../models/reports/autoLineaDetalle';
+import { IEtiqueta } from '../models/planta/etiqueta';
 // import { IConceptoEstadoResultado } from '../models/administracion/conceptoEstadoResultado';
 
 @Injectable()
@@ -85,7 +86,10 @@ export class ReportesService {
   private _urlClasificacionAutolineaDetalleNoRegistrado = 'api/reportes/clasificacionAutolineaDetalleNoRegistrado';
   private _urlClasificacionAutolineaHONDA = 'api/reportes/clasificacionAutolineaHONDA';
   private _urlGurdarConfiguracionHonda = 'api/reportes/gurdarConfiguracionHonda';
-  
+  private _urlDepartamentoConfiguracionHonda = 'api/reportes/departamentoConfiguracionHonda';
+  private _urlEtiquetaConfiguracionHonda = 'api/reportes/etiquetaConfiguracionHonda';
+  private _urlCuentasSinClasificarHONDA = 'api/reportes/cuentasSinClasificarHONDA';
+  private _urlGuardaConfiguracionReporteHondaHojaDosTres = 'api/reportes/guardaConfiguracionReporteHondaHojaDosTres';
   private _urlGetConfigTemplate = 'WSF/api/report/PlantReporttemplate';
   private _urlcreateExcel = 'WSF/api/report/createExcel';
   // private _urlcreateExcel = 'api/report/createExcel';
@@ -725,6 +729,35 @@ export class ReportesService {
     .catch(this.handleError); 
   }
 
+  getDepartamentoConfiguracionHonda(): Observable<IDepartamento[]>  { 
+
+    return this._http.get<IDepartamento[]>(this._urlDepartamentoConfiguracionHonda , { })
+    .catch(this.handleError); 
+  }
+
+  getEtiquetaConfiguracionHonda(): Observable<IEtiqueta[]>  { 
+    
+
+    return this._http.get<IEtiqueta[]>(this._urlEtiquetaConfiguracionHonda , { })
+    .catch(this.handleError); 
+  }
+
+  getCuentasSinClasificarHONDA(parameters): Observable<IDetalleResultadosMensual[]>  { 
+    let Params = new HttpParams();
+    
+    Params = Params.append('periodoYear', parameters.periodoYear);
+    Params = Params.append('periodoMes', parameters.periodoMes);
+    return this._http.get<IDetalleResultadosMensual[]>(this._urlCuentasSinClasificarHONDA, { params: Params })
+    .catch(this.handleError); 
+  }
+
+  getGuardaConfiguracionReporteHondaHojaDosTres(parameters): Observable<any[]>  { 
+    let Params = new HttpParams();
+    Params = Params.append('xmlCtas', parameters.xmlCtas);
+
+    return this._http.get<any[]>(this._urlGuardaConfiguracionReporteHondaHojaDosTres, { params: Params })
+    .catch(this.handleError); 
+  }
   private handleError(err: HttpErrorResponse) {
     console.error(err.message);
     return Observable.throw(err.message);
