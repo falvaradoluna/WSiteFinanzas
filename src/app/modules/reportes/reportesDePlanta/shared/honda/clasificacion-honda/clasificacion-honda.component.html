@@ -1,32 +1,94 @@
-<div class="form-row ">
-	<div class="col-md-4 form-group">
-		<ng-multiselect-dropdown class="form-control" 
-			[placeholder]="'--Seleccione--'"
-			[data]="idAutoLinea"
-			[(ngModel)]="idAutoLineaSelected"
-			[settings]="dropdownSettings"
-			(onSelect)="onItemSelect($event)"
-			>
-		</ng-multiselect-dropdown>	
+<div class="card">
+	<div class="card-header text-center" (click)="togglePanels(4);">
+		Hoja 4 HONDA
 	</div>
-	<div class="col-md-2 form-group">
-		<button class="btn btn-primary btn-sm btn-block" type="button" (click)="save();">Guardar</button>
+	<div class="card-body" [hidden]="!showPaneHojaCuatro" @ngIfAnimation>
+		<div class="form-row ">
+			<div class="col-md-4 form-group">
+				<ng-multiselect-dropdown class="form-control" 
+					[placeholder]="'--Seleccione--'"
+					[data]="idAutoLinea"
+					[(ngModel)]="idAutoLineaSelected"
+					[settings]="dropdownSettings"
+					(onSelect)="onItemSelect($event)"
+					>
+				</ng-multiselect-dropdown>	
+			</div>
+			<div class="col-md-2 form-group">
+				<button class="btn btn-primary btn-sm btn-block" type="button" (click)="save();">Guardar</button>
+			</div>
+			<div class="col-md-6 form-group"></div>
+		</div>
+		<div class="form-row">
+			<div class="col-md-12">
+				<dual-list 
+					[sort]="keepSorted" 
+					[source]="source" 
+					[key]="key" 
+					[display]="display" 
+					[(destination)]="confirmed" 
+					height="200px" 
+					[format]="format" 
+					[filter]= "true"
+					[disabled]="disabled">
+				</dual-list>
+			</div>
+		</div>
 	</div>
-	<div class="col-md-6 form-group"></div>
 </div>
-<div class="form-row">
-	<div class="col-md-12">
-		<dual-list 
-			[sort]="keepSorted" 
-			[source]="source" 
-			[key]="key" 
-			[display]="display" 
-			[(destination)]="confirmed" 
-			height="200px" 
-			[format]="format" 
-			[filter]= "true"
-			[disabled]="disabled">
-		</dual-list>
+<div class="card" >
+	<div class="card-header text-center" (click)="togglePanels(2);">
+		Hoja 2 y 3 HONDA
 	</div>
-</div>
+	<div class="card-body" [hidden]="!showPaneDosTres" @ngIfAnimation>
 
+		<div class="form-row">
+			<div class="col-md-10 form-group"></div>
+			<div class="col-md-2 form-group">
+				<button class="btn btn-primary btn-sm btn-block" type="button" (click)="saveSheetTwoThree();">Guardar</button>
+			</div>
+		</div>
+		<div class="form-row">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th  class="text-center" scope="col">Cuenta</th>
+						<th class="text-center" scope="col">Departamento</th>
+						<th class="text-center" scope="col">Nombre de la cuenta</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let account of accounts;">
+						<td>
+							{{account.numeroCuenta}}
+						</td>
+						<td>
+							<select name="inputDepartamentoUnidad" class="form-control" [(ngModel)]="selectedDepartments[account.numeroCuenta]">
+								<option value="0">--Seleccione--</option>
+								<option *ngFor="let department of departments" [value]="department.id">{{department.departamento}}</option>
+							</select>    
+						</td>
+						<td>
+							<ng-multiselect-dropdown class="form-control" 
+								[placeholder]="'--Seleccione--'"
+								[data]="labels"
+								[(ngModel)]="selectedLabels[account.numeroCuenta]"
+								[settings]="labelDropdownSettings"
+								(onSelect)="onItemSelect($event)">
+							</ng-multiselect-dropdown>	
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div class="card" >
+	<div class="card-header text-center" (click)="togglePanels(1);">
+		Hoja 1 HONDA
+	</div>
+	<div class="card-body" [hidden]="!showPaneUno" @ngIfAnimation>
+		<div class="form-row">
+		</div>
+	</div>
+</div>
