@@ -203,4 +203,42 @@ reportes.prototype.get_gurdarConfiguracionHonda = function (req, res, next) {
   });
 };
 
+reportes.prototype.get_departamentoConfiguracionHonda = function (req, res, next) {
+  var self = this;
+  this.model.query('[Planta].[ObtieneDepartamentoConfiguracionHonda]', [], function (error, result) {
+    self.view.expositor(res, {error: error, result: result, });
+  });
+};
+
+reportes.prototype.get_etiquetaConfiguracionHonda = function (req, res, next) {
+  var self = this;
+  this.model.query('[Planta].[ObtieneEtiquetaConfiguracionHonda]', [], function (error, result) {
+    self.view.expositor(res, {error: error, result: result, });
+  });
+};
+
+reportes.prototype.get_cuentasSinClasificarHONDA = function (req, res, next) {
+  var self = this;
+  var periodoYear = req.query.periodoYear;
+  var periodoMes = req.query.periodoMes;
+  
+  var params = [
+                  { name: 'periodoYear', value: periodoYear, type: self.model.types.INT },
+                  { name: 'periodoMes', value: periodoMes, type: self.model.types.INT }
+               ];
+  this.model.query('[Planta].[ObtieneCuentasSinClasificarHONDA]', params, function (error, result) {
+    self.view.expositor(res, {error: error, result: result, });
+  });
+};
+
+reportes.prototype.get_guardaConfiguracionReporteHondaHojaDosTres = function (req, res, next) {
+  var self = this;
+  var xmlCtas = req.query.xmlCtas;
+  
+  var params = [{ name: 'xmlCtas', value: xmlCtas, type: self.model.types.XML }];
+  this.model.query('[Planta].[GuardaConfiguracionReporteHondaHojaDosTres]', params, function (error, result) {
+    self.view.expositor(res, {error: error, result: result, });
+  });
+};
+
 module.exports = reportes;

@@ -26,4 +26,5 @@ export interface IDetalleResultadosMensual {
   diciembre: number;
   totalAnual: number;
   Suma: number;
+  saldoActual: number;
 }
