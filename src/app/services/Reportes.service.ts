@@ -754,6 +754,7 @@ export class ReportesService {
   getGuardaConfiguracionReporteHondaHojaDosTres(parameters): Observable<any[]>  { 
     let Params = new HttpParams();
     Params = Params.append('xmlCtas', parameters.xmlCtas);
+    Params = Params.append('idCompania', parameters.idCompania);
 
     return this._http.get<any[]>(this._urlGuardaConfiguracionReporteHondaHojaDosTres, { params: Params })
     .catch(this.handleError); 

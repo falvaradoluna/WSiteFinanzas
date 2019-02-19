@@ -619,6 +619,16 @@ private changeCursorDefault(): void {
   }
   }
 
+  calculaTotalMensualV2(items, prop) {
+    var resultado = 0;
+    items.forEach(uap => {
+      if(uap.descripcion.trim() !== 'INTERCAMBIOS' && uap.descripcion.trim() !== 'Total Unidades') {
+        resultado = resultado + uap[prop];
+      }
+    });
+    return resultado;   
+  }
+
   calculaTotalMensual(items, prop) {
     return items.reduce(function (a, b) {
       return a + b[prop];
@@ -1380,8 +1390,7 @@ getReporteSumaDepartamentos() : void{
             }
 
           // Se actualiza el total anual de todas las autoLineas
-          totales.totalAnual = this.calculaTotalMensual(this.acumuladoReal, 'totalAnual');
-
+          totales.totalAnual = this.calculaTotalMensualV2(this.acumuladoReal, 'totalAnual');
           // Se calculan los porcentajes de totales
           this.acumuladoReal.forEach(dua => {
             dua.totalAnualPerc = this.getIsNumber(dua.totalAnual / totales.totalAnual * 100);

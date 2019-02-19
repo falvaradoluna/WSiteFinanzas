@@ -8,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { IDepartamento } from '../../../../../../models/catalog/departamento';
 import { IEtiqueta } from '../../../../../../models/planta/etiqueta';
 import { IDetalleResultadosMensual } from '../../../../../../models/reports/detalle-resultados-mensual';
+import { strictEqual } from 'assert';
 
 
 @Component({
@@ -85,6 +86,10 @@ export class ClasificacionHondaComponent implements OnInit {
     this.getClasificacionAutolineaHONDA(selected);
   }
 
+  onItemSelectH2h3(){
+
+  }
+
   getClasificacionAutolineaHONDA(selected): void {
     let row = this.idAutoLinea.filter(x=>x.id == selected.id);
     this._reportesService.getClasificacionAutolineaHONDA({
@@ -118,7 +123,19 @@ export class ClasificacionHondaComponent implements OnInit {
 
   saveSheetTwoThree(): void {
     let xml = this.getXmlThowThree();
-    // return xmlConfiguration;
+    if(!!xml){
+      this._spinnerService.show();
+      this._reportesService.getGuardaConfiguracionReporteHondaHojaDosTres({
+        xmlCtas: xml,
+        idCompania: 39
+      }).subscribe(result => {
+        this._spinnerService.hide();
+        this.modalReference.close();
+        swal('Transacción realizada con éxito.','','success');
+      },error => {
+      this.errorMessage = <any>error
+      });
+    }
   }
 
   togglePanels(panelNumber: number): void {
@@ -157,7 +174,9 @@ export class ClasificacionHondaComponent implements OnInit {
   }
 
   private getXmlThowThree(): string {
-    let xmlConfiguration: string = "<cuentas>";
+    let next = false;
+
+    let xmlConfiguration: string = "<Cuentas>";
     this.accounts.forEach(element => {
       var idDepartamento = +this.selectedDepartments[element.numeroCuenta];
       var idLabel = 0;
@@ -165,16 +184,17 @@ export class ClasificacionHondaComponent implements OnInit {
         idLabel = this.selectedLabels[element.numeroCuenta][0].id;
 
         if(idDepartamento >  0 && idLabel > 0){
-          xmlConfiguration +="<cuenta>"
+          next = true;
+          xmlConfiguration +="<Cuenta>"
           xmlConfiguration +="<numeroCuenta>" + element.numeroCuenta + "</numeroCuenta>"
           xmlConfiguration +="<idEtiqueta>" + idLabel + "</idEtiqueta>"
           xmlConfiguration +="<idDepartamento>" + idDepartamento + "</idDepartamento>"
-          xmlConfiguration +="</cuenta>"
+          xmlConfiguration +="</Cuenta>"
           
         }
     });
-    xmlConfiguration +="</cuentas>"
-    return xmlConfiguration;
+    xmlConfiguration +="</Cuentas>"
+    return next? xmlConfiguration :"";
 
   }
 

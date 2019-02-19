@@ -234,8 +234,10 @@ reportes.prototype.get_cuentasSinClasificarHONDA = function (req, res, next) {
 reportes.prototype.get_guardaConfiguracionReporteHondaHojaDosTres = function (req, res, next) {
   var self = this;
   var xmlCtas = req.query.xmlCtas;
+  var idCompania = req.query.idCompania;
   
-  var params = [{ name: 'xmlCtas', value: xmlCtas, type: self.model.types.XML }];
+  var params = [{ name: 'xmlCtas', value: xmlCtas, type: self.model.types.XML }
+               ,{ name: 'idCompania', value: idCompania, type: self.model.types.INT }];
   this.model.query('[Planta].[GuardaConfiguracionReporteHondaHojaDosTres]', params, function (error, result) {
     self.view.expositor(res, {error: error, result: result, });
   });
