@@ -17,7 +17,7 @@ var DataAccess = function(config) {
     this.types = {
         INT: sql.Int,
         DECIMAL: sql.Decimal(18, 5),
-        STRING: sql.VarChar(8000),
+        STRING: sql.VarChar(50000),
         DATE: sql.DateTime,
         BIT: sql.bit,
         XML: sql.Xml
